@@ -1,12 +1,15 @@
 class AdventuresController < ApplicationController
-  before_action :set_story, only: [:show, :edit, :update, :destroy]
+  before_action :set_adventure, only: [:show, :edit, :update, :destroy]
 
   def index
     @adventures = Adventure.where(private: false)
   end
 
   def mine
-    redirect_to root_url unless current_user
+    if !current_user
+      flash[:alert] = "You must be logged in to view your Adventures"
+      return redirect_to root_url
+    end
 
     @adventures = current_user.adventures
   end
@@ -19,6 +22,10 @@ class AdventuresController < ApplicationController
   end
 
   def edit
+    if @adventure.user && @adventure.user != current_user
+      flash[:alert] = "You can't modify that Adventure"
+      redirect_to root_url
+    end
   end
 
   def create
@@ -47,7 +54,7 @@ class AdventuresController < ApplicationController
 
   private
 
-  def set_story
+  def set_adventure
     @adventure = Adventure.find_by_slug(params[:id])
   end
 
