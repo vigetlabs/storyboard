@@ -74,17 +74,11 @@ class Editor extends React.Component<{}, EditorState> {
 
     engine.setDiagramModel(model)
 
-<<<<<<< HEAD
-    return <DiagramWidget className="srd-demo-canvas" diagramEngine={engine} />
+    return <>
+      <DiagramWidget className="srd-demo-canvas" diagramEngine={engine} />
+      <SceneEditor />
+    </>
   }
-||||||| merged common ancestors
-  return <DiagramWidget className="srd-demo-canvas" diagramEngine={engine} />
-=======
-  return <>
-    <DiagramWidget className="srd-demo-canvas" diagramEngine={engine} />
-    <SceneEditor />
-  </>
->>>>>>> Add Scene Editor
 }
 
 export default Editor
