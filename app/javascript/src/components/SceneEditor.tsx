@@ -7,6 +7,7 @@ import { StateConsumer, ApplicationState } from "../Store"
 import "./SceneEditor.css"
 
 declare function $R(el: HTMLElement, options: any): void;
+declare function $R(el: HTMLElement, fun: string, arg: string): void;
 
 interface SceneEditorProps {
   state: ApplicationState;
@@ -17,30 +18,40 @@ class SceneEditor extends React.Component<SceneEditorProps> {
   editor: React.RefObject<HTMLTextAreaElement> = React.createRef()
 
   componentDidMount() {
-    this._install()
+    this.install()
+  }
+
+  componentDidUpdate(prevProps: SceneEditorProps) {
+    if (this.props.state.currentFocusedScene !== prevProps.state.currentFocusedScene) {
+      this.editor.current && $R(this.editor.current, 'source.setCode', this.currentText)
+    }
   }
 
   render() {
-    const { state: { meta, currentFocusedScene } } = this.props;
-    const text = currentFocusedScene ? meta[currentFocusedScene].text : ""
-
     return (
       <aside className="SceneEditor">
-        <textarea ref={this.editor} defaultValue={text} />
+        <textarea ref={this.editor} />
       </aside>
     )
   }
 
-  _install() {
+  private get currentText() {
+    const { state: { meta, currentFocusedScene } } = this.props;
+    console.log(currentFocusedScene)
+    return currentFocusedScene
+      ? meta[currentFocusedScene] ? meta[currentFocusedScene].text : ""
+      : ""
+  }
+
+  private install() {
     if (this.editor.current) $R(this.editor.current, {
       callbacks: {
-        synced: (html: string) =>
-          this._onChange(this.props.state.currentFocusedScene)
+        synced: (html: string) => this.onChange(html)
       }
     })
   }
 
-  _onChange(html?: string) {
+  private onChange(html?: string) {
     const { state: { meta, currentFocusedScene }, updateState } = this.props;
     if (!currentFocusedScene || !html) return
     const metaItem = {
@@ -50,6 +61,7 @@ class SceneEditor extends React.Component<SceneEditorProps> {
 
     updateState({
       ...this.props.state, meta: {
+        ...meta,
         [currentFocusedScene]: metaItem
       }
     })

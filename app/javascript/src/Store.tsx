@@ -2,7 +2,7 @@ import * as React from "react";
 import seed from "./seed";
 
 export interface ApplicationState {
-  story: Object,
+  story: any,
   meta: MetaData,
   currentFocusedScene?: string,
 }
