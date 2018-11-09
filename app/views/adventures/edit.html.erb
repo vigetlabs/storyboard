@@ -1,7 +1,7 @@
 <div class="Editor">
   <header>
     <h1 class="Titlebar">
-      <%= @story %>
+      <%= @adventure %>
     </h1>
     <nav>
       <%= link_to 'Show', @adventure %> |
@@ -10,7 +10,7 @@
   </header>
 
   <% unless current_user %>
-    <em>
+    <em class="EditorNote">
       This adventure doesn't belong to any one user. It is in the public domain.
       Arbitrary people could come in here and change whatever. Just so you know.
     </em>
@@ -18,3 +18,6 @@
 
   <main id="editor" class="EditorMain"></main>
 </div>
+
+<%= stylesheet_pack_tag "hello_react" %>
+<%= javascript_pack_tag "hello_react" %>

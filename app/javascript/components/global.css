@@ -23,3 +23,22 @@ body {
 button {
   cursor: pointer;
 }
+
+.AdventureHeader {
+  background: #333;
+  font-family: fantasy;
+  padding: 0 16px;
+}
+
+.AdventureHeader a {
+  color: #eee;
+  font-size: 14px;
+  text-decoration: none;
+  text-decoration: uppercase;
+  margin: 0;
+}
+
+.AdventureHeader a:hover,
+.AdventureHeader a:focus {
+  text-decoration: underline;
+}

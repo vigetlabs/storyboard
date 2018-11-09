@@ -34,3 +34,13 @@
 .Editor > main > .srd-diagram {
   height: 100%;
 }
+
+.EditorNote {
+  background: rgba(0, 0, 0, 0.54);
+  bottom: 0;
+  color: white;
+  left: 0;
+  padding: 24px;
+  position: fixed;
+  width: 100%;
+}

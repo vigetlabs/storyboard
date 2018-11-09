@@ -1,12 +1,14 @@
-<%= link_to "Adventure Tyme", root_url %>
-|
+<nav class="AdventureHeader">
+  <%= link_to "Adventure Tyme", root_url %>
+  |
 
-<% if current_user.present? %>
-  <%= link_to current_user.email, my_adventures_path %>
-  |
-  <%= link_to "Log Out", destroy_user_session_path, method: :delete %>
-<% else %>
-  <%= link_to "Log In", new_user_session_path %>
-  |
-  <%= link_to "Sign Up", new_user_registration_path %>
-<% end %>
+  <% if current_user.present? %>
+    <%= link_to current_user.email, my_adventures_path %>
+    |
+    <%= link_to "Log Out", destroy_user_session_path, method: :delete %>
+  <% else %>
+    <%= link_to "Log In", new_user_session_path %>
+    |
+    <%= link_to "Sign Up", new_user_registration_path %>
+  <% end %>
+</nav>
