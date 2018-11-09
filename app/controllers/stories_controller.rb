@@ -2,7 +2,7 @@ class StoriesController < ApplicationController
   before_action :set_story, only: [:show, :edit, :update, :destroy]
 
   def index
-    @stories = Story.all
+    @stories = Story.where(private: false)
   end
 
   def show
@@ -45,6 +45,6 @@ class StoriesController < ApplicationController
   end
 
   def story_params
-    params.require(:story).permit(:title, :description)
+    params.require(:story).permit(:title, :description, :private)
   end
 end
