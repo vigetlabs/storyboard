@@ -1,5 +1,12 @@
 <h1>New Story</h1>
 
+<% unless current_user %>
+  <em>
+    If you'd like to maintain ownership of this story, log in or create an
+    account before you create it.
+  </em>
+<% end %>
+
 <%= form_for @story do |f| %>
   <div>
     <%= f.label :title %>

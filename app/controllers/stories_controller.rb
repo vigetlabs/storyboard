@@ -5,6 +5,12 @@ class StoriesController < ApplicationController
     @stories = Story.where(private: false)
   end
 
+  def mine
+    redirect_to root_url unless current_user
+
+    @stories = current_user.stories
+  end
+
   def show
   end
 
@@ -17,6 +23,7 @@ class StoriesController < ApplicationController
 
   def create
     @story = Story.new(story_params)
+    @story.user = current_user if current_user
 
     if @story.save
       redirect_to [:edit, @story]

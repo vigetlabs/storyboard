@@ -9,6 +9,7 @@ gem 'puma', '~> 3.11'
 gem 'webpacker'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'awesome_print'
+gem 'devise'
 
 group :development, :test do
   gem 'pry-rails'

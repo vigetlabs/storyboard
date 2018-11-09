@@ -1,8 +1,14 @@
 <h1>Editing Story: <%= @story %></h1>
 
+<% unless current_user %>
+  <em>
+    This story doesn't belong to any one user. It is in the public domain.
+    Arbitrary people could come in here and change whatever. Just so you know.
+  </em>
+<% end %>
+
 <div>
   [fancy things here]
 </div>
 
-<%= link_to 'Show', @story %> |
 <%= link_to 'Back', stories_path %>

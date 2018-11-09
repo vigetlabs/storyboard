@@ -3,6 +3,10 @@ class Story < ApplicationRecord
 
   slug_from :slug_source
 
+  belongs_to :user, optional: true
+
+  validates :title, presence: true
+
   def to_s
     title
   end

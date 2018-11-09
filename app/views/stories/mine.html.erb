@@ -1,0 +1,36 @@
+<h1>My Stories</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @stories.each do |story| %>
+      <tr>
+        <td>
+          <%= story %>
+          <%= "(private)" if story.private? %>
+        </td>
+        <td><%= link_to 'Play', story %></td>
+        <td><%= link_to 'Edit', edit_story_path(story) %></td>
+        <td><%= link_to 'Destroy', story, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Story', new_story_path %>
+
+<br>
+
+<%= link_to "Edit Account Details", edit_user_registration_path %>
+
+<br>
+
+<%= link_to 'Back', stories_path %>
