@@ -1,12 +1,23 @@
 import * as React from "react";
 
-interface ApplicationState {
-  story: any,
-  currentFocusedScene: any,
+export interface ApplicationState {
+  story: Story,
+  currentFocusedScene?: string,
 }
+
+interface Story {
+  scenes: { [id: string]: Scene }
+}
+
+interface Scene {
+  title: string,
+  text: string,
+  decisions: string[],
+}
+
 const applicationState: ApplicationState = {
-  story: {},
-  currentFocusedScene: null
+  story: { scenes: {} },
+  currentFocusedScene: undefined
 }
 
 const ApplicationStateContext = React.createContext({
