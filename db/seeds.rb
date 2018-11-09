@@ -19,7 +19,7 @@ if Adventure.count == 0
     "joe",
     "julia",
     "albert",
-    "angeloa",
+    "angela",
     "ola"
   ].each do |name|
     puts "Seeding user: #{name}@test.com"

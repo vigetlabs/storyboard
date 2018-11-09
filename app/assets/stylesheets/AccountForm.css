@@ -1,0 +1,28 @@
+.AccountForm {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.AccountForm h2 {
+  font-family: fantasy;
+}
+
+.AccountForm .field {
+  margin-bottom: 15px;
+}
+
+.AccountForm .field label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.AccountForm .field.-checkbox label {
+  display: inline;
+}
+
+.AccountForm .field input[type="email"],
+.AccountForm .field input[type="password"] {
+  width: 150px;
+  height: 17px;
+}

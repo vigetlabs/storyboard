@@ -2,8 +2,6 @@
   <%= link_to "Home", root_url %>
 
   <% if current_user.present? %>
-    <%= link_to "Home", root_url %>
-    |
     <%= link_to current_user.email, my_adventures_path %>
     <%= link_to "Log Out", destroy_user_session_path, method: :delete %>
   <% else %>
