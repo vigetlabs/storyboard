@@ -2,11 +2,7 @@ class AdventuresController < ApplicationController
   before_action :set_adventure, only: [:show, :edit, :update, :destroy]
 
   def index
-    @adventures = Adventure.where(private: false)
-
-    if params[:q]
-      @adventures = @adventures.where("title LIKE ?", "%#{params[:q]}%")
-    end
+    @featured_adventures = Adventure.where(featured: true).first(6)
   end
 
   def mine
@@ -53,7 +49,7 @@ class AdventuresController < ApplicationController
 
   def destroy
     @adventure.destroy
-    redirect_to adventures_url, notice: 'Adventure was successfully destroyed.'
+    redirect_to my_adventures_url, notice: 'Adventure was successfully destroyed.'
   end
 
   private

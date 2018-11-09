@@ -1,5 +1,5 @@
 <nav class="AdventureHeader">
-  <%= link_to "Adventure Tyme", root_url %>
+  <%= link_to "Home", root_url %>
 
   <% if current_user.present? %>
     <%= link_to current_user.email, my_adventures_path %>

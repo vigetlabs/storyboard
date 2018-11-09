@@ -1,0 +1,17 @@
+.StoryIndex {
+  text-align: center;
+}
+
+.StoryIndex h1 {
+  font-family: fantasy;
+}
+
+.StoryIndex h2 {
+  font-family: fantasy;
+}
+
+.StoryIndex .intro {
+  text-align: center;
+  max-width: 360px;
+  margin: 0 auto 30px;
+}

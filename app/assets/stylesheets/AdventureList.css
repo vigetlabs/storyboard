@@ -1,0 +1,58 @@
+.AdventureList {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.AdventureList .row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 40px;
+}
+
+.AdventureList .card {
+  width: 150px;
+  background: #EEE;
+}
+
+.AdventureList .card a {
+  color: black;
+  text-decoration: none;
+}
+
+.AdventureList .card a:hover,
+.AdventureList .card a:focus {
+  text-decoration: underline;
+}
+
+.AdventureList .card .card-image {
+  width: calc(100% - 20px);
+  height: 120px;
+  background: #BBB;
+  margin: 10px;
+}
+
+.AdventureList .card .card-title {
+  margin: 10px;
+  text-decoration: none;
+}
+
+@media only screen and (max-width: 500px) {
+  .AdventureList .row {
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+
+  .AdventureList .card {
+    margin-bottom: 30px;
+    width: 280px;
+  }
+
+  .AdventureList .card:last-child {
+    margin-bottom: 0;
+  }
+
+  .AdventureList .card .card-image {
+    height: 240px;
+  }
+}

@@ -1,0 +1,17 @@
+.AdventureHeader {
+  font-family: fantasy;
+  text-align: right;
+  padding: 0 16px;
+}
+
+.AdventureHeader a {
+  font-size: 14px;
+  text-decoration: none;
+  margin: 0 5px;
+  color: black;
+}
+
+.AdventureHeader a:hover,
+.AdventureHeader a:focus {
+  text-decoration: underline;
+}
