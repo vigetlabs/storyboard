@@ -89,6 +89,7 @@ class Editor extends React.Component<{}, EditorState> {
     var node = new DefaultNodeModel('New Scene')
 
     node.setPosition(100, 100)
+    node.addInPort("In")
 
     this.model.addNode(node)
 
