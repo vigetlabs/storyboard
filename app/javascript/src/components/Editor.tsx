@@ -4,22 +4,22 @@ import {
   DiagramEngine,
   DiagramModel,
   DefaultNodeModel,
-  DiagramWidget,
+  DiagramWidget
 } from 'storm-react-diagrams'
 import SceneEditor from './SceneEditor'
 import seed from '../seed'
 
 import './Editor.css'
 import './FlowChart.css'
-import { StateConsumer, ApplicationState } from '../Store';
+import { StateConsumer, ApplicationState } from '../Store'
 
 interface EditorState {
   ready: Boolean
 }
 
 interface EditorProps {
-  state: ApplicationState;
-  updateState(state: Readonly<ApplicationState>): Readonly<ApplicationState>;
+  state: ApplicationState
+  updateState(state: Readonly<ApplicationState>): Readonly<ApplicationState>
 }
 
 class Editor extends React.Component<EditorProps, EditorState> {
@@ -73,7 +73,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
             />
           </label>
         </menu>
-        <DiagramWidget diagramEngine={this.engine} />
+        <DiagramWidget diagramEngine={this.engine} maxNumberPointsPerLink={0} />
         <SceneEditor />
       </div>
     )
@@ -89,7 +89,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     var node = new DefaultNodeModel('New Scene')
 
     node.setPosition(100, 100)
-    node.addInPort("In")
+    node.addInPort('In')
 
     this.model.addNode(node)
 
@@ -118,9 +118,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
     let reader = new FileReader()
 
     let scope = this
-    reader.onload = function () {
+    reader.onload = function() {
       try {
-        scope.props.updateState(JSON.parse(`${this.result}`));
+        scope.props.updateState(JSON.parse(`${this.result}`))
       } catch (error) {
         alert("Sorry, we couldn't parse your file :(")
       }
@@ -130,6 +130,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 }
 
-export default () => <StateConsumer>
-  {(props) => <Editor {...props} />}
-</StateConsumer> 
+export default () => (
+  <StateConsumer>{props => <Editor {...props} />}</StateConsumer>
+)
