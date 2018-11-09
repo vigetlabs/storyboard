@@ -12,7 +12,7 @@ const applicationState: ApplicationState = {
 const ApplicationStateContext = React.createContext({
   state: applicationState,
 
-  updateState(state: Readonly<ApplicationState>): Readonly<ApplicationState> {
+  updateState(state: ApplicationState): ApplicationState {
     return applicationState;
   }
 })

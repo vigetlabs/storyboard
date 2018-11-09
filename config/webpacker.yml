@@ -40,13 +40,13 @@ development:
     host: localhost
     port: 4000
     public: localhost:4000
-    hmr: false
+    hmr: true
     # Inline should be set to true if using HMR
     inline: true
     overlay: true
     compress: true
     disable_host_check: true
-    use_local_ip: false
+    use_local_ip: true
     quiet: false
     headers:
       'Access-Control-Allow-Origin': '*'

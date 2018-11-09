@@ -11,60 +11,70 @@ import {
   DefaultLabelModel
 } from 'storm-react-diagrams'
 
-import 'storm-react-diagrams/dist/style.min.css'
-
 import './Editor.css'
+import './FlowChart.css'
 
 const nodes = {
-  hungry: new DefaultNodeModel(
-    'You are hungry. Sooo hungry.',
-    'rgb(0,192,255)'
-  ),
+  hungry: new DefaultNodeModel('You are hungry. Sooo hungry.', '#4CAF50'),
   cooking: new DefaultNodeModel(
     'You frying bacon. It smells amazing.',
-    'rgb(0,192,255)'
+    '#ffeb3b'
   ),
-  starve: new DefaultNodeModel('You ded', 'rgb(0,192,255)')
+  starve: new DefaultNodeModel('You ded', '#f44336')
 }
 
 const ports = {
   findFood: nodes.hungry.addOutPort('Find Food'),
   wait: nodes.hungry.addOutPort('Wait'),
-  cook: nodes.cooking.addInPort('Cook'),
-  dead: nodes.starve.addInPort('Death')
+  cook: nodes.cooking.addInPort('Input'),
+  dead: nodes.starve.addInPort('Input')
 }
 
-function link(a: DefaultPortModel, b: DefaultPortModel, label: string) {
-  const edge = a.link(b)
-  const labelModel = new DefaultLabelModel()
-  labelModel.setLabel(label)
-
-  edge.addLabel(labelModel)
-
-  return edge
+function link(a: DefaultPortModel, b: DefaultPortModel) {
+  return a.link(b)
 }
 
-const Editor = () => {
-  let engine = new DiagramEngine()
-  engine.installDefaultFactories()
+interface EditorState {
+  ready: Boolean
+}
 
-  let model = new DiagramModel()
+class Editor extends React.Component<{}, EditorState> {
+  state: EditorState = {
+    ready: false
+  }
 
-  nodes.hungry.setPosition(100, 100)
-  nodes.cooking.setPosition(400, 300)
-  nodes.starve.setPosition(100, 300)
+  async componentDidMount() {
+    setTimeout(() => {
+      this.setState({ ready: true })
+    }, 100)
+  }
 
-  model.addAll(
-    nodes.hungry,
-    nodes.cooking,
-    nodes.starve,
-    link(ports.findFood, ports.cook, 'Make bacon'),
-    link(ports.wait, ports.dead, 'Your hearts deplete')
-  )
+  render() {
+    if (this.state.ready !== true) {
+      return null
+    }
 
-  engine.setDiagramModel(model)
+    const engine = new DiagramEngine()
+    const model = new DiagramModel()
 
-  return <DiagramWidget className="srd-demo-canvas" diagramEngine={engine} />
+    engine.installDefaultFactories()
+
+    nodes.hungry.setPosition(100, 100)
+    nodes.cooking.setPosition(400, 300)
+    nodes.starve.setPosition(100, 300)
+
+    model.addAll(
+      nodes.hungry,
+      nodes.cooking,
+      nodes.starve,
+      link(ports.findFood, ports.cook),
+      link(ports.wait, ports.dead)
+    )
+
+    engine.setDiagramModel(model)
+
+    return <DiagramWidget className="srd-demo-canvas" diagramEngine={engine} />
+  }
 }
 
 export default Editor
