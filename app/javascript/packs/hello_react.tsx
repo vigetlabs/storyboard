@@ -3,5 +3,8 @@ import * as ReactDOM from 'react-dom'
 import Editor from '../src/components/Editor'
 
 import '../components/global.css'
+import { ApplicationComponent } from '../src/Store';
 
-ReactDOM.render(<Editor />, document.getElementById('editor'))
+ReactDOM.render(<ApplicationComponent>
+  <Editor />
+</ApplicationComponent>, document.getElementById('editor'))
