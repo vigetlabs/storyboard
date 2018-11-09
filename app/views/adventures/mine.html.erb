@@ -1,36 +1,33 @@
-<h1>My Adventures</h1>
+<div class="StoryIndex">
+  <h1>My Adventures</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th></th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @adventures.each do |adventure| %>
-      <tr>
-        <td>
-          <%= adventure %>
-          <%= "(private)" if adventure.private? %>
-        </td>
-        <td><%= link_to 'Play', adventure %></td>
-        <td><%= link_to 'Edit', edit_adventure_path(adventure) %></td>
-        <td><%= link_to 'Destroy', adventure, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+  <div class="AdventureList">
+    <% @adventures.in_groups_of(3).each do |adventure_group| %>
+      <div class="row">
+        <% adventure_group.each do |adventure| %>
+          <% if adventure %>
+              <div class="card">
+                <%= link_to adventure do %>
+                  <div class="card-image">
+                  </div>
+                  <div class="card-title">
+                    <%= adventure %>
+                  </div>
+                <% end %>
+              </div>
+          <% end %>
+        <% end %>
+      </div>
     <% end %>
-  </tbody>
-</table>
+  </div>
 
-<br>
+  <h2>Account Management</h2>
 
-<%= link_to 'New Adventure', new_adventure_path %>
+  <p>
+    User Since: <%= current_user.created_at.strftime("%x") %>
+  </p>
 
-<br>
-
-<%= link_to "Edit Account Details", edit_user_registration_path %>
-
-<br>
-
-<%= link_to 'Back', adventures_path %>
+  <p>
+    <%= link_to "Edit Account Details", edit_user_registration_path %>
+  </p>
+</div>
