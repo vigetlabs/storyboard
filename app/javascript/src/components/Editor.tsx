@@ -25,15 +25,6 @@ const nodes = {
 
 const ports = {
   findFood: nodes.hungry.addOutPort('Find Food'),
-  findFood2: nodes.hungry.addOutPort('Find Food'),
-  findFood3: nodes.hungry.addOutPort('Find Food'),
-  findFood4: nodes.hungry.addOutPort('Find Food'),
-  findFood5: nodes.hungry.addOutPort('Find Food'),
-  findFood6: nodes.hungry.addOutPort('Find Food'),
-  findFood7: nodes.hungry.addOutPort('Find Food'),
-  findFood8: nodes.hungry.addOutPort('Find Food'),
-  findFood9: nodes.hungry.addOutPort('Find Food'),
-  findFood10: nodes.hungry.addOutPort('Find Food'),
   wait: nodes.hungry.addOutPort('Wait'),
   cook: nodes.cooking.addInPort('Input'),
   dead: nodes.starve.addInPort('Input')
