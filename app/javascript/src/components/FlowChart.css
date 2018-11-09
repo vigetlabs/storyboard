@@ -12,6 +12,7 @@
   height: 100%;
   overflow: hidden;
   position: relative;
+  will-change: all;
 }
 
 .srd-diagram__selector {
