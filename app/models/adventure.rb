@@ -1,4 +1,4 @@
-class Story < ApplicationRecord
+class Adventure < ApplicationRecord
   include Sluggable
 
   slug_from :slug_source

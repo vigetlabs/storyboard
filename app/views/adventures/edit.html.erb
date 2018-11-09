@@ -1,8 +1,8 @@
-<h1>Editing Story: <%= @story %></h1>
+<h1>Editing Adventure: <%= @adventure %></h1>
 
 <% unless current_user %>
   <em>
-    This story doesn't belong to any one user. It is in the public domain.
+    This adventure doesn't belong to any one user. It is in the public domain.
     Arbitrary people could come in here and change whatever. Just so you know.
   </em>
 <% end %>
@@ -11,4 +11,4 @@
   [fancy things here]
 </div>
 
-<%= link_to 'Back', stories_path %>
+<%= link_to 'Back', adventures_path %>

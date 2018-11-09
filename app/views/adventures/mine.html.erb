@@ -1,0 +1,36 @@
+<h1>My Adventures</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @adventures.each do |adventure| %>
+      <tr>
+        <td>
+          <%= adventure %>
+          <%= "(private)" if adventure.private? %>
+        </td>
+        <td><%= link_to 'Play', adventure %></td>
+        <td><%= link_to 'Edit', edit_adventure_path(adventure) %></td>
+        <td><%= link_to 'Destroy', adventure, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Adventure', new_adventure_path %>
+
+<br>
+
+<%= link_to "Edit Account Details", edit_user_registration_path %>
+
+<br>
+
+<%= link_to 'Back', adventures_path %>

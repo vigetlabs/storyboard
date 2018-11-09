@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
   devise_for :users
 
-  root to: "stories#index"
+  root to: "adventures#index"
 
-  resources :stories, path: "/" do
+  resources :adventures, path: "/" do
     get "mine", on: :collection, as: :my
   end
 end

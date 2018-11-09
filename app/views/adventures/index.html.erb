@@ -1,0 +1,23 @@
+<h1>Adventures</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @adventures.each do |adventure| %>
+      <tr>
+        <td><%= adventure %></td>
+        <td><%= link_to 'Play', adventure %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Adventure', new_adventure_path %>

@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_09_045141) do
+ActiveRecord::Schema.define(version: 2018_11_09_051605) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "stories", force: :cascade do |t|
+  create_table "adventures", force: :cascade do |t|
     t.string "title", null: false
     t.string "slug", null: false
     t.text "description"
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 2018_11_09_045141) do
     t.datetime "updated_at", null: false
     t.boolean "private", default: false
     t.integer "user_id"
-    t.index ["user_id"], name: "index_stories_on_user_id"
+    t.index ["user_id"], name: "index_adventures_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -43,5 +43,5 @@ ActiveRecord::Schema.define(version: 2018_11_09_045141) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "stories", "users", on_delete: :cascade
+  add_foreign_key "adventures", "users", on_delete: :cascade
 end
