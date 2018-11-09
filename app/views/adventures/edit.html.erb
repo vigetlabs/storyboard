@@ -1,14 +1,20 @@
-<h1>Editing Adventure: <%= @adventure %></h1>
+<div class="Editor">
+  <header>
+    <h1 class="Titlebar">
+      <%= @story %>
+    </h1>
+    <nav>
+      <%= link_to 'Show', @adventure %> |
+      <%= link_to 'Back', adventures_path %>
+    </nav>
+  </header>
 
-<% unless current_user %>
-  <em>
-    This adventure doesn't belong to any one user. It is in the public domain.
-    Arbitrary people could come in here and change whatever. Just so you know.
-  </em>
-<% end %>
+  <% unless current_user %>
+    <em>
+      This adventure doesn't belong to any one user. It is in the public domain.
+      Arbitrary people could come in here and change whatever. Just so you know.
+    </em>
+  <% end %>
 
-<div>
-  [fancy things here]
+  <main id="editor" class="EditorMain"></main>
 </div>
-
-<%= link_to 'Back', adventures_path %>

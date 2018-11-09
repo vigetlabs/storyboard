@@ -1,0 +1,25 @@
+@import "./variables.css";
+
+html,
+body {
+  box-sizing: border-box;
+  height: 100%;
+  margin: 0;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body {
+  color: var(--color-body);
+  font: 300 16px/1.6 var(--font-system);
+  letter-spacing: 0.01em;
+  margin: 0;
+}
+
+button {
+  cursor: pointer;
+}

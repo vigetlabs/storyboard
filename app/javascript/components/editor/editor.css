@@ -1,0 +1,36 @@
+@import '../variables.css';
+@import '../type.css';
+
+.Editor {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.Editor > header {
+  align-items: center;
+  display: flex;
+  flex-shrink: 0;
+  justify-content: space-between;
+  padding: 0 16px;
+}
+
+.Editor > main {
+  background-color: #224;
+  background-size: 40px 40px;
+  background-image: linear-gradient(
+      to right,
+      var(--color-tooling-inverse) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      var(--color-tooling-inverse) 1px,
+      transparent 1px
+    );
+  flex: 1 1;
+}
+
+.Editor > main > .srd-diagram {
+  height: 100%;
+}
