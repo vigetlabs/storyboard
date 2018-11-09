@@ -3,6 +3,10 @@ class AdventuresController < ApplicationController
 
   def index
     @adventures = Adventure.where(private: false)
+
+    if params[:q]
+      @adventures = @adventures.where("title LIKE ?", "%#{params[:q]}%")
+    end
   end
 
   def mine
@@ -29,7 +33,7 @@ class AdventuresController < ApplicationController
   end
 
   def create
-    @adventure = Adventure.new(story_params)
+    @adventure = Adventure.new(adventure_params)
     @adventure.user = current_user if current_user
 
     if @adventure.save
@@ -40,7 +44,7 @@ class AdventuresController < ApplicationController
   end
 
   def update
-    if @adventure.update(story_params)
+    if @adventure.update(adventure_params)
       redirect_to [:edit, @adventure]
     else
       render :edit
@@ -58,7 +62,7 @@ class AdventuresController < ApplicationController
     @adventure = Adventure.find_by_slug(params[:id])
   end
 
-  def story_params
+  def adventure_params
     params.require(:adventure).permit(:title, :description, :private)
   end
 end
