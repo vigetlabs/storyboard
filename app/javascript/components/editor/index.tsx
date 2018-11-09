@@ -6,7 +6,9 @@ import {
   DefaultNodeModel,
   LinkModel,
   DiagramWidget,
-  DefaultLinkModel
+  DefaultLinkModel,
+  DefaultPortModel,
+  DefaultLabelModel
 } from 'storm-react-diagrams'
 
 import 'storm-react-diagrams/dist/style.min.css'
@@ -32,10 +34,12 @@ const ports = {
   dead: nodes.starve.addInPort('Death')
 }
 
-function link(a, b, label) {
-  let edge = a.link(b)
+function link(a: DefaultPortModel, b: DefaultPortModel, label: string) {
+  const edge = a.link(b)
+  const labelModel = new DefaultLabelModel()
+  labelModel.setLabel(label)
 
-  edge.addLabel(label)
+  edge.addLabel(labelModel)
 
   return edge
 }
