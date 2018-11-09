@@ -10,38 +10,21 @@ import {
   DefaultPortModel,
   DefaultLabelModel
 } from 'storm-react-diagrams'
-import SceneEditor from './SceneEditor';
+import SceneEditor from './SceneEditor'
+import seed from './seed'
 
 import './Editor.css'
 import './FlowChart.css'
 
-const nodes = {
-  hungry: new DefaultNodeModel('You are hungry. Sooo hungry.', '#4CAF50'),
-  cooking: new DefaultNodeModel(
-    'You frying bacon. It smells amazing.',
-    '#ffeb3b'
-  ),
-  starve: new DefaultNodeModel('You ded', '#f44336')
-}
-
-const ports = {
-  findFood: nodes.hungry.addOutPort('Find Food'),
-  wait: nodes.hungry.addOutPort('Wait'),
-  cook: nodes.cooking.addInPort('Input'),
-  dead: nodes.starve.addInPort('Input')
-}
-
-function link(a: DefaultPortModel, b: DefaultPortModel) {
-  return a.link(b)
-}
-
 interface EditorState {
   ready: Boolean
+  scene: Object | null
 }
 
 class Editor extends React.Component<{}, EditorState> {
   state: EditorState = {
-    ready: false
+    ready: false,
+    scene: seed
   }
 
   async componentDidMount() {
@@ -59,25 +42,61 @@ class Editor extends React.Component<{}, EditorState> {
     const model = new DiagramModel()
 
     engine.installDefaultFactories()
-
-    nodes.hungry.setPosition(100, 100)
-    nodes.cooking.setPosition(400, 300)
-    nodes.starve.setPosition(100, 300)
-
-    model.addAll(
-      nodes.hungry,
-      nodes.cooking,
-      nodes.starve,
-      link(ports.findFood, ports.cook),
-      link(ports.wait, ports.dead)
-    )
-
+    model.deSerializeDiagram(this.state.scene, engine)
     engine.setDiagramModel(model)
 
-    return <>
-      <DiagramWidget className="srd-demo-canvas" diagramEngine={engine} />
-      <SceneEditor />
-    </>
+    return (
+      <div className="EditorWorkspace">
+        <menu className="EditorTools">
+          <button className="EditorButton" onClick={() => this.toFile(model)}>
+            Export
+          </button>
+
+          <label className="EditorButton">
+            Import
+            <input
+              type="file"
+              onChange={event => this.loadFile(event.target.files)}
+            />
+          </label>
+        </menu>
+        <DiagramWidget diagramEngine={engine} />
+        <SceneEditor />
+      </div>
+    )
+  }
+
+  private toFile(model: DiagramModel) {
+    let data = model.serializeDiagram()
+    let dataStr =
+      'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data))
+    let anchor = document.createElement('a')
+
+    anchor.setAttribute('href', dataStr)
+    anchor.setAttribute('download', 'scene.json')
+    anchor.style.position = 'absolute'
+
+    document.body.appendChild(anchor)
+    anchor.click()
+    anchor.remove()
+  }
+
+  private loadFile(files: FileList | null) {
+    if (files == null) return
+
+    let file = files[0]
+    let reader = new FileReader()
+
+    let scope = this
+    reader.onload = function() {
+      try {
+        scope.setState({ scene: JSON.parse(`${this.result}`) })
+      } catch (error) {
+        alert("Sorry, we couldn't parse your file :(")
+      }
+    }
+
+    reader.readAsText(file)
   }
 }
 

@@ -1,3 +1,8 @@
 .SceneEditor {
   background: #eee;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  max-width: 300px;
 }

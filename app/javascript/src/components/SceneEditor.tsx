@@ -24,8 +24,11 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     const { state: { story: { scenes }, currentFocusedScene } } = this.props;
     const text = currentFocusedScene ? scenes[currentFocusedScene].text : ""
 
-    return <textarea ref={this.editor} defaultValue={text}>
-    </textarea>
+    return (
+      <aside className="SceneEditor">
+        <textarea ref={this.editor} defaultValue={text} />
+      </aside>
+    )
   }
 
   _install() {
