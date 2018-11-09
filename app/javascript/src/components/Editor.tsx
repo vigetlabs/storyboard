@@ -22,9 +22,21 @@ interface EditorState {
 }
 
 class Editor extends React.Component<{}, EditorState> {
-  state: EditorState = {
-    ready: false,
-    scene: seed
+  engine: DiagramEngine
+  model: DiagramModel
+
+  constructor(props: Object) {
+    super(props)
+
+    this.state = {
+      ready: false,
+      scene: seed
+    }
+
+    this.engine = new DiagramEngine()
+    this.model = new DiagramModel()
+
+    this.engine.setDiagramModel(this.model)
   }
 
   async componentDidMount() {
@@ -38,18 +50,21 @@ class Editor extends React.Component<{}, EditorState> {
       return null
     }
 
-    const engine = new DiagramEngine()
-    const model = new DiagramModel()
-
-    engine.installDefaultFactories()
-    model.deSerializeDiagram(this.state.scene, engine)
-    engine.setDiagramModel(model)
+    this.engine.installDefaultFactories()
+    this.model.deSerializeDiagram(this.state.scene, this.engine)
 
     return (
       <div className="EditorWorkspace">
         <menu className="EditorTools">
-          <button className="EditorButton" onClick={() => this.toFile(model)}>
+          <button
+            className="EditorButton"
+            onClick={() => this.toFile(this.model)}
+          >
             Export
+          </button>
+
+          <button className="EditorButton" onClick={this.addScene}>
+            Add scene
           </button>
 
           <label className="EditorButton">
@@ -60,10 +75,24 @@ class Editor extends React.Component<{}, EditorState> {
             />
           </label>
         </menu>
-        <DiagramWidget diagramEngine={engine} />
+        <DiagramWidget diagramEngine={this.engine} />
         <SceneEditor />
       </div>
     )
+  }
+
+  private refresh() {
+    this.setState({ scene: this.model.serializeDiagram() })
+  }
+
+  private addScene = (event: React.SyntheticEvent) => {
+    var node = new DefaultNodeModel('New Scene')
+
+    node.setPosition(100, 100)
+
+    this.model.addNode(node)
+
+    this.refresh()
   }
 
   private toFile(model: DiagramModel) {
