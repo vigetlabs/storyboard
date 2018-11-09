@@ -14,6 +14,14 @@
                     <%= adventure %>
                   </div>
                 <% end %>
+
+                <div class="card-actions">
+                  <div class="action">
+                    <%= link_to "Edit", [:edit, adventure] %>
+                    |
+                    <%= link_to "Delete", adventure, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+                  </div>
+                </div>
               </div>
           <% end %>
         <% end %>
