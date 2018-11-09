@@ -197,6 +197,7 @@
   stroke: #00c0ff !important;
   stroke-dasharray: 10, 2;
   animation: dash 1s linear infinite;
+  transition: 0.2s all;
 }
 
 .srd-default-link__label {
