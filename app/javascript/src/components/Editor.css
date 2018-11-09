@@ -15,6 +15,15 @@
   padding: 0 16px;
 }
 
+.EditorActions a {
+  text-decoration: none;
+}
+
+.EditorActions a:hover,
+.EditorActions a:focus {
+  text-decoration: underline;
+}
+
 .Editor > main {
   background-color: #224;
   background-size: 40px 40px;
@@ -80,7 +89,7 @@
   margin-top: 0;
 }
 
-.EditorButton > input[type="file"] {
+.EditorButton > input[type='file'] {
   opacity: 0;
   position: absolute;
   left: -100%;

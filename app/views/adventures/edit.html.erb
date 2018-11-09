@@ -1,20 +1,12 @@
 <div class="Editor">
   <header>
     <h1 class="Titlebar">
-      <%= @adventure %>
+      <%= @adventure %> <% unless current_user %><span class="Badge">Public, Anyone Can Edit</span><% end %>
     </h1>
-    <nav>
-      <%= link_to 'Play', @adventure %> |
-      <%= link_to 'Back', adventures_path %>
+    <nav class="EditorActions">
+      <%= link_to 'Play', @adventure %>
     </nav>
   </header>
-
-  <% unless current_user %>
-    <em class="EditorNote">
-      This adventure doesn't belong to any one user. It is in the public domain.
-      Arbitrary people could come in here and change whatever. Just so you know.
-    </em>
-  <% end %>
 
   <main id="editor" class="EditorMain"></main>
 </div>
