@@ -54,15 +54,17 @@ class Editor extends React.Component<EditorProps, EditorState> {
     return (
       <div className="EditorWorkspace">
         <menu className="EditorTools">
+          <button className="EditorButton" onClick={this.addScene}>
+            Add scene
+          </button>
+
+          <hr className="EditorToolsDivider" />
+
           <button
             className="EditorButton"
             onClick={() => this.toFile(this.model)}
           >
             Export
-          </button>
-
-          <button className="EditorButton" onClick={this.addScene}>
-            Add scene
           </button>
 
           <label className="EditorButton">

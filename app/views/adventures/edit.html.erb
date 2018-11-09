@@ -1,15 +1,13 @@
-<div class="Editor">
-  <header>
-    <h1 class="Titlebar">
-      <%= @adventure %> <% unless current_user %><span class="Badge">Public, Anyone Can Edit</span><% end %>
-    </h1>
-    <nav class="EditorActions">
-      <%= link_to 'Play', @adventure %>
-    </nav>
-  </header>
+<header>
+  <h1 class="Titlebar">
+    <%= @adventure %> <% unless current_user %><span class="Badge">Public, Anyone Can Edit</span><% end %>
+  </h1>
+  <nav class="EditorActions">
+    <%= link_to 'Play', @adventure %>
+  </nav>
+</header>
 
-  <main id="editor" class="EditorMain"></main>
-</div>
+<main id="editor" class="EditorMain"></main>
 
 <%= stylesheet_pack_tag "editor" %>
 <%= javascript_pack_tag "editor", async: true, defer: true %>

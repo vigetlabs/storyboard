@@ -30,6 +30,8 @@ class AdventuresController < ApplicationController
       flash[:alert] = "You can't modify that Adventure"
       redirect_to root_url
     end
+
+    render layout: 'editor'
   end
 
   def create
