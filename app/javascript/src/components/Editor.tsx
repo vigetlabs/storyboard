@@ -13,7 +13,7 @@ import {
 
 import 'storm-react-diagrams/dist/style.min.css'
 
-import './editor.css'
+import './Editor.css'
 
 const nodes = {
   hungry: new DefaultNodeModel(

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import Editor from '../components/editor'
+import Editor from '../src/components/Editor'
 
 import '../components/global.css'
 
