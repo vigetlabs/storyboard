@@ -21,8 +21,8 @@ class SceneEditor extends React.Component<SceneEditorProps> {
   }
 
   render() {
-    const { state: { story: { scenes }, currentFocusedScene } } = this.props;
-    const text = currentFocusedScene ? scenes[currentFocusedScene].text : ""
+    const { state: { meta, currentFocusedScene } } = this.props;
+    const text = currentFocusedScene ? meta[currentFocusedScene].text : ""
 
     return (
       <aside className="SceneEditor">
@@ -41,14 +41,18 @@ class SceneEditor extends React.Component<SceneEditorProps> {
   }
 
   _onChange(html?: string) {
-    const { state: { story: { scenes }, currentFocusedScene }, updateState } = this.props;
-    if (!currentFocusedScene) return
-    const scene = {
-      ...scenes[currentFocusedScene],
+    const { state: { meta, currentFocusedScene }, updateState } = this.props;
+    if (!currentFocusedScene || !html) return
+    const metaItem = {
+      ...meta[currentFocusedScene],
       text: html
     }
 
-    updateState({ ...this.props.state, [currentFocusedScene]: scene })
+    updateState({
+      ...this.props.state, meta: {
+        [currentFocusedScene]: metaItem
+      }
+    })
   }
 }
 

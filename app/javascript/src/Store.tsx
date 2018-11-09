@@ -1,22 +1,22 @@
 import * as React from "react";
+import seed from "./seed";
 
 export interface ApplicationState {
-  story: Story,
+  story: Object,
+  meta: MetaData,
   currentFocusedScene?: string,
 }
 
-interface Story {
-  scenes: { [id: string]: Scene }
-}
-
-interface Scene {
-  title: string,
-  text: string,
-  decisions: string[],
+interface MetaData {
+  [id: string]: {
+    title: string,
+    text: string
+  }
 }
 
 const applicationState: ApplicationState = {
-  story: { scenes: {} },
+  story: seed,
+  meta: {},
   currentFocusedScene: undefined
 }
 

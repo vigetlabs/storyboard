@@ -4,34 +4,32 @@ import {
   DiagramEngine,
   DiagramModel,
   DefaultNodeModel,
-  LinkModel,
   DiagramWidget,
-  DefaultLinkModel,
-  DefaultPortModel,
-  DefaultLabelModel
 } from 'storm-react-diagrams'
 import SceneEditor from './SceneEditor'
-import seed from './seed'
+import seed from '../seed'
 
 import './Editor.css'
 import './FlowChart.css'
+import { StateConsumer, ApplicationState } from '../Store';
 
 interface EditorState {
   ready: Boolean
-  scene: Object | null
 }
 
-class Editor extends React.Component<{}, EditorState> {
+interface EditorProps {
+  state: ApplicationState;
+  updateState(state: Readonly<ApplicationState>): Readonly<ApplicationState>;
+}
+
+class Editor extends React.Component<EditorProps, EditorState> {
   engine: DiagramEngine
   model: DiagramModel
 
-  constructor(props: Object) {
+  constructor(props: EditorProps) {
     super(props)
 
-    this.state = {
-      ready: false,
-      scene: seed
-    }
+    this.state = { ready: false }
 
     this.engine = new DiagramEngine()
     this.model = new DiagramModel()
@@ -51,7 +49,7 @@ class Editor extends React.Component<{}, EditorState> {
     }
 
     this.engine.installDefaultFactories()
-    this.model.deSerializeDiagram(this.state.scene, this.engine)
+    this.model.deSerializeDiagram(this.props.state.story, this.engine)
 
     return (
       <div className="EditorWorkspace">
@@ -82,7 +80,9 @@ class Editor extends React.Component<{}, EditorState> {
   }
 
   private refresh() {
-    this.setState({ scene: this.model.serializeDiagram() })
+    const { state, updateState } = this.props
+
+    updateState({ ...state, story: this.model.serializeDiagram() })
   }
 
   private addScene = (event: React.SyntheticEvent) => {
@@ -97,7 +97,7 @@ class Editor extends React.Component<{}, EditorState> {
   }
 
   private toFile(model: DiagramModel) {
-    let data = model.serializeDiagram()
+    let data = { story: model.serializeDiagram(), meta: this.props.state.meta }
     let dataStr =
       'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(data))
     let anchor = document.createElement('a')
@@ -118,9 +118,9 @@ class Editor extends React.Component<{}, EditorState> {
     let reader = new FileReader()
 
     let scope = this
-    reader.onload = function() {
+    reader.onload = function () {
       try {
-        scope.setState({ scene: JSON.parse(`${this.result}`) })
+        scope.props.updateState(JSON.parse(`${this.result}`));
       } catch (error) {
         alert("Sorry, we couldn't parse your file :(")
       }
@@ -130,4 +130,6 @@ class Editor extends React.Component<{}, EditorState> {
   }
 }
 
-export default Editor
+export default () => <StateConsumer>
+  {(props) => <Editor {...props} />}
+</StateConsumer> 
