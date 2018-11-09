@@ -28,7 +28,9 @@
       var(--color-tooling-inverse) 1px,
       transparent 1px
     );
+  display: flex;
   flex: 1 1;
+  flex-direction: row;
 }
 
 .EditorNote {
