@@ -198,11 +198,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     try {
       await save(this.props.state.slug, this.serialize())
     } catch (error) {
-      alert(
-        `Sorry! We couldn't save! It's possible you do not have
-        internet access. Be sure to export your scene before closing
-        the browser!`
-      )
+      alert("Sorry! We couldn't save! It's possible you do not have internet access. Be sure to export your scene before closing the browser!")
     } finally {
       let timeLeft = 600 - Math.min(Date.now() - then, 600)
 

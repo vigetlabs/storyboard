@@ -32,28 +32,38 @@ class SceneEditor extends React.Component<SceneEditorProps> {
 
     return (
       <aside className="SceneEditor" onKeyUp={this.trapKeys}>
-        <h3>Name</h3>
-        <input value={focus.name} onChange={this.onNameChange} />
+        <div className="SceneEditorField">
+          <label htmlFor="title">Name</label>
+          <input name="title" value={focus.name} onChange={this.onNameChange} />
+        </div>
 
-        <h3>Content</h3>
-        <textarea ref={this.editor} defaultValue={text} />
-        <ul>
-          {this.ports.map(port => (
-            <li key={port.id}>
-              <input
-                defaultValue={port.label}
-                onChange={this.updateChoice.bind(this, port)}
-              />{' '}
-              <button onClick={this.removeChoice.bind(this, port)}>
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-        <form onSubmit={this.addChoice}>
-          <input name="label" defaultValue="" min="1" required={true} />
-          <button>Add choice</button>
-        </form>
+        <div className="SceneEditorField">
+          <label htmlFor="content">Content</label>
+          <textarea name="content" ref={this.editor} defaultValue={text} />
+        </div>
+
+        <div className="SceneEditorField">
+          <h3>Choices</h3>
+
+          <ul className="SceneEditorPortList">
+            {this.ports.map(port => (
+              <li key={port.id}>
+                <input
+                  defaultValue={port.label}
+                  onChange={this.updateChoice.bind(this, port)}
+                />{' '}
+                <button onClick={this.removeChoice.bind(this, port)}>
+                  Delete
+                </button>
+              </li>
+            ))}
+          </ul>
+
+          <form onSubmit={this.addChoice} className="SceneEditorPortForm">
+            <input name="label" defaultValue="" min="1" required={true} />
+            <button>Add choice</button>
+          </form>
+        </div>
       </aside>
     )
   }
@@ -104,6 +114,7 @@ class SceneEditor extends React.Component<SceneEditorProps> {
   private install() {
     if (this.editor.current) {
       $R(this.editor.current, {
+        buttons: ['format', 'bold', 'italic', 'lists'],
         callbacks: {
           synced: (html: string) => this.onChange(html)
         }
