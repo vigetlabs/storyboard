@@ -8,6 +8,7 @@ interface Props {
 export default class Workspace extends React.Component<Props> {
   isMouseDown: Boolean = false
   isDragging: Boolean = false
+  mouseDown: Date
 
   render() {
     return (
@@ -35,10 +36,15 @@ export default class Workspace extends React.Component<Props> {
 
   pressMouse = () => {
     this.isMouseDown = true
+    this.mouseDown = new Date()
   }
 
   dragMouse = () => {
-    this.isDragging = this.isMouseDown
+    let now = new Date()
+
+    this.isDragging = (this.isMouseDown && (
+      now.valueOf() - this.mouseDown.valueOf() > 250
+    ))
   }
 
 }
