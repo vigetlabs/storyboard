@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AdventureTime</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+  </head>
+  <body>
+    <div class="Player">
+      <%= render "shared/header" %>
+      <%= yield %>
+
+      <%= stylesheet_pack_tag "player" %>
+      <%= javascript_pack_tag "player", async: true, defer: true %>
+    </div>
+  </body>
+</html>

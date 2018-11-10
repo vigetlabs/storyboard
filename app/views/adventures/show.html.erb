@@ -1,8 +1,7 @@
 <h1>Adventure: <%= @adventure %></h1>
 
-<div>
-  [fancy things here to play the adventure]
-</div>
-
-<%= link_to 'Edit', edit_adventure_path(@adventure) %> |
-<%= link_to 'Back', adventures_path %>
+<script>
+  var SEED = {
+    story: <%== @adventure.content.to_json %>
+  }
+</script>
