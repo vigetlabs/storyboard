@@ -19,7 +19,7 @@
  * Main heading for marketing pages, like log-in
  */
 .PageBanner {
-  font: 400 72px/90px var(--font-serif);
+  font: 400 72px/70px var(--font-serif);
   margin: 0;
 }
 

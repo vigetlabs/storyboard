@@ -1,22 +1,22 @@
 <div class="AccountForm Container">
-  <h1 class="PageBanner">New Adventure</h1>
+  <h1 class="PageBanner">Create a<br>Story</h1>
 
   <% unless current_user %>
     <em>
-      If you'd like to maintain ownership of this adventure, log in or create an
+      If you'd like to maintain ownership of this story, log in or create an
       account before you create it.
     </em>
   <% end %>
 
   <%= form_for @adventure do |f| %>
     <div class="Field">
-      <%= f.label :title %>
-      <%= f.text_field :title %>
+      <%= f.label :title, "What's your title?" %>
+      <%= f.text_field :title, placeholder: "enter title name here" %>
     </div>
 
     <div class="Field">
-      <%= f.label :description %>
-      <%= f.text_area :description %>
+      <%= f.label :description, "What's the premise?" %>
+      <%= f.text_area :description, placeholder: "describe the context of the story" %>
     </div>
 
     <div class="Field -checkbox">

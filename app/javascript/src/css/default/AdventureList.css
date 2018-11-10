@@ -38,14 +38,14 @@
 
 .AdventureList .card iframe {
   background: white;
-  height: 400%;
+  height: 300%;
   left: 0;
   border: 0;
   pointer-events: none;
   position: absolute;
   top: 0;
-  width: 400%;
-  transform: scale(0.25);
+  width: 300%;
+  transform: scale(0.3333333);
   transform-origin: 0 0;
 }
 
