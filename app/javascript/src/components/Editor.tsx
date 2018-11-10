@@ -156,29 +156,42 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private addScene = () => {
-    var node = new DefaultNodeModel('New Scene')
+    let node = new DefaultNodeModel('New Scene')
 
-    var ids = Object.keys(this.model.nodes)
+    let ids = Object.keys(this.model.nodes)
+
+    let targetX
+    let targetY
+
     if (ids.length) {
-      var ySum = ids.reduce((acc, id) => {
+      let ySum = ids.reduce((acc, id) => {
         return acc + this.model.nodes[id].y
       }, 0)
+      let averageY = ySum / ids.length
 
-      var maxX = ids.reduce((acc, id) => {
-        var existing = this.model.nodes[id]
+      let maxX = 0
+      let furthestNode = this.model.nodes[ids[0]]
 
-        if (existing.x > acc) {
-          return existing.x + (existing.width || 0)
-        } else {
-          return acc
+      ids.map((id) => {
+        let existing = this.model.nodes[id]
+
+        let rightEdge = existing.x + (existing.width || 180)
+        if (rightEdge > maxX) {
+          maxX = rightEdge
+          furthestNode = existing
         }
-      }, 0)
+      })
 
-      var targetX = maxX + 100
-      var targetY = ySum / ids.length
+      targetX = maxX + 200
+
+      if (furthestNode.y < averageY) {
+        targetY = furthestNode.y + 200
+      } else {
+        targetY = furthestNode.y - 200
+      }
     } else {
-      var targetX = 150
-      var targetY = 200
+      targetX = 150
+      targetY = 200
     }
 
     node.setPosition(targetX, targetY)
@@ -189,6 +202,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.watchNode(node)
 
     this.model.addNode(node)
+
+    this.clearSelection()
+    node.selected = true
 
     this.repaint()
   }
