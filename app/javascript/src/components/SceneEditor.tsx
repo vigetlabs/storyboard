@@ -151,7 +151,6 @@ class SceneEditor extends React.Component<SceneEditorProps> {
   * do not delete nodes!
   */
   private trapKeys = (event: React.KeyboardEvent) => {
-    debugger
     switch (event.key) {
       case "Escape":
         this.props.onClear()
