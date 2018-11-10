@@ -5,8 +5,6 @@ import {
   DiagramModel,
   DefaultNodeModel,
   DiagramWidget,
-  BaseModel,
-  NodeModel
 } from 'storm-react-diagrams'
 import SceneEditor from './SceneEditor'
 
@@ -57,7 +55,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   render() {
-    const { ready, selected, saving } = this.state
+    const { ready, saving } = this.state
 
     if (ready !== true) {
       return null
@@ -93,7 +91,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
           <button
             className="EditorButton"
-            onClick={() => this.toFile(this.model)}
+            onClick={() => this.toFile()}
           >
             Export
           </button>
@@ -150,20 +148,16 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
   }
 
-  private addScene = (event: React.SyntheticEvent) => {
-    var node = new DefaultNodeModel('New Scene')
-
-    node.setPosition(100, 100)
-
-    node.addInPort('In')
-    node.addOutPort('Next')
-
-    this.model.addNode(node)
-
-    this.refresh()
+  private addScene = () => {
+    var node = new DefaultNodeModel('New Scene');
+    node.setPosition(100, 100);
+    node.addInPort('In');
+    node.addOutPort('Next');
+    this.model.addNode(node);
+    this.refresh();
   }
 
-  private toFile(model: DiagramModel) {
+  private toFile() {
     let dataStr =
       'data:text/json;charset=utf-8,' +
       encodeURIComponent(JSON.stringify(this.serialize()))
@@ -196,12 +190,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     reader.readAsText(file)
   }
 
-  private updateCurrentlySelected(id: string) {
-    const { updateState, state } = this.props
-    updateState({ ...state, currentFocusedScene: id })
-  }
-
-  private saveStory = async (event: React.SyntheticEvent) => {
+  private saveStory = async () => {
     this.setState({ saving: true })
 
     const then = Date.now()
