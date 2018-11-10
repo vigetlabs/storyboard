@@ -69,6 +69,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
       this.model.deSerializeDiagram(this.props.state.story, this.engine)
     }
 
+    for (let key in this.model.nodes) {
+      this.model.nodes[key].addListener({
+        entityRemoved: this.refresh
+      })
+    }
+
     return (
       <Workspace
         onClear={this.clearSelection}
