@@ -34,7 +34,11 @@ class SceneEditor extends React.Component<SceneEditorProps> {
       <aside className="SceneEditor" onKeyUp={this.trapKeys}>
         <div className="SceneEditorField">
           <label htmlFor="title">Name</label>
-          <input name="title" defaultValue={focus.name} onChange={this.onNameChange} />
+          <input
+            name="title"
+            defaultValue={focus.name}
+            onChange={this.onNameChange}
+          />
         </div>
 
         <div className="SceneEditorField">
@@ -79,7 +83,15 @@ class SceneEditor extends React.Component<SceneEditorProps> {
   removeChoice = (port: DefaultPortModel) => {
     const { focus, requestPaint } = this.props
 
+    // Avoids zombie links attached to the input node
+    Object.keys(port.links).forEach(id => {
+      // This removes the link itself. It is different than
+      // port.removeLink(), which only disconnects the port
+      port.links[id].remove()
+    })
+
     focus.removePort(port)
+
     requestPaint()
   }
 

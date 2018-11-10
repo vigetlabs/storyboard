@@ -51,7 +51,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
     for (let key in this.model.nodes) {
       this.model.nodes[key].addListener({
-        entityRemoved: this.forceUpdate.bind(this)
+        entityRemoved: () => this.forceUpdate()
       })
     }
 
