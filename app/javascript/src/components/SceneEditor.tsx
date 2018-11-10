@@ -16,6 +16,7 @@ interface SceneEditorProps {
   updateState(state: Readonly<ApplicationState>): Readonly<ApplicationState>
   focus: DefaultNodeModel
   requestPaint: () => void
+  onClear: () => void
 }
 
 class SceneEditor extends React.Component<SceneEditorProps> {
@@ -31,7 +32,7 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     const text = get(state, `meta.${focus.id}.text`)
 
     return (
-      <aside className="SceneEditor">
+      <aside className="SceneEditor" onKeyUp={this.trapKeys}>
         <div className="SceneEditorField">
           <label htmlFor="title">Name</label>
           <input
@@ -144,14 +145,30 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     this.props.focus.name = event.currentTarget.value
     this.props.requestPaint()
   }
+
+  /**
+  * Important: We trap key presses in the sidebar so that backspaces
+  * do not delete nodes!
+  */
+  private trapKeys = (event: React.KeyboardEvent) => {
+    debugger
+    switch (event.key) {
+      case "Escape":
+        this.props.onClear()
+        break
+      default:
+        event.stopPropagation()
+    }
+  }
 }
 
 interface ConsumerProps {
   focus: DefaultNodeModel | null
   requestPaint: () => void
+  onClear: () => void
 }
 
-export default ({ focus, requestPaint }: ConsumerProps) => {
+export default ({ focus, requestPaint, onClear }: ConsumerProps) => {
   if (focus == null) {
     return null
   }
@@ -163,6 +180,7 @@ export default ({ focus, requestPaint }: ConsumerProps) => {
           key={focus.id}
           requestPaint={requestPaint}
           focus={focus}
+          onClear={onClear}
           {...props}
         />
       )}
