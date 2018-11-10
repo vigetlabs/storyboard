@@ -15,5 +15,9 @@ export async function save(slug: String, content: Object) {
     })
   })
 
+  if (request.ok === false) {
+    throw request
+  }
+
   return request.json()
 }

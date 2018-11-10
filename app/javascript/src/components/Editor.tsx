@@ -10,6 +10,8 @@ import {
 } from 'storm-react-diagrams'
 import SceneEditor from './SceneEditor'
 
+import Workspace from './Workspace'
+
 import './Editor.css'
 import './FlowChart.css'
 import { StateConsumer, ApplicationState } from '../Store'
@@ -18,6 +20,7 @@ import { save } from '../persistance'
 interface EditorState {
   ready: Boolean
   selected: string | null
+  saving: Boolean
 }
 
 interface EditorProps {
@@ -37,7 +40,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
     this.state = {
       ready: false,
-      selected: null
+      selected: null,
+      saving: false
     }
 
     this.engine = new DiagramEngine()
@@ -53,7 +57,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   render() {
-    const { ready, selected } = this.state
+    const { ready, selected, saving } = this.state
 
     if (ready !== true) {
       return null
@@ -66,11 +70,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
 
     return (
-      <div
-        className="EditorWorkspace"
-        onMouseUp={this.releaseMouse}
-        onMouseDown={this.pressMouse}
-        onMouseMove={this.dragMouse}
+      <Workspace
+        onClear={this.clearSelection}
+        onRelease={this.refreshEventually}
       >
         <menu className="EditorTools">
           <button className="EditorButton" onClick={this.addScene}>
@@ -80,7 +82,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
           <hr className="EditorToolsDivider" />
 
           <button className="EditorButton" onClick={this.saveStory}>
-            Save
+            {saving ? 'Saving...' : 'Save'}
           </button>
 
           <button
@@ -100,27 +102,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
         </menu>
         <DiagramWidget diagramEngine={this.engine} maxNumberPointsPerLink={0} />
         <SceneEditor focus={this.getFocus()} requestPaint={this.refresh} />
-      </div>
+      </Workspace>
     )
   }
 
-  releaseMouse = () => {
-    if (this.isDragging) {
-      this.model.clearSelection()
-    }
-
-    this.isMouseDown = false
-    this.isDragging = false
-
-    this.refreshEventually()
-  }
-
-  pressMouse = () => {
-    this.isMouseDown = true
-  }
-
-  dragMouse = () => {
-    this.isDragging = this.isMouseDown
+  clearSelection = () => {
+    this.model.clearSelection()
   }
 
   private getFocus(): DefaultNodeModel | null {
@@ -208,8 +195,27 @@ class Editor extends React.Component<EditorProps, EditorState> {
     updateState({ ...state, currentFocusedScene: id })
   }
 
-  private saveStory = (event: React.SyntheticEvent) => {
-    save(this.props.state.slug, this.serialize())
+  private saveStory = async (event: React.SyntheticEvent) => {
+    this.setState({ saving: true })
+
+    const then = Date.now()
+
+    try {
+      await save(this.props.state.slug, this.serialize())
+    } catch (error) {
+      alert(
+        `Sorry! We couldn't save! It's possible you do not have
+        internet access. Be sure to export your scene before closing
+        the browser!`
+      )
+    } finally {
+      let timeLeft = 600 - Math.min(Date.now() - then, 600)
+
+      // Add a stupid delay to make it look like it really did save
+      setTimeout(() => {
+        this.setState({ saving: false })
+      }, timeLeft)
+    }
   }
 }
 
