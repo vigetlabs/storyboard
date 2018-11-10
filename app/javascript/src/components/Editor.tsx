@@ -4,10 +4,11 @@ import {
   DiagramEngine,
   DiagramModel,
   DefaultNodeModel,
-  DiagramWidget
+  DiagramWidget,
+  NodeModel
 } from 'storm-react-diagrams'
-import SceneEditor from './SceneEditor'
 
+import SceneEditor from './SceneEditor'
 import Workspace from './Workspace'
 
 import './Editor.css'
@@ -50,9 +51,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.model.deSerializeDiagram(this.props.state.story, this.engine)
 
     for (let key in this.model.nodes) {
-      this.model.nodes[key].addListener({
-        entityRemoved: () => this.forceUpdate()
-      })
+      this.watchNode(this.model.nodes[key])
     }
 
     this.engine.setDiagramModel(this.model)
@@ -100,15 +99,31 @@ class Editor extends React.Component<EditorProps, EditorState> {
               />
             </label>
           </menu>
-          <DiagramWidget diagramEngine={this.engine} maxNumberPointsPerLink={0} />
+          <DiagramWidget
+            diagramEngine={this.engine}
+            maxNumberPointsPerLink={0}
+          />
         </Workspace>
-        <SceneEditor focus={this.getFocus()} requestPaint={this.eventuallyForceUpdate} />
+        <SceneEditor
+          focus={this.getFocus()}
+          requestPaint={this.eventuallyForceUpdate}
+        />
       </>
     )
   }
 
-  clearSelection = () => {
+  private clearSelection = () => {
     this.model.clearSelection()
+  }
+
+  private watchNode = (node: NodeModel) => {
+    node.addListener({
+      entityRemoved: () => {
+        this.clearSelection()
+        this.repaint()
+        this.forceUpdate()
+      }
+    })
   }
 
   private getFocus(): DefaultNodeModel | null {
@@ -156,21 +171,23 @@ class Editor extends React.Component<EditorProps, EditorState> {
         }
       }, 0)
 
-      var targetX = maxX + 100;
-      var targetY = (ySum / ids.length);
+      var targetX = maxX + 100
+      var targetY = ySum / ids.length
     } else {
-      var targetX = 150;
-      var targetY = 200;
+      var targetX = 150
+      var targetY = 200
     }
 
-    node.setPosition(targetX, targetY);
+    node.setPosition(targetX, targetY)
 
-    node.addInPort('In');
-    node.addOutPort('Next');
+    node.addInPort('In')
+    node.addOutPort('Next')
 
-    this.model.addNode(node);
+    this.watchNode(node)
 
-    this.repaint();
+    this.model.addNode(node)
+
+    this.repaint()
   }
 
   private toFile() {

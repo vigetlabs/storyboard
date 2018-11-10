@@ -52,6 +52,7 @@
   user-select: none;
   cursor: move;
   pointer-events: all;
+  transform: translateZ(0);
 }
 
 .srd-node--selected > * {
@@ -122,7 +123,7 @@
   flex-direction: column;
 }
 
-.srd-default-node__out .name  {
+.srd-default-node__out .name {
   max-width: 100px;
   overflow: hidden;
   text-overflow: ellipsis;
