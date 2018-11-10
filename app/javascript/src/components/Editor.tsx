@@ -80,6 +80,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
 
     this.calculateNodeColors()
+    this.removeOrphanLinks()
 
     return (
       <>
@@ -321,6 +322,26 @@ class Editor extends React.Component<EditorProps, EditorState> {
       } else  {
         // connected
         node.color = '#00bfff'
+      }
+    })
+  }
+
+  private removeOrphanLinks = () => {
+    let ids = Object.keys(this.model.nodes)
+
+    ids.map((id) => {
+      let node = this.model.nodes[id] as DefaultNodeModel
+
+      for (let key in node.ports) {
+        let port = node.ports[key] as DefaultPortModel
+
+        for (let linkKey in port.links) {
+          let link = port.links[linkKey]
+
+          if (link.targetPort === null) {
+            port.links[linkKey].remove()
+          }
+        }
       }
     })
   }
