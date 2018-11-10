@@ -15,6 +15,7 @@ class AdventuresController < ApplicationController
   end
 
   def show
+    render layout: 'player'
   end
 
   def new

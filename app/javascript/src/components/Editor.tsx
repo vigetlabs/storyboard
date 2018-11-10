@@ -249,7 +249,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
         "Sorry! We couldn't save! It's possible you do not have internet access. Be sure to export your scene before closing the browser!"
       )
     } finally {
-      let timeLeft = 600 - Math.min(Date.now() - then, 600)
+      let timeLeft = 400 - Math.min(Date.now() - then, 400)
 
       // Add a stupid delay to make it look like it really did save
       setTimeout(() => {

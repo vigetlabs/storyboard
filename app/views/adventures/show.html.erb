@@ -1,5 +1,7 @@
 <h1>Adventure: <%= @adventure %></h1>
 
+<div id="player"></div>
+
 <script>
   var SEED = {
     story: <%== @adventure.content.to_json %>
