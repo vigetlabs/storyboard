@@ -1,9 +1,14 @@
-<h1>Adventure: <%= @adventure %></h1>
+<div class="PlayerContainer">
+  <h1 class="PlayerTitle">
+    <span class="PlayerTitlePrelude">You have embarked on&hellip;</span>
+    <%= @adventure %>
+  </h1>
 
-<div id="player"></div>
+  <div id="player"></div>
 
-<script>
-  var SEED = {
-    story: <%== @adventure.content.to_json %>
-  }
-</script>
+  <script>
+    var SEED = {
+      story: <%== @adventure.content.to_json %>
+    }
+  </script>
+</div>

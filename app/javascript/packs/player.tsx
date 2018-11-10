@@ -5,7 +5,7 @@ import '../src/global.css'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
-import Player from "../src/components/Player"
+import Player from '../src/components/Player'
 
 const story = SEED.story
 

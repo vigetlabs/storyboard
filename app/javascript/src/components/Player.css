@@ -1,0 +1,31 @@
+/**
+ * It's game time
+ */
+
+@import "../variables.css";
+
+.PlayerTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 0 0 16px;
+  line-height: 1;
+}
+
+.PlayerTitlePrelude {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 15px;
+  display: block;
+  opacity: .88;
+  margin-bottom: 4px;
+}
+
+.PlayerContainer {
+  max-width: 600px;
+  margin: 48px auto;
+}
+
+.PlayerSectionTitle {
+  font-size: 18px;
+  margin-top: 48px;
+}

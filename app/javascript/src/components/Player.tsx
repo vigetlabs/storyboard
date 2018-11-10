@@ -7,6 +7,8 @@ import {
   DefaultPortModel
 } from 'storm-react-diagrams'
 
+import "./Player.css";
+
 import { MetaData } from '../Store'
 
 interface PlayerProps {
@@ -67,7 +69,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
     return (
       <main>
-        <header>
+        <header className="PlayerSectionTitle">
           {node.name}
         </header>
 
