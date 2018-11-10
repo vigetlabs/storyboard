@@ -3,12 +3,12 @@ import seed from './seed'
 
 export interface ApplicationState {
   slug: String
-  story?: Object
+  story?: any
   meta: MetaData
   currentFocusedScene?: string
 }
 
-interface MetaData {
+export interface MetaData {
   [id: string]: {
     title: string
     text: string

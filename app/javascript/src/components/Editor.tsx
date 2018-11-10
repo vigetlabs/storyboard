@@ -16,7 +16,6 @@ import { save } from '../persistance'
 
 interface EditorState {
   ready: Boolean
-  saving: false
 }
 
 interface EditorProps {
@@ -48,12 +47,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   shouldComponentUpdate(nextProps: EditorProps, nextState: EditorState) {
-    if (
+    return (
       this.props.state.story.id !== nextProps.state.story.id ||
       this.state.ready !== nextState.ready
     )
-      return true
-    else return false
   }
 
   render() {
@@ -112,6 +109,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     const { state, updateState } = this.props
 
     updateState({
+      ...state,
       story: this.model.serializeDiagram()
     })
   }
@@ -170,8 +168,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private updateCurrentlySelected(id: string) {
-    const { updateState } = this.props
-    updateState({ currentFocusedScene: id })
+    const { updateState, state } = this.props
+    updateState({ ...state, currentFocusedScene: id })
   }
 
   private saveStory = (event: React.SyntheticEvent) => {

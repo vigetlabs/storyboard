@@ -6,10 +6,20 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
 import Editor from '../src/components/Editor'
-import { ApplicationComponent } from '../src/Store'
+import { ApplicationComponent, MetaData } from '../src/Store'
 
-const slug = window.SEED.slug
-const story = window.SEED.story
+declare global {
+  const SEED: {
+    slug: string
+    story: {
+      story: any
+      meta: MetaData
+    }
+  }
+}
+
+const slug = SEED.slug
+const story = SEED.story
 
 ReactDOM.render(
   <ApplicationComponent slug={slug} meta={story.meta} story={story.story}>
