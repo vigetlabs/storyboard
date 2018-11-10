@@ -1,5 +1,6 @@
 .SceneEditor {
-  background: #eee;
+  background: rgba(70, 104, 136, .87);
+  color: white;
   height: 100%;
   max-width: 33%;
   min-width: 300px;
@@ -19,13 +20,16 @@
 .SceneEditorField h3 {
   display: block;
   font-weight: bold;
-  font-size: 13px;
-  margin: 0;
+  font-size: 16px;
+  margin: 0 0 10px;
 }
 
 .SceneEditorField input,
 .SceneEditorField textarea {
   width: 100%;
+  height: 33px;
+  padding: 8px;
+  font-size: 13px;
 }
 
 .SceneEditorPortList {
@@ -44,4 +48,12 @@
 .SceneEditorPortForm input {
   flex-grow: 1;
   padding: 8px;
+}
+
+.SceneEditor .redactor-styles {
+  font-size: 13px;
+}
+
+.SceneEditor .redactor-box.redactor-styles-on .redactor-toolbar {
+  padding: 5px;
 }

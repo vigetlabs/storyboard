@@ -60,7 +60,7 @@
 }
 
 .EditorTools {
-  background: #aaa;
+  background: rgba(96, 135, 173, 0.87);
   border-radius: 2px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.54);
   left: 16px;
