@@ -31,7 +31,7 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     const text = get(state, `meta.${focus.id}.text`)
 
     return (
-      <aside className="SceneEditor" onKeyUp={this.trapKeys}>
+      <aside className="SceneEditor">
         <div className="SceneEditorField">
           <label htmlFor="title">Name</label>
           <input
@@ -143,14 +143,6 @@ class SceneEditor extends React.Component<SceneEditorProps> {
   private onNameChange = (event: React.FormEvent<HTMLInputElement>) => {
     this.props.focus.name = event.currentTarget.value
     this.props.requestPaint()
-  }
-
-  /**
-   * Important: We trap key presses in the sidebar so that backspaces
-   * do not delete nodes!
-   */
-  private trapKeys = (event: React.KeyboardEvent) => {
-    event.stopPropagation()
   }
 }
 

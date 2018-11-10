@@ -24,7 +24,7 @@
   text-decoration: underline;
 }
 
-.Editor > main {
+.EditorMain {
   background-color: #224;
   background-size: 40px 40px;
   background-image: linear-gradient(
@@ -40,6 +40,7 @@
   display: flex;
   flex: 1 1;
   flex-direction: row;
+  position: relative;
 }
 
 .EditorWorkspace {
