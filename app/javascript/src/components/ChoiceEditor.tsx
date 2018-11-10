@@ -1,5 +1,6 @@
 import * as React from "react";
 import { DefaultNodeModel, DefaultPortModel } from "storm-react-diagrams";
+import PortEditor from "./PortEditor";
 
 interface ChoiceEditorProps {
   focus: DefaultNodeModel
@@ -11,15 +12,12 @@ class ChoiceEditor extends React.Component<ChoiceEditorProps> {
     return <>
       <ul className="SceneEditorPortList">
         {this.ports.map(port => (
-          <li key={port.id}>
-            <input
-              defaultValue={port.label}
-              onChange={this.updateChoice.bind(this, port)}
-            />{' '}
-            <button onClick={this.removeChoice.bind(this, port)}>
-              Delete
-                </button>
-          </li>
+          <PortEditor
+            key={port.id}
+            port={port}
+            removeChoice={this.removeChoice.bind(this, port)}
+            updateChoice={this.updateChoice.bind(this, port)}
+          />
         ))}
       </ul>
 
