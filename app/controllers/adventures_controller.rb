@@ -25,7 +25,7 @@ class AdventuresController < ApplicationController
   def edit
     if @adventure.user && @adventure.user != current_user
       flash[:alert] = "You can't modify that Adventure"
-      redirect_to root_url
+      return redirect_to root_url
     end
 
     render layout: 'editor'
