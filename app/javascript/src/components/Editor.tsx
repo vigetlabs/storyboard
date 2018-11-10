@@ -4,6 +4,7 @@ import {
   DiagramEngine,
   DiagramModel,
   DefaultNodeModel,
+  DefaultPortModel,
   DiagramWidget,
   NodeModel
 } from 'storm-react-diagrams'
@@ -77,6 +78,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
     if (ready !== true) {
       return null
     }
+
+    this.calculateNodeColors()
 
     return (
       <>
@@ -266,6 +269,47 @@ class Editor extends React.Component<EditorProps, EditorState> {
   private toggleRouting = () => {
     this.setState({
       smartRouting: !this.state.smartRouting
+    })
+  }
+
+  private calculateNodeColors = () => {
+    let ids = Object.keys(this.model.nodes)
+
+    ids.map((id) => {
+      let node = this.model.nodes[id] as DefaultNodeModel
+
+      let inPortsWithLinks = []
+      let outPortsWithLinks = []
+      let outPorts = []
+
+      for (let key in node.ports) {
+        let port = node.ports[key] as DefaultPortModel
+        if (port.in === true) {
+          if (Object.keys(port.links).length) {
+            inPortsWithLinks.push(port)
+          }
+        } else {
+          outPorts.push(port)
+
+          if (Object.keys(port.links).length) {
+            outPortsWithLinks.push(port)
+          }
+        }
+      }
+
+      if (!inPortsWithLinks.length && outPortsWithLinks.length) {
+        // start: has no [in ports with links], [has out ports with links]
+        node.color = '#4CAF50'
+      } else if (!inPortsWithLinks.length && !outPortsWithLinks.length) {
+        // orphan: has no [in/out ports with links]
+        node.color = '#ffeb3b'
+      } else if (!outPorts.length) {
+        // end: has no out ports
+        node.color = '#f6412d'
+      } else  {
+        // connected
+        node.color = '#00bfff'
+      }
     })
   }
 }
