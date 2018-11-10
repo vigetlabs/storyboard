@@ -72,36 +72,38 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
 
     return (
-      <Workspace
-        onClear={this.clearSelection}
-        onRelease={this.eventuallyForceUpdate}
-      >
-        <menu className="EditorTools">
-          <button className="EditorButton" onClick={this.addScene}>
-            Add scene
-          </button>
+      <>
+        <Workspace
+          onClear={this.clearSelection}
+          onRelease={this.eventuallyForceUpdate}
+        >
+          <menu className="EditorTools">
+            <button className="EditorButton" onClick={this.addScene}>
+              Add scene
+            </button>
 
-          <hr className="EditorToolsDivider" />
+            <hr className="EditorToolsDivider" />
 
-          <button className="EditorButton" onClick={this.saveStory}>
-            {saving ? 'Saving...' : 'Save'}
-          </button>
+            <button className="EditorButton" onClick={this.saveStory}>
+              {saving ? 'Saving...' : 'Save'}
+            </button>
 
-          <button className="EditorButton" onClick={() => this.toFile()}>
-            Export
-          </button>
+            <button className="EditorButton" onClick={() => this.toFile()}>
+              Export
+            </button>
 
-          <label className="EditorButton">
-            Import
-            <input
-              type="file"
-              onChange={event => this.loadFile(event.target.files)}
-            />
-          </label>
-        </menu>
-        <DiagramWidget diagramEngine={this.engine} maxNumberPointsPerLink={0} />
+            <label className="EditorButton">
+              Import
+              <input
+                type="file"
+                onChange={event => this.loadFile(event.target.files)}
+              />
+            </label>
+          </menu>
+          <DiagramWidget diagramEngine={this.engine} maxNumberPointsPerLink={0} />
+        </Workspace>
         <SceneEditor focus={this.getFocus()} requestPaint={this.eventuallyForceUpdate} />
-      </Workspace>
+      </>
     )
   }
 
