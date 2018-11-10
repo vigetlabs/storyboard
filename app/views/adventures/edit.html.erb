@@ -9,5 +9,12 @@
 
 <main id="editor" class="EditorMain"></main>
 
+<script>
+  var SEED = {
+    slug: "<%= @adventure.to_param %>",
+    story: <%== @adventure.content.to_json %>
+  }
+</script>
+
 <%= stylesheet_pack_tag "editor" %>
 <%= javascript_pack_tag "editor", async: true, defer: true %>

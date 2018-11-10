@@ -1,20 +1,22 @@
-import * as React from "react";
-import seed from "./seed";
+import * as React from 'react'
+import seed from './seed'
 
 export interface ApplicationState {
-  story: any,
-  meta: MetaData,
-  currentFocusedScene?: string,
+  slug: String
+  story?: Object
+  meta: MetaData
+  currentFocusedScene?: string
 }
 
 interface MetaData {
   [id: string]: {
-    title: string,
+    title: string
     text: string
   }
 }
 
 const applicationState: ApplicationState = {
+  slug: '',
   story: seed,
   meta: {},
   currentFocusedScene: undefined
@@ -24,18 +26,48 @@ const ApplicationStateContext = React.createContext({
   state: applicationState,
 
   updateState(state: ApplicationState): ApplicationState {
-    return applicationState;
+    return applicationState
   }
 })
 
-export class ApplicationComponent extends React.Component {
-  state = applicationState
+interface Props {
+  slug: String
+  story: Object
+  meta: MetaData
+}
+
+export class ApplicationComponent extends React.Component<
+  Props,
+  ApplicationState
+> {
+  static defaultProps = {
+    story: seed.story,
+    meta: seed.meta
+  }
+
+  constructor(props: Props) {
+    super(props)
+
+    this.state = {
+      ...applicationState,
+      slug: props.slug,
+      story: props.story,
+      meta: props.meta
+    }
+  }
 
   render() {
-    return <ApplicationStateContext.Provider value={{ state: this.state, updateState: this.setState.bind(this) }}>
-      {this.props.children}
-    </ApplicationStateContext.Provider>
+    const value = {
+      state: this.state,
+      updateState: this.setState.bind(this)
+    }
+
+    return (
+      <ApplicationStateContext.Provider value={value}>
+        {this.props.children}
+      </ApplicationStateContext.Provider>
+    )
   }
 }
 
-export const StateConsumer = ApplicationStateContext.Consumer;
+export const StateConsumer = ApplicationStateContext.Consumer

@@ -18,6 +18,8 @@ class Api::AdventuresController < ApplicationController
   private
 
   def adventure_params
-    params.require(:adventure).permit(:content)
+    {
+      content: params.require(:adventure).permit![:content]
+    }
   end
 end
