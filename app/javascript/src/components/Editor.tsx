@@ -100,7 +100,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
           </label>
         </menu>
         <DiagramWidget diagramEngine={this.engine} maxNumberPointsPerLink={0} />
-        <SceneEditor focus={this.getFocus()} requestPaint={this.repaint} />
+        <SceneEditor focus={this.getFocus()} requestPaint={this.eventuallyForceUpdate} />
       </Workspace>
     )
   }
