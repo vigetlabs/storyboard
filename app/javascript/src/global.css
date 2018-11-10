@@ -1,99 +1,12 @@
 @import './variables.css';
-
-html,
-body {
-  box-sizing: border-box;
-  height: 100%;
-  margin: 0;
-}
-
-*,
-*:before,
-*:after {
-  box-sizing: inherit;
-}
-
-body {
-  color: var(--color-body);
-  font: 300 16px/1.6 var(--font-sans);
-  letter-spacing: 0.01em;
-  margin: 0;
-}
-
-button {
-  cursor: pointer;
-}
-
-p.notice,
-p.alert {
-  text-align: center;
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 10px;
-  background: lightgrey;
-  border-radius: 5px;
-}
+@import './reset.css';
+@import './css/default/AdventureHeader.css';
+@import './css/default/Badge.css';
+@import './css/default/Brand.css';
 
 .Container {
   max-width: 1100px;
   padding: 0 24px;
   margin: 0 auto;
   width: 100%;
-}
-
-.AdventureHeader {
-  background: var(--mkt-charcoal);
-  color: #eee;
-  padding: 10px 0;
-  width: 100%;
-}
-
-.AdventureHeader .Container {
-  display: flex;
-}
-
-.AdventureHeaderMenu {
-  flex: 1 0;
-  text-align: right;
-}
-
-.AdventureHeaderMenu a {
-  color: inherit;
-  font-size: 13px;
-  font-weight: 500;
-  margin: 0 20px;
-  text-decoration: none;
-  text-transform: uppercase;
-  transition: 0.2s all;
-}
-
-.AdventureHeaderMenu a:hover,
-.AdventureHeaderMenu a:focus {
-  color: var(--mkt-gold);
-}
-
-.Badge {
-  background: #223;
-  border-radius: 3px;
-  color: white;
-  display: inline-block;
-  font-size: 12px;
-  padding: 4px 8px;
-  vertical-align: middle;
-  margin: 0 8px;
-}
-
-.Brand {
-  /* https://www.cssfontstack.com/Garamond */
-  font-family: Garamond, Baskerville, Baskerville Old Face, Hoefler Text, Times New Roman, serif;
-  color: inherit;
-  text-decoration: none;
-  font-size: 24px;
-  line-height: 32px;
-  transition: 0.2s all;
-}
-
-.Brand:hover,
-.Brand:focus {
-  color: var(--mkt-gold);
 }

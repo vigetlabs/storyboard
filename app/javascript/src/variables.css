@@ -1,13 +1,15 @@
 :root {
   --font-sans: 'Open Sans', sans-serif;
-  --font-serif: Garamond, Georgia, serif;
+  /* https://www.cssfontstack.com/Garamond */
+  --font-serif: Garamond, Baskerville, Baskerville Old Face, Hoefler Text,
+    Times New Roman, serif;
 
   /**
    * These colors are used for marketing pages. They should be
    * different so they aren't coupled to the editor
    */
-  --mkt-charcoal: #2B2D39;
-  --mkt-gold: #D7A10C;
+  --mkt-charcoal: #2b2d39;
+  --mkt-gold: #d7a10c;
   --mkt-text: white;
 
   /**

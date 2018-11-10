@@ -2,7 +2,7 @@
  * Non-editing pages have a dark theme.
  */
 
-@import "../../variables.css";
+@import '../../variables.css';
 
 .ThemeDark {
   background: var(--mkt-charcoal);

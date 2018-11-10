@@ -1,0 +1,40 @@
+/**
+ * Main header. Shows navigation, logo, and session management
+ */
+
+@import '../../variables.css';
+
+.AdventureHeader {
+  background: var(--mkt-charcoal);
+  color: #eee;
+  padding: 10px 0;
+  width: 100%;
+}
+
+.AdventureHeader .Container {
+  display: flex;
+}
+
+.AdventureHeaderMenu {
+  flex: 1 0;
+  text-align: right;
+}
+
+.AdventureHeaderMenu a {
+  color: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0 20px;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: 0.2s all;
+}
+
+.AdventureHeaderMenu a:last-child {
+  margin-right: 0;
+}
+
+.AdventureHeaderMenu a:hover,
+.AdventureHeaderMenu a:focus {
+  color: var(--mkt-gold);
+}
