@@ -67,9 +67,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
        */
       this.setState({ smartRouting: false })
     }, 100)
-
-    // Naive auto saving
-    setInterval(this.saveStory, 10000)
   }
 
   render() {
@@ -87,6 +84,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
         <Workspace
           onClear={this.clearSelection}
           onRelease={this.eventuallyForceUpdate}
+          saveStory={this.saveStory}
         >
           <menu className="EditorTools">
             <button className="EditorButton" onClick={this.addScene}>

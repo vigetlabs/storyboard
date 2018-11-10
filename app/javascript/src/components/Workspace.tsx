@@ -1,14 +1,22 @@
 import * as React from 'react'
 
-interface Props {
+interface WorkspaceProps {
   onClear: () => void
   onRelease: () => void
+  saveStory: () => void
 }
 
-export default class Workspace extends React.Component<Props> {
+export default class Workspace extends React.Component<WorkspaceProps> {
   isMouseDown: Boolean = false
   isDragging: Boolean = false
   mouseDown: Date
+
+  constructor(props: WorkspaceProps) {
+    super(props)
+
+    // Naive auto saving unless you're dragging
+    setInterval(this.maybySaveStory, 10000)
+  }
 
   render() {
     return (
@@ -47,4 +55,9 @@ export default class Workspace extends React.Component<Props> {
     ))
   }
 
+  maybySaveStory = () => {
+    if (!this.isMouseDown) {
+      this.props.saveStory()
+    }
+  }
 }
