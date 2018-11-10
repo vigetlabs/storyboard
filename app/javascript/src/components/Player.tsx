@@ -70,7 +70,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
         <div dangerouslySetInnerHTML={{ __html: meta.text }} />
 
-        <ul className="PlayerChoiceList">
+        <ul className="PlayerChoiceList" hidden={choices.length <= 0}>
           {choices.map(port => (
             <li key={port.id}>
               <p>{port.label}</p>
