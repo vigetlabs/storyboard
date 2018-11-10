@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 
 import {
   DiagramModel,
@@ -7,7 +7,7 @@ import {
   DefaultPortModel
 } from 'storm-react-diagrams'
 
-import "./Player.css";
+import './Player.css'
 
 import { MetaData } from '../Store'
 
@@ -36,7 +36,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   componentDidMount() {
-    console.log('mounting');
+    console.log('mounting')
     this.setState({
       focus: this.findStartKey()
     })
@@ -58,32 +58,23 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     let node = this.model.getNode(focus) as DefaultNodeModel
 
     if (node == null) {
-      return (
-        <main>
-          Oh no! You really shouldn't ever see this message.
-        </main>
-      )
+      return <main>Oh no! You really shouldn't ever see this message.</main>
     }
 
-    let meta = this.props.meta[focus] || { text: "" }
+    let meta = this.props.meta[focus] || { text: '' }
+    let choices = this.ports(node)
 
     return (
       <main>
-        <header className="PlayerSectionTitle">
-          {node.name}
-        </header>
+        <header className="PlayerSectionTitle">{node.name}</header>
 
         <div dangerouslySetInnerHTML={{ __html: meta.text }} />
 
-        <ul>
-          {this.ports(node).map(port => (
+        <ul className="PlayerChoiceList">
+          {choices.map(port => (
             <li key={port.id}>
-              <span>
-                {port.label}
-              </span>
-              <button onClick={this.makeChoice.bind(this, port)}>
-                Go ->
-              </button>
+              <p>{port.label}</p>
+              <button onClick={this.makeChoice.bind(this, port)} title="Follow this path">›</button>
             </li>
           ))}
         </ul>
@@ -105,7 +96,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   private findStartKey() {
-    let viableStartNodes = Object.keys(this.model.nodes).filter((id) => {
+    let viableStartNodes = Object.keys(this.model.nodes).filter(id => {
       let node = this.model.nodes[id]
 
       let linkedInPorts = []

@@ -9,6 +9,8 @@
   font-weight: bold;
   margin: 0 0 16px;
   line-height: 1;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  padding-bottom: 32px;
 }
 
 .PlayerTitlePrelude {
@@ -17,15 +19,57 @@
   font-size: 15px;
   display: block;
   opacity: .88;
-  margin-bottom: 4px;
+  margin-bottom: 16px;
 }
 
 .PlayerContainer {
-  max-width: 600px;
+  max-width: 480px;
   margin: 48px auto;
 }
 
 .PlayerSectionTitle {
   font-size: 18px;
-  margin-top: 48px;
+  margin-top: 32px;
+  font-weight: bold;
+}
+
+.PlayerChoiceList {
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  list-style: none;
+  margin: 36px 0 0;
+  padding: 0;
+}
+
+.PlayerChoiceList li {
+  align-items: center;
+  border-bottom: 1px solid #d9d9d9;
+  display: flex;
+}
+
+.PlayerChoiceList p {
+  flex: 1 1;
+  padding: 8px 16px;
+  border-right: 1px solid #d9d9d9;
+  margin: 0;
+}
+
+.PlayerChoiceList button {
+  background: 0;
+  padding: 8px;
+  margin: 0;
+  width: 40px;
+  line-height: 16px;
+  border: 0;
+  font-size: 24px;
+  transition: 0.3s all;
+}
+
+.PlayerChoiceList button:hover,
+.PlayerChoiceList button:focus {
+  color: #03A9F4;
+}
+
+.PlayerChoiceList li:last-child {
+  border-bottom: 0;
 }

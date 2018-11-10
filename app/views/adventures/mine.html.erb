@@ -1,11 +1,15 @@
 <div class="Container">
   <h1 class="PageBanner">My Adventures</h1>
 
-  <div class="AdventureList">
-    <% if @adventures.size <= 0 %>
-      <p>You have no adventures. Live a little!</p>
-    <% end %>
+  <% if @adventures.size <= 0 %>
+    <p>You have no adventures. Live a little!</p>
+  <% end %>
 
+  <p>
+    <%= link_to "Create a Story", new_adventure_path, class: "SlantButton" %>
+  </p>
+
+  <div class="AdventureList">
     <% @adventures.each do |adventure| %>
       <div class="card">
         <%= link_to adventure do %>
