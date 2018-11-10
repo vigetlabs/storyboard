@@ -106,15 +106,22 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     let viableStartNodes = Object.keys(this.model.nodes).filter((id) => {
       let node = this.model.nodes[id]
 
+      let linkedInPorts = []
+      let linkedOutPorts = []
+
       for (let key in node.ports) {
         let port = node.ports[key] as DefaultPortModel
 
-        if (port.in) {
-          return Object.keys(port.links).length == 0
+        if (Object.keys(port.links).length) {
+          if (port.in) {
+            linkedInPorts.push(port)
+          } else {
+            linkedOutPorts.push(port)
+          }
         }
       }
 
-      return true
+      return !linkedInPorts.length && linkedOutPorts.length
     })
 
     return this.getRandom(viableStartNodes)
