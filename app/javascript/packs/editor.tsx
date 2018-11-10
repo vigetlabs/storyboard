@@ -22,7 +22,7 @@ const slug = SEED.slug
 const story = SEED.story
 
 ReactDOM.render(
-  <ApplicationComponent slug={slug} meta={story.meta} story={story.story}>
+  <ApplicationComponent slug={slug} {...story}>
     <Editor />
   </ApplicationComponent>,
   document.getElementById('editor')

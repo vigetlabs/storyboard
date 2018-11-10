@@ -74,8 +74,6 @@ class ChoiceEditor extends React.Component<ChoiceEditorProps> {
 
     focus.addOutPort(input.value)
 
-    input.value = ''
-
     this.props.requestPaint()
   }
 }

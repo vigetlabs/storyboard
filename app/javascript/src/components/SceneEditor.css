@@ -42,6 +42,12 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.12);
   display: flex;
   margin-bottom: 8px;
+  padding: 5px;
+  font-size: 11px;
+}
+
+.SceneEditorPortList li span {
+  margin: 0 10px;
 }
 
 .SceneEditorPortList li input,

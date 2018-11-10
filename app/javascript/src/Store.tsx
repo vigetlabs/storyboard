@@ -5,6 +5,8 @@ export interface ApplicationState {
   slug: String
   story?: any
   meta: MetaData
+  portMeta: PortMeta
+  modifiers: string[]
   currentFocusedScene?: string
 }
 
@@ -15,10 +17,20 @@ export interface MetaData {
   }
 }
 
+export interface PortMeta {
+  [port_id: string]: {
+    showIf?: string
+    showUnless?: string
+    addsModifier: string
+  }
+}
+
 const applicationState: ApplicationState = {
   slug: '',
   story: seed,
   meta: {},
+  portMeta: {},
+  modifiers: [],
   currentFocusedScene: undefined
 }
 
@@ -26,7 +38,7 @@ const ApplicationStateContext = React.createContext({
   state: applicationState,
 
   updateState(state: ApplicationState): ApplicationState {
-    return applicationState
+    return state
   }
 })
 
@@ -39,7 +51,7 @@ interface Props {
 export class ApplicationComponent extends React.Component<
   Props,
   ApplicationState
-> {
+  > {
   static defaultProps = {
     story: seed.story,
     meta: seed.meta
@@ -50,9 +62,7 @@ export class ApplicationComponent extends React.Component<
 
     this.state = {
       ...applicationState,
-      slug: props.slug,
-      story: props.story,
-      meta: props.meta
+      ...props
     }
   }
 
