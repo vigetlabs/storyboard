@@ -2,7 +2,7 @@
  * It's game time
  */
 
-@import "../variables.css";
+@import '../variables.css';
 
 .PlayerTitle {
   font-size: 24px;
@@ -18,7 +18,7 @@
   font-style: italic;
   font-size: 15px;
   display: block;
-  opacity: .88;
+  opacity: 0.88;
   margin-bottom: 16px;
 }
 
@@ -67,9 +67,165 @@
 
 .PlayerChoiceList button:hover,
 .PlayerChoiceList button:focus {
-  color: #03A9F4;
+  color: #03a9f4;
 }
 
 .PlayerChoiceList li:last-child {
   border-bottom: 0;
+}
+
+/**
+ * --------------------------------------------------
+ * THEMES
+ * --------------------------------------------------
+ */
+
+/* Light theme */
+
+.LightTheme .Player {
+  font-family: monospace !important;
+}
+
+/* Viget Theme */
+
+.VigetTheme {
+  background: #054f67;
+  color: white;
+}
+
+.VigetTheme .PlayerTitle {
+  border-bottom-color: white;
+}
+
+.VigetTheme .AdventureHeader {
+  background: #054f67;
+}
+
+.VigetTheme .PlayerContainer {
+  margin: 48px 5%;
+}
+
+.VigetTheme .PlayerChoiceList {
+  border: 0;
+}
+
+.VigetTheme .PlayerChoiceList li {
+  border: 0;
+  margin-bottom: 16px;
+}
+
+.VigetTheme .PlayerChoiceList li p {
+  border: 0;
+  padding: 0;
+}
+
+.VigetTheme .PlayerChoiceList button {
+  background: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+}
+
+/* Space Theme */
+
+.SpaceTheme {
+  background: #000;
+  color: white;
+}
+
+.SpaceTheme .PlayerTitle {
+  border-bottom-color: transparent;
+  position: relative;
+  padding-bottom: 64px;
+  font-family: sans-serif;
+  font-weight: black;
+  text-transform: uppercase;
+  font-style: italic;
+  padding-top: 64px;
+  margin-top: 128px;
+}
+
+.SpaceTheme .PlayerTitle:after {
+  position: absolute;
+  top: -40px;
+  left: -20px;
+  height: 100%;
+  width: 100px;
+  z-index: -1;
+  content: "";
+  background: #8C3327;
+}
+
+.SpaceTheme .AdventureHeader {
+  background: #054f67;
+}
+
+.SpaceTheme .PlayerContainer {
+  margin: 48px 5%;
+}
+
+.SpaceTheme .PlayerChoiceList {
+  border: 0;
+}
+
+.SpaceTheme .PlayerChoiceList li {
+  border: 0;
+  margin-bottom: 16px;
+}
+
+.SpaceTheme .PlayerChoiceList li p {
+  border: 0;
+  padding: 0;
+}
+
+.SpaceTheme .PlayerChoiceList button {
+   background: transparent url('../images/space-btn.svg') 0 0 no-repeat / 100%
+    100%;
+  color: transparent;
+  border-radius: 0;
+  width: 40px;
+  height: 40px;
+}
+
+/* Desert Theme */
+
+.DesertTheme {
+  background: black url('../images/desert.jpg') 0 0 no-repeat / cover;
+  color: white;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.68);
+}
+
+.DesertTheme .PlayerTitle {
+  border-bottom-color: white;
+}
+
+.DesertTheme .AdventureHeader {
+  background: #054f67;
+}
+
+.DesertTheme .PlayerContainer {
+  background: rgba(0, 0, 0, 0.54);
+  padding: 24px;
+  margin: 48px 5%;
+}
+
+.DesertTheme .PlayerChoiceList {
+  border: 0;
+}
+
+.DesertTheme .PlayerChoiceList li {
+  border: 0;
+  margin-bottom: 16px;
+}
+
+.DesertTheme .PlayerChoiceList li p {
+  border: 0;
+  padding: 0;
+}
+
+.DesertTheme .PlayerChoiceList button {
+  background: white;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
 }
