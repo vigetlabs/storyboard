@@ -34,7 +34,7 @@ class SceneEditor extends React.Component<SceneEditorProps> {
       <aside className="SceneEditor" onKeyUp={this.trapKeys}>
         <div className="SceneEditorField">
           <label htmlFor="title">Name</label>
-          <input name="title" value={focus.name} onChange={this.onNameChange} />
+          <input name="title" defaultValue={focus.name} onChange={this.onNameChange} />
         </div>
 
         <div className="SceneEditorField">

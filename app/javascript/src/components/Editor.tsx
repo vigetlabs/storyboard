@@ -4,7 +4,7 @@ import {
   DiagramEngine,
   DiagramModel,
   DefaultNodeModel,
-  DiagramWidget,
+  DiagramWidget
 } from 'storm-react-diagrams'
 import SceneEditor from './SceneEditor'
 
@@ -45,6 +45,16 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.engine = new DiagramEngine()
     this.model = new DiagramModel()
 
+    this.engine.installDefaultFactories()
+
+    this.model.deSerializeDiagram(this.props.state.story, this.engine)
+
+    for (let key in this.model.nodes) {
+      this.model.nodes[key].addListener({
+        entityRemoved: this.forceUpdate.bind(this)
+      })
+    }
+
     this.engine.setDiagramModel(this.model)
   }
 
@@ -61,22 +71,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
       return null
     }
 
-    this.engine.installDefaultFactories()
-
-    if (this.props.state.story) {
-      this.model.deSerializeDiagram(this.props.state.story, this.engine)
-    }
-
-    for (let key in this.model.nodes) {
-      this.model.nodes[key].addListener({
-        entityRemoved: this.refresh
-      })
-    }
-
     return (
       <Workspace
         onClear={this.clearSelection}
-        onRelease={this.refreshEventually}
+        onRelease={this.eventuallyForceUpdate}
       >
         <menu className="EditorTools">
           <button className="EditorButton" onClick={this.addScene}>
@@ -89,10 +87,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
             {saving ? 'Saving...' : 'Save'}
           </button>
 
-          <button
-            className="EditorButton"
-            onClick={() => this.toFile()}
-          >
+          <button className="EditorButton" onClick={() => this.toFile()}>
             Export
           </button>
 
@@ -105,7 +100,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
           </label>
         </menu>
         <DiagramWidget diagramEngine={this.engine} maxNumberPointsPerLink={0} />
-        <SceneEditor focus={this.getFocus()} requestPaint={this.refresh} />
+        <SceneEditor focus={this.getFocus()} requestPaint={this.repaint} />
       </Workspace>
     )
   }
@@ -126,20 +121,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
     return null
   }
 
-  private refresh = () => {
-    const { state, updateState } = this.props
+  private repaint = () => this.engine.repaintCanvas()
 
-    updateState({
-      ...state,
-      story: this.model.serializeDiagram()
+  private eventuallyForceUpdate = () =>
+    requestAnimationFrame(() => {
+      this.forceUpdate()
     })
-  }
-
-  /**
-   * In order to handle edge cases with rendering during mouse events,
-   * we wait for the next tick to update the flow chart
-   */
-  private refreshEventually = () => requestAnimationFrame(this.refresh)
 
   private serialize() {
     return {
@@ -149,12 +136,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private addScene = () => {
-    var node = new DefaultNodeModel('New Scene');
-    node.setPosition(100, 100);
-    node.addInPort('In');
-    node.addOutPort('Next');
-    this.model.addNode(node);
-    this.refresh();
+    var node = new DefaultNodeModel('New Scene')
+    node.setPosition(100, 100)
+    node.addInPort('In')
+    node.addOutPort('Next')
+    this.model.addNode(node)
+    this.repaint()
   }
 
   private toFile() {
@@ -198,7 +185,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
     try {
       await save(this.props.state.slug, this.serialize())
     } catch (error) {
-      alert("Sorry! We couldn't save! It's possible you do not have internet access. Be sure to export your scene before closing the browser!")
+      alert(
+        "Sorry! We couldn't save! It's possible you do not have internet access. Be sure to export your scene before closing the browser!"
+      )
     } finally {
       let timeLeft = 600 - Math.min(Date.now() - then, 600)
 
