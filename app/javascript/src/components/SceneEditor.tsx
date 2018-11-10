@@ -29,6 +29,7 @@ class SceneEditor extends React.Component<SceneEditorProps> {
   render() {
     const { state, focus } = this.props
 
+    // TODO: repace this. It doesn't matter much here but this breaks typechecking as get always returns `any`
     const text = get(state, `meta.${focus.id}.text`)
 
     return (

@@ -164,8 +164,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
   private serialize() {
     return {
+      ...this.props.state,
       story: this.model.serializeDiagram(),
-      meta: this.props.state.meta
     }
   }
 
@@ -229,7 +229,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     let reader = new FileReader()
 
     let scope = this
-    reader.onload = function() {
+    reader.onload = function () {
       try {
         scope.props.updateState(JSON.parse(`${this.result}`))
       } catch (error) {

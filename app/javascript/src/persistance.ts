@@ -4,7 +4,7 @@
 
 import { ApplicationState } from './Store'
 
-export async function save(slug: String, content: Object) {
+export async function save(slug: String, content: ApplicationState) {
   let request = await fetch(`/api/${slug}`, {
     method: 'POST',
     headers: {
