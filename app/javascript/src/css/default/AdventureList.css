@@ -6,11 +6,12 @@
 }
 
 .AdventureList .card {
-  background: #EEE;
+  background: #eee;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.54);
   flex-basis: 31%;
   margin: 1%;
   transition: 0.3s all;
+  position: relative;
 }
 
 .AdventureList .card:hover {
@@ -30,8 +31,22 @@
 .AdventureList .card .card-image {
   width: calc(100% - 20px);
   padding-top: 70%;
-  background: #BBB;
+  background: #bbb;
   margin: 10px;
+  position: relative;
+}
+
+.AdventureList .card iframe {
+  background: white;
+  height: 400%;
+  left: 0;
+  border: 0;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 400%;
+  transform: scale(0.25);
+  transform-origin: 0 0;
 }
 
 .AdventureList .card .card-title {

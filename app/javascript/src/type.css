@@ -1,4 +1,4 @@
-@import "./variables.css";
+@import './variables.css';
 
 .Titlebar {
   font-size: 16px;
@@ -11,7 +11,7 @@
  * This is the huge text displayed on marketing pages
  */
 .PowerBanner {
-  font: 400 120px/140px var(--font-serif);
+  font: 400 120px/110px var(--font-serif);
   margin: 0;
 }
 
@@ -23,11 +23,9 @@
   margin: 0;
 }
 
-
 /**
  * Section headers for marketing pages
  */
-
 .SectionHeader {
   font-size: 16px;
   margin: 0;
