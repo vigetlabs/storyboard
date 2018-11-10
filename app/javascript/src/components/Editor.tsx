@@ -17,9 +17,10 @@ import { StateConsumer, ApplicationState } from '../Store'
 import { save } from '../persistance'
 
 interface EditorState {
-  ready: Boolean
+  ready: boolean
   selected: string | null
-  saving: Boolean
+  saving: boolean
+  smartRouting: boolean
 }
 
 interface EditorProps {
@@ -31,16 +32,14 @@ class Editor extends React.Component<EditorProps, EditorState> {
   engine: DiagramEngine
   model: DiagramModel
 
-  isMouseDown: Boolean = false
-  isDragging: Boolean = false
-
   constructor(props: EditorProps) {
     super(props)
 
     this.state = {
       ready: false,
       selected: null,
-      saving: false
+      saving: false,
+      smartRouting: true
     }
 
     this.engine = new DiagramEngine()
@@ -61,10 +60,18 @@ class Editor extends React.Component<EditorProps, EditorState> {
     setTimeout(() => {
       this.setState({ ready: true })
     }, 100)
+
+    /**
+     * If smartRouting is initialized as false, toggling to true breaks
+     * the flow chart engine.
+     */
+    setTimeout(() => {
+      this.setState({ smartRouting: false })
+    }, 101)
   }
 
   render() {
-    const { ready, saving } = this.state
+    const { ready, saving, smartRouting } = this.state
 
     if (ready !== true) {
       return null
@@ -98,10 +105,15 @@ class Editor extends React.Component<EditorProps, EditorState> {
                 onChange={event => this.loadFile(event.target.files)}
               />
             </label>
+
+            <label className="EditorButton">
+              <input type="checkbox" checked={smartRouting} onChange={this.toggleRouting} /> Routing
+            </label>
           </menu>
           <DiagramWidget
             diagramEngine={this.engine}
             maxNumberPointsPerLink={0}
+            smartRouting={smartRouting}
           />
         </Workspace>
         <SceneEditor
@@ -242,6 +254,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
         this.setState({ saving: false })
       }, timeLeft)
     }
+  }
+
+  private toggleRouting = () => {
+    this.setState({
+      smartRouting: !this.state.smartRouting
+    })
   }
 }
 
