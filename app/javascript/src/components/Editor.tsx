@@ -68,6 +68,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
     setTimeout(() => {
       this.setState({ smartRouting: false })
     }, 200)
+
+    // Naive auto saving
+    setInterval(this.saveStory, 10000)
   }
 
   render() {
