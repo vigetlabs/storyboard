@@ -1,11 +1,22 @@
 <nav class="AdventureHeader">
-  <%= link_to "Home", root_url %>
+  <div class="Container">
+    <%= link_to root_url, class: "Brand" do %>
+      <svg width="20" height="15" fill="currentColor">
+        <rect width="20" height="6"></rect>
+        <rect width="14" height="6" y="8"></rect>
+      </svg>
+      Storyboard
+    <% end %>
 
-  <% if current_user.present? %>
-    <%= link_to current_user.email, my_adventures_path %>
-    <%= link_to "Log Out", destroy_user_session_path, method: :delete %>
-  <% else %>
-    <%= link_to "Log In", new_user_session_path %>
-    <%= link_to "Sign Up", new_user_registration_path %>
-  <% end %>
+    <div class="AdventureHeaderMenu">
+      <%= link_to "Home", root_url %>
+      <% if current_user.present? %>
+        <%= link_to "My Stories", my_adventures_path %>
+        <%= link_to "Log Out", destroy_user_session_path, method: :delete %>
+      <% else %>
+        <%= link_to "Log In", new_user_session_path %>
+        <%= link_to "Sign Up", new_user_registration_path %>
+      <% end %>
+    </div>
+  </div>
 </nav>

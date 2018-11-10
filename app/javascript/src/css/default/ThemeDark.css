@@ -1,0 +1,18 @@
+/**
+ * Non-editing pages have a dark theme.
+ */
+
+@import "../../variables.css";
+
+.ThemeDark {
+  background: var(--mkt-charcoal);
+  color: var(--mkt-text);
+}
+
+/**
+ * Dark theme has increased header padding
+ */
+
+.ThemeDark .AdventureHeader {
+  padding: 30px 0;
+}

@@ -1,6 +1,36 @@
+@import "./variables.css";
+
 .Titlebar {
   font-size: 16px;
   font-weight: 500;
   letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/**
+ * This is the huge text displayed on marketing pages
+ */
+.PowerBanner {
+  font: 400 120px/140px var(--font-serif);
+  margin: 0;
+}
+
+/**
+ * Main heading for marketing pages, like log-in
+ */
+.PageBanner {
+  font: 400 72px/90px var(--font-serif);
+  margin: 0;
+}
+
+
+/**
+ * Section headers for marketing pages
+ */
+
+.SectionHeader {
+  font-size: 16px;
+  margin: 0;
+  font-weight: bold;
   text-transform: uppercase;
 }

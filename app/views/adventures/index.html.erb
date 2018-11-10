@@ -1,35 +1,30 @@
 <div class="StoryIndex">
-  <h1>Adventure Time</h1>
+  <div class="StoryIndexBanner">
+    <h1 class="PowerBanner">Adventure <br>Time</h1>
 
-  <p class="intro">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-    Officia similique neque facere, doloremque nam delectus
-    vitae id error beatae nostrum soluta temporibus sit omnis
-    dolor, voluptates quos incidunt ex harum!
-  </p>
 
-  <%= link_to "Create a Story", new_adventure_path, class: "btn -large -space-below" %>
+    <p class="StoryIndexIntro">
+      Build your story just the way you want it.
 
-  <h2>Featured Stories</h2>
-
-  <div class="AdventureList">
-    <% @featured_adventures.in_groups_of(3).each do |adventure_group| %>
-      <div class="row">
-        <% adventure_group.each do |adventure| %>
-          <% if adventure %>
-              <div class="card">
-                <%= link_to adventure do %>
-                  <div class="card-image">
-                  </div>
-                  <div class="card-title">
-                    <%= adventure %>
-                  </div>
-                <% end %>
-              </div>
-          <% end %>
-        <% end %>
-      </div>
-    <% end %>
+      <%= link_to "Create a Story →", new_adventure_path, class: "StoryIndexIntroAction" %>
+    </p>
   </div>
 
+  <section class="StoryIndexFeatured">
+    <h2 class="SectionHeader">Featured Stories</h2>
+
+    <div class="AdventureList">
+      <% @featured_adventures.each do |adventure| %>
+        <div class="card">
+          <%= link_to adventure do %>
+            <div class="card-image">
+            </div>
+            <div class="card-title">
+              <%= adventure %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </section>
 </div>

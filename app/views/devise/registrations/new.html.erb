@@ -1,35 +1,36 @@
-<div class="AccountForm">
-  <h2>Sign up</h2>
+<div class="AccountForm Container">
+  <h1 class="PageBanner">Sign Up</h1>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
     <%= devise_error_messages! %>
 
-    <div class="field">
+    <div class="Field">
       <%= f.label :email %>
       <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
     </div>
 
-    <div class="field">
-      <%= f.label :password do %>
-        Password
-        <% if @minimum_password_length %>
-          <br>
-          <em>(<%= @minimum_password_length %> characters minimum)</em>
-        <% end %>
-      <% end %>
+    <div class="Field">
+      <%= f.label :password %>
 
       <%= f.password_field :password, autocomplete: "off" %>
+      <% if @minimum_password_length %>
+        <span class="FieldHint">
+          <%= @minimum_password_length %> characters minimum)
+        </span>
+      <% end %>
     </div>
 
-    <div class="field">
+    <div class="Field">
       <%= f.label :password_confirmation %>
       <%= f.password_field :password_confirmation, autocomplete: "off" %>
     </div>
 
     <div class="actions">
-      <%= f.submit "Sign up", class: "btn -space-below" %>
+      <%= f.submit "Sign up", class: "SlantButton" %>
     </div>
   <% end %>
 
-  <%= render "devise/shared/links" %>
+  <footer class="AccountFormFooter">
+    <%= render "devise/shared/links" %>
+  </footer>
 </div>

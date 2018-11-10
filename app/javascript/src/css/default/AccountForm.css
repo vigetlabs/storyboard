@@ -1,28 +1,58 @@
+@import "../../variables.css";
+
 .AccountForm {
-  max-width: 500px;
-  margin: 0 auto;
-  text-align: center;
+  margin: 24px auto;
 }
 
-.AccountForm h2 {
-  font-family: fantasy;
+.AccountForm .PageBanner {
+  margin-bottom: 48px;
 }
 
-.AccountForm .field {
+.AccountFormHeader {
+  padding: 16px;
+  background: var(--mkt-gold);
+}
+
+.AccountForm .Field {
   margin-bottom: 15px;
 }
 
-.AccountForm .field label {
+.AccountForm .Field label {
   display: block;
+  font-size: 24px;
+  font-weight: bold;
   margin-bottom: 5px;
 }
 
-.AccountForm .field.-checkbox label {
+.AccountForm .Field.-checkbox label {
   display: inline;
+  font-size: 18px;
+  font-weight: normal;
 }
 
-.AccountForm .field input[type="email"],
-.AccountForm .field input[type="password"] {
-  width: 150px;
-  height: 17px;
+.AccountForm .Field input[type="email"],
+.AccountForm .Field input[type="password"] {
+  background: transparent;
+  border: 1px solid white;
+  color: inherit;
+  font-size: 16px;
+  padding: 8px;
+  max-width: 475px;
+  width: 100%;
+}
+
+.FieldHint {
+  font-size: 14px;
+  font-style: italic;
+  display: block;
+  margin-top: 4px;
+}
+
+.AccountFormFooter {
+  margin-top: 48px;
+}
+
+.AccountFormFooter a {
+  display: block;
+  color: white;
 }

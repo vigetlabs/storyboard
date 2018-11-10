@@ -1,17 +1,20 @@
 .AdventureList {
-  max-width: 500px;
-  margin: 0 auto;
-}
-
-.AdventureList .row {
+  margin: 20px auto;
   display: flex;
   justify-content: space-between;
-  margin-bottom: 40px;
+  flex-wrap: wrap;
 }
 
 .AdventureList .card {
-  width: 150px;
   background: #EEE;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.54);
+  flex-basis: 31%;
+  margin: 1%;
+  transition: 0.3s all;
+}
+
+.AdventureList .card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.68);
 }
 
 .AdventureList .card a {
@@ -26,7 +29,7 @@
 
 .AdventureList .card .card-image {
   width: calc(100% - 20px);
-  height: 120px;
+  padding-top: 70%;
   background: #BBB;
   margin: 10px;
 }
@@ -37,22 +40,11 @@
 }
 
 @media only screen and (max-width: 500px) {
-  .AdventureList .row {
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 30px;
+  .AdventureList {
+    justify-content: flex-start;
   }
 
   .AdventureList .card {
-    margin-bottom: 30px;
-    width: 280px;
-  }
-
-  .AdventureList .card:last-child {
-    margin-bottom: 0;
-  }
-
-  .AdventureList .card .card-image {
-    height: 240px;
+    margin: 5px;
   }
 }
