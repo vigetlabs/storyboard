@@ -15,7 +15,7 @@ body {
 
 body {
   color: var(--color-body);
-  font: 300 16px/1.6 var(--font-system);
+  font: 300 16px/1.6 var(--font-sans);
   letter-spacing: 0.01em;
   margin: 0;
 }

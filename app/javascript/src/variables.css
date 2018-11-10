@@ -3,4 +3,5 @@
   --color-tooling: rgba(0, 0, 0, 0.12);
   --color-tooling-inverse: rgba(255, 255, 255, 0.04);
   --font-system: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell",  "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  --font-sans: 'Open Sans', sans-serif;
 }
