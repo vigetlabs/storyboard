@@ -10,6 +10,6 @@ import Player from '../src/components/Player'
 const story = SEED.story
 
 ReactDOM.render(
-  <Player story={story.story} meta={story.meta} />,
+  <Player story={story.story} meta={story.meta} portMeta={story.portMeta} />,
   document.getElementById('player')
 )

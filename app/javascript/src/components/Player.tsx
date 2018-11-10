@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { get } from "lodash"
 
 import {
   DiagramModel,
@@ -9,21 +10,23 @@ import {
 
 import './Player.css'
 
-import { MetaData } from '../Store'
+import { MetaData, PortMeta } from '../Store'
 
 interface PlayerProps {
   story: Object
   meta: MetaData
+  portMeta: PortMeta
 }
 
 interface PlayerState {
   focus?: string
+  currentModifiers: string[]
 }
 
 class Player extends React.Component<PlayerProps, PlayerState> {
   engine: DiagramEngine
   model: DiagramModel
-  state: PlayerState = {}
+  state: PlayerState = { currentModifiers: [] }
 
   constructor(props: PlayerProps) {
     super(props)
@@ -36,7 +39,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   componentDidMount() {
-    console.log('mounting')
     this.setState({
       focus: this.findStartKey()
     })
@@ -71,12 +73,18 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         <div dangerouslySetInnerHTML={{ __html: meta.text }} />
 
         <ul className="PlayerChoiceList" hidden={choices.length <= 0}>
-          {choices.map(port => (
-            <li key={port.id}>
-              <p>{port.label}</p>
-              <button onClick={this.makeChoice.bind(this, port)} title="Follow this path">›</button>
-            </li>
-          ))}
+          {this.ports(node)
+            .map(port => {
+              const showIf = get(this.props.portMeta as any, `${port.id}.showIf`)
+              const showUnless = get(this.props.portMeta as any, `${port.id}.showUnless`)
+              let show = !showIf || this.state.currentModifiers.indexOf(showIf) !== -1
+              show = show && !showUnless || !(this.state.currentModifiers.indexOf(showUnless) === -1)
+
+              return show ? <li key={port.id}>
+                <p>{port.label}{showIf ? ` (${showIf})` : ''}</p>
+                <button onClick={this.makeChoice.bind(this, port)} title="Follow this path">›</button>
+              </li> : null
+            })}
         </ul>
       </main>
     )
@@ -121,6 +129,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   private makeChoice(port: DefaultPortModel) {
+    const modiifier = get(this.props.portMeta as any, `${port.id}.addsModifier`)
     let targetNodes = []
 
     for (let key in port.links) {
@@ -133,9 +142,12 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
     let randomNode = this.getRandom(targetNodes)
 
-    this.setState({
-      focus: randomNode
-    })
+    this.setState(state => ({
+      focus: randomNode,
+      currentModifiers: modiifier
+        ? [...state.currentModifiers, modiifier]
+        : state.currentModifiers
+    }))
   }
 
   private getRandom(nodes: string[]) {

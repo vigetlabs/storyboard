@@ -6,7 +6,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
 import Editor from '../src/components/Editor'
-import { ApplicationComponent, MetaData } from '../src/Store'
+import { ApplicationComponent, MetaData, PortMeta } from '../src/Store'
 
 declare global {
   const SEED: {
@@ -14,6 +14,7 @@ declare global {
     story: {
       story: any
       meta: MetaData
+      portMeta: PortMeta
     }
   }
 }
