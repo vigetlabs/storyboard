@@ -95,18 +95,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
               {saving ? 'Saving...' : 'Save'}
             </button>
 
-            <button className="EditorButton" onClick={() => this.toFile()}>
-              Export
-            </button>
-
-            <label className="EditorButton">
-              Import
-              <input
-                type="file"
-                onChange={event => this.loadFile(event.target.files)}
-              />
-            </label>
-
             <label className="EditorButton">
               <input type="checkbox" checked={smartRouting} onChange={this.toggleRouting} /> Routing
             </label>
