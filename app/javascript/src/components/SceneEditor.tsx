@@ -2,9 +2,11 @@ import * as React from 'react'
 
 import 'redactor/redactor.css'
 import 'redactor/redactor'
-
-import { StateConsumer, ApplicationState } from '../Store'
 import './SceneEditor.css'
+
+import { get, set } from 'lodash'
+import { DefaultNodeModel, DefaultPortModel } from 'storm-react-diagrams'
+import { StateConsumer, ApplicationState } from '../Store'
 
 declare function $R(el: HTMLElement, options: any): void
 declare function $R(el: HTMLElement, fun: string, arg: string): void
@@ -12,6 +14,8 @@ declare function $R(el: HTMLElement, fun: string, arg: string): void
 interface SceneEditorProps {
   state: ApplicationState
   updateState(state: Readonly<ApplicationState>): Readonly<ApplicationState>
+  focus: DefaultNodeModel
+  requestPaint: () => void
 }
 
 class SceneEditor extends React.Component<SceneEditorProps> {
@@ -21,69 +25,132 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     this.install()
   }
 
-  componentDidUpdate(prevProps: SceneEditorProps) {
-    if (
-      this.props.state.currentFocusedScene !==
-      prevProps.state.currentFocusedScene
-    ) {
-      this.editor.current &&
-        $R(this.editor.current, 'source.setCode', this.currentText)
-    }
-  }
-
   render() {
+    const { state, focus } = this.props
+
+    const text = get(state, `meta.${focus.id}.text`)
+
     return (
-      <aside
-        className="SceneEditor"
-        hidden={this.props.state.currentFocusedScene == null}
-      >
-        <textarea ref={this.editor} />
+      <aside className="SceneEditor" onKeyUp={this.trapKeys}>
+        <h3>Name</h3>
+        <input value={focus.name} onChange={this.onNameChange} />
+
+        <h3>Content</h3>
+        <textarea ref={this.editor} defaultValue={text} />
+        <ul>
+          {this.ports.map(port => (
+            <li key={port.id}>
+              <input
+                defaultValue={port.label}
+                onChange={this.updateChoice.bind(this, port)}
+              />{' '}
+              <button onClick={this.removeChoice.bind(this, port)}>
+                Delete
+              </button>
+            </li>
+          ))}
+        </ul>
+        <form onSubmit={this.addChoice}>
+          <input name="label" defaultValue="" min="1" required={true} />
+          <button>Add choice</button>
+        </form>
       </aside>
     )
   }
 
-  private get currentText() {
-    const {
-      state: { meta, currentFocusedScene }
-    } = this.props
-    console.log(currentFocusedScene)
-    return currentFocusedScene
-      ? meta[currentFocusedScene]
-        ? meta[currentFocusedScene].text
-        : ''
-      : ''
+  updateChoice = (
+    port: DefaultPortModel,
+    event: React.FormEvent<HTMLInputElement>
+  ) => {
+    port.label = event.currentTarget.value
+    this.props.requestPaint()
+  }
+
+  removeChoice = (port: DefaultPortModel) => {
+    const { focus, requestPaint } = this.props
+
+    focus.removePort(port)
+    requestPaint()
+  }
+
+  addChoice = (event: React.FormEvent) => {
+    event.preventDefault()
+
+    const { focus } = this.props
+
+    const form = event.target as HTMLFormElement
+    const input = form.elements.namedItem('label') as HTMLInputElement
+
+    focus.addOutPort(input.value)
+
+    input.value = ''
+
+    this.props.requestPaint()
+  }
+
+  get ports(): DefaultPortModel[] {
+    let ports = []
+
+    for (let key in this.props.focus.ports) {
+      let port = this.props.focus.ports[key]
+      if (port.in === false) {
+        ports.push(port)
+      }
+    }
+
+    return ports
   }
 
   private install() {
-    if (this.editor.current)
+    if (this.editor.current) {
       $R(this.editor.current, {
         callbacks: {
           synced: (html: string) => this.onChange(html)
         }
       })
+    }
   }
 
-  private onChange(html?: string) {
-    const {
-      state: { meta, currentFocusedScene },
-      updateState
-    } = this.props
-    if (!currentFocusedScene || !html) return
-    const metaItem = {
-      ...meta[currentFocusedScene],
-      text: html
-    }
+  private onChange(html: string) {
+    const { focus, state, updateState } = this.props
 
-    updateState({
-      ...this.props.state,
-      meta: {
-        ...meta,
-        [currentFocusedScene]: metaItem
-      }
-    })
+    updateState(set(state, `meta.${focus.id}.text`, html))
+  }
+
+  private onNameChange = (event: React.FormEvent<HTMLInputElement>) => {
+    this.props.focus.name = event.currentTarget.value
+    this.props.requestPaint()
+  }
+
+  /**
+   * Important: We trap key presses in the sidebar so that backspaces
+   * do not delete nodes!
+   */
+  private trapKeys = (event: React.KeyboardEvent) => {
+    event.stopPropagation()
   }
 }
 
-export default () => (
-  <StateConsumer>{props => <SceneEditor {...props} />}</StateConsumer>
-)
+interface ConsumerProps {
+  focus: DefaultNodeModel | null
+  requestPaint: () => void
+}
+
+export default ({ focus, requestPaint }: ConsumerProps) => {
+  if (focus == null) {
+    return null
+  }
+
+  return (
+    <StateConsumer>
+      {props => (
+        <SceneEditor
+          key={focus.id}
+          requestPaint={requestPaint}
+          focus={focus}
+          {...props}
+        />
+      )}
+    </StateConsumer>
+  )
+}

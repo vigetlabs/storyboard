@@ -113,11 +113,20 @@
 }
 
 .srd-default-node__name {
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .srd-default-node__ports {
   display: flex;
   flex-direction: column;
+}
+
+.srd-default-node__out .name  {
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .srd-default-node__in .name {

@@ -5,7 +5,8 @@ import {
   DiagramModel,
   DefaultNodeModel,
   DiagramWidget,
-  BaseModel
+  BaseModel,
+  NodeModel
 } from 'storm-react-diagrams'
 import SceneEditor from './SceneEditor'
 
@@ -16,6 +17,7 @@ import { save } from '../persistance'
 
 interface EditorState {
   ready: Boolean
+  selected: string | null
 }
 
 interface EditorProps {
@@ -27,11 +29,15 @@ class Editor extends React.Component<EditorProps, EditorState> {
   engine: DiagramEngine
   model: DiagramModel
 
+  isMouseDown: Boolean = false
+  isDragging: Boolean = false
+
   constructor(props: EditorProps) {
     super(props)
 
     this.state = {
-      ready: false
+      ready: false,
+      selected: null
     }
 
     this.engine = new DiagramEngine()
@@ -46,15 +52,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }, 100)
   }
 
-  shouldComponentUpdate(nextProps: EditorProps, nextState: EditorState) {
-    return (
-      this.props.state.story.id !== nextProps.state.story.id ||
-      this.state.ready !== nextState.ready
-    )
-  }
-
   render() {
-    if (this.state.ready !== true) {
+    const { ready, selected } = this.state
+
+    if (ready !== true) {
       return null
     }
 
@@ -64,15 +65,13 @@ class Editor extends React.Component<EditorProps, EditorState> {
       this.model.deSerializeDiagram(this.props.state.story, this.engine)
     }
 
-    for (let key in this.model.nodes) {
-      this.model.nodes[key].addListener({
-        selectionChanged: event =>
-          event.isSelected && this.updateCurrentlySelected(event.entity.id)
-      })
-    }
-
     return (
-      <div className="EditorWorkspace">
+      <div
+        className="EditorWorkspace"
+        onMouseUp={this.releaseMouse}
+        onMouseDown={this.pressMouse}
+        onMouseMove={this.dragMouse}
+      >
         <menu className="EditorTools">
           <button className="EditorButton" onClick={this.addScene}>
             Add scene
@@ -100,12 +99,43 @@ class Editor extends React.Component<EditorProps, EditorState> {
           </label>
         </menu>
         <DiagramWidget diagramEngine={this.engine} maxNumberPointsPerLink={0} />
-        <SceneEditor />
+        <SceneEditor focus={this.getFocus()} requestPaint={this.refresh} />
       </div>
     )
   }
 
-  private refresh() {
+  releaseMouse = () => {
+    if (this.isDragging) {
+      this.model.clearSelection()
+    }
+
+    this.isMouseDown = false
+    this.isDragging = false
+
+    this.refreshEventually()
+  }
+
+  pressMouse = () => {
+    this.isMouseDown = true
+  }
+
+  dragMouse = () => {
+    this.isDragging = this.isMouseDown
+  }
+
+  private getFocus(): DefaultNodeModel | null {
+    const selected = this.model.getSelectedItems().filter(item => {
+      return item instanceof DefaultNodeModel
+    })
+
+    if (selected.length == 1) {
+      return selected[0] as DefaultNodeModel
+    }
+
+    return null
+  }
+
+  private refresh = () => {
     const { state, updateState } = this.props
 
     updateState({
@@ -113,6 +143,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
       story: this.model.serializeDiagram()
     })
   }
+
+  /**
+   * In order to handle edge cases with rendering during mouse events,
+   * we wait for the next tick to update the flow chart
+   */
+  private refreshEventually = () => requestAnimationFrame(this.refresh)
 
   private serialize() {
     return {
