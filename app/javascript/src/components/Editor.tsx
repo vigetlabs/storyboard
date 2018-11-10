@@ -59,15 +59,13 @@ class Editor extends React.Component<EditorProps, EditorState> {
   async componentDidMount() {
     setTimeout(() => {
       this.setState({ ready: true })
-    }, 100)
 
-    /**
-     * If smartRouting is initialized as false, toggling to true breaks
-     * the flow chart engine.
-     */
-    setTimeout(() => {
+      /**
+       * If smartRouting is initialized as false, toggling to true breaks
+       * the flow chart engine.
+       */
       this.setState({ smartRouting: false })
-    }, 200)
+    }, 100)
 
     // Naive auto saving
     setInterval(this.saveStory, 10000)
