@@ -137,11 +137,38 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
   private addScene = () => {
     var node = new DefaultNodeModel('New Scene')
-    node.setPosition(100, 100)
-    node.addInPort('In')
-    node.addOutPort('Next')
-    this.model.addNode(node)
-    this.repaint()
+
+    var ids = Object.keys(this.model.nodes)
+    if (ids.length) {
+      var ySum = ids.reduce((acc, id) => {
+        return acc + this.model.nodes[id].y
+      }, 0)
+
+      var maxX = ids.reduce((acc, id) => {
+        var existing = this.model.nodes[id]
+
+        if (existing.x > acc) {
+          return existing.x + (existing.width || 0)
+        } else {
+          return acc
+        }
+      }, 0)
+
+      var targetX = maxX + 100;
+      var targetY = (ySum / ids.length);
+    } else {
+      var targetX = 150;
+      var targetY = 200;
+    }
+
+    node.setPosition(targetX, targetY);
+
+    node.addInPort('In');
+    node.addOutPort('Next');
+
+    this.model.addNode(node);
+
+    this.repaint();
   }
 
   private toFile() {
