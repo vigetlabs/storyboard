@@ -1,41 +1,22 @@
-<div class="StoryIndex">
-  <h1>My Adventures</h1>
+<div class="Container">
+  <h1 class="PageBanner">My Adventures</h1>
 
   <div class="AdventureList">
-    <% @adventures.in_groups_of(3).each do |adventure_group| %>
-      <div class="row">
-        <% adventure_group.each do |adventure| %>
-          <% if adventure %>
-              <div class="card">
-                <%= link_to adventure do %>
-                  <div class="card-image">
-                  </div>
-                  <div class="card-title">
-                    <%= adventure %>
-                  </div>
-                <% end %>
+    <% if @adventures.size <= 0 %>
+      <p>You have no adventures. Live a little!</p>
+    <% end %>
 
-                <div class="card-actions">
-                  <div class="action">
-                    <%= link_to "Edit", [:edit, adventure] %>
-                    |
-                    <%= link_to "Delete", adventure, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-                  </div>
-                </div>
-              </div>
-          <% end %>
+    <% @adventures.each do |adventure| %>
+      <div class="card">
+        <%= link_to adventure do %>
+          <div class="card-image">
+            <iframe src="<%= adventure_path(adventure) %>"></iframe>
+          </div>
+          <div class="card-title">
+            <%= adventure %>
+          </div>
         <% end %>
       </div>
     <% end %>
   </div>
-
-  <h2>Account Management</h2>
-
-  <p>
-    User Since: <%= current_user.created_at.strftime("%x") %>
-  </p>
-
-  <p>
-    <%= link_to "Edit Account Details", edit_user_registration_path %>
-  </p>
 </div>

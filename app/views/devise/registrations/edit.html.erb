@@ -1,10 +1,10 @@
-<div class="AccountForm">
-  <h2>Edit <%= resource_name.to_s.humanize %></h2>
+<div class="AccountForm Container">
+  <h1 class="PageBanner">Edit Account</h1>
 
   <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
     <%= devise_error_messages! %>
 
-    <div class="field">
+    <div class="Field">
       <%= f.label :email %>
       <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
     </div>
@@ -13,35 +13,35 @@
       <div>Currently waiting confirmation for: <%= resource.unconfirmed_email %></div>
     <% end %>
 
-    <div class="field">
-      <%= f.label :password do %>
-        Password
-        <br>
-        <em>(leave blank if you don't want to change it)</em>
-      <% end %>
+    <div class="Field">
+      <%= f.label :password %>
       <%= f.password_field :password, autocomplete: "off" %>
+
+      <span class="FieldHint">
+        Leave blank if you don't want to change it
+      </span>
     </div>
 
-    <div class="field">
+    <div class="Field">
       <%= f.label :password_confirmation %>
       <%= f.password_field :password_confirmation, autocomplete: "off" %>
     </div>
 
-    <div class="field">
-      <%= f.label :current_password do %>
-        Current Password
-        <br>
-        <em>(we need your current password to confirm your changes)</em>
-      <% end %>
+    <div class="Field">
+      <%= f.label :current_password %>
       <%= f.password_field :current_password, autocomplete: "off" %>
+
+      <span class="FieldHint">
+        We need your current password to confirm your changes
+      </span>
     </div>
 
     <div class="actions">
-      <%= f.submit "Update", class: "btn" %>
+      <%= f.submit "Update", class: "SlantButton" %>
     </div>
   <% end %>
 
-  <h3>Cancel my account</h3>
-
-  <p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), class: "btn", data: { confirm: "Are you sure?" }, method: :delete %></p>
+  <footer class="AccountFormFooter">
+    <p>Unhappy? <%= button_to "Delete my account", registration_path(resource_name), class: "SlantButton", data: { confirm: "Are you sure?" }, method: :delete %></p>
+  </footer>
 </div>

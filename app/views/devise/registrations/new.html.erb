@@ -11,11 +11,11 @@
 
     <div class="Field">
       <%= f.label :password %>
-
       <%= f.password_field :password, autocomplete: "off" %>
+
       <% if @minimum_password_length %>
         <span class="FieldHint">
-          <%= @minimum_password_length %> characters minimum)
+          <%= @minimum_password_length %> characters minimum
         </span>
       <% end %>
     </div>
