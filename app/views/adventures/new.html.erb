@@ -19,6 +19,11 @@
       <%= f.text_area :description, placeholder: "describe the context of the story" %>
     </div>
 
+    <div class="Field">
+      <%= f.label :Theme %>
+      <%= f.select :theme, options_for_select(Adventure::THEMES) %>
+    </div>
+
     <div class="Field -checkbox">
       <%= f.check_box :private %>
       <%= f.label :private %>

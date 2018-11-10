@@ -62,6 +62,11 @@ class AdventuresController < ApplicationController
   end
 
   def adventure_params
-    params.require(:adventure).permit(:title, :description, :private)
+    params.require(:adventure).permit(
+      :title,
+      :description,
+      :private,
+      :theme
+    )
   end
 end
