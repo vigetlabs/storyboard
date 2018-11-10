@@ -51,7 +51,7 @@ export default class Workspace extends React.Component<WorkspaceProps> {
     let now = new Date()
 
     this.isDragging = (this.isMouseDown && (
-      now.valueOf() - this.mouseDown.valueOf() > 250
+      now.valueOf() - this.mouseDown.valueOf() > 150
     ))
   }
 
