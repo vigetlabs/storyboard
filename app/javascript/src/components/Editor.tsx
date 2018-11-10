@@ -67,7 +67,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
      */
     setTimeout(() => {
       this.setState({ smartRouting: false })
-    }, 101)
+    }, 200)
   }
 
   render() {
