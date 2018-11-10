@@ -199,9 +199,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
       targetX = maxX + 200
 
       if (furthestNode.y < averageY) {
-        targetY = furthestNode.y + 200
+        targetY = furthestNode.y + 50
       } else {
-        targetY = furthestNode.y - 200
+        targetY = furthestNode.y - 50
       }
     } else {
       targetX = 150
@@ -211,7 +211,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
     node.setPosition(targetX, targetY)
 
     node.addInPort('In')
-    node.addOutPort('Next')
 
     this.watchNode(node)
 
