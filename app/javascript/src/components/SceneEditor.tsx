@@ -5,8 +5,9 @@ import 'redactor/redactor'
 import './SceneEditor.css'
 
 import { get, set } from 'lodash'
-import { DefaultNodeModel, DefaultPortModel } from 'storm-react-diagrams'
+import { DefaultNodeModel } from 'storm-react-diagrams'
 import { StateConsumer, ApplicationState } from '../Store'
+import ChoiceEditor from "./ChoiceEditor";
 
 declare function $R(el: HTMLElement, options: any): void
 declare function $R(el: HTMLElement, fun: string, arg: string): void
@@ -27,7 +28,7 @@ class SceneEditor extends React.Component<SceneEditorProps> {
   }
 
   render() {
-    const { state, focus } = this.props
+    const { state, focus, requestPaint } = this.props
 
     // TODO: repace this. It doesn't matter much here but this breaks typechecking as get always returns `any`
     const text = get(state, `meta.${focus.id}.text`)
@@ -51,78 +52,10 @@ class SceneEditor extends React.Component<SceneEditorProps> {
         <div className="SceneEditorField">
           <h3>Choices</h3>
 
-          <ul className="SceneEditorPortList">
-            {this.ports.map(port => (
-              <li key={port.id}>
-                <input
-                  defaultValue={port.label}
-                  onChange={this.updateChoice.bind(this, port)}
-                />{' '}
-                <button onClick={this.removeChoice.bind(this, port)}>
-                  Delete
-                </button>
-              </li>
-            ))}
-          </ul>
-
-          <form onSubmit={this.addChoice} className="SceneEditorPortForm">
-            <input name="label" defaultValue="" min="1" required={true} />
-            <button>Add choice</button>
-          </form>
+          <ChoiceEditor focus={focus} requestPaint={requestPaint} />
         </div>
       </aside>
     )
-  }
-
-  updateChoice = (
-    port: DefaultPortModel,
-    event: React.FormEvent<HTMLInputElement>
-  ) => {
-    port.label = event.currentTarget.value
-    this.props.requestPaint()
-  }
-
-  removeChoice = (port: DefaultPortModel) => {
-    const { focus, requestPaint } = this.props
-
-    // Avoids zombie links attached to the input node
-    Object.keys(port.links).forEach(id => {
-      // This removes the link itself. It is different than
-      // port.removeLink(), which only disconnects the port
-      port.links[id].remove()
-    })
-
-    focus.removePort(port)
-
-    requestPaint()
-  }
-
-  addChoice = (event: React.FormEvent) => {
-    event.preventDefault()
-
-    const { focus } = this.props
-
-    const form = event.target as HTMLFormElement
-    const input = form.elements.namedItem('label') as HTMLInputElement
-
-    focus.addOutPort(input.value)
-
-    input.value = ''
-
-    this.props.requestPaint()
-  }
-
-  get ports(): DefaultPortModel[] {
-    let ports = []
-
-    for (let key in this.props.focus.ports) {
-      let port = this.props.focus.ports[key]
-      if (port.in === false) {
-        ports.push(port)
-      }
-    }
-
-    return ports
   }
 
   private install() {
