@@ -1,6 +1,7 @@
 // Important: Order matters here. Otherwise our flow chart's layout
 // calculations fail
 import '../src/global.css'
+import '../src/button.css'
 
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'

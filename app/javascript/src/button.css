@@ -1,7 +1,7 @@
-@import '../../variables.css';
+@import './variables.css';
 
 .SlantButton {
-  background: url('../../images/slant-grey.svg') 0 0 no-repeat / 100% 100%;
+  background: url('./images/slant-grey.svg') 0 0 no-repeat / 100% 100%;
   border-radius: 0;
   border: 0;
   color: white;
@@ -14,7 +14,11 @@
   text-transform: uppercase;
 }
 
+.SlantButton.-large {
+  padding: 40px;
+}
+
 .SlantButton:hover,
 .SlantButton:focus {
-  background: url('../../images/slant-gold.svg') 0 0 no-repeat / 100% 100%;
+  background: url('./images/slant-gold.svg') 0 0 no-repeat / 100% 100%;
 }
