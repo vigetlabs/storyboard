@@ -7,9 +7,10 @@
     </h1>
 
     <div class="PlayerActions">
-      <%# link_to 'Source', [:source, @adventure], class: "SlantButton" %>
       <% if @adventure.editable_by?(current_user) %>
         <%= link_to 'Edit', [:edit, @adventure], class: "SlantButton" %>
+      <% else %>
+        <%= link_to 'Source', [:source, @adventure], class: "SlantButton" %>
       <% end %>
     </div>
   </div>
