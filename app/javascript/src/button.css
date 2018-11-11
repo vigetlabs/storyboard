@@ -1,6 +1,52 @@
 @import './variables.css';
 
 .SlantButton {
+  color: white;
+  font-size: 14px;
+  text-decoration: none;
+  text-transform: uppercase;
+
+  position: relative;
+  display: inline-block;
+  padding: 2px 54px 2px 40px;
+  overflow: hidden;
+  color: #fff;
+
+
+  -webkit-appearance: none;
+  white-space: pre;
+  border: none;
+  /* background: none; */
+}
+
+
+.SlantButton:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 14px;
+  width: calc(100% - 28px);
+  height: 100%;
+  background: var(--color-grey-button);
+  -webkit-transform-origin: 100% 0;
+  -ms-transform-origin: 100% 0;
+  transform-origin: 100% 0;
+  -webkit-transform: skew(-22deg);
+  -ms-transform: skew(-22deg);
+  transform: skew(-22deg);
+  z-index: -1;
+}
+
+.SlantButton:hover:after,
+.SlantButton:focus:after {
+  background: var(--mkt-gold);
+}
+
+.SlantButton.-right {
+  float: right;
+}
+
+.LegacySlantButton {
   background: url('./images/slant-grey.svg') 0 0 no-repeat / 100% 100%;
   border-radius: 0;
   border: 0;
@@ -14,11 +60,7 @@
   text-transform: uppercase;
 }
 
-.SlantButton.-large {
-  padding: 40px;
-}
-
-.SlantButton:hover,
-.SlantButton:focus {
+.LegacySlantButton:hover,
+.LegacySlantButton:focus {
   background: url('./images/slant-gold.svg') 0 0 no-repeat / 100% 100%;
 }

@@ -4,13 +4,19 @@
 
 @import '../variables.css';
 
+.PlayerHeader {
+  display: flex;
+  margin: 0 0 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+  padding-bottom: 32px;
+  justify-content: space-between;
+}
+
 .PlayerTitle {
   font-size: 24px;
   font-weight: bold;
-  margin: 0 0 16px;
   line-height: 1;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  padding-bottom: 32px;
+  margin: 0;
 }
 
 .PlayerTitlePrelude {
@@ -22,9 +28,21 @@
   margin-bottom: 16px;
 }
 
+.PlayerActions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: 10px;
+}
+
+.PlayerActions a {
+  margin-bottom: 7px;
+}
+
 .PlayerContainer {
   max-width: 480px;
   margin: 48px auto;
+  position: relative;
 }
 
 .PlayerSectionTitle {

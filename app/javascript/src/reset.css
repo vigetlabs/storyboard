@@ -30,4 +30,5 @@ p.alert {
   padding: 10px;
   background: lightgrey;
   border-radius: 5px;
+  color: var(--mkt-charcoal);
 }
