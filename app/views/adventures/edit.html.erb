@@ -3,6 +3,7 @@
     <%= @adventure %> <% unless current_user %><span class="Badge">Public, Anyone Can Edit</span><% end %>
   </h1>
   <nav class="EditorActions">
+    <%= link_to 'Edit', [:details, @adventure] %>
     <%= link_to 'Play', @adventure, target: :_blank %>
   </nav>
 </header>

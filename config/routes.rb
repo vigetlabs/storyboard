@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root to: "adventures#index"
 
   resources :adventures, path: "/" do
+    get "details", on: :member, as: :details
     get "mine", on: :collection, as: :my
   end
 

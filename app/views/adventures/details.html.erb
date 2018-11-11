@@ -1,17 +1,15 @@
 <div class="AccountForm Container">
-  <h1 class="PageBanner">Create a<br>Story</h1>
-
-  <% unless current_user %>
-    <em>
-      If you'd like to maintain ownership of this story, log in or create an
-      account before you create it.
-    </em>
-  <% end %>
+  <h1 class="PageBanner"><%= @adventure %></h1>
 
   <%= form_for @adventure do |f| %>
     <div class="Field">
       <%= f.label :title, "What's your title?" %>
       <%= f.text_field :title, placeholder: "enter title name here" %>
+    </div>
+
+    <div class="Field">
+      <%= f.label :slug, "Story URL" %>
+      <%= f.text_field :slug %>
     </div>
 
     <div class="Field">
@@ -21,7 +19,7 @@
 
     <div class="Field">
       <%= f.label :Theme %>
-      <%= f.select :theme, options_for_select(Adventure::THEMES) %>
+      <%= f.select :theme, options_for_select(Adventure::THEMES, selected: @adventure.theme) %>
     </div>
 
     <div class="Field -checkbox">
@@ -30,11 +28,11 @@
     </div>
 
     <div class="Field">
-      <%= f.submit "Create Story", class: "SlantButton" %>
+      <%= f.submit "Update Story", class: "SlantButton" %>
     </div>
   <% end %>
 
   <footer class="AccountFormFooter">
-    <%= link_to 'Back', adventures_path %>
+    <%= link_to 'Back', [:edit, @adventure] %>
   </footer>
 </div>

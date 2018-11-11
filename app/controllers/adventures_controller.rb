@@ -1,5 +1,5 @@
 class AdventuresController < ApplicationController
-  before_action :set_adventure, only: [:show, :edit, :update, :destroy]
+  before_action :set_adventure, only: [:show, :edit, :update, :destroy, :details]
 
   def index
     @featured_adventures = Adventure.where(featured: true).first(6)
@@ -46,8 +46,11 @@ class AdventuresController < ApplicationController
     if @adventure.update(adventure_params)
       redirect_to [:edit, @adventure]
     else
-      render :edit
+      render :details
     end
+  end
+
+  def details
   end
 
   def destroy
@@ -64,6 +67,7 @@ class AdventuresController < ApplicationController
   def adventure_params
     params.require(:adventure).permit(
       :title,
+      :slug,
       :description,
       :private,
       :theme
