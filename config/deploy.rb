@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'viget/deployment/rails'
+require 'capistrano-db-tasks'
 
 set :application, 'adventuretime'
 set :repository,  'git@github.com:vigetlabs/adventure-time.git'

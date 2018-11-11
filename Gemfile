@@ -12,6 +12,13 @@ gem 'rails', '~> 5.2.1'
 gem 'uglifier'
 gem 'webpacker'
 
+gem 'capistrano-db-tasks', {
+  :github  => 'efatsi/capistrano-db-tasks',
+  :require => false,
+  :branch  => '0.2.1'
+}
+
+
 group :development, :test do
   gem 'pry-rails'
 end

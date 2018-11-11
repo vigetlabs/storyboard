@@ -1,4 +1,11 @@
 GIT
+  remote: https://github.com/efatsi/capistrano-db-tasks.git
+  revision: f5ec28b024858913fe70feaacb77f3fede606325
+  branch: 0.2.1
+  specs:
+    capistrano-db-tasks (0.2.1)
+
+GIT
   remote: https://github.com/vigetlabs/viget-deployment.git
   revision: 478e2482da382ede863b92d5e38c8f270938ba14
   specs:
@@ -221,6 +228,7 @@ PLATFORMS
 DEPENDENCIES
   awesome_print
   bootsnap (>= 1.1.0)
+  capistrano-db-tasks!
   capybara (>= 2.15)
   chromedriver-helper
   devise
