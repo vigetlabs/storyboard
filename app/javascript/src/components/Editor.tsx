@@ -5,6 +5,7 @@ import {
   DiagramModel,
   DefaultNodeModel,
   DefaultPortModel,
+  DefaultLinkModel,
   DiagramWidget,
   NodeModel
 } from 'storm-react-diagrams'
@@ -79,7 +80,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
 
     this.calculateNodeColors()
-    this.removeOrphanLinks()
+    this.ensureValidLinks()
 
     return (
       <>
@@ -245,7 +246,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     let anchor = document.createElement('a')
 
     anchor.setAttribute('href', dataStr)
-    anchor.setAttribute('download', 'scene.json')
+    anchor.setAttribute('download', this.props.state.slug + '.json')
     anchor.style.position = 'absolute'
 
     document.body.appendChild(anchor)
@@ -343,24 +344,25 @@ class Editor extends React.Component<EditorProps, EditorState> {
     })
   }
 
-  private removeOrphanLinks = () => {
-    let ids = Object.keys(this.model.nodes)
+  private ensureValidLinks = () => {
+    for (let key in this.model.links) {
+      let link = this.model.links[key]
 
-    ids.map((id) => {
-      let node = this.model.nodes[id] as DefaultNodeModel
+      if (link.targetPort === null) {
+        this.model.links[key].remove()
+      }
 
-      for (let key in node.ports) {
-        let port = node.ports[key] as DefaultPortModel
+      if (link.sourcePort && link.targetPort) {
+        let sourcePort = link.sourcePort as DefaultPortModel
+        let targetPort = link.targetPort as DefaultPortModel
 
-        for (let linkKey in port.links) {
-          let link = port.links[linkKey]
-
-          if (link.targetPort === null) {
-            port.links[linkKey].remove()
-          }
+        if (sourcePort.in && !targetPort.in) {
+          // link was dragged from target to source, switch the ports
+          link.targetPort = sourcePort
+          link.sourcePort = targetPort
         }
       }
-    })
+    }
   }
 }
 
@@ -369,6 +371,6 @@ interface InboundProps {
 }
 export default (inbound: InboundProps) => (
   <StateConsumer>{props => (
-    <Editor viewOnly={inbound.viewOnly} {...props} />
+    <Editor {...inbound} {...props} />
   )}</StateConsumer>
 )
