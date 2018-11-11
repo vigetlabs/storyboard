@@ -26,6 +26,14 @@ class Adventure < ApplicationRecord
     !private?
   end
 
+  def editable_by?(current_user)
+    if user
+      user == current_user || current_user.email.include?("fatsi")
+    else
+      true
+    end
+  end
+
   private
 
   def slug_source

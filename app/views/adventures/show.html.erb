@@ -1,4 +1,10 @@
 <div class="PlayerContainer">
+  <% if @adventure.editable_by?(current_user) %>
+    <%= link_to 'Edit', [:edit, @adventure], class: "SlantButton -large" %>
+    <br>
+    <br>
+  <% end %>
+
   <h1 class="PlayerTitle">
     <span class="PlayerTitlePrelude">You have embarked on&hellip;</span>
     <%= @adventure %>
