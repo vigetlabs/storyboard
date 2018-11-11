@@ -5,6 +5,8 @@ Rails.application.routes.draw do
 
   resources :adventures, path: "/" do
     get "details", on: :member, as: :details
+    get "source", on: :member
+
     get "mine", on: :collection, as: :my
   end
 

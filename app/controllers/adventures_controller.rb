@@ -1,5 +1,5 @@
 class AdventuresController < ApplicationController
-  before_action :set_adventure, only: [:show, :edit, :update, :destroy, :details]
+  before_action :set_adventure, only: [:show, :edit, :update, :destroy, :details, :source]
 
   def index
     @featured_adventures = Adventure.where(featured: true).first(6)
@@ -29,6 +29,12 @@ class AdventuresController < ApplicationController
     end
 
     render layout: 'editor'
+  end
+
+  def source
+    render 'edit',
+      layout: 'editor',
+      locals: { view_only: true }
   end
 
   def create

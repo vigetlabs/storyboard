@@ -26,6 +26,7 @@ interface EditorState {
 
 interface EditorProps {
   state: ApplicationState
+  viewOnly: boolean
   updateState(state: Readonly<ApplicationState>): Readonly<ApplicationState>
 }
 
@@ -70,7 +71,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   render() {
-    const { ready, saving, smartRouting } = this.state
+    const { ready, smartRouting } = this.state
+    const { viewOnly } = this.props
 
     if (ready !== true) {
       return null
@@ -87,15 +89,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
           saveStory={this.saveStory}
         >
           <menu className="EditorTools">
-            <button className="EditorButton" onClick={this.addScene}>
-              Add scene
-            </button>
-
-            <hr className="EditorToolsDivider" />
-
-            <button className="EditorButton" onClick={this.saveStory}>
-              {saving ? 'Saving...' : 'Save'}
-            </button>
+            { viewOnly ? null : this.renderAddScene() }
+            { viewOnly ? null : this.renderSave() }
 
             <button className="EditorButton" onClick={() => this.toFile()}>
               Export
@@ -119,12 +114,33 @@ class Editor extends React.Component<EditorProps, EditorState> {
             smartRouting={smartRouting}
           />
         </Workspace>
+
         <SceneEditor
           focus={this.getFocus()}
           requestPaint={this.eventuallyForceUpdate}
           onClear={this.clearSelection}
         />
       </>
+    )
+  }
+
+  private renderAddScene() {
+    return (
+      <>
+        <button className="EditorButton" onClick={this.addScene}>
+          Add scene
+        </button>
+
+        <hr className="EditorToolsDivider" />
+      </>
+    )
+  }
+
+  private renderSave() {
+    return (
+      <button className="EditorButton" onClick={this.saveStory}>
+        {this.state.saving ? 'Saving...' : 'Save'}
+      </button>
     )
   }
 
@@ -256,6 +272,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private saveStory = async () => {
+    if (this.props.viewOnly) {
+      return
+    }
+
     this.setState({ saving: true })
 
     const then = Date.now()
@@ -344,6 +364,11 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 }
 
-export default () => (
-  <StateConsumer>{props => <Editor {...props} />}</StateConsumer>
+interface InboundProps {
+  viewOnly: boolean
+}
+export default (inbound: InboundProps) => (
+  <StateConsumer>{props => (
+    <Editor viewOnly={inbound.viewOnly} {...props} />
+  )}</StateConsumer>
 )

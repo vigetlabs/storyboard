@@ -1,9 +1,20 @@
+<% view_only ||= false %>
+
 <header>
   <h1 class="Titlebar">
-    <%= @adventure %> <% unless current_user %><span class="Badge">Public, Anyone Can Edit</span><% end %>
+    <%= @adventure %>
+
+    <% if view_only %>
+      <span class="Badge">View Only, Changes Will Not Be Saved</span>
+    <% elsif !@adventure.user %>
+      <span class="Badge">Public, Anyone Can Edit</span>
+    <% end %>
   </h1>
   <nav class="EditorActions">
-    <%= link_to 'Edit', [:details, @adventure], class: "SlantButton -large" %>
+    <% if !view_only && @adventure.editable_by?(current_user) %>
+      <%= link_to 'Edit', [:details, @adventure], class: "SlantButton -large" %>
+    <% end %>
+
     <%= link_to 'Play', @adventure, class: "SlantButton -large", target: :_blank %>
   </nav>
 </header>
@@ -13,6 +24,7 @@
 <script>
   var SEED = {
     slug: "<%= @adventure.to_param %>",
-    story: <%== @adventure.content.to_json %>
+    story: <%== @adventure.content.to_json %>,
+    viewOnly: <%= view_only %>
   }
 </script>

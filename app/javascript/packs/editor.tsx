@@ -16,16 +16,18 @@ declare global {
       story: any
       meta: MetaData
       portMeta: PortMeta
-    }
+    },
+    viewOnly: boolean
   }
 }
 
 const slug = SEED.slug
 const story = SEED.story
+const viewOnly = SEED.viewOnly
 
 ReactDOM.render(
   <ApplicationComponent slug={slug} {...story}>
-    <Editor />
+    <Editor viewOnly={viewOnly} />
   </ApplicationComponent>,
   document.getElementById('editor')
 )
