@@ -28,7 +28,7 @@ class Adventure < ApplicationRecord
 
   def editable_by?(current_user)
     if user
-      user == current_user || current_user.email.include?("fatsi")
+      user == current_user || current_user&.email&.include?("fatsi")
     else
       true
     end
