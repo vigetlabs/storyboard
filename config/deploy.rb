@@ -3,7 +3,7 @@
 require 'viget/deployment/rails'
 require 'capistrano-db-tasks'
 
-set :application, 'adventuretime'
+set :application, 'storyboard'
 set :repository,  'git@github.com:vigetlabs/adventure-time.git'
 set :branch,      'master'
 
