@@ -293,8 +293,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private saveStory = async () => {
-    return
     if (this.props.viewOnly) {
+      return
     }
 
     this.setState({ saving: true })
