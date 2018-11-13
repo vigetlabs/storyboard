@@ -1,9 +1,9 @@
 export default {
   "story": {
     "id": "4f4b1e22-5fa3-4b4d-8a01-7fe86a1f660e",
-    "offsetX": -32.156177659338184,
-    "offsetY": 68.75457693482136,
-    "zoom": 105.23333333333332,
+    "offsetX": 0,
+    "offsetY": 0,
+    "zoom": 100,
     "gridSize": 0,
     "links": [
       {
