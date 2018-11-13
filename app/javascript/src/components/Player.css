@@ -102,6 +102,10 @@
   border-bottom: 0;
 }
 
+.PlayerEndPane {
+  margin-top: 75px;
+}
+
 /**
  * --------------------------------------------------
  * THEMES

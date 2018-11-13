@@ -91,23 +91,37 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
         <div dangerouslySetInnerHTML={{ __html: meta.text }} />
 
-        <ul className="PlayerChoiceList" hidden={choices.length <= 0}>
-          {this.ports(node)
-            .map(port => {
-              const showIf = get(this.props.portMeta as any, `${port.id}.showIf`)
-              const showUnless = get(this.props.portMeta as any, `${port.id}.showUnless`)
-              let show = !showIf || this.state.currentModifiers.indexOf(showIf) !== -1
-              show = show && !showUnless || !(this.state.currentModifiers.indexOf(showUnless) === -1)
-
-              return show ? (
-                <li key={port.id} onClick={this.makeChoice.bind(this, port)}>
-                  <p>{port.label}{showIf ? ` (${showIf})` : ''}</p>
-                  <button title="Follow this path">›</button>
-                </li>
-              ) : null
-            })}
-        </ul>
+        { choices.length > 0 ? this.renderChoices(node) : this.renderEnd() }
       </main>
+    )
+  }
+
+  private renderChoices(node: DefaultNodeModel) {
+    return (
+      <ul className="PlayerChoiceList">
+        {this.ports(node)
+          .map(port => {
+            const showIf = get(this.props.portMeta as any, `${port.id}.showIf`)
+            const showUnless = get(this.props.portMeta as any, `${port.id}.showUnless`)
+            let show = !showIf || this.state.currentModifiers.indexOf(showIf) !== -1
+            show = show && !showUnless || !(this.state.currentModifiers.indexOf(showUnless) === -1)
+
+            return show ? (
+              <li key={port.id} onClick={this.makeChoice.bind(this, port)}>
+                <p>{port.label}{showIf ? ` (${showIf})` : ''}</p>
+                <button title="Follow this path">›</button>
+              </li>
+            ) : null
+          })}
+      </ul>
+    )
+  }
+
+  private renderEnd() {
+    return (
+      <div className="PlayerEndPane">
+        <button className="LegacySlantButton" onClick={() => location.reload()}>Play Again!</button>
+      </div>
     )
   }
 
