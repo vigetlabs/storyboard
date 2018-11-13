@@ -13,13 +13,13 @@ gem 'uglifier'
 gem 'webpacker'
 gem 'pointless_feedback'
 gem 'jquery-rails' # dependency of pointless_feedback
+gem 'sentry-raven'
 
 gem 'capistrano-db-tasks', {
   :github  => 'efatsi/capistrano-db-tasks',
   :require => false,
   :branch  => '0.2.1'
 }
-
 
 group :development, :test do
   gem 'pry-rails'
