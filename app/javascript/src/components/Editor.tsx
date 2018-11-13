@@ -98,11 +98,11 @@ class Editor extends React.Component<EditorProps, EditorState> {
             </label>
 
             <div className="EditorButton -zooms">
-              <button onClick={() => this.setZoom(-15)}>
+              <button onClick={() => this.setZoom(-1)}>
                 -
               </button>
 
-              <button onClick={() => this.setZoom(15)}>
+              <button onClick={() => this.setZoom(1)}>
                 +
               </button>
             </div>
@@ -143,13 +143,22 @@ class Editor extends React.Component<EditorProps, EditorState> {
     )
   }
 
-  private setZoom = (delta: number) => {
+  private setZoom = (direction: number) => {
+    let delta: number
+
+    if (direction > 0) {
+      delta = 0.5 * this.model.zoom
+    } else {
+      delta =  -1 * 0.33 * this.model.zoom
+    }
+
     let startZoom = this.model.zoom
 
-    // ignore if zoomed in too far
-    if (startZoom + delta > 150 && delta > 0) return
 
-    // only allow zooming out to 10
+    // restrict zooming to 10 - 150
+    if (startZoom + delta > 150 && delta > 0) {
+      delta = 150 - startZoom
+    }
     if (startZoom + delta < 10 && delta < 0) {
       delta = 10 - startZoom
     }

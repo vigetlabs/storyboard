@@ -13,7 +13,7 @@ let Easing = {
     if (now >= end) return
 
     let percentage = (now - start) / (end - start)
-    let progress = Easing.easeInQuad(percentage)
+    let progress = Easing.easeInOutQuad(percentage)
 
     callback(progress)
 
