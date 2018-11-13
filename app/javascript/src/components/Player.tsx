@@ -103,12 +103,13 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           .map(port => {
             const showIf = get(this.props.portMeta as any, `${port.id}.showIf`)
             const showUnless = get(this.props.portMeta as any, `${port.id}.showUnless`)
-            let show = !showIf || this.state.currentModifiers.indexOf(showIf) !== -1
-            show = show && !showUnless || !(this.state.currentModifiers.indexOf(showUnless) === -1)
+            let show = !showIf || this.hasModifier(showIf) && (
+              !showUnless || !this.hasModifier(showUnless)
+            )
 
             return show ? (
               <li key={port.id} onClick={this.makeChoice.bind(this, port)}>
-                <p>{port.label}{showIf ? ` (${showIf})` : ''}</p>
+                <p>{port.label}</p>
                 <button title="Follow this path">›</button>
               </li>
             ) : null
@@ -167,6 +168,10 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     })
 
     return this.getRandom(viableStartNodes)
+  }
+
+  private hasModifier(modifier: string) {
+    return this.state.currentModifiers.indexOf(modifier) !== -1
   }
 
   private makeChoice(port: DefaultPortModel) {
