@@ -186,47 +186,22 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
   }
 
+  private rand = (num: number) => {
+    return (Math.random() * num) - (num / 2)
+  }
+
   private addScene = () => {
     let node = new DefaultNodeModel('New Scene')
 
-    let ids = Object.keys(this.model.nodes)
+    let workspace = document.getElementsByClassName("EditorWorkspace")[0]
+    let width = workspace.clientWidth * 0.4
+    let height = workspace.clientHeight * 0.75
 
-    let targetX
-    let targetY
-
-    if (ids.length) {
-      let ySum = ids.reduce((acc, id) => {
-        return acc + this.model.nodes[id].y
-      }, 0)
-      let averageY = ySum / ids.length
-
-      let maxX = 0
-      let furthestNode = this.model.nodes[ids[0]]
-
-      ids.map((id) => {
-        let existing = this.model.nodes[id]
-
-        let rightEdge = existing.x + (existing.width || 180)
-        if (rightEdge > maxX) {
-          maxX = rightEdge
-          furthestNode = existing
-        }
-      })
-
-      targetX = maxX + 200
-
-      if (furthestNode.y < averageY) {
-        targetY = furthestNode.y + 50
-      } else {
-        targetY = furthestNode.y - 50
-      }
-    } else {
-      targetX = 150
-      targetY = 200
-    }
+    let zoomModifier = (100 / this.model.zoom)
+    let targetX = (width + this.rand(100) - this.model.offsetX) * zoomModifier
+    let targetY = (height + this.rand(100) - this.model.offsetY) * zoomModifier
 
     node.setPosition(targetX, targetY)
-
     node.addInPort('In')
 
     this.watchNode(node)
@@ -273,8 +248,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private saveStory = async () => {
+    return
     if (this.props.viewOnly) {
-      return
     }
 
     this.setState({ saving: true })
