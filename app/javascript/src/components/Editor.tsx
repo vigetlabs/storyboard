@@ -5,7 +5,6 @@ import {
   DiagramModel,
   DefaultNodeModel,
   DefaultPortModel,
-  DefaultLinkModel,
   DiagramWidget,
   NodeModel
 } from 'storm-react-diagrams'
