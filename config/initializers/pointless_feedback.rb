@@ -1,7 +1,7 @@
 PointlessFeedback.setup do |config|
   # ==> Feedback Configuration
   # Configure the topics for the user to choose from on the feedback form
-  # config.message_topics = ['Error on page', 'Other']
+  config.message_topics = ['Error on page', 'Feature request', 'Praise', 'Other']
 
   # ==> Email Configuration
   # Configure feedback email properties (disabled by default)
