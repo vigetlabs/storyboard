@@ -1,0 +1,91 @@
+/**
+ * Storyboard logo. Shows up inside the main header.
+ */
+
+@import "../../variables.css";
+
+.Footer.-black {
+  background: black;
+}
+
+.Footer {
+  min-height: 80px;
+  background: var(--color-grey-button);
+  display: flex;
+  justify-content: space-between;
+  padding: 0 30px;
+  align-items: center;
+}
+
+@media only screen and (max-width: 650px) {
+  .Footer {
+    flex-direction: column;
+    min-height: 160px;
+  }
+
+  .FooterLinks a {
+    display: block;
+    text-align: center;
+    margin: 15px;
+  }
+
+  .OrgLinks {
+    margin-bottom: 10px;
+  }
+}
+
+.FooterLinks a {
+  color: white;
+  text-decoration: none;
+  margin-right: 30px;
+}
+
+.FooterLinks a:hover,
+.FooterLinks a:focus {
+  color: var(--mkt-gold);
+}
+
+.OrgLinks {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.OrgLinks a {
+  text-decoration: none;
+}
+
+.OrgLinks .pointless svg {
+  width: 250px;
+}
+
+.OrgLinks .viget {
+  margin-left: 26px;
+}
+
+.OrgLinks .viget p {
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: white;
+  font-size: 8px;
+  margin-bottom: 3px;
+  text-align: center;
+  transition: color .15s ease-in-out;
+}
+
+.OrgLinks .viget svg {
+  width: 80px;
+}
+
+.OrgLinks .viget:after {
+  border-left: 1px solid white;
+  bottom: 0;
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  -webkit-transform: translate(-12px) rotate(10deg);
+  transform: translate(-12px) rotate(10deg);
+  width: 0;
+}

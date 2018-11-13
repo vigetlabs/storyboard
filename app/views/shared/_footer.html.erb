@@ -1,0 +1,18 @@
+<% additional_class ||= "" %>
+
+<div class="Footer <%= additional_class %>">
+  <div class="FooterLinks">
+    <%= link_to "About", "/" %>
+    <%= link_to "Feedback", "/feedback" %>
+  </div>
+
+  <div class="OrgLinks">
+    <a class="pointless" href="http://pointlesscorp.com/" itemscope itemtype="http://schema.org/Organization">
+      <%= render 'shared/svg/pointless' %>
+    </a>
+    <a class="viget" href="http://viget.com/" itemscope itemtype="http://schema.org/Organization">
+      <p>A Division of</p>
+      <%= render 'shared/svg/viget' %>
+    </a>
+  </div>
+</div>

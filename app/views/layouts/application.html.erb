@@ -11,14 +11,18 @@
   <body class="ThemeDark">
     <%= render "shared/header" %>
 
-    <% if notice %>
-      <p class="notice"><%= notice %></p>
-    <% end %>
+    <main>
+      <% if notice %>
+        <p class="notice"><%= notice %></p>
+      <% end %>
 
-    <% if alert %>
-      <p class="alert"><%= alert %></p>
-    <% end %>
+      <% if alert %>
+        <p class="alert"><%= alert %></p>
+      <% end %>
 
-    <%= yield %>
+      <%= yield %>
+    </main>
+
+    <%= render "shared/footer" %>
   </body>
 </html>

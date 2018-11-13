@@ -4,12 +4,16 @@
     <%= render "shared/head_tags" %>
   </head>
   <body>
-    <div class="Player">
-      <%= render "shared/header" %>
-      <%= yield %>
+    <main>
+      <div class="Player">
+        <%= render "shared/header" %>
+        <%= yield %>
 
-      <%= stylesheet_pack_tag "player" %>
-      <%= javascript_pack_tag "player", async: true, defer: true %>
-    </div>
+        <%= stylesheet_pack_tag "player" %>
+        <%= javascript_pack_tag "player", async: true, defer: true %>
+      </div>
+    </main>
+
+    <%= render "shared/footer", additional_class: "-black" %>
   </body>
 </html>
