@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount PointlessFeedback::Engine, :at => '/feedback'
   devise_for :users
 
   root to: "adventures#index"

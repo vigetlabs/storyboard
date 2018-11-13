@@ -1,0 +1,67 @@
+<% if PointlessFeedback.using_captcha? %>
+  <head>
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+  </head>
+<% end %>
+
+<div class="AccountForm Container">
+  <h1 class="PageBanner">Feedback?</h1>
+
+  <%= form_for @message do |f| %>
+    <% if @message.errors.any? %>
+      <div class="error_messages">
+        <h2>
+          <%= I18n.t('activerecord.errors.header', :default => 'Invalid Fields') %>
+        </h2>
+
+        <p>
+          <%= I18n.t('activerecord.errors.message', :default => 'Correct the following errors and try again.') %>
+        </p>
+
+        <ul>
+          <% @message.errors.full_messages.each do |message| %>
+            <li><%= message.html_safe %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <h3>About You</h3>
+
+    <div class="Field">
+      <%= f.label :name %>
+      <%= f.text_field :name %>
+    </div>
+
+    <div class="Field">
+      <%= f.label :email_address %>
+      <%= f.text_field :email_address %>
+    </div>
+
+    <h3>Leave Your Feedback</h3>
+
+    <div class="Field">
+      <%= f.label :topic %>
+      <%= f.select :topic, PointlessFeedback.message_topics, { :prompt => true } %>
+    </div>
+
+    <div class="Field">
+      <%= f.label :description %>
+      <%= f.text_area :description %>
+    </div>
+
+    <!-- This is a honeypot field to keep the spammers away. Do not remove. -->
+    <!-- If this field is filled in, feedback will not be emailed -->
+    <div class="contact-input" style="position: absolute; left: -9999px;">
+      <%= f.text_field :contact_info %>
+    </div>
+    <!-- End of honeypot field -->
+
+    <% if PointlessFeedback.using_captcha? %>
+      <div class="g-recaptcha" data-sitekey="<%= PointlessFeedback.google_captcha_site_key %>"></div>
+    <% end %>
+
+    <br>
+    <%= f.submit 'Submit', class: "LegacySlantButton" %>
+  <% end %>
+</div>
