@@ -5,7 +5,7 @@
 @import "../../variables.css";
 
 .Footer {
-  background: var(--color-grey-button);
+  background: var(--mkt-charcoal-light);
 }
 
 .Footer.-black {
