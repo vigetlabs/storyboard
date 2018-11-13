@@ -80,10 +80,12 @@ class Player extends React.Component<PlayerProps, PlayerState> {
               let show = !showIf || this.state.currentModifiers.indexOf(showIf) !== -1
               show = show && !showUnless || !(this.state.currentModifiers.indexOf(showUnless) === -1)
 
-              return show ? <li key={port.id}>
-                <p>{port.label}{showIf ? ` (${showIf})` : ''}</p>
-                <button onClick={this.makeChoice.bind(this, port)} title="Follow this path">›</button>
-              </li> : null
+              return show ? (
+                <li key={port.id} onClick={this.makeChoice.bind(this, port)}>
+                  <p>{port.label}{showIf ? ` (${showIf})` : ''}</p>
+                  <button title="Follow this path">›</button>
+                </li>
+              ) : null
             })}
         </ul>
       </main>
