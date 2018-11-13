@@ -12,6 +12,7 @@ import {
 
 import SceneEditor from './SceneEditor'
 import Workspace from './Workspace'
+import Easing from '../utilities/Easing'
 
 import './Editor.css'
 import './FlowChart.css'
@@ -96,10 +97,21 @@ class Editor extends React.Component<EditorProps, EditorState> {
                 onChange={event => this.loadFile(event.target.files)}
               />
             </label>
+
+            <div className="EditorButton -zooms">
+              <button onClick={() => this.setZoom(-15)}>
+                -
+              </button>
+
+              <button onClick={() => this.setZoom(15)}>
+                +
+              </button>
+            </div>
           </menu>
           <DiagramWidget
             diagramEngine={this.engine}
             maxNumberPointsPerLink={0}
+            inverseZoom={true}
           />
         </Workspace>
 
@@ -130,6 +142,51 @@ class Editor extends React.Component<EditorProps, EditorState> {
         {this.state.saving ? 'Saving...' : 'Save'}
       </button>
     )
+  }
+
+  private setZoom = (delta: number) => {
+    let startZoom = this.model.zoom
+
+    // ignore if zoomed in too far
+    if (startZoom + delta > 150 && delta > 0) return
+
+    // only allow zooming out to 10
+    if (startZoom + delta < 10 && delta < 0) {
+      delta = 10 - startZoom
+    }
+
+    Easing.queueEasing((progress: number) => {
+      let addition = delta * progress
+
+      // pulling zooming centering logic from:
+      // https://github.com/projectstorm/react-diagrams/blob/fa34f5c98b42eb4b6770a64d9d06373cc153e4c6/src/widgets/DiagramWidget.tsx#L452-L471
+      let oldZoomFactor = this.model.getZoomLevel() / 100;
+      this.model.setZoomLevel(startZoom + addition)
+      let zoomFactor = this.model.getZoomLevel() / 100
+
+      // determine workspace width and height
+      let workspace = document.getElementsByClassName("EditorWorkspace")[0]
+      let clientWidth = workspace.clientWidth
+      let clientHeight = workspace.clientHeight
+
+      // compute difference between rect before and after scroll
+      let widthDiff = clientWidth * zoomFactor - clientWidth * oldZoomFactor;
+      let heightDiff = clientHeight * zoomFactor - clientHeight * oldZoomFactor;
+      // compute center of screen (formerly: compute mouse coords relative to canvas)
+      let clientX = clientWidth * 0.5
+      let clientY = clientHeight * 0.5
+
+      // compute width and height increment factor
+      let xFactor = (clientX - this.model.getOffsetX()) / oldZoomFactor / clientWidth;
+      let yFactor = (clientY - this.model.getOffsetY()) / oldZoomFactor / clientHeight;
+
+      this.model.setOffset(
+        this.model.getOffsetX() - widthDiff * xFactor,
+        this.model.getOffsetY() - heightDiff * yFactor
+      );
+
+      this.eventuallyForceUpdate()
+    })
   }
 
   private clearSelection = () => {
@@ -181,15 +238,16 @@ class Editor extends React.Component<EditorProps, EditorState> {
     let node = new DefaultNodeModel('New Scene')
 
     let workspace = document.getElementsByClassName("EditorWorkspace")[0]
-    let width = workspace.clientWidth * 0.4
-    let height = workspace.clientHeight * 0.75
+    let clientWidth = workspace.clientWidth * 0.4
+    let clientHeight = workspace.clientHeight * 0.75
 
     let zoomModifier = (100 / this.model.zoom)
-    let targetX = (width + this.rand(100) - this.model.offsetX) * zoomModifier
-    let targetY = (height + this.rand(100) - this.model.offsetY) * zoomModifier
+    let targetX = (clientWidth + this.rand(100) - this.model.offsetX) * zoomModifier
+    let targetY = (clientHeight + this.rand(100) - this.model.offsetY) * zoomModifier
 
     node.setPosition(targetX, targetY)
     node.addInPort('In')
+    node.color = '#ffeb3b'
 
     this.watchNode(node)
 

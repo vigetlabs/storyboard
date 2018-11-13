@@ -93,6 +93,27 @@
   width: 100%;
 }
 
+.EditorButton.-zooms {
+  height: 27px;
+  padding: 0;
+}
+
+.EditorButton.-zooms button {
+  height: 100%;
+  width: 50%;
+  background: white;
+  border: none;
+  font-size: 15px;
+}
+
+.EditorButton.-zooms button:first-child {
+  border-right: 2px solid var(--color-grey-button);
+}
+
+.EditorButton.-zooms button:last-child {
+  border-left: 2px solid var(--color-grey-button);
+}
+
 .EditorButton:first-child {
   margin-top: 0;
 }
