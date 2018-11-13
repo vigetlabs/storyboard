@@ -6,13 +6,17 @@
  */
 
 .srd-diagram {
-  cursor: move;
+  cursor: grab;
   display: flex;
   flex-grow: 1;
   height: 100%;
   overflow: hidden;
   position: relative;
   transform: translateZ(0);
+}
+
+.srd-diagram:active {
+  cursor: grabbing;
 }
 
 .srd-diagram__selector {
@@ -50,7 +54,7 @@
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   user-select: none;
-  cursor: move;
+  cursor: pointer;
   pointer-events: all;
   transform: translateZ(0);
 }
