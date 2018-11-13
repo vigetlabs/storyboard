@@ -9,7 +9,7 @@
 }
 
 .Footer.-black {
-  background: black;
+  background: var(--mkt-charcoal);
 }
 
 .FooterContainer {
@@ -43,7 +43,7 @@
 }
 
 .FooterLinks a {
-  color: white;
+  color: #eee;
   text-decoration: none;
   margin-right: 30px;
 }
@@ -57,14 +57,23 @@
   display: flex;
   align-items: center;
   position: relative;
+  height: 40px;
 }
 
 .OrgLinks a {
   text-decoration: none;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.OrgLinks .pointless {
+  height: 80%;
 }
 
 .OrgLinks .pointless svg {
-  width: 250px;
+  height: 100%;
 }
 
 .OrgLinks .viget {
@@ -75,19 +84,19 @@
   font-weight: 700;
   letter-spacing: .1em;
   text-transform: uppercase;
-  color: white;
+  color: #eee;
   font-size: 8px;
-  margin-bottom: 3px;
+  margin: 0 0 3px;
   text-align: center;
   transition: color .15s ease-in-out;
 }
 
 .OrgLinks .viget svg {
-  width: 80px;
+  height: 60%
 }
 
 .OrgLinks .viget:after {
-  border-left: 1px solid white;
+  border-left: 1px solid #eee;
   bottom: 0;
   content: "";
   display: block;
