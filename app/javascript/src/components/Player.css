@@ -77,6 +77,11 @@
   margin: 0;
 }
 
+.PlayerChoiceList button + p {
+  border-left: 1px solid #d9d9d9;
+  border-right: none;
+}
+
 .PlayerChoiceList button {
   background: 0;
   padding: 8px;

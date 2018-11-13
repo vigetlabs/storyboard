@@ -19,6 +19,7 @@ interface PlayerProps {
 }
 
 interface PlayerState {
+  lastFocus?: string
   focus?: string
   currentModifiers: string[]
 }
@@ -51,8 +52,26 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       return (
         <main>
           Your story's all messed up. You probably deleted the start scene.
-          <br />
+          <br /><br />
           <b>Shouldn't have done that.</b>
+        </main>
+      )
+    }
+
+    if (focus === "empty") {
+      return (
+        <main>
+          <b>Dead End!</b>
+          <br /><br />
+          That choice wasn't tied to a new scene. You should fix that. In the
+          meantime though:
+
+          <ul className="PlayerChoiceList">
+            <li onClick={this.goBack}>
+              <button title="Go Back">‹</button>
+              <p className="-onRight">Go Back</p>
+            </li>
+          </ul>
         </main>
       )
     }
@@ -142,14 +161,21 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       }
     }
 
-    let randomNode = this.getRandom(targetNodes)
+    let randomTarget = this.getRandom(targetNodes) || "empty"
 
     this.setState(state => ({
-      focus: randomNode,
+      lastFocus: this.state.focus,
+      focus: randomTarget,
       currentModifiers: modiifier
         ? [...state.currentModifiers, modiifier]
         : state.currentModifiers
     }))
+  }
+
+  private goBack = () => {
+    this.setState({
+      focus: this.state.lastFocus,
+    })
   }
 
   private getRandom(nodes: string[]) {
