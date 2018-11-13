@@ -4,13 +4,21 @@
 
 @import "../../variables.css";
 
+.Footer {
+  background: var(--color-grey-button);
+}
+
 .Footer.-black {
   background: black;
 }
 
-.Footer {
+.FooterContainer {
+  max-width: 1100px;
+  padding: 0 24px;
+  margin: 0 auto;
+  width: 100%;
+
   min-height: 80px;
-  background: var(--color-grey-button);
   display: flex;
   justify-content: space-between;
   padding: 0 30px;
@@ -18,7 +26,7 @@
 }
 
 @media only screen and (max-width: 650px) {
-  .Footer {
+  .FooterContainer {
     flex-direction: column;
     min-height: 160px;
   }
