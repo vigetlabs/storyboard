@@ -22,7 +22,6 @@ interface EditorState {
   ready: boolean
   selected: string | null
   saving: boolean
-  smartRouting: boolean
 }
 
 interface EditorProps {
@@ -42,7 +41,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
       ready: false,
       selected: null,
       saving: false,
-      smartRouting: true
     }
 
     this.engine = new DiagramEngine()
@@ -62,17 +60,11 @@ class Editor extends React.Component<EditorProps, EditorState> {
   async componentDidMount() {
     setTimeout(() => {
       this.setState({ ready: true })
-
-      /**
-       * If smartRouting is initialized as false, toggling to true breaks
-       * the flow chart engine.
-       */
-      this.setState({ smartRouting: false })
-    }, 100)
+    })
   }
 
   render() {
-    const { ready, smartRouting } = this.state
+    const { ready } = this.state
     const { viewOnly } = this.props
 
     if (ready !== true) {
@@ -104,15 +96,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
                 onChange={event => this.loadFile(event.target.files)}
               />
             </label>
-
-            <label className="EditorButton">
-              <input type="checkbox" checked={smartRouting} onChange={this.toggleRouting} /> Routing
-            </label>
           </menu>
           <DiagramWidget
             diagramEngine={this.engine}
             maxNumberPointsPerLink={0}
-            smartRouting={smartRouting}
           />
         </Workspace>
 
@@ -270,12 +257,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
         this.setState({ saving: false })
       }, timeLeft)
     }
-  }
-
-  private toggleRouting = () => {
-    this.setState({
-      smartRouting: !this.state.smartRouting
-    })
   }
 
   private calculateNodeColors = () => {
