@@ -199,8 +199,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private clearSelection = () => {
-    this.model.clearSelection()
-    this.eventuallyForceUpdate()
+    if (this.model.getSelectedItems().length == 1) {
+      this.model.clearSelection()
+      this.eventuallyForceUpdate()
+    }
   }
 
   private watchNode = (node: NodeModel) => {
