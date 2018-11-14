@@ -120,7 +120,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   private renderEnd() {
     return (
       <div className="PlayerEndPane">
-        <button className="LegacySlantButton" onClick={() => location.reload()}>Play Again!</button>
+        <button className="LegacySlantButton" onClick={this.restart}>Play Again!</button>
       </div>
     )
   }
@@ -136,6 +136,12 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     }
 
     return ports
+  }
+
+  private restart = () => {
+    this.setState({
+      focus: this.findStartKey(),
+    })
   }
 
   private findStartKey() {
