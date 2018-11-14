@@ -3,6 +3,7 @@ import * as React from 'react'
 import {
   DiagramEngine,
   DiagramModel,
+  DefaultLinkModel,
   DefaultNodeModel,
   DefaultPortModel,
   DiagramWidget,
@@ -380,8 +381,13 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
         if (sourcePort.in && !targetPort.in) {
           // link was dragged from target to source, switch the ports
-          link.targetPort = sourcePort
-          link.sourcePort = targetPort
+          this.model.links[key].remove()
+
+          let link = new DefaultLinkModel
+          link.setSourcePort(targetPort)
+          link.setTargetPort(sourcePort)
+
+          this.model.addLink(link)
         }
       }
     }
