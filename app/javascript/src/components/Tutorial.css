@@ -1,0 +1,102 @@
+@import '../variables.css';
+@import '../type.css';
+
+.TutorialBackdrop {
+  position: fixed;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 1000;
+  height: 100%;
+  width: 100%;
+  background: rgba(38, 48, 58, 0.65);
+}
+
+.Tutorial {
+  position: relative;
+
+  height: 80%;
+  width: 80%;
+  max-width: 850px;
+  margin: 0 auto;
+  padding: 20px 30px;
+
+  background: #fff;
+  border: 3px solid var(--color-grey-button);
+  border-radius: 10px;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.Tutorial .delete {
+  position: absolute;
+  top: 0;
+  right: 0;
+  border: none;
+  background: none;
+  padding: 10px 15px;
+  font-size: 14px;
+  color: var(--color-light-grey);
+}
+
+.Tutorial .delete:focus,
+.Tutorial .delete:hover {
+  color: black;
+}
+
+.TutorialHeader h2 {
+  margin: 0 0 10px;
+}
+
+.TutorialContent {
+  flex-grow: 1;
+  margin-bottom: 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.TutorialContent img {
+  width: 40%;
+  margin: 0 auto;
+  align-self: center;
+}
+
+.TutorialPagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.TutorialPagination .ProgressBar {
+  display: flex;
+  flex-direction: row;
+}
+
+.TutorialPagination button {
+  background: var(--color-grey-button);
+  color: white;
+  border: none;
+  padding: 5px 10px;
+}
+
+.TutorialPagination button:disabled {
+  background: var(--color-very-light-grey);
+}
+
+.TutorialPagination .bubble {
+  cursor: pointer;
+  border-radius: 5px;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--color-grey-button);
+  margin: 1.5px;
+}
+
+.TutorialPagination .bubble.active {
+  background: var(--color-dark-grey);
+}

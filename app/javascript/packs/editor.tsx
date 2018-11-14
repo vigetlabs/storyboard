@@ -6,6 +6,7 @@ import '../src/button.css'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
+import Tutorial from '../src/components/Tutorial'
 import Editor from '../src/components/Editor'
 import { ApplicationComponent, MetaData, PortMeta } from '../src/Store'
 
@@ -28,6 +29,7 @@ const viewOnly = SEED.viewOnly
 ReactDOM.render(
   <ApplicationComponent slug={slug} {...story}>
     <Editor viewOnly={viewOnly} />
+    <Tutorial />
   </ApplicationComponent>,
   document.getElementById('editor')
 )

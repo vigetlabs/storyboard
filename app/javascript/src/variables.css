@@ -20,5 +20,8 @@
   --color-body: #334;
   --color-tooling: rgba(0, 0, 0, 0.12);
   --color-tooling-inverse: rgba(255, 255, 255, 0.04);
+  --color-very-light-grey: #858494;
+  --color-light-grey: #6c6b7b;
   --color-grey-button: #555461;
+  --color-dark-grey: #302f37;
 }
