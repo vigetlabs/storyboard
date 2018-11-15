@@ -16,6 +16,8 @@ class Tutorial extends React.Component<{}, TutorialState> {
     this.state = {
       open: localStorage.getItem("tutorial") != "seen",
     }
+
+    document.onkeyup = this.onKeyUp
   }
 
   render() {
@@ -34,6 +36,12 @@ class Tutorial extends React.Component<{}, TutorialState> {
         </div>
       </div>
     )
+  }
+
+  private onKeyUp = (event: KeyboardEvent) => {
+    if (this.state.open && event.key == "Escape") {
+      this.handleClose()
+    }
   }
 
   handleClose = () => {
