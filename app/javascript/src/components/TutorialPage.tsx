@@ -71,6 +71,7 @@ const pages: TutorialPageContent[] = [
       "And of course, feel free to drop us a note in our feedback form (available from the footer on the homepage).",
       "Thanks for making it all the way through the tutorial, hope you make a fun story!"
     ],
+    image: require('../images/tutorial/pointless-corp.svg')
   },
 ]
 
