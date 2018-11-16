@@ -264,7 +264,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
     this.model.addNode(node)
 
-    this.clearSelection()
+    this.model.clearSelection()
     node.selected = true
 
     this.repaint()

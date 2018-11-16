@@ -10,13 +10,10 @@
   display: inline-block;
   padding: 2px 54px 2px 40px;
   overflow: hidden;
-  color: #fff;
-
 
   -webkit-appearance: none;
   white-space: pre;
   border: none;
-  /* background: none; */
 }
 
 

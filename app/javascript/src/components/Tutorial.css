@@ -60,10 +60,28 @@
   align-items: flex-start;
 }
 
+.TutorialContent p {
+  margin: 5px 0;
+}
+
+.TutorialContent button {
+  margin-top: 20px;
+}
+
+.TutorialContent .ImageContainer {
+  flex-grow: 1;
+  width: 100%;
+  margin-top: 10px;
+  position: relative;
+}
+
 .TutorialContent img {
-  width: 40%;
-  margin: 0 auto;
-  align-self: center;
+  max-width: 100%;
+  max-height: 100%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%)
 }
 
 .TutorialPagination {
@@ -81,7 +99,9 @@
   background: var(--color-grey-button);
   color: white;
   border: none;
-  padding: 5px 10px;
+  padding: 15px 20px;
+  border-radius: 5px;
+  text-transform: uppercase;
 }
 
 .TutorialPagination button:disabled {

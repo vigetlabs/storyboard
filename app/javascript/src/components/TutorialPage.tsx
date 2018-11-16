@@ -10,7 +10,7 @@ interface TPState {
 
 interface TutorialPageContent {
   title: string
-  text: string
+  text: string[]
   intro?: boolean
   image?: string
 }
@@ -18,46 +18,60 @@ interface TutorialPageContent {
 const pages: TutorialPageContent[] = [
   {
     title: "Tutorial",
-    text: "Welcome to the Storyboard Editor! Here are a few tips to build your first story",
+    text: ["Welcome to the Storyboard Editor! Here are a few tips to build your first story."],
     intro: true
   },
   {
-    title: "#1 - Do this thing",
-    text: "Scenes have names, content, and choices that you want a reader to take based on the scene. Edit these values in the sidebar that comes up when you click on a scene.",
-    image: "this_thing"
+    title: "#1 - Scenes",
+    text: [
+      "Scenes are the building blocks of your story. Scenes have names, content, and choices that you want a reader to take based on the scene.",
+      "Add scenes with the button in the upper left, and edit their details in the sidebar that comes up when you click on a scene."],
+    image: require('../images/tutorial/add-scene.gif')
   },
   {
-    title: "#2 - Do this thing",
-    text: "Names are used in the overview, but aren’t shown to readers as they go through your story."
+    title: "#2 - Choices and Links",
+    text: ["You can add choices in the sidebar within the scene sidebar. Once a choice has been added, you can then link that choice to another scene. This is how you build the flow of your story."],
+    image: require('../images/tutorial/choices.gif')
   },
   {
-    title: "#3 - Do this thing",
-    text: "Content is the scenario that will be presented to readers."
+    title: "#3 - Moving and Deleting Things",
+    text: ["You can drag scenes around to help keep your storyboard organized. To delete a scene or a link, select the item and press the BACKSPACE key. If you'd like to move or delete multiple items at once, holding shift while selecting them."],
+    image: require('../images/tutorial/delete.gif')
   },
   {
-    title: "#4 - Do this thing",
-    text: "Choices are options readers will select to shape their story. A scene can have zero to many choices."
+    title: "#4 - Navigation",
+    text: ["You can use your mouse to drag the storyboard around, and you can zoom in and out using the +/- buttons or your scroll wheel."],
+    image: require('../images/tutorial/navigation.gif')
   },
   {
-    title: "#5 - Do this thing",
-    text: "Click “Add Scene” to add a new scene to the story."
+    title: "#5 - Advance Choice Logic",
+    text: [
+      "You can attach modifiers to choices, and use those modifiers to hide and show choices in other scenes.",
+      "For example, the “Teleport to Moon” choice might only be available to the reader if the “has teleporter” modifier was picked up in an earlier choice."
+    ],
+    image: require('../images/tutorial/advanced.gif')
   },
   {
-    title: "#6 - Do this thing",
-    text: "As you’re building out your story, you can re-arrange scenes to keep your story organized. Protip: zoom and pan using the mouse, and select multiple scenes with Shift + Click"
+    title: "#6 - Saving",
+    text: ["Your story will be autosaved as you build it out. You can also manually do so by clicking “Save” to save your progress."],
+    image: require('../images/tutorial/saving.gif')
   },
   {
-    title: "#7 - Do this thing",
-    text: "Delete a scene or link by selecting it and hitting delete or pressing the delete button."
+    title: "#6 - Editing Story Details",
+    text: ["You can change the title, description, and theme of your story by clicking the “Edit” button."],
   },
   {
-    title: "#8 - Do this thing",
-    text: "Once your story is complete, press “Save” to keep your progress."
+    title: "#7 - Time to Play!",
+    text: ["Press “Play” to read your story and get a shareable link."],
   },
   {
-    title: "#9 - Do this thing",
-    text: "Press Play to read your story and get a shareable link."
-  }
+    title: "#8 - Disclaimer",
+    text: [
+      "This project was primarily built in a weekend, so you may encounter some quirks along the way. If something doesn't look right, saving your story and refreshing the page might do the trick. If saving isn't working, you can export your story as a last resort.",
+      "And of course, feel free to drop us a note in our feedback form (available from the footer on the homepage).",
+      "Thanks for making it all the way through the tutorial, hope you make a fun story!"
+    ],
+  },
 ]
 
 class TutorialPage extends React.Component<TPProps, TPState> {
@@ -76,14 +90,11 @@ class TutorialPage extends React.Component<TPProps, TPState> {
           <h2>{this.getTitle()}</h2>
         </div>
         <div className="TutorialContent">
-          <p>
-            {this.getText()}
-          </p>
+          {this.getText()}
 
           { this.currentPage().intro ? this.renderSkipLink() : null }
           { !this.hasNext() ? this.renderOkayLink() : null }
-
-          <img src={this.getImage()} />
+          { this.hasImage() ? this.renderImage() : null }
         </div>
 
         <div className="TutorialPagination">
@@ -112,7 +123,14 @@ class TutorialPage extends React.Component<TPProps, TPState> {
   }
 
   private getText() {
-    return this.currentPage().text
+    let paragraphs = []
+
+    for (let i = 0; i < this.currentPage().text.length; i++) {
+      let blob = this.currentPage().text[i];
+      paragraphs.push(<p>{blob}</p>)
+    }
+
+    return paragraphs
   }
 
   private getImage() {
@@ -122,7 +140,7 @@ class TutorialPage extends React.Component<TPProps, TPState> {
   private renderSkipLink() {
     return (
       <button onClick={this.props.onClose} className="LegacySlantButton">
-        Skip
+        No Thanks
       </button>
     )
   }
@@ -138,7 +156,13 @@ class TutorialPage extends React.Component<TPProps, TPState> {
         className += " active"
       }
 
-      return (<div className={className} onClick={() => this.setPage(index)} />)
+      return (
+        <div
+          key={index}
+          className={className}
+          onClick={() => this.setPage(index)}
+        />
+      )
     })
 
     return bubbles
@@ -153,9 +177,19 @@ class TutorialPage extends React.Component<TPProps, TPState> {
   private renderOkayLink() {
     return (
       <button onClick={this.props.onClose} className="LegacySlantButton">
-        Got it!
+        Let's Go!
       </button>
     )
+  }
+
+  private renderImage() {
+    return (<div className="ImageContainer">
+      <img src={this.getImage()} />
+    </div>)
+  }
+
+  private hasImage() {
+    return !!this.getImage()
   }
 
   private hasPrevious() {
