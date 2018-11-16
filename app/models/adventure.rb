@@ -22,25 +22,13 @@ class Adventure < ApplicationRecord
     slug
   end
 
-  def public?
-    !private?
-  end
-
   def editable_by?(current_user)
-    if user
-      user == current_user || current_user&.email&.include?("fatsi")
-    else
-      true
-    end
+    public || !user || user == current_user
   end
 
   private
 
   def slug_source
-    if public?
-      title
-    else
-      SecureRandom.uuid
-    end
+    title
   end
 end

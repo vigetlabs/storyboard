@@ -22,10 +22,12 @@
       <%= f.select :theme, options_for_select(Adventure::THEMES, selected: @adventure.theme) %>
     </div>
 
-    <div class="Field -checkbox">
-      <%= f.check_box :private %>
-      <%= f.label :private %>
-    </div>
+    <% if @adventure.user && @adventure.user == current_user %>
+      <div class="Field -checkbox">
+        <%= f.check_box :public %>
+        <%= f.label :public %>
+      </div>
+    <% end %>
 
     <div class="Field">
       <%= f.submit "Update Story", class: "LegacySlantButton" %>

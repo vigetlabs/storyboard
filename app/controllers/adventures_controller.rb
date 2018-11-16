@@ -39,7 +39,11 @@ class AdventuresController < ApplicationController
 
   def create
     @adventure = Adventure.new(adventure_params)
-    @adventure.user = current_user if current_user
+    if current_user
+      @adventure.user = current_user
+    else
+      @adventure.public = true
+    end
 
     if @adventure.save
       redirect_to [:edit, @adventure]
@@ -75,7 +79,7 @@ class AdventuresController < ApplicationController
       :title,
       :slug,
       :description,
-      :private,
+      :public,
       :theme
     )
   end

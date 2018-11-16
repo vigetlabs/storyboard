@@ -2,10 +2,12 @@
   <h1 class="PageBanner">Create a<br>Story</h1>
 
   <% unless current_user %>
-    <em>
-      If you'd like to maintain ownership of this story, log in or create an
-      account before you create it.
-    </em>
+    <p>
+      <em>
+        If you'd like to maintain ownership of this story, log in or create an
+        account before you create it.
+      </em>
+    </p>
   <% end %>
 
   <%= form_for @adventure do |f| %>
@@ -24,10 +26,17 @@
       <%= f.select :theme, options_for_select(Adventure::THEMES) %>
     </div>
 
-    <div class="Field -checkbox">
-      <%= f.check_box :private %>
-      <%= f.label :private %>
-    </div>
+    <% if current_user %>
+      <div class="Field -checkbox">
+        <%= f.check_box :public %>
+        <%= f.label :public %>
+        <div class="hint">
+          <em>
+            If checked, others will be able to edit the source of the Story.
+          </em>
+        </div>
+      </div>
+    <% end %>
 
     <div class="Field">
       <%= f.submit "Create Story", class: "LegacySlantButton" %>

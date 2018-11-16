@@ -6,7 +6,7 @@
 
     <% if view_only %>
       <span class="Badge">View Only, Changes Will Not Be Saved</span>
-    <% elsif !@adventure.user %>
+    <% elsif @adventure.public? %>
       <span class="Badge">Public, Anyone Can Edit</span>
     <% end %>
   </h1>
