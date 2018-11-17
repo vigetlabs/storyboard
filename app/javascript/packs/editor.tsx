@@ -27,7 +27,7 @@ const story = SEED.story
 const viewOnly = SEED.viewOnly
 
 ReactDOM.render(
-  <ApplicationComponent slug={slug} {...story}>
+  <ApplicationComponent {...story} slug={slug}>
     <Editor viewOnly={viewOnly} />
     <Tutorial />
   </ApplicationComponent>,
