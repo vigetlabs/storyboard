@@ -8,6 +8,11 @@
     </div>
 
     <div class="Field">
+      <%= f.label :slug, "Story URL" %>
+      <%= f.text_field :slug %>
+    </div>
+
+    <div class="Field">
       <%= f.label :description, "What's the premise?" %>
       <%= f.text_area :description, placeholder: "describe the context of the story" %>
     </div>
