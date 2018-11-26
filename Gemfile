@@ -11,9 +11,8 @@ gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.2.1'
 gem 'uglifier'
 gem 'webpacker'
-gem 'pointless_feedback'
-gem 'jquery-rails' # dependency of pointless_feedback
 gem 'sentry-raven'
+gem 'pointless_feedback', '~> 4.0.6'
 
 gem 'capistrano-db-tasks', {
   :github  => 'efatsi/capistrano-db-tasks',
