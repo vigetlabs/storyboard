@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { get } from "lodash"
+import { get } from 'lodash'
 
 import {
   DiagramModel,
@@ -11,14 +11,21 @@ import {
 import './Player.css'
 
 import { MetaData, PortMeta } from '../Store'
+import { PlayerIntro } from './PlayerIntro'
+import { PlayerInvalid } from './PlayerInvalid'
+import { PlayerDeadEnd } from './PlayerDeadEnd'
+import { PlayerEnd } from './PlayerEnd'
 
 interface PlayerProps {
+  title: string
+  description: string
   story: Object
   meta: MetaData
   portMeta: PortMeta
 }
 
 interface PlayerState {
+  started: boolean
   lastFocus?: string
   focus?: string
   currentModifiers: string[]
@@ -27,7 +34,11 @@ interface PlayerState {
 class Player extends React.Component<PlayerProps, PlayerState> {
   engine: DiagramEngine
   model: DiagramModel
-  state: PlayerState = { currentModifiers: [] }
+
+  state: PlayerState = {
+    started: false,
+    currentModifiers: []
+  }
 
   constructor(props: PlayerProps) {
     super(props)
@@ -45,83 +56,101 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     })
   }
 
-  render() {
-    let { focus } = this.state
+  start = () => {
+    this.setState({ started: true })
+  }
 
-    if (focus == null) {
+  render() {
+    let { focus, started } = this.state
+    let { title, description } = this.props
+
+    if (!started) {
       return (
-        <main>
-          Your story's all messed up. You probably deleted the start scene.
-          <br /><br />
-          <b>Shouldn't have done that.</b>
-        </main>
+        <PlayerIntro
+          title={title}
+          description={description}
+          onStart={this.start}
+        />
       )
     }
 
-    if (focus === "empty") {
-      return (
-        <main>
-          <b>Dead End!</b>
-          <br /><br />
-          That choice wasn't tied to a new scene. You should fix that. In the
-          meantime though:
+    if (focus == null) {
+      return <PlayerInvalid />
+    }
 
-          <ul className="PlayerChoiceList">
-            <li onClick={this.goBack}>
-              <button title="Go Back">‹</button>
-              <p className="-onRight">Go Back</p>
-            </li>
-          </ul>
-        </main>
-      )
+    if (focus === 'empty') {
+      return <PlayerDeadEnd goBack={this.goBack} />
     }
 
     let node = this.model.getNode(focus) as DefaultNodeModel
 
     if (node == null) {
-      return <main>Oh no! You really shouldn't ever see this message.</main>
+      return <PlayerInvalid />
     }
 
     let meta = this.props.meta[focus] || { text: '' }
     let choices = this.ports(node)
 
+    if (choices.length <= 0) {
+      return (
+        <PlayerEnd title={node.name} body={meta.text} onReplay={this.restart} />
+      )
+    }
+
     return (
-      <main>
-        <header className="PlayerSectionTitle">{node.name}</header>
+      <main className="PlayerScene">
+        <div className="PlayerForeground">
+          <h1 className="PlayerSceneTitle">{node.name}</h1>
 
-        <div dangerouslySetInnerHTML={{ __html: meta.text }} />
-
-        { choices.length > 0 ? this.renderChoices(node) : this.renderEnd() }
+          <div className="PlayerSceneContent">
+            <div
+              className="PlayerSceneBody"
+              dangerouslySetInnerHTML={{ __html: meta.text }}
+            />
+            {this.renderChoices(node)}
+          </div>
+        </div>
       </main>
     )
   }
 
   private renderChoices(node: DefaultNodeModel) {
     return (
-      <ul className="PlayerChoiceList">
-        {this.ports(node)
-          .map(port => {
-            const showIf = get(this.props.portMeta as any, `${port.id}.showIf`)
-            const showUnless = get(this.props.portMeta as any, `${port.id}.showUnless`)
-            let show = !showIf || this.hasModifier(showIf) && (
-              !showUnless || !this.hasModifier(showUnless)
-            )
+      <menu className="PlayerChoices">
+        {this.ports(node).map(port => {
+          const showIf = get(this.props.portMeta as any, `${port.id}.showIf`)
+          const showUnless = get(
+            this.props.portMeta as any,
+            `${port.id}.showUnless`
+          )
+          let show =
+            !showIf ||
+            (this.hasModifier(showIf) &&
+              (!showUnless || !this.hasModifier(showUnless)))
 
-            return show ? (
-              <li key={port.id} onClick={this.makeChoice.bind(this, port)}>
-                <p>{port.label}</p>
-                <button title="Follow this path">›</button>
-              </li>
-            ) : null
-          })}
-      </ul>
+          return show ? (
+            <div key={port.getID()}>
+              <a
+                className="PlayerChoice"
+                title="Follow this path"
+                onClick={this.makeChoice.bind(this, port)}
+                href="#"
+              >
+                {port.label}
+              </a>
+            </div>
+          ) : null
+        })}
+      </menu>
     )
   }
 
   private renderEnd() {
     return (
       <div className="PlayerEndPane">
-        <button className="LegacySlantButton" onClick={this.restart}>Play Again!</button>
+        <button className="SlantButton" onClick={this.restart}>
+          Play Again!
+        </button>
       </div>
     )
   }
@@ -141,7 +170,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
   private restart = () => {
     this.setState({
-      focus: this.findStartKey(),
+      focus: this.findStartKey()
     })
   }
 
@@ -174,7 +203,9 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return this.state.currentModifiers.indexOf(modifier) !== -1
   }
 
-  private makeChoice(port: DefaultPortModel) {
+  private makeChoice(port: DefaultPortModel, event: Event) {
+    event.preventDefault()
+
     const modiifier = get(this.props.portMeta as any, `${port.id}.addsModifier`)
     let targetNodes = []
 
@@ -186,7 +217,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       }
     }
 
-    let randomTarget = this.getRandom(targetNodes) || "empty"
+    let randomTarget = this.getRandom(targetNodes) || 'empty'
 
     this.setState(state => ({
       lastFocus: this.state.focus,
@@ -199,7 +230,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
   private goBack = () => {
     this.setState({
-      focus: this.state.lastFocus,
+      focus: this.state.lastFocus
     })
   }
 

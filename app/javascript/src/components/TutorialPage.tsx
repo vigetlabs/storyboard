@@ -140,7 +140,7 @@ class TutorialPage extends React.Component<TPProps, TPState> {
 
   private renderSkipLink() {
     return (
-      <button onClick={this.props.onClose} className="LegacySlantButton">
+      <button onClick={this.props.onClose} className="SlantButton">
         No Thanks
       </button>
     )
@@ -177,7 +177,7 @@ class TutorialPage extends React.Component<TPProps, TPState> {
 
   private renderOkayLink() {
     return (
-      <button onClick={this.props.onClose} className="LegacySlantButton">
+      <button onClick={this.props.onClose} className="SlantButton">
         Let's Go!
       </button>
     )

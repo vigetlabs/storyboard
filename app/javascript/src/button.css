@@ -42,22 +42,3 @@
 .SlantButton.-right {
   float: right;
 }
-
-.LegacySlantButton {
-  background: url('./images/slant-grey.svg') 0 0 no-repeat / 100% 100%;
-  border-radius: 0;
-  border: 0;
-  color: white;
-  cursor: pointer;
-  font-family: var(--font-serif);
-  font-size: 16px;
-  min-width: 180px;
-  padding: 14px;
-  text-decoration: none;
-  text-transform: uppercase;
-}
-
-.LegacySlantButton:hover,
-.LegacySlantButton:focus {
-  background: url('./images/slant-gold.svg') 0 0 no-repeat / 100% 100%;
-}

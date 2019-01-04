@@ -2,108 +2,38 @@
  * It's game time
  */
 
+@import url('https://fonts.googleapis.com/css?family=Monoton');
 @import '../variables.css';
 
-.PlayerContainer {
-  max-width: 480px;
-  margin: 48px auto;
-  position: relative;
-
-  @media only screen and (max-width: 516px) {
-    max-width: 93%;
-  }
-}
-
-.PlayerHeader {
-  display: flex;
-  margin: 0 0 16px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
-  padding-bottom: 32px;
-  justify-content: space-between;
-}
-
-.PlayerTitle {
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 1;
-  margin: 0;
-}
-
-.PlayerTitlePrelude {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-size: 15px;
-  display: block;
-  opacity: 0.88;
-  margin-bottom: 16px;
+.Player {
+  height: 100%;
 }
 
 .PlayerActions {
+  padding: 16px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.PlayerIntro,
+.PlayerScene,
+.PlayerEnd {
+  align-items: flex-start;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
-  margin-left: 10px;
+  height: 100%;
+  justify-content: center;
 }
 
-.PlayerActions a {
-  margin-bottom: 7px;
-}
-
-.PlayerSectionTitle {
-  font-size: 18px;
-  margin-top: 32px;
-  font-weight: bold;
-}
-
-.PlayerChoiceList {
-  border: 1px solid #d9d9d9;
-  border-radius: 4px;
-  list-style: none;
-  margin: 36px 0 0;
+.PlayerChoices {
+  margin: 0;
   padding: 0;
 }
 
-.PlayerChoiceList li {
-  align-items: center;
-  border-bottom: 1px solid #d9d9d9;
-  display: flex;
-  cursor: pointer;
-}
-
-.PlayerChoiceList p {
-  flex: 1 1;
-  padding: 8px 16px;
-  border-right: 1px solid #d9d9d9;
-  margin: 0;
-}
-
-.PlayerChoiceList button + p {
-  border-left: 1px solid #d9d9d9;
-  border-right: none;
-}
-
-.PlayerChoiceList button {
-  background: 0;
-  padding: 8px;
-  margin: 0;
-  width: 40px;
-  line-height: 16px;
-  border: 0;
-  font-size: 24px;
-  transition: 0.3s all;
-}
-
-.PlayerChoiceList button:hover,
-.PlayerChoiceList button:focus {
-  color: #03a9f4;
-}
-
-.PlayerChoiceList li:last-child {
-  border-bottom: 0;
-}
-
-.PlayerEndPane {
-  margin-top: 75px;
+.PlayerChoice {
+  text-decoration: none;
 }
 
 /**
@@ -114,150 +44,413 @@
 
 /* Light theme */
 
-.LightTheme .Player {
-  font-family: monospace !important;
+.LightTheme {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.LightTheme .PlayerIntro {
+  background: url('../images/eclipse.svg') 50% 50% no-repeat / farthest-corner,
+    radial-gradient(circle at -5% 105%, #6f689d, transparent 15%);
+}
+
+.LightTheme .PlayerForeground {
+  max-width: 1184px;
+  margin: 0 auto;
+  padding: 24px 36px;
+  width: 100%;
+}
+
+.LightTheme .PlayerIntroTitle {
+  font-size: 72px;
+  font-weight: lighter;
+  max-width: 600px;
+}
+
+.LightTheme .PlayerIntroBody {
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 64px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.24); /* Improves contrast */
+}
+
+.LightTheme .PlayerIntroContent {
+  margin: 0 0 0 auto;
+  max-width: 600px;
+}
+
+.LightTheme .PlayerIntroStart,
+.LightTheme .PlayerEndReplay {
+  background: transparent;
+  border-radius: 24px;
+  border: 1px solid #333;
+  color: black;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: bold;
+  height: 40px;
+  min-width: 150px;
+  text-transform: lowercase;
+}
+
+.LightTheme .PlayerSceneBody {
+  margin: 0 auto 0 0;
+  max-width: 600px;
+}
+
+.LightTheme .PlayerSceneTitle {
+  font-size: 48px;
+  font-weight: normal;
+  line-height: normal;
+  max-width: 600px;
+}
+
+.LightTheme .PlayerChoices {
+  max-width: 600px;
+  margin: 36px 0 0 auto;
+}
+
+.LightTheme .PlayerChoice {
+  background: url('../images/light-choice.svg') 100% 50% no-repeat;
+  color: inherit;
+  display: block;
+  font-size: 18px;
+  min-height: 48px;
+  padding-right: 48px;
+  padding: 20px 48px 20px 16px;
+  text-decoration: none;
+}
+
+.LightTheme .PlayerEnd {
+  background: url('../images/light-theme-end-background.svg') 50% 50% no-repeat /
+    cover;
+  text-align: center;
+}
+
+.LightTheme .PlayerEndTitle {
+  font-size: 48px;
+  font-weight: normal;
+  line-height: normal;
+  margin-bottom: 68px;
+}
+
+.LightTheme .PlayerEndBody {
+  font-size: 14px;
+  line-height: 24px;
+  margin-bottom: 68px;
 }
 
 /* Viget Theme */
 
 .VigetTheme {
-  background: #054f67;
+  background: #054f67 url('../images/viget-logo.svg') calc(100% - 24px)
+    calc(100% - 24px) no-repeat;
   color: white;
 }
 
-.VigetTheme .PlayerTitle {
-  border-bottom-color: white;
+.VigetTheme .PlayerIntro {
+  background: url('../images/viget-theme-intro-background.svg') top right
+    no-repeat / auto 100%;
 }
 
-.VigetTheme .AdventureHeader {
-  background: #054f67;
+.VigetTheme .PlayerEnd {
+  background: url('../images/viget-theme-end-background.svg') top right
+    no-repeat / auto 100%;
 }
 
-.VigetTheme .PlayerContainer {
-  margin: 48px 5%;
+.VigetTheme .PlayerForeground {
+  max-width: 1184px;
+  margin: 0 auto;
+  padding: 24px 36px;
+  width: 100%;
 }
 
-.VigetTheme .PlayerChoiceList {
-  border: 0;
+.VigetTheme .PlayerIntroTitle {
+  font-size: 72px;
+  letter-spacing: 0.05em;
+  line-height: normal;
+  max-width: 600px;
 }
 
-.VigetTheme .PlayerChoiceList li {
-  border: 0;
-  margin-bottom: 16px;
+.VigetTheme .PlayerIntroBody {
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 64px;
 }
 
-.VigetTheme .PlayerChoiceList li p {
-  border: 0;
-  padding: 0;
+.VigetTheme .PlayerIntroContent {
+  margin: 0 auto 0 0;
+  max-width: 600px;
 }
 
-.VigetTheme .PlayerChoiceList button {
+.VigetTheme .PlayerIntroStart,
+.VigetTheme .PlayerEndReplay {
   background: white;
-  border-radius: 50%;
-  width: 40px;
+  border: 0;
+  border-radius: 24px;
+  color: #054f67;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: bold;
   height: 40px;
+  min-width: 150px;
+  text-transform: lowercase;
+}
+
+.VigetTheme .PlayerSceneBody {
+  margin: 0 auto 0 0;
+  max-width: 600px;
+}
+
+.VigetTheme .PlayerSceneTitle {
+  font-size: 48px;
+  line-height: 1;
+  max-width: 600px;
+}
+
+.VigetTheme .PlayerChoices {
+  max-width: 600px;
+  margin: 36px auto 0 0;
+}
+
+.VigetTheme .PlayerChoice {
+  background: url('../images/viget-choice.svg') 100% 50% no-repeat;
+  color: inherit;
+  display: block;
+  font-size: 18px;
+  min-height: 48px;
+  padding-right: 48px;
+  padding: 0.5em 48px 0.5em 0;
+  text-decoration: none;
+}
+
+.VigetTheme .PlayerEnd {
+  background: url('../images/viget-theme-end-background.svg') 50% 50% no-repeat /
+    cover;
+  text-align: center;
+}
+
+.VigetTheme .PlayerEndTitle {
+  font-size: 48px;
+  line-height: normal;
+  margin-bottom: 68px;
+}
+
+.VigetTheme .PlayerEndBody {
+  font-size: 14px;
+  line-height: 24px;
+  margin-bottom: 68px;
 }
 
 /* Space Theme */
 
+@keyframes space-up {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .SpaceTheme {
-  background: #000;
+  background: linear-gradient(#0c0c28, #000001), #000001;
   color: white;
 }
 
-.SpaceTheme .PlayerTitle {
-  border-bottom-color: transparent;
-  position: relative;
-  padding-bottom: 64px;
-  font-family: sans-serif;
-  font-weight: black;
-  text-transform: uppercase;
-  font-style: italic;
-  padding-top: 64px;
-  margin-top: 128px;
+.SpaceTheme .PlayerIntro {
+  background: url('../images/space-triangle.svg') 0 100% no-repeat,
+    url('../images/moon.png') top right no-repeat / 40vh auto;
+  padding: 24px 128px;
 }
 
-.SpaceTheme .PlayerTitle:after {
-  position: absolute;
-  top: -40px;
-  left: -20px;
+.SpaceTheme .PlayerEnd,
+.SpaceTheme .PlayerScene {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
   height: 100%;
+  justify-content: center;
+  padding: 24px 128px;
+}
+
+.SpaceTheme .PlayerIntroTitle {
+  animation-fill-mode: both;
+  animation: 0.8s space-up 0.3s;
+  font: normal normal 64px/1.25 Monoton, cursive;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+  margin-top: 0;
+  word-spacing: 0.4em;
+}
+
+.SpaceTheme .PlayerIntroBody {
+  animation: 0.8s space-up 0.45s;
+  animation-fill-mode: both;
+}
+
+.SpaceTheme .PlayerIntroStart {
+  animation-fill-mode: both;
+  animation: 0.8s space-up 0.45s;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  display: inline-block;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 800;
+  margin-top: 40px;
+  padding: 0;
+  text-decoration: underline;
+  text-transform: uppercase;
+}
+
+.SpaceTheme .PlayerSceneTitle,
+.SpaceTheme .PlayerEndTitle {
+  font: italic 600 64px/1.25 Monoton, cursive;
+  letter-spacing: 3px;
+  padding-bottom: 64px;
+  padding-top: 40px;
+  position: relative;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.54);
+  text-transform: uppercase;
+  word-spacing: 0.3em;
+}
+
+.SpaceTheme .PlayerSceneTitle:after,
+.SpaceTheme .PlayerEndTitle:after {
+  background: #8c3327;
+  content: '';
+  height: 100%;
+  left: -20px;
+  position: absolute;
+  top: -20px;
+  transform: skewX(-12.5deg);
   width: 100px;
   z-index: -1;
-  content: "";
-  background: #8C3327;
-}
-
-.SpaceTheme .AdventureHeader {
-  background: #054f67;
 }
 
 .SpaceTheme .PlayerContainer {
   margin: 48px 5%;
 }
 
-.SpaceTheme .PlayerChoiceList {
-  border: 0;
-}
-
-.SpaceTheme .PlayerChoiceList li {
-  border: 0;
-  margin-bottom: 16px;
-}
-
-.SpaceTheme .PlayerChoiceList li p {
-  border: 0;
-  padding: 0;
-}
-
-.SpaceTheme .PlayerChoiceList button {
-   background: transparent url('../images/space-btn.svg') 0 0 no-repeat / 100%
-    100%;
-  color: transparent;
+.SpaceTheme .PlayerChoice,
+.SpaceTheme .PlayerEndReplay {
+  background: transparent url(../images/space-btn.svg) right center no-repeat /
+    auto 1em;
   border-radius: 0;
-  width: 40px;
-  height: 40px;
+  border: 0;
+  color: white;
+  display: inline-block;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 0.5em 2em 0.5em 0;
+  text-transform: uppercase;
 }
 
 /* Desert Theme */
 
 .DesertTheme {
-  background: black url('../images/desert.jpg') 0 0 no-repeat / cover;
+  background: #55708c;
   color: white;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.68);
+  border: 40px solid white;
 }
 
-.DesertTheme .PlayerTitle {
-  border-bottom-color: white;
+.DesertTheme .PlayerIntro {
+  background: url('../images/desert-theme-intro-background.jpg') 0 0 no-repeat /
+    cover;
 }
 
-.DesertTheme .AdventureHeader {
-  background: #054f67;
+.DesertTheme .PlayerScene {
+  background: url('../images/desert-theme-scene-background.jpg') 0 0 no-repeat /
+    cover;
 }
 
-.DesertTheme .PlayerContainer {
-  background: rgba(0, 0, 0, 0.54);
-  padding: 24px;
-  margin: 48px 5%;
+.DesertTheme .PlayerEnd {
+  background: url('../images/desert-theme-end-background.jpg') 50% 50% no-repeat /
+    cover;
+  text-align: center;
 }
 
-.DesertTheme .PlayerChoiceList {
-  border: 0;
+.DesertTheme .PlayerForeground {
+  max-width: 1184px;
+  margin: 0 auto;
+  padding: 24px 36px;
+  width: 100%;
 }
 
-.DesertTheme .PlayerChoiceList li {
-  border: 0;
-  margin-bottom: 16px;
+.DesertTheme .PlayerIntroTitle {
+  font-family: Georgia, serif;
+  font-size: 72px;
+  max-width: 600px;
 }
 
-.DesertTheme .PlayerChoiceList li p {
-  border: 0;
-  padding: 0;
+.DesertTheme .PlayerIntroBody {
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 64px;
 }
 
-.DesertTheme .PlayerChoiceList button {
+.DesertTheme .PlayerIntroContent {
+  margin: 0 auto 0 0;
+  max-width: 600px;
+}
+
+.DesertTheme .PlayerIntroStart,
+.DesertTheme .PlayerEndReplay {
   background: white;
-  border-radius: 50%;
-  width: 40px;
+  border-radius: 24px;
+  border: 0;
+  color: black;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: bold;
   height: 40px;
+  min-width: 150px;
+  text-transform: lowercase;
+  text-shadow: none;
+}
+
+.DesertTheme .PlayerSceneBody {
+  margin: 0 auto 0 0;
+  max-width: 600px;
+}
+
+.DesertTheme .PlayerSceneTitle {
+  font-family: Georgia, serif;
+  font-size: 48px;
+  line-height: normal;
+  max-width: 600px;
+}
+
+.DesertTheme .PlayerChoices {
+  max-width: 600px;
+  margin: 36px auto 0 0;
+}
+
+.DesertTheme .PlayerChoice {
+  color: inherit;
+  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  min-height: 48px;
+  padding: 0.5em 0;
+  text-decoration: none;
+}
+
+.DesertTheme .PlayerEndTitle {
+  font-family: Georgia, serif;
+  font-size: 48px;
+  line-height: normal;
+  margin-bottom: 68px;
+}
+
+.DesertTheme .PlayerEndBody {
+  font-size: 14px;
+  line-height: 24px;
+  margin-bottom: 68px;
 }
