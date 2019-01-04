@@ -13,6 +13,8 @@ import { ApplicationComponent, MetaData, PortMeta } from '../src/Store'
 declare global {
   const SEED: {
     slug: string
+    title: string
+    description: string
     story: {
       story: any
       meta: MetaData

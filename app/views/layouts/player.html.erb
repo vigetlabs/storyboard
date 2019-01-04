@@ -3,13 +3,10 @@
   <head>
     <%= render "shared/head_tags" %>
   </head>
-  <body>
-    <div class="Player">
-      <%= render "shared/header" %>
-      <%= yield %>
+  <body class="<%= content_for :theme %>">
+    <%= yield %>
 
-      <%= stylesheet_pack_tag "player" %>
-      <%= javascript_pack_tag "player", async: true, defer: true %>
-    </div>
+    <%= stylesheet_pack_tag "player" %>
+    <%= javascript_pack_tag "player", async: true, defer: true %>
   </body>
 </html>
