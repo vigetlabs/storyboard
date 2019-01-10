@@ -1,14 +1,1 @@
-<svg width="80" height="80" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g filter="url(#filter0_f)">
-<rect x="20" y="20" width="40" height="40" rx="20" fill="#EB5757"/>
-</g>
-<rect x="20.5" y="20.5" width="39" height="39" rx="19.5" fill="white" stroke="black"/>
-<path d="M52.7071 40.7071C53.0976 40.3166 53.0976 39.6834 52.7071 39.2929L46.3431 32.9289C45.9526 32.5384 45.3195 32.5384 44.9289 32.9289C44.5384 33.3195 44.5384 33.9526 44.9289 34.3431L50.5858 40L44.9289 45.6569C44.5384 46.0474 44.5384 46.6805 44.9289 47.0711C45.3195 47.4616 45.9526 47.4616 46.3431 47.0711L52.7071 40.7071ZM28 41H52V39H28V41Z" fill="black"/>
-<defs>
-<filter id="filter0_f" x="0" y="0" width="80" height="80" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-<feFlood flood-opacity="0" result="BackgroundImageFix"/>
-<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
-<feGaussianBlur stdDeviation="10" result="effect1_foregroundBlur"/>
-</filter>
-</defs>
-</svg>
+<svg width="80" height="80" fill="none" xmlns="http://www.w3.org/2000/svg"><rect x="20" y="20" width="40" height="40" rx="20" fill="#EB5757" filter="url(#filter0_f)"/><rect x="20.5" y="20.5" width="39" height="39" rx="19.5" fill="#fff" stroke="#000"/><path d="M52.707 40.707a1 1 0 0 0 0-1.414l-6.364-6.364a1 1 0 0 0-1.414 1.414L50.586 40l-5.657 5.657a1 1 0 0 0 1.414 1.414l6.364-6.364zM28 41h24v-2H28v2z" fill="#000"/><defs><filter id="filter0_f" x="0" y="0" width="80" height="80" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB"><feFlood flood-opacity="0" result="BackgroundImageFix"/><feBlend in="SourceGraphic" in2="BackgroundImageFix" result="shape"/><feGaussianBlur stdDeviation="10" result="effect1_foregroundBlur"/></filter></defs></svg>
