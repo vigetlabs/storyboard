@@ -1,0 +1,98 @@
+/**
+ * Player Light Theme
+ */
+
+.LightTheme {
+  font-family: 'Courier New', Courier, monospace;
+}
+
+.LightTheme .PlayerIntro {
+  background: url('../images/eclipse.svg') 50% 50% no-repeat / farthest-corner,
+    radial-gradient(circle at -5% 105%, #6f689d, transparent 15%);
+}
+
+.LightTheme .PlayerForeground {
+  max-width: 1184px;
+  margin: 0 auto;
+  padding: 24px 36px;
+  width: 100%;
+}
+
+.LightTheme .PlayerIntroTitle {
+  font-size: 72px;
+  font-weight: lighter;
+  max-width: 600px;
+}
+
+.LightTheme .PlayerIntroBody {
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 64px;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.24); /* Improves contrast */
+}
+
+.LightTheme .PlayerIntroContent {
+  margin: 0 0 0 auto;
+  max-width: 600px;
+}
+
+.LightTheme .PlayerIntroStart,
+.LightTheme .PlayerEndReplay {
+  background: transparent;
+  border-radius: 24px;
+  border: 1px solid #333;
+  color: black;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: bold;
+  height: 40px;
+  min-width: 150px;
+  text-transform: lowercase;
+}
+
+.LightTheme .PlayerSceneBody {
+  margin: 0 auto 0 0;
+  max-width: 600px;
+}
+
+.LightTheme .PlayerSceneTitle {
+  font-size: 48px;
+  font-weight: normal;
+  line-height: normal;
+  max-width: 600px;
+}
+
+.LightTheme .PlayerChoices {
+  max-width: 600px;
+  margin: 36px 0 0 auto;
+}
+
+.LightTheme .PlayerChoice {
+  background: url('../../images/light-choice.svg') 100% 50% no-repeat;
+  color: inherit;
+  display: block;
+  font-size: 18px;
+  min-height: 48px;
+  padding-right: 48px;
+  padding: 20px 48px 20px 16px;
+  text-decoration: none;
+}
+
+.LightTheme .PlayerEnd {
+  background: url('../../images/light-theme-end-background.svg') 50% 50%
+    no-repeat / cover;
+  text-align: center;
+}
+
+.LightTheme .PlayerEndTitle {
+  font-size: 48px;
+  font-weight: normal;
+  line-height: normal;
+  margin-bottom: 68px;
+}
+
+.LightTheme .PlayerEndBody {
+  font-size: 14px;
+  line-height: 24px;
+  margin-bottom: 68px;
+}

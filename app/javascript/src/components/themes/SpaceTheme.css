@@ -1,0 +1,113 @@
+/**
+ * Player Space Theme
+ */
+
+@import url('https://fonts.googleapis.com/css?family=Monoton');
+
+@keyframes space-up {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.SpaceTheme {
+  background: linear-gradient(#0c0c28, #000001), #000001;
+  color: white;
+}
+
+.SpaceTheme .PlayerIntro {
+  background: url('../../images/space-triangle.svg') 0 100% no-repeat,
+    url('../../images/moon.png') top right no-repeat / 40vh auto;
+  padding: 24px 128px;
+}
+
+.SpaceTheme .PlayerEnd,
+.SpaceTheme .PlayerScene {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  justify-content: center;
+  padding: 24px 128px;
+}
+
+.SpaceTheme .PlayerIntroTitle {
+  animation-fill-mode: both;
+  animation: 0.8s space-up 0.3s;
+  font: normal normal 64px/1.25 Monoton, cursive;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
+  text-transform: uppercase;
+  margin-top: 0;
+  word-spacing: 0.4em;
+}
+
+.SpaceTheme .PlayerIntroBody {
+  animation: 0.8s space-up 0.45s;
+  animation-fill-mode: both;
+}
+
+.SpaceTheme .PlayerIntroStart {
+  animation-fill-mode: both;
+  animation: 0.8s space-up 0.45s;
+  background: transparent;
+  border: 0;
+  color: inherit;
+  display: inline-block;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 800;
+  margin-top: 40px;
+  padding: 0;
+  text-decoration: underline;
+  text-transform: uppercase;
+}
+
+.SpaceTheme .PlayerSceneTitle,
+.SpaceTheme .PlayerEndTitle {
+  font: italic 600 64px/1.25 Monoton, cursive;
+  letter-spacing: 3px;
+  padding-bottom: 64px;
+  padding-top: 40px;
+  position: relative;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.54);
+  text-transform: uppercase;
+  word-spacing: 0.3em;
+}
+
+.SpaceTheme .PlayerSceneTitle:after,
+.SpaceTheme .PlayerEndTitle:after {
+  background: #8c3327;
+  content: '';
+  height: 100%;
+  left: -20px;
+  position: absolute;
+  top: -20px;
+  transform: skewX(-12.5deg);
+  width: 100px;
+  z-index: -1;
+}
+
+.SpaceTheme .PlayerContainer {
+  margin: 48px 5%;
+}
+
+.SpaceTheme .PlayerChoice,
+.SpaceTheme .PlayerEndReplay {
+  background: transparent url('../../images/space-btn.svg') right center no-repeat /
+    auto 1em;
+  border-radius: 0;
+  border: 0;
+  color: white;
+  display: inline-block;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 0.5em 2em 0.5em 0;
+  text-transform: uppercase;
+}
