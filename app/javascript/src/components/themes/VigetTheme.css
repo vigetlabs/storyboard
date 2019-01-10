@@ -1,0 +1,103 @@
+/**
+ * Player Viget Theme
+ */
+
+.VigetTheme {
+  background: #054f67 url('../../images/viget-logo.svg') calc(100% - 24px)
+    calc(100% - 24px) no-repeat;
+  color: white;
+}
+
+.VigetTheme .PlayerIntro {
+  background: url('../../images/viget-theme-intro-background.svg') top right
+    no-repeat / auto 100%;
+}
+
+.VigetTheme .PlayerEnd {
+  background: url('../../images/viget-theme-end-background.svg') top right
+    no-repeat / auto 100%;
+}
+
+.VigetTheme .PlayerForeground {
+  max-width: 1184px;
+  margin: 0 auto;
+  padding: 24px 36px;
+  width: 100%;
+}
+
+.VigetTheme .PlayerIntroTitle {
+  font-size: 72px;
+  letter-spacing: 0.05em;
+  line-height: normal;
+  max-width: 600px;
+}
+
+.VigetTheme .PlayerIntroBody {
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 64px;
+}
+
+.VigetTheme .PlayerIntroContent {
+  margin: 0 auto 0 0;
+  max-width: 600px;
+}
+
+.VigetTheme .PlayerIntroStart,
+.VigetTheme .PlayerEndReplay {
+  background: white;
+  border: 0;
+  border-radius: 24px;
+  color: #054f67;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: bold;
+  height: 40px;
+  min-width: 150px;
+  text-transform: lowercase;
+}
+
+.VigetTheme .PlayerSceneBody {
+  margin: 0 auto 0 0;
+  max-width: 600px;
+}
+
+.VigetTheme .PlayerSceneTitle {
+  font-size: 48px;
+  line-height: 1;
+  max-width: 600px;
+}
+
+.VigetTheme .PlayerChoices {
+  max-width: 600px;
+  margin: 36px auto 0 0;
+}
+
+.VigetTheme .PlayerChoice {
+  background: url('../../images/viget-choice.svg') 100% 50% no-repeat;
+  color: inherit;
+  display: block;
+  font-size: 18px;
+  min-height: 48px;
+  padding-right: 48px;
+  padding: 0.5em 48px 0.5em 0;
+  text-decoration: none;
+}
+
+.VigetTheme .PlayerEnd {
+  background: url('../../images/viget-theme-end-background.svg') 50% 50%
+    no-repeat / cover;
+  text-align: center;
+}
+
+.VigetTheme .PlayerEndTitle {
+  font-size: 48px;
+  line-height: normal;
+  margin-bottom: 68px;
+}
+
+.VigetTheme .PlayerEndBody {
+  font-size: 14px;
+  line-height: 24px;
+  margin-bottom: 68px;
+}

@@ -1,0 +1,105 @@
+/**
+ * Player Desert Theme
+ */
+
+.DesertTheme {
+  background: #55708c;
+  color: white;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.68);
+  border: 40px solid white;
+}
+
+.DesertTheme .PlayerIntro {
+  background: url('../../images/desert-theme-intro-background.jpg') 0 0 no-repeat /
+    cover;
+}
+
+.DesertTheme .PlayerScene {
+  background: url('../../images/desert-theme-scene-background.jpg') 0 0 no-repeat /
+    cover;
+}
+
+.DesertTheme .PlayerEnd {
+  background: url('../../images/desert-theme-end-background.jpg') 50% 50% no-repeat /
+    cover;
+  text-align: center;
+}
+
+.DesertTheme .PlayerForeground {
+  max-width: 1184px;
+  margin: 0 auto;
+  padding: 24px 36px;
+  width: 100%;
+}
+
+.DesertTheme .PlayerIntroTitle {
+  font-family: Georgia, serif;
+  font-size: 72px;
+  max-width: 600px;
+}
+
+.DesertTheme .PlayerIntroBody {
+  font-size: 16px;
+  line-height: 24px;
+  margin-bottom: 64px;
+}
+
+.DesertTheme .PlayerIntroContent {
+  margin: 0 auto 0 0;
+  max-width: 600px;
+}
+
+.DesertTheme .PlayerIntroStart,
+.DesertTheme .PlayerEndReplay {
+  background: white;
+  border-radius: 24px;
+  border: 0;
+  color: black;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: bold;
+  height: 40px;
+  min-width: 150px;
+  text-transform: lowercase;
+  text-shadow: none;
+}
+
+.DesertTheme .PlayerSceneBody {
+  margin: 0 auto 0 0;
+  max-width: 600px;
+}
+
+.DesertTheme .PlayerSceneTitle {
+  font-family: Georgia, serif;
+  font-size: 48px;
+  line-height: normal;
+  max-width: 600px;
+}
+
+.DesertTheme .PlayerChoices {
+  max-width: 600px;
+  margin: 36px auto 0 0;
+}
+
+.DesertTheme .PlayerChoice {
+  color: inherit;
+  display: inline-block;
+  font-size: 18px;
+  font-weight: bold;
+  min-height: 48px;
+  padding: 0.5em 0;
+  text-decoration: none;
+}
+
+.DesertTheme .PlayerEndTitle {
+  font-family: Georgia, serif;
+  font-size: 48px;
+  line-height: normal;
+  margin-bottom: 68px;
+}
+
+.DesertTheme .PlayerEndBody {
+  font-size: 14px;
+  line-height: 24px;
+  margin-bottom: 68px;
+}

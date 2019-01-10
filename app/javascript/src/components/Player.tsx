@@ -17,11 +17,12 @@ import { PlayerDeadEnd } from './PlayerDeadEnd'
 import { PlayerEnd } from './PlayerEnd'
 
 interface PlayerProps {
-  title: string
   description: string
-  story: Object
   meta: MetaData
   portMeta: PortMeta
+  story: Object
+  theme: string
+  title: string
 }
 
 interface PlayerState {
@@ -48,6 +49,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
     this.engine.installDefaultFactories()
     this.model.deSerializeDiagram(this.props.story, this.engine)
+
+    import(`./themes/${props.theme}Theme.css`)
   }
 
   componentDidMount() {
