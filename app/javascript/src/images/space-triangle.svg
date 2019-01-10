@@ -1,3 +1,1 @@
-<svg viewBox="0 0 164 1000" xmlns="http://www.w3.org/2000/svg">
-  <polygon points="0,0 0,1000 164,1000 0,0" fill="#8C3327" />
-</svg>
+<svg viewBox="0 0 164 1000" xmlns="http://www.w3.org/2000/svg"><path fill="#8C3327" d="M0 0v1000h164L0 0z"/></svg>
