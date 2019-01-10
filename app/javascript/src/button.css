@@ -1,8 +1,10 @@
 @import './variables.css';
 
 .SlantButton {
+  background: transparent;
   color: white;
   font-size: 14px;
+  line-height: 24px;
   text-decoration: none;
   text-transform: uppercase;
 
