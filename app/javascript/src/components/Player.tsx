@@ -13,8 +13,7 @@ import './Player.css'
 import { MetaData, PortMeta } from '../Store'
 import { PlayerIntro } from './PlayerIntro'
 import { PlayerInvalid } from './PlayerInvalid'
-import { PlayerDeadEnd } from './PlayerDeadEnd'
-import { PlayerEnd } from './PlayerEnd'
+import { PlayerEnd, PlayerDeadEnd } from './PlayerEnd'
 
 interface PlayerProps {
   description: string
@@ -82,7 +81,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     }
 
     if (focus === 'empty') {
-      return <PlayerDeadEnd goBack={this.goBack} />
+      return <PlayerDeadEnd onReplay={this.restart} />
     }
 
     let node = this.model.getNode(focus) as DefaultNodeModel
@@ -145,16 +144,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           ) : null
         })}
       </menu>
-    )
-  }
-
-  private renderEnd() {
-    return (
-      <div className="PlayerEndPane">
-        <button className="SlantButton" onClick={this.restart}>
-          Play Again!
-        </button>
-      </div>
     )
   }
 
@@ -229,12 +218,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         ? [...state.currentModifiers, modiifier]
         : state.currentModifiers
     }))
-  }
-
-  private goBack = () => {
-    this.setState({
-      focus: this.state.lastFocus
-    })
   }
 
   private getRandom(nodes: string[]) {
