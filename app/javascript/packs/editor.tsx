@@ -15,6 +15,7 @@ declare global {
     slug: string
     title: string
     description: string
+    theme: string
     story: {
       story: any
       meta: MetaData

@@ -7,7 +7,7 @@
 }
 
 .LightTheme .PlayerIntro {
-  background: url('../images/eclipse.svg') 50% 50% no-repeat / farthest-corner,
+  background: url('../../images/eclipse.svg') 50% 50% no-repeat / farthest-corner,
     radial-gradient(circle at -5% 105%, #6f689d, transparent 15%);
 }
 
