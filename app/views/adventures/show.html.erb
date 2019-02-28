@@ -13,8 +13,8 @@
 <script>
   var SEED = {
     story: <%== @adventure.content.to_json %>,
-    title: "<%= @adventure.title %>",
-    description: "<%= @adventure.description %>",
-    theme: "<%= @adventure.theme.capitalize %>"
+    title: "<%= escape_javascript @adventure.title %>",
+    description: "<%= escape_javascript @adventure.description %>",
+    theme: "<%= escape_javascript @adventure.theme.capitalize %>"
   }
 </script>
