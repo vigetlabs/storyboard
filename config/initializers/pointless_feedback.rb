@@ -14,6 +14,6 @@ PointlessFeedback.setup do |config|
     'joe.jackson@viget.com',
     'nate.hunzaker@viget.com'
   ]
-  config.google_captcha_site_key   = "6LfCTXoUAAAAACO82VMQ8yfMsF4nEsNEzCaz0kbT"
-  config.google_captcha_secret_key = "6LfCTXoUAAAAAIssC_3HPJKA1TEzGb0jJtUFn8Fu"
+  config.google_captcha_site_key   = "6Lcx6pQUAAAAANoXFts8_nsPSoNikCW6p80aCIL_"
+  config.google_captcha_secret_key = "6Lcx6pQUAAAAALoO68Z-f5vxBehQZLkxZkQvwkGw"
 end
