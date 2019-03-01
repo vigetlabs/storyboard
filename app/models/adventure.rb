@@ -26,7 +26,7 @@ class Adventure < ApplicationRecord
     public               ||
     !user                ||
     user == current_user ||
-    current_user.is_admin?
+    current_user.try(:is_admin?)
   end
 
   private
