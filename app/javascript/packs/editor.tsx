@@ -12,7 +12,11 @@ import { ApplicationComponent, MetaData, PortMeta } from '../src/Store'
 
 // Similar to the note in application.tsx old data was loaded so it would show
 // a version of the story but you can't update it. This reloads the page
-if (performance.navigation.type == 2) location.reload(true)
+// More info: https://stackoverflow.com/a/42063482/1153149
+window.addEventListener("pageshow", (e) => {
+  if (e.persisted || window.performance && window.performance.navigation.type === 2)
+    location.reload(true)
+})
 
 declare global {
   const SEED: {
