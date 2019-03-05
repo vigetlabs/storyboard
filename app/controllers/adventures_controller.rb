@@ -71,7 +71,7 @@ class AdventuresController < ApplicationController
   private
 
   def set_adventure
-    @adventure = Adventure.find_by_slug(params[:id])
+    @adventure = Adventure.find_by_slug!(params[:id])
   end
 
   def adventure_params
