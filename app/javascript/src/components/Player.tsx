@@ -120,15 +120,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return (
       <menu className="PlayerChoices">
         {this.ports(node).map(port => {
-          const showIf = get(this.props.portMeta as any, `${port.id}.showIf`)
-          const showUnless = get(
-            this.props.portMeta as any,
-            `${port.id}.showUnless`
-          )
-          let show =
-            !showIf ||
-            (this.hasModifier(showIf) &&
-              (!showUnless || !this.hasModifier(showUnless)))
+          let show = this.showIf(port) && this.showUnless(port)
 
           return show ? (
             <div key={port.getID()}>
@@ -145,6 +137,20 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         })}
       </menu>
     )
+  }
+
+  // If there is no modifier always return true
+  // If there is a modifier make sure that the user has it
+  private showIf(port: DefaultPortModel): boolean {
+    const modifier: string | undefined = get(this.props.portMeta as any, `${port.id}.showIf`)
+    return !modifier || this.hasModifier(modifier)
+  }
+
+  // If there is no modifier always return true
+  // If there is a modifier make sure that the user does not have it
+  private showUnless(port: DefaultPortModel): boolean {
+    const modifier: string | undefined = get(this.props.portMeta as any, `${port.id}.showUnless`)
+    return !modifier || !this.hasModifier(modifier)
   }
 
   private ports(node: DefaultNodeModel): DefaultPortModel[] {
