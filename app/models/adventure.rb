@@ -12,7 +12,7 @@ class Adventure < ApplicationRecord
 
   belongs_to :user, optional: true
 
-  validates :title, presence: true
+  validates :title, :theme, presence: true
 
   def to_s
     title
