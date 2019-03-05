@@ -8,7 +8,7 @@ class ApplicationController < ActionController::Base
     # cache since successive method calls are nil
     stored = stored_location_for(resource)
 
-    if stored != root_path
+    if stored && stored != root_path
       stored
     else
       my_adventures_path
