@@ -7,7 +7,7 @@ import './SceneEditor.css'
 import { get, set } from 'lodash'
 import { DefaultNodeModel } from 'storm-react-diagrams'
 import { StateConsumer, ApplicationState } from '../Store'
-import ChoiceEditor from "./ChoiceEditor";
+import ChoiceEditor from './ChoiceEditor'
 
 declare function $R(el: HTMLElement, options: any): void
 declare function $R(el: HTMLElement, fun: string, arg: string): void
@@ -36,7 +36,7 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     return (
       <aside className="SceneEditor" onKeyUp={this.trapKeys}>
         <div className="SceneEditorField">
-          <label htmlFor="title">Name</label>
+          <label className="SceneEditorHeading" htmlFor="title">Name</label>
           <input
             name="title"
             defaultValue={focus.name}
@@ -45,12 +45,12 @@ class SceneEditor extends React.Component<SceneEditorProps> {
         </div>
 
         <div className="SceneEditorField">
-          <label htmlFor="content">Content</label>
+          <label className="SceneEditorHeading" htmlFor="content">Content</label>
           <textarea name="content" ref={this.editor} defaultValue={text} />
         </div>
 
         <div className="SceneEditorField">
-          <h3>Choices</h3>
+          <h3 className="SceneEditorHeading">Choices</h3>
 
           <ChoiceEditor focus={focus} requestPaint={requestPaint} />
         </div>
@@ -81,12 +81,12 @@ class SceneEditor extends React.Component<SceneEditorProps> {
   }
 
   /**
-  * Important: We trap key presses in the sidebar so that backspaces
-  * do not delete nodes!
-  */
+   * Important: We trap key presses in the sidebar so that backspaces
+   * do not delete nodes!
+   */
   private trapKeys = (event: React.KeyboardEvent) => {
     switch (event.key) {
-      case "Escape":
+      case 'Escape':
         this.props.onClear()
         break
       default:
