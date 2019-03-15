@@ -12,4 +12,5 @@ Rails.application.routes.draw do
   end
 
   post "/api/:id", to: "api/adventures#update"
+  get "/api/:id", to: "api/adventures#show"
 end

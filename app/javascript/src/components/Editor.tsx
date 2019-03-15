@@ -43,23 +43,32 @@ class Editor extends React.Component<EditorProps, EditorState> {
       selected: null,
       saving: false,
     }
-
-    this.engine = new DiagramEngine()
-    this.model = new DiagramModel()
-
-    this.engine.installDefaultFactories()
-
-    this.model.deSerializeDiagram(this.props.state.story, this.engine)
-
-    for (let key in this.model.nodes) {
-      this.watchNode(this.model.nodes[key])
-    }
-
-    this.engine.setDiagramModel(this.model)
   }
 
   async componentDidMount() {
-    setTimeout(() => {
+    console.log("fetching request")
+
+    fetch(`/api/${this.props.state.slug}`, {
+      method: "GET",
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+    })
+    .then((response) => response.json())
+    .then((responseData) => {
+      this.engine = new DiagramEngine()
+      this.model = new DiagramModel()
+      this.engine.installDefaultFactories()
+      console.log(responseData.content)
+      this.model.deSerializeDiagram(responseData.content, this.engine)
+
+      for (let key in this.model.nodes) {
+        this.watchNode(this.model.nodes[key])
+      }
+
+      console.log(this.model)
+      this.engine.setDiagramModel(this.model)
       this.setState({ ready: true })
     })
   }
