@@ -50,7 +50,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
           onChange={updateChoice}
         />{' '}
         <button onClick={this.optionsButtonClick}>
-          {optionsOpen ? '>' : 'v'}
+          {optionsOpen ? '>' : '▾'}
         </button>
         <button onClick={removeChoice}>
           Delete
