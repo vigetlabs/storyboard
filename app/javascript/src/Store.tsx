@@ -3,6 +3,7 @@ import seed from './seed'
 
 export interface ApplicationState {
   slug: String
+  story?: any
   meta: MetaData
   portMeta: PortMeta
   modifiers: string[]
@@ -26,13 +27,14 @@ export interface PortMeta {
 
 const applicationState: ApplicationState = {
   slug: '',
+  story: seed,
   meta: {},
   portMeta: {},
   modifiers: [],
   currentFocusedScene: undefined
 }
 
-const ApplicationStateContext = React.createContext({
+export const ApplicationStateContext = React.createContext({
   state: applicationState,
 
   updateState(state: ApplicationState): ApplicationState {
@@ -42,6 +44,7 @@ const ApplicationStateContext = React.createContext({
 
 interface Props {
   slug: String
+  story: Object
   meta: MetaData
 }
 
@@ -50,6 +53,7 @@ export class ApplicationComponent extends React.Component<
   ApplicationState
   > {
   static defaultProps = {
+    story: seed.story,
     meta: seed.meta
   }
 

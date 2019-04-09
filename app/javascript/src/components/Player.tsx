@@ -10,12 +10,16 @@ import {
 
 import './Player.css'
 
+import { MetaData, PortMeta } from '../Store'
 import { PlayerIntro } from './PlayerIntro'
 import { PlayerInvalid } from './PlayerInvalid'
 import { PlayerEnd, PlayerDeadEnd } from './PlayerEnd'
 
 interface PlayerProps {
   description: string
+  meta: MetaData
+  portMeta: PortMeta
+  story: Object
   theme: string
   title: string
 }
@@ -43,7 +47,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     this.model = new DiagramModel()
 
     this.engine.installDefaultFactories()
-    // this.model.deSerializeDiagram(this.props.story, this.engine)
+    this.model.deSerializeDiagram(this.props.story, this.engine)
 
     import(`./themes/${props.theme}Theme.css`)
   }
@@ -86,7 +90,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       return <PlayerInvalid />
     }
 
-    let meta = { text: '' }
+    let meta = this.props.meta[focus] || { text: '' }
     let choices = this.ports(node)
 
     if (choices.length <= 0) {
@@ -138,17 +142,15 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   // If there is no modifier always return true
   // If there is a modifier make sure that the user has it
   private showIf(port: DefaultPortModel): boolean {
-    return false
-    // const modifier: string | undefined = get(this.props.portMeta as any, `${port.id}.showIf`)
-    // return !modifier || this.hasModifier(modifier)
+    const modifier: string | undefined = get(this.props.portMeta as any, `${port.id}.showIf`)
+    return !modifier || this.hasModifier(modifier)
   }
 
   // If there is no modifier always return true
   // If there is a modifier make sure that the user does not have it
   private showUnless(port: DefaultPortModel): boolean {
-    return false
-    // const modifier: string | undefined = get(this.props.portMeta as any, `${port.id}.showUnless`)
-    // return !modifier || !this.hasModifier(modifier)
+    const modifier: string | undefined = get(this.props.portMeta as any, `${port.id}.showUnless`)
+    return !modifier || !this.hasModifier(modifier)
   }
 
   private ports(node: DefaultNodeModel): DefaultPortModel[] {
@@ -202,7 +204,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   private makeChoice(port: DefaultPortModel, event: Event) {
     event.preventDefault()
 
-    const modiifier = {}
+    const modiifier = get(this.props.portMeta as any, `${port.id}.addsModifier`)
     let targetNodes = []
 
     for (let key in port.links) {
@@ -215,13 +217,13 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
     let randomTarget = this.getRandom(targetNodes) || 'empty'
 
-    // this.setState(state => ({
-    //   lastFocus: this.state.focus,
-    //   focus: randomTarget,
-    //   currentModifiers: modiifier
-    //     ? [...state.currentModifiers, modiifier]
-    //     : state.currentModifiers
-    // }))
+    this.setState(state => ({
+      lastFocus: this.state.focus,
+      focus: randomTarget,
+      currentModifiers: modiifier
+        ? [...state.currentModifiers, modiifier]
+        : state.currentModifiers
+    }))
   }
 
   private getRandom(nodes: string[]) {

@@ -9,7 +9,9 @@ import * as ReactDOM from 'react-dom'
 
 import Player from '../src/components/Player'
 
+const story = SEED.story
+
 ReactDOM.render(
-  <Player title={SEED.title} description={SEED.description} theme={SEED.theme} />,
+  <Player title={SEED.title} description={SEED.description} story={story.story} meta={story.meta} portMeta={story.portMeta} theme={SEED.theme} />,
   document.getElementById('player')
 )

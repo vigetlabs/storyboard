@@ -16,13 +16,24 @@ import Easing from '../utilities/Easing'
 
 import './Editor.css'
 import './FlowChart.css'
-import { StateConsumer, ApplicationState } from '../Store'
+import {
+  StateConsumer,
+  ApplicationState,
+  ApplicationStateContext,
+  MetaData,
+  PortMeta
+} from '../Store'
 import { save } from '../persistance'
 
 interface EditorState {
   ready: boolean
   selected: string | null
   saving: boolean
+  story: {
+    story: any
+    meta: MetaData
+    portMeta: PortMeta
+  }
 }
 
 interface EditorProps {
@@ -35,42 +46,67 @@ class Editor extends React.Component<EditorProps, EditorState> {
   engine: DiagramEngine
   model: DiagramModel
 
+  static contextType = ApplicationStateContext
+
   constructor(props: EditorProps) {
     super(props)
+
+    this.engine = new DiagramEngine()
+    this.model = new DiagramModel()
+
+    this.engine.installDefaultFactories()
+    this.engine.setDiagramModel(this.model)
 
     this.state = {
       ready: false,
       selected: null,
       saving: false,
+      story: {
+        story: {},
+        meta: {},
+        portMeta: {}
+      }
     }
   }
 
   async componentDidMount() {
-    console.log("fetching request")
+    try {
+      await this.load()
+    } catch (error) {
+      console.error(error)
 
-    fetch(`/api/${this.props.state.slug}`, {
-      method: "GET",
+      alert(
+        'Yikes! For some reason we could not load your story. Please refresh the page.'
+      )
+    }
+  }
+
+  async load() {
+    let response = await fetch(`/api/${this.props.state.slug}`, {
+      method: 'GET',
       headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      }
     })
-    .then((response) => response.json())
-    .then((responseData) => {
-      this.engine = new DiagramEngine()
-      this.model = new DiagramModel()
-      this.engine.installDefaultFactories()
-      console.log(responseData.content)
-      this.model.deSerializeDiagram(responseData.content, this.engine)
+
+    if (response.ok === false) {
+      throw new Error('Unable to load editor data.')
+    }
+
+    let { content } = await response.json()
+
+    if (content.story) {
+      this.model.deSerializeDiagram(content.story, this.engine)
 
       for (let key in this.model.nodes) {
         this.watchNode(this.model.nodes[key])
       }
+    }
 
-      console.log(this.model)
-      this.engine.setDiagramModel(this.model)
-      this.setState({ ready: true })
-    })
+    this.context.updateState({ story: content })
+
+    this.setState({ ready: true })
   }
 
   render() {
@@ -92,8 +128,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
           saveStory={this.saveStory}
         >
           <menu className="EditorTools">
-            { viewOnly ? null : this.renderAddScene() }
-            { viewOnly ? null : this.renderSave() }
+            {viewOnly ? null : this.renderAddScene()}
+            {viewOnly ? null : this.renderSave()}
 
             <button className="EditorButton" onClick={() => this.toFile()}>
               Export
@@ -108,13 +144,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
             </label>
 
             <div className="EditorButton -zooms">
-              <button onClick={() => this.setZoom(-1)}>
-                -
-              </button>
+              <button onClick={() => this.setZoom(-1)}>-</button>
 
-              <button onClick={() => this.setZoom(1)}>
-                +
-              </button>
+              <button onClick={() => this.setZoom(1)}>+</button>
             </div>
           </menu>
           <DiagramWidget
@@ -159,11 +191,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
     if (direction > 0) {
       delta = 0.5 * this.model.zoom
     } else {
-      delta =  -1 * 0.33 * this.model.zoom
+      delta = -1 * 0.33 * this.model.zoom
     }
 
     let startZoom = this.model.zoom
-
 
     // restrict zooming to 10 - 150
     if (startZoom + delta > 150 && delta > 0) {
@@ -178,30 +209,32 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
       // pulling zooming centering logic from:
       // https://github.com/projectstorm/react-diagrams/blob/fa34f5c98b42eb4b6770a64d9d06373cc153e4c6/src/widgets/DiagramWidget.tsx#L452-L471
-      let oldZoomFactor = this.model.getZoomLevel() / 100;
+      let oldZoomFactor = this.model.getZoomLevel() / 100
       this.model.setZoomLevel(startZoom + addition)
       let zoomFactor = this.model.getZoomLevel() / 100
 
       // determine workspace width and height
-      let workspace = document.getElementsByClassName("EditorWorkspace")[0]
+      let workspace = document.getElementsByClassName('EditorWorkspace')[0]
       let clientWidth = workspace.clientWidth
       let clientHeight = workspace.clientHeight
 
       // compute difference between rect before and after scroll
-      let widthDiff = clientWidth * zoomFactor - clientWidth * oldZoomFactor;
-      let heightDiff = clientHeight * zoomFactor - clientHeight * oldZoomFactor;
+      let widthDiff = clientWidth * zoomFactor - clientWidth * oldZoomFactor
+      let heightDiff = clientHeight * zoomFactor - clientHeight * oldZoomFactor
       // compute center of screen (formerly: compute mouse coords relative to canvas)
       let clientX = clientWidth * 0.5
       let clientY = clientHeight * 0.5
 
       // compute width and height increment factor
-      let xFactor = (clientX - this.model.getOffsetX()) / oldZoomFactor / clientWidth;
-      let yFactor = (clientY - this.model.getOffsetY()) / oldZoomFactor / clientHeight;
+      let xFactor =
+        (clientX - this.model.getOffsetX()) / oldZoomFactor / clientWidth
+      let yFactor =
+        (clientY - this.model.getOffsetY()) / oldZoomFactor / clientHeight
 
       this.model.setOffset(
         this.model.getOffsetX() - widthDiff * xFactor,
         this.model.getOffsetY() - heightDiff * yFactor
-      );
+      )
 
       this.eventuallyForceUpdate()
     })
@@ -246,24 +279,26 @@ class Editor extends React.Component<EditorProps, EditorState> {
   private serialize() {
     return {
       ...this.props.state,
-      story: this.model.serializeDiagram(),
+      story: this.model.serializeDiagram()
     }
   }
 
   private rand = (num: number) => {
-    return (Math.random() * num) - (num / 2)
+    return Math.random() * num - num / 2
   }
 
   private addScene = () => {
     let node = new DefaultNodeModel('New Scene')
 
-    let workspace = document.getElementsByClassName("EditorWorkspace")[0]
+    let workspace = document.getElementsByClassName('EditorWorkspace')[0]
     let clientWidth = workspace.clientWidth * 0.4
     let clientHeight = workspace.clientHeight * 0.75
 
-    let zoomModifier = (100 / this.model.zoom)
-    let targetX = (clientWidth + this.rand(100) - this.model.offsetX) * zoomModifier
-    let targetY = (clientHeight + this.rand(100) - this.model.offsetY) * zoomModifier
+    let zoomModifier = 100 / this.model.zoom
+    let targetX =
+      (clientWidth + this.rand(100) - this.model.offsetX) * zoomModifier
+    let targetY =
+      (clientHeight + this.rand(100) - this.model.offsetY) * zoomModifier
 
     node.setPosition(targetX, targetY)
     node.addInPort('In')
@@ -301,7 +336,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     let reader = new FileReader()
 
     let scope = this
-    reader.onload = function () {
+    reader.onload = function() {
       try {
         scope.props.updateState(JSON.parse(`${this.result}`))
       } catch (error) {
@@ -340,7 +375,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
   private calculateNodeColors = () => {
     let ids = Object.keys(this.model.nodes)
 
-    ids.map((id) => {
+    ids.map(id => {
       let node = this.model.nodes[id] as DefaultNodeModel
 
       let inPortsWithLinks = []
@@ -371,7 +406,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       } else if (!outPorts.length) {
         // end: has no out ports
         node.color = '#f6412d'
-      } else  {
+      } else {
         // connected
         node.color = '#00bfff'
       }
@@ -394,7 +429,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
           // link was dragged from target to source, switch the ports
           this.model.links[key].remove()
 
-          let link = new DefaultLinkModel
+          let link = new DefaultLinkModel()
           link.setSourcePort(targetPort)
           link.setTargetPort(sourcePort)
 
@@ -409,7 +444,5 @@ interface InboundProps {
   viewOnly: boolean
 }
 export default (inbound: InboundProps) => (
-  <StateConsumer>{props => (
-    <Editor {...inbound} {...props} />
-  )}</StateConsumer>
+  <StateConsumer>{props => <Editor {...inbound} {...props} />}</StateConsumer>
 )
