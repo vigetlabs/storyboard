@@ -152,13 +152,17 @@ export default {
   },
   "meta": {
     "94913fcb-4d8e-4314-b99e-e24646d5e551": {
+      "title": "",
       "text": "<p>This the starting scene, where you introduce your story to the reader. It's marked in green so you can find it easily.</p><p>Feel free to edit this text, the name above, and the choices below to write your first story.<br></p><p>If you don't set any choices for a scene, that scene is&nbsp;considered an end to the story and marked in red.</p>"
     },
     "38388378-6f4c-4631-884a-f63ff3ac8fb1": {
+      "title": "",
       "text": "<p>This content is shown to the reader if they choose \"Choice 1\" in the opening scene.</p>"
     },
     "9e59af2a-a4dd-4e2d-ac68-14f344ecb4db": {
+      "title": "",
       "text": "<p>This content is shown to the reader if they choose \"Choice 2\" in the opening scene.</p>"
     }
-  }
+  },
+  "portMeta": {}
 }

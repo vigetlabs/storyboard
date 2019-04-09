@@ -3,7 +3,11 @@ import seed from './seed'
 
 export interface ApplicationState {
   slug: String
-  story?: any
+  story: {
+    story: any
+    meta: MetaData
+    portMeta: PortMeta
+  }
   meta: MetaData
   portMeta: PortMeta
   modifiers: string[]
@@ -51,7 +55,7 @@ interface Props {
 export class ApplicationComponent extends React.Component<
   Props,
   ApplicationState
-  > {
+> {
   static defaultProps = {
     story: seed.story,
     meta: seed.meta

@@ -29,11 +29,6 @@ interface EditorState {
   ready: boolean
   selected: string | null
   saving: boolean
-  story: {
-    story: any
-    meta: MetaData
-    portMeta: PortMeta
-  }
 }
 
 interface EditorProps {
@@ -60,12 +55,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.state = {
       ready: false,
       selected: null,
-      saving: false,
-      story: {
-        story: {},
-        meta: {},
-        portMeta: {}
-      }
+      saving: false
     }
   }
 
