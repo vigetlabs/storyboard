@@ -34,6 +34,7 @@ interface EditorProps {
 class Editor extends React.Component<EditorProps, EditorState> {
   engine: DiagramEngine
   model: DiagramModel
+  lastSavedState: ApplicationState
 
   constructor(props: EditorProps) {
     super(props)
@@ -56,6 +57,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
 
     this.engine.setDiagramModel(this.model)
+    this.lastSavedState = this.serialize()
   }
 
   async componentDidMount() {
@@ -307,12 +309,21 @@ class Editor extends React.Component<EditorProps, EditorState> {
       return
     }
 
+    const newState = this.serialize()
+
+    if (JSON.stringify(newState) === JSON.stringify(this.lastSavedState)) {
+      // Don't save if nothing has changed on this end
+      return
+    } else {
+      this.lastSavedState = newState
+    }
+
     this.setState({ saving: true })
 
     const then = Date.now()
 
     try {
-      await save(this.props.state.slug, this.serialize())
+      await save(this.props.state.slug, newState)
     } catch (error) {
       alert(
         "Sorry! We couldn't save! It's possible you do not have internet access. Be sure to export your scene before closing the browser!"
