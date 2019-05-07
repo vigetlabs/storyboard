@@ -68,6 +68,12 @@ class AdventuresController < ApplicationController
     redirect_to my_adventures_url, notice: 'Adventure was successfully destroyed.'
   end
 
+  def csv
+    if current_user.try(:is_admin?)
+      send_data(AdventureExport.export, filename: "storyboard_adventures_#{Date.current.strftime("%x").gsub("/", "-")}.csv")
+    end
+  end
+
   private
 
   def set_adventure

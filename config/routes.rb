@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     get "source", on: :member
 
     get "mine", on: :collection, as: :my
+    get "csv", on: :collection
   end
 
   post "/api/:id", to: "api/adventures#update"

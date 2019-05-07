@@ -8,6 +8,8 @@ class User < ApplicationRecord
     email.in? [
       "eli.fatsi@viget.com",
       "albert.wavering@viget.com",
+      "nate.hunzaker@viget.com",
+      "joe.jackson@viget.com",
       "kelly.kenny@viget.com"
     ]
   end
