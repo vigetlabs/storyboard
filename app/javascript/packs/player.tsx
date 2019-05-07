@@ -8,10 +8,26 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
 import Player from '../src/components/Player'
+import { load } from '../src/persistance'
 
-const story = SEED.story
+const slug = SEED.slug
 
-ReactDOM.render(
-  <Player title={SEED.title} description={SEED.description} story={story.story} meta={story.meta} portMeta={story.portMeta} theme={SEED.theme} />,
-  document.getElementById('player')
-)
+async function render() {
+  const content = await load(slug)
+
+  if (content) {
+    ReactDOM.render(
+      <Player
+        title={SEED.title}
+        description={SEED.description}
+        story={content.story}
+        meta={content.meta}
+        portMeta={content.portMeta}
+        theme={SEED.theme}
+      />,
+      document.getElementById('player')
+    )
+  }
+}
+
+render()

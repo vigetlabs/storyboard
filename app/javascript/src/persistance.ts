@@ -21,3 +21,21 @@ export async function save(slug: String, content: ApplicationState) {
 
   return request.json()
 }
+
+export async function load(slug: String) {
+  let response = await fetch(`/api/${slug}`, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    }
+  })
+
+  if (response.ok === false) {
+    throw new Error('Unable to load editor data.')
+  }
+
+  let { content } = await response.json()
+
+  return content
+}

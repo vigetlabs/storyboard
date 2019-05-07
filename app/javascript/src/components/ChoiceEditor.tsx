@@ -19,7 +19,12 @@ class ChoiceEditor extends React.Component<ChoiceEditorProps> {
 
   renderChoiceList() {
     if (this.ports.length <= 0) {
-      return <p>Choices let users advance in the story. Use the form below to create this scene's first choice:</p>
+      return (
+        <p>
+          Choices let users advance in the story. Use the form below to create
+          this scene's first choice:
+        </p>
+      )
     }
 
     return (
@@ -40,7 +45,7 @@ class ChoiceEditor extends React.Component<ChoiceEditorProps> {
     return (
       <form onSubmit={this.addChoice} className="SceneEditorPortForm">
         <input name="label" defaultValue="" min="1" required={true} />
-        <button class="SceneEditorPortFormCreateChoice">Add choice</button>
+        <button className="SceneEditorPortFormCreateChoice">Add choice</button>
       </form>
     )
   }
