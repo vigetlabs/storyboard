@@ -49,14 +49,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.model = new DiagramModel()
 
     this.engine.installDefaultFactories()
-
-    this.model.deSerializeDiagram(this.props.state.story, this.engine)
-
-    for (let key in this.model.nodes) {
-      this.watchNode(this.model.nodes[key])
-    }
-
-    this.engine.setDiagramModel(this.model)
+    this.updateStory(this.props.state.story)
     this.lastSavedState = this.serialize()
   }
 
@@ -64,6 +57,26 @@ class Editor extends React.Component<EditorProps, EditorState> {
     setTimeout(() => {
       this.setState({ ready: true })
     })
+  }
+
+  componentDidUpdate({ state: { story } }: EditorProps) {
+    let { state: { story: newStory } } = this.props;
+    if (JSON.stringify(story) !== JSON.stringify(newStory)) {
+      this.updateStory(newStory)
+      this.forceUpdate()
+    }
+  }
+
+  updateStory(story: any) {
+    let model = new DiagramModel()
+    model.deSerializeDiagram(story, this.engine)
+
+    for (let key in this.model.nodes) {
+      this.watchNode(this.model.nodes[key])
+    }
+
+    this.engine.setDiagramModel(model)
+    this.model = model
   }
 
   render() {
@@ -293,9 +306,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
     let reader = new FileReader()
 
     let scope = this
-    reader.onload = function() {
+    reader.onload = function () {
       try {
-        scope.props.updateState(JSON.parse(`${this.result}`))
+        scope.props.updateState({ ...JSON.parse(`${this.result}`), slug: scope.props.state.slug })
       } catch (error) {
         alert("Sorry, we couldn't parse your file :(")
       }
