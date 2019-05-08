@@ -46,9 +46,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
 
     this.engine = new DiagramEngine()
-    this.model = new DiagramModel()
-
     this.engine.installDefaultFactories()
+
     this.updateStory(this.props.state.story)
     this.lastSavedState = this.serialize()
   }
@@ -71,8 +70,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
     let model = new DiagramModel()
     model.deSerializeDiagram(story, this.engine)
 
-    for (let key in this.model.nodes) {
-      this.watchNode(this.model.nodes[key])
+    for (let key in model.nodes) {
+      this.watchNode(model.nodes[key])
     }
 
     this.engine.setDiagramModel(model)
