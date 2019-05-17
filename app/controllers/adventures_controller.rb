@@ -2,7 +2,6 @@ class AdventuresController < ApplicationController
   before_action :set_adventure, only: [:show, :edit, :update, :destroy, :details, :source]
 
   def index
-    @featured_adventures = Adventure.where(featured: true).first(6)
   end
 
   def mine

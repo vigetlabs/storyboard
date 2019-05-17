@@ -8,6 +8,12 @@ class Adventure < ApplicationRecord
     "Desert" => "desert"
   }
 
+  FEATURE_GROUPS = [
+    "Fiction",
+    "History",
+    "Education and Training"
+  ]
+
   slug_from :slug_source
 
   belongs_to :user, optional: true

@@ -11,21 +11,8 @@
   </div>
 
   <section class="StoryIndexFeatured">
-    <h2 class="SectionHeader">Featured Stories</h2>
-
-    <div class="AdventureList">
-      <% @featured_adventures.each do |adventure| %>
-        <div class="card">
-          <%= link_to adventure do %>
-            <div class="card-image">
-              <iframe src="<%= adventure_path(adventure) %>?iframe=1"></iframe>
-            </div>
-            <div class="card-title">
-              <%= adventure %>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
-    </div>
+    <% Adventure::FEATURE_GROUPS.each do |feature_group| %>
+      <%= render 'featured_adventures', feature_group: feature_group %>
+    <% end %>
   </section>
 </div>

@@ -1,5 +1,5 @@
 .AdventureList {
-  margin: 20px auto;
+  margin: 20px auto 40px;
   display: flex;
   flex-wrap: wrap;
 }
