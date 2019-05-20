@@ -3,6 +3,7 @@
  */
 
 .Player {
+  display: flex;
   height: 100%;
 }
 
@@ -20,8 +21,9 @@
   align-items: flex-start;
   display: flex;
   flex-direction: column;
-  height: 100%;
-  justify-content: center;
+  flex-grow: 1;
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
 .PlayerChoices {
