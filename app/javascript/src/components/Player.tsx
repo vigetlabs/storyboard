@@ -201,6 +201,10 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return this.state.currentModifiers.indexOf(modifier) !== -1
   }
 
+  private resetScroll() {
+    window.scrollTo(0, 0)
+  }
+
   private makeChoice(port: DefaultPortModel, event: Event) {
     event.preventDefault()
 
@@ -223,7 +227,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       currentModifiers: modiifier
         ? [...state.currentModifiers, modiifier]
         : state.currentModifiers
-    }))
+    }), this.resetScroll)
   }
 
   private getRandom(nodes: string[]) {
