@@ -28,6 +28,7 @@ interface EditorState {
 interface EditorProps {
   state: ApplicationState
   viewOnly: boolean
+  setTutorialOpen(isOpen: boolean): void
   updateState(state: Readonly<ApplicationState>): Readonly<ApplicationState>
 }
 
@@ -59,7 +60,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   componentDidUpdate({ state: { story } }: EditorProps) {
-    let { state: { story: newStory } } = this.props;
+    let {
+      state: { story: newStory }
+    } = this.props
     if (JSON.stringify(story) !== JSON.stringify(newStory)) {
       this.updateStory(newStory)
       this.forceUpdate()
@@ -111,6 +114,13 @@ class Editor extends React.Component<EditorProps, EditorState> {
                 onChange={event => this.loadFile(event.target.files)}
               />
             </label>
+
+            <button
+              className="EditorButton"
+              onClick={() => this.props.setTutorialOpen(true)}
+            >
+              Tutorial
+            </button>
 
             <div className="EditorButton -zooms">
               <button onClick={() => this.setZoom(-1)}>-</button>
@@ -246,9 +256,21 @@ class Editor extends React.Component<EditorProps, EditorState> {
     })
 
   private serialize() {
-    return {
+    const newState = {
       ...this.props.state,
       story: this.model.serializeDiagram()
+    }
+
+    // Pulling out individual fields that we want because returning the entire
+    // state includes a `children` key, which contains a circular reference to
+    // this component (I think), which breaks JSON stringification
+    return {
+      currentFocusedScene: newState.currentFocusedScene,
+      meta: newState.meta,
+      modifiers: newState.modifiers,
+      portMeta: newState.portMeta,
+      slug: newState.slug,
+      story: newState.story
     }
   }
 
@@ -305,9 +327,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
     let reader = new FileReader()
 
     let scope = this
-    reader.onload = function () {
+    reader.onload = function() {
       try {
-        scope.props.updateState({ ...JSON.parse(`${this.result}`), slug: scope.props.state.slug })
+        scope.props.updateState({
+          ...JSON.parse(`${this.result}`),
+          slug: scope.props.state.slug
+        })
       } catch (error) {
         alert("Sorry, we couldn't parse your file :(")
       }
@@ -420,6 +445,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
 interface InboundProps {
   viewOnly: boolean
+  setTutorialOpen(isOpen: boolean): void
 }
 export default (inbound: InboundProps) => (
   <StateConsumer>{props => <Editor {...inbound} {...props} />}</StateConsumer>

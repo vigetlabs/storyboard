@@ -3,25 +3,20 @@ import TutorialPage from './TutorialPage'
 
 import './Tutorial.css'
 
-interface TutorialState {
-  open: boolean
+interface TutorialProps {
+  isOpen: boolean
+  setTutorialOpen(isOpen: boolean): void
 }
 
-class Tutorial extends React.Component<{}, TutorialState> {
-  open: boolean
-
-  constructor(props: {}) {
+class Tutorial extends React.Component<TutorialProps> {
+  constructor(props: TutorialProps) {
     super(props)
-
-    this.state = {
-      open: localStorage.getItem("tutorial") != "seen",
-    }
 
     document.onkeyup = this.onKeyUp
   }
 
   render() {
-    if (!this.state.open) {
+    if (!this.props.isOpen) {
       return null
     }
 
@@ -29,24 +24,26 @@ class Tutorial extends React.Component<{}, TutorialState> {
       <div className="TutorialBackdrop">
         <div className="Tutorial">
           <div>
-            <button className="delete" onClick={this.handleClose}>X</button>
+            <button className="delete" onClick={this.handleClose}>
+              X
+            </button>
           </div>
 
-          <TutorialPage onClose={this.handleClose}/>
+          <TutorialPage onClose={this.handleClose} />
         </div>
       </div>
     )
   }
 
   private onKeyUp = (event: KeyboardEvent) => {
-    if (this.state.open && event.key == "Escape") {
+    if (this.props.isOpen && event.key == 'Escape') {
       this.handleClose()
     }
   }
 
   handleClose = () => {
-    localStorage.setItem("tutorial", "seen")
-    this.setState({open: false})
+    localStorage.setItem('tutorial', 'seen')
+    this.props.setTutorialOpen(false)
   }
 }
 

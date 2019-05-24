@@ -36,26 +36,51 @@ declare global {
 const slug = SEED.slug
 const viewOnly = SEED.viewOnly
 
-async function render() {
-  const content = await load(slug)
+class MainEditor extends React.Component {
+  state = {
+    tutorialOpen: localStorage.getItem('tutorial') != 'seen',
+    contentLoaded: false,
+    content: null
+  }
 
-  if (content) {
-    ReactDOM.render(
-      <ApplicationComponent {...content} slug={slug}>
-        <Editor viewOnly={viewOnly} />
-        <Tutorial />
-      </ApplicationComponent>,
-      document.getElementById('editor')
-    )
-  } else {
-    ReactDOM.render(
-      <ApplicationComponent story={defaultStory} slug={slug}>
-        <Editor viewOnly={viewOnly} />
-        <Tutorial />
-      </ApplicationComponent>,
-      document.getElementById('editor')
-    )
+  componentDidMount() {
+    this.fetchContent()
+  }
+
+  fetchContent() {
+    load(slug).then(result => {
+      this.setState({
+        contentLoaded: true,
+        content: result
+      })
+    })
+  }
+
+  setTutorialOpen = (v: boolean) => {
+    this.setState({ tutorialOpen: v })
+  }
+
+  render() {
+    if (this.state.contentLoaded) {
+      let applicationProps: any = { story: defaultStory }
+
+      if (this.state.content) {
+        applicationProps = this.state.content
+      }
+
+      return (
+        <ApplicationComponent {...applicationProps} slug={slug}>
+          <Editor viewOnly={viewOnly} setTutorialOpen={this.setTutorialOpen} />
+          <Tutorial
+            isOpen={this.state.tutorialOpen}
+            setTutorialOpen={this.setTutorialOpen}
+          />
+        </ApplicationComponent>
+      )
+    }
+
+    return null
   }
 }
 
-render()
+ReactDOM.render(<MainEditor />, document.getElementById('editor'))
