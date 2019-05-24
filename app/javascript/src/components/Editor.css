@@ -123,3 +123,14 @@
   position: absolute;
   left: -100%;
 }
+
+.EditorButton.TutorialButton {
+  bottom: 0;
+  border: 1px solid #224;
+  font-size: 16px;
+  right: 0;
+  margin: 5px;
+  padding: 5px;
+  position: fixed;
+  width: 40px;
+}
