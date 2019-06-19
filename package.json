@@ -2,20 +2,26 @@
   "name": "adventure-time",
   "private": true,
   "dependencies": {
-    "@rails/webpacker": "3.5",
+    "@babel/core": "^7.0.0-0",
+    "@babel/preset-react": "^7.0.0",
+    "@rails/webpacker": "4.0.7",
     "@types/lodash": "^4.14.118",
     "@types/react": "^16.4.18",
     "@types/react-dom": "^16.0.9",
-    "babel-preset-react": "^6.24.1",
     "lodash": "^4.17.11",
     "prop-types": "^15.6.2",
     "react": "^16.6.1",
     "react-dom": "^16.6.1",
     "storm-react-diagrams": "^5.2.1",
-    "ts-loader": "3.5.0",
-    "typescript": "^3.1.6"
+    "ts-loader": "6.0.3",
+    "typescript": "^3.1.6",
+    "webpack": "^4.0.0"
   },
   "devDependencies": {
-    "webpack-dev-server": "2.11.2"
+    "webpack-dev-server": "^3.1.11"
+  },
+  "resolutions": {
+    "browserslist": "4.6.2",
+    "caniuse-lite": "1.0.30000974"
   }
 }
