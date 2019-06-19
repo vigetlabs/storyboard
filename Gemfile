@@ -10,7 +10,7 @@ gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 3.11'
 gem 'rails', '~> 5.2.1'
 gem 'uglifier'
-gem 'webpacker'
+gem 'webpacker', '~> 4.0.7'
 gem 'sentry-raven'
 gem 'pointless_feedback', '~> 4.0.6'
 
