@@ -1,7 +1,7 @@
 Usual Stuff:
 
 - bundle
-- rake db:create db:migrate db:seed
 - yarn install
+- rake db:create db:migrate db:seed
 - ./bin/webpack-dev-server
 - rails s
