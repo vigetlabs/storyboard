@@ -96,3 +96,6 @@ production:
 
   # Cache manifest.json for performance
   cache_manifest: true
+
+  # Enable logging on production. Otherwise build failures are silent and useless
+  webpack_compile_output: true
