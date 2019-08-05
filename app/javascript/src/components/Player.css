@@ -3,34 +3,33 @@
  */
 
 .Player {
-  display: flex;
-  height: 100%;
+  /* display: flex;
+  height: 100%; */
 }
 
 .PlayerActions {
-  padding: 16px;
   position: absolute;
-  top: 0;
   right: 0;
+  top: 0;
   z-index: 1;
 }
 
 .PlayerIntro,
 .PlayerScene,
 .PlayerEnd {
-  align-items: flex-start;
+  /* align-items: flex-start;
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   margin-top: auto;
-  margin-bottom: auto;
+  margin-bottom: auto; */
 }
 
 .PlayerChoices {
-  margin: 0;
-  padding: 0;
+  /* margin: 0;
+  padding: 0; */
 }
 
 .PlayerChoice {
-  text-decoration: none;
+  /* text-decoration: none; */
 }

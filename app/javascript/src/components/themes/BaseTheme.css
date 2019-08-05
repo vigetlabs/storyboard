@@ -1,0 +1,44 @@
+/**
+ * A theme is comprised of:
+ *
+ * Intro
+ *  - Title
+ *  - Body
+ *  - Container
+ *  - Start
+ */
+
+:root {
+  --color-text: #000;
+  --font-display: sans-serif;
+  --font-body: sans-serif;
+  --font-button: sans-serif;
+}
+
+.Player {
+  height: 100%;
+}
+
+.PlayerIntro {
+  height: 100%;
+}
+
+.PlayerForeground {
+  height: 100%;
+}
+
+.PlayerIntroTitle {
+  color: var(--color-text);
+  font-family: var(--font-display);
+  margin: 0;
+}
+
+.PlayerIntroBody {
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+.PlayerIntroStart {
+  font-family: var(--font-button);
+  margin-top: 48px;
+}

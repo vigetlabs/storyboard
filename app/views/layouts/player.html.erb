@@ -2,11 +2,13 @@
 <html>
   <head>
     <%= render "shared/head_tags" %>
+    
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    
+    <%= stylesheet_pack_tag "player" %>
+    <%= javascript_pack_tag "player", async: true, defer: true %>
   </head>
   <body class="<%= content_for :theme %>">
     <%= yield %>
-
-    <%= stylesheet_pack_tag "player" %>
-    <%= javascript_pack_tag "player", async: true, defer: true %>
   </body>
 </html>

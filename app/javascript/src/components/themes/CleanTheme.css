@@ -1,0 +1,146 @@
+/**
+ * Clean and Simple Theme
+ * See https://www.figma.com/file/YJ5cYiBDtmYEbkxQIFWeIqKP/Adventure-Explorations
+ */
+
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display:700|Roboto:300,400,700&display=swap');
+@import './BaseTheme.css';
+
+.CleanTheme {
+  --color-text: #013040;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'Roboto', sans-serif;
+  --font-button: 'Roboto', sans-serif;
+}
+
+.PlayerAction {
+  background: var(--color-text);
+  color: #FFFFFF;
+  display: inline-block;
+  font-family: var(--font-button);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: bold;
+  letter-spacing: 0.12em;
+  line-height: 16px;
+  padding: 17px 32px;
+  text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.PlayerIntro {
+}
+
+.PlayerForeground {
+  display: flex;
+  flex-direction: column;
+}
+
+.PlayerIntroHeader {
+  align-items: flex-end;
+  background: #71d8e1;
+  display: flex;
+  flex-basis: 43vh;
+  padding: 32px;
+  align-content: flex-start;
+}
+
+.PlayerIntroTitle {
+  font-size: 55px;
+  font-weight: bold;
+  line-height: 73px;
+  margin: auto auto 0;
+  max-width: 732px;
+  width: 100%;
+}
+
+.PlayerForeground {
+  width: 100%;
+}
+
+.PlayerIntroBody {
+  font-size: 18px;
+  line-height: 1.6;
+  font-weight: 300;
+}
+
+.PlayerIntroContent {
+  max-width: 796px;
+  padding: 48px 32px;
+  margin: 0 auto 0;
+}
+
+.PlayerIntroStart {
+  background: #E71536;
+  border: 0;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 14px;
+  margin-top: 48px;
+  border-radius: 2px;
+  color: white;
+  min-width: 128px;
+  padding: 17px;
+}
+
+.PlayerEndReplay {
+  background: transparent;
+  border-radius: 24px;
+  border: 1px solid #333;
+  color: black;
+  font-family: inherit;
+  font-size: 18px;
+  font-weight: bold;
+  height: 40px;
+  min-width: 150px;
+  text-transform: lowercase;
+}
+
+.PlayerSceneBody {
+  margin: 0 auto 0 0;
+  max-width: 600px;
+}
+
+.PlayerSceneTitle {
+  font-size: 48px;
+  font-weight: normal;
+  line-height: normal;
+  max-width: 600px;
+}
+
+.PlayerChoices {
+  max-width: 600px;
+  margin: 36px 0 0 auto;
+}
+
+.PlayerChoice {
+  background: url('../../images/light-choice.svg') 100% 50% no-repeat;
+  color: inherit;
+  display: block;
+  font-size: 18px;
+  min-height: 48px;
+  padding-right: 48px;
+  padding: 20px 48px 20px 16px;
+  text-decoration: none;
+}
+
+.PlayerEnd {
+  background: url('../../images/light-theme-end-background.svg') 50% 50%
+    no-repeat / cover;
+  text-align: center;
+}
+
+.PlayerEndTitle {
+  font-size: 48px;
+  font-weight: normal;
+  line-height: normal;
+  margin-bottom: 68px;
+}
+
+.PlayerEndBody {
+  font-size: 14px;
+  line-height: 24px;
+  margin-bottom: 68px;
+}

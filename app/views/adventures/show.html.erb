@@ -2,9 +2,9 @@
 
 <div class="PlayerActions">
 <% if @adventure.editable_by?(current_user) %>
-  <%= link_to 'Edit', [:edit, @adventure], class: "SlantButton" %>
+  <%= link_to 'Edit', [:edit, @adventure], class: "PlayerAction" %>
 <% else %>
-  <%= link_to 'Source', [:source, @adventure], class: "SlantButton" %>
+  <%= link_to 'Source', [:source, @adventure], class: "PlayerAction" %>
 <% end %>
 </div>
 

@@ -12,7 +12,9 @@ export const PlayerIntro: React.SFC<Props> = props => {
   return (
     <main className="PlayerIntro">
       <div className="PlayerForeground">
-        <h1 className="PlayerIntroTitle">{title}</h1>
+        <header className="PlayerIntroHeader">
+          <h1 className="PlayerIntroTitle">{title}</h1>
+        </header>
 
         <div className="PlayerIntroContent">
           <div

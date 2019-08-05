@@ -5,7 +5,8 @@ class Adventure < ApplicationRecord
     "Light"  => "light",
     "Viget"  => "viget",
     "Space"  => "space",
-    "Desert" => "desert"
+    "Desert" => "desert",
+    "Clean and Simple" => "clean"
   }
 
   FEATURE_GROUPS = [

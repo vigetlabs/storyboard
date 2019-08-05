@@ -102,7 +102,9 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return (
       <main className="PlayerScene">
         <div className="PlayerForeground">
-          <h1 className="PlayerSceneTitle">{node.name}</h1>
+          <header className="PlayerHeader">
+            <h1 className="PlayerSceneTitle">{node.name}</h1>
+          </header>
 
           <div className="PlayerSceneContent">
             <div
@@ -142,14 +144,20 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   // If there is no modifier always return true
   // If there is a modifier make sure that the user has it
   private showIf(port: DefaultPortModel): boolean {
-    const modifier: string | undefined = get(this.props.portMeta as any, `${port.id}.showIf`)
+    const modifier: string | undefined = get(
+      this.props.portMeta as any,
+      `${port.id}.showIf`
+    )
     return !modifier || this.hasModifier(modifier)
   }
 
   // If there is no modifier always return true
   // If there is a modifier make sure that the user does not have it
   private showUnless(port: DefaultPortModel): boolean {
-    const modifier: string | undefined = get(this.props.portMeta as any, `${port.id}.showUnless`)
+    const modifier: string | undefined = get(
+      this.props.portMeta as any,
+      `${port.id}.showUnless`
+    )
     return !modifier || !this.hasModifier(modifier)
   }
 
@@ -221,13 +229,16 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
     let randomTarget = this.getRandom(targetNodes) || 'empty'
 
-    this.setState(state => ({
-      lastFocus: this.state.focus,
-      focus: randomTarget,
-      currentModifiers: modiifier
-        ? [...state.currentModifiers, modiifier]
-        : state.currentModifiers
-    }), this.resetScroll)
+    this.setState(
+      state => ({
+        lastFocus: this.state.focus,
+        focus: randomTarget,
+        currentModifiers: modiifier
+          ? [...state.currentModifiers, modiifier]
+          : state.currentModifiers
+      }),
+      this.resetScroll
+    )
   }
 
   private getRandom(nodes: string[]) {
