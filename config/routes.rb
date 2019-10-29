@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount StatBoard::Engine, at: 'stats'
   mount PointlessFeedback::Engine, :at => '/feedback'
   devise_for :users
 
