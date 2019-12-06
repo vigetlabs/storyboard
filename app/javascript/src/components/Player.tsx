@@ -168,7 +168,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
   private restart = () => {
     this.setState({
-      focus: this.findStartKey()
+      focus: this.findStartKey(),
+      currentModifiers: []
     })
   }
 
