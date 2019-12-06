@@ -209,7 +209,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   private makeChoice(port: DefaultPortModel, event: Event) {
     event.preventDefault()
 
-    const modiifier = get(this.props.portMeta as any, `${port.id}.addsModifier`)
+    const modifier = get(this.props.portMeta as any, `${port.id}.addsModifier`)
     let targetNodes = []
 
     for (let key in port.links) {
@@ -225,8 +225,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     this.setState(state => ({
       lastFocus: this.state.focus,
       focus: randomTarget,
-      currentModifiers: modiifier
-        ? [...state.currentModifiers, modiifier]
+      currentModifiers: modifier
+        ? [...state.currentModifiers, modifier]
         : state.currentModifiers
     }), this.resetScroll)
   }
