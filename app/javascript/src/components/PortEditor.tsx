@@ -107,15 +107,24 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     const { state, updateState } = this.props
     const value = e.target.value;
 
-    if (value && state.modifiers.indexOf(value) === -1) {
-      updateState({
-        ...state,
-        modifiers: [
-          ...state.modifiers.filter(mod => mod),
-          value
-        ],
-        portMeta: this.updatePortMeta({ addsModifier: value })
-      })
+    if (value) {
+      if (state.modifiers.indexOf(value) === -1) {
+        updateState({
+          ...state,
+          modifiers: [
+            ...state.modifiers.filter(mod => mod),
+            value
+          ],
+          portMeta: this.updatePortMeta({ addsModifier: value })
+        })
+      } else {
+        updateState({
+          ...state,
+          portMeta: this.updatePortMeta({ addsModifier: value })
+        })
+      }
+    } else {
+      debugger
     }
   }
 }
