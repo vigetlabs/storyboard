@@ -148,7 +148,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
   private renderSave() {
     return (
-      <button className="EditorButton" onClick={this.saveStory}>
+      <button className="EditorButton" onClick={() => {this.saveStory({force: true})}}>
         {this.state.saving ? 'Saving...' : 'Save'}
       </button>
     )
@@ -316,32 +316,33 @@ class Editor extends React.Component<EditorProps, EditorState> {
     reader.readAsText(file)
   }
 
-  private saveStory = async () => {
+  private saveStory = async (opts: {force: boolean}) => {
     if (this.props.viewOnly) {
       return
     }
 
+    const saveStart = Date.now()
     const newState = this.serialize()
+    const noChange = JSON.stringify(newState) === JSON.stringify(this.lastSavedState)
 
-    if (JSON.stringify(newState) === JSON.stringify(this.lastSavedState)) {
-      // Don't save if nothing has changed on this end
-      return
-    } else {
-      this.lastSavedState = newState
-    }
-
-    this.setState({ saving: true })
-
-    const then = Date.now()
+    // Don't save if nothing happened
+    if (noChange && !opts.force) return
 
     try {
-      await save(this.props.state.slug, newState)
+      this.setState({ saving: true })
+
+      if (noChange) {
+        // Do nothing, but let the UI change around
+      } else {
+        this.lastSavedState = newState
+        await save(this.props.state.slug, newState)
+      }
     } catch (error) {
       alert(
         "Sorry! We couldn't save! It's possible you do not have internet access. Be sure to export your scene before closing the browser!"
       )
     } finally {
-      let timeLeft = 400 - Math.min(Date.now() - then, 400)
+      let timeLeft = 250 - Math.min(Date.now() - saveStart, 400)
 
       // Add a stupid delay to make it look like it really did save
       setTimeout(() => {

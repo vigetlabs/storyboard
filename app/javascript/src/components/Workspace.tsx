@@ -3,7 +3,7 @@ import * as React from 'react'
 interface WorkspaceProps {
   onClear: () => void
   onRelease: () => void
-  saveStory: () => void
+  saveStory: (opts: {}) => void
 }
 
 export default class Workspace extends React.Component<WorkspaceProps> {
@@ -56,7 +56,7 @@ export default class Workspace extends React.Component<WorkspaceProps> {
 
   maybySaveStory = () => {
     if (!this.isMouseDown) {
-      this.props.saveStory()
+      this.props.saveStory({force: false})
     }
   }
 }
