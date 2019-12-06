@@ -35,6 +35,13 @@
   <% end %>
 
   <footer class="AccountFormFooter">
-    <%= link_to 'Back', [:edit, @adventure] %>
+    <%= link_to 'Back to Edit', [:edit, @adventure] %>
+    <br>
+    <%= link_to 'Delete', @adventure,
+      method: :delete,
+      data: {
+        confirm: 'ARE YOU SURE YOU WANT TO DELETE THIS STORY? This is an unrecoverable action.'
+      }
+    %>
   </footer>
 </div>

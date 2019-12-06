@@ -64,7 +64,11 @@ class AdventuresController < ApplicationController
 
   def destroy
     @adventure.destroy
-    redirect_to my_adventures_url, notice: 'Adventure was successfully destroyed.'
+    if current_user
+      redirect_to my_adventures_url, notice: 'Adventure was successfully destroyed.'
+    else
+      redirect_to root_url, notice: 'Adventure was successfully destroyed.'
+    end
   end
 
   def csv
