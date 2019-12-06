@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DefaultPortModel } from "storm-react-diagrams";
-import { StateConsumer, ApplicationState } from "../Store";
+import { StateConsumer, ApplicationState, PortMeta } from "../Store";
 import { get } from "lodash";
 
 interface PortEditorProps {
@@ -86,6 +86,12 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     const { portMeta } = state;
     const thisPortMeta = portMeta[port.id] || {};
 
+    // If we're deleting the addsModifier, let's clear the value
+    if (value.addsModifier == "") {
+      delete thisPortMeta.addsModifier
+      delete value.addsModifier
+    }
+
     return {
       ...portMeta,
       [port.id]: {
@@ -107,37 +113,29 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     const { state, updateState } = this.props
     const value = e.target.value;
 
-    let newState = {
+    let newPortMeta = this.updatePortMeta({ addsModifier: value })
+    let newModifiers = this.gatherModifiers(newPortMeta)
+
+    updateState({
       ...state,
-      portMeta: this.updatePortMeta({ addsModifier: value })
-    }
+      portMeta: newPortMeta,
+      modifiers: newModifiers
+    })
 
-    if (value) {
-      newState = {
-        ...newState,
-        modifiers: [
-          ...state.modifiers.filter(mod => mod),
-          value
-        ],
-      }
-    }
 
-    updateState(newState)
-
-    // Give the updateState a bit to finish before analyzing all state.portMeta
-    setTimeout(this.reconcileModifiers, 100)
   }
 
-  // Cleans up the modifier list to be a unique list of existing modifiers
-  reconcileModifiers = () => {
-    const { state, updateState } = this.props
+  // Returns a list of unique and existing modifiers
+  gatherModifiers = (portMeta: PortMeta) => {
+    const { updateState } = this.props
 
     let existingModifiers = []
 
-    for (let key in state.portMeta) {
-      let portMeta = state.portMeta[key]
-      if (portMeta.addsModifier) {
-        let value = portMeta.addsModifier
+    for (let key in portMeta) {
+      let meta = portMeta[key]
+
+      if (meta.addsModifier) {
+        let value = meta.addsModifier
 
         if (existingModifiers.indexOf(value) === -1) {
           existingModifiers.push(value)
@@ -145,10 +143,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
       }
     }
 
-    updateState({
-      ...state,
-      modifiers: existingModifiers,
-    })
+    return existingModifiers
   }
 }
 
