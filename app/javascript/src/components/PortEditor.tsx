@@ -74,7 +74,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
         </li>
         <li>
           <span>Add Modifier When Selected:</span>
-          <input onBlur={this.handleAddModifier} defaultValue={addsModifier} />
+          <input onBlur={this.handleAddModifier.bind(this)} defaultValue={addsModifier} />
         </li>
       </>
       }
@@ -108,24 +108,41 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     const value = e.target.value;
 
     if (value) {
-      if (state.modifiers.indexOf(value) === -1) {
-        updateState({
-          ...state,
-          modifiers: [
-            ...state.modifiers.filter(mod => mod),
-            value
-          ],
-          portMeta: this.updatePortMeta({ addsModifier: value })
-        })
-      } else {
-        updateState({
-          ...state,
-          portMeta: this.updatePortMeta({ addsModifier: value })
-        })
-      }
-    } else {
-      debugger
+      updateState({
+        ...state,
+        modifiers: [
+          ...state.modifiers.filter(mod => mod),
+          value
+        ],
+        portMeta: this.updatePortMeta({ addsModifier: value })
+      })
     }
+
+    // Give the updateState a bit to finish before analyzing all state.portMeta
+    setTimeout(this.reconcileModifiers, 100)
+  }
+
+  // Cleans up the modifier list to be a unique list of existing modifiers
+  reconcileModifiers = () => {
+    const { state, updateState } = this.props
+
+    let existingModifiers = []
+
+    for (let key in state.portMeta) {
+      let portMeta = state.portMeta[key]
+      if (portMeta.addsModifier) {
+        let value = portMeta.addsModifier
+
+        if (existingModifiers.indexOf(value) === -1) {
+          existingModifiers.push(value)
+        }
+      }
+    }
+
+    updateState({
+      ...state,
+      modifiers: existingModifiers,
+    })
   }
 }
 
