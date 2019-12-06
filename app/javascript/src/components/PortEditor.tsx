@@ -107,16 +107,22 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     const { state, updateState } = this.props
     const value = e.target.value;
 
+    let newState = {
+      ...state,
+      portMeta: this.updatePortMeta({ addsModifier: value })
+    }
+
     if (value) {
-      updateState({
-        ...state,
+      newState = {
+        ...newState,
         modifiers: [
           ...state.modifiers.filter(mod => mod),
           value
         ],
-        portMeta: this.updatePortMeta({ addsModifier: value })
-      })
+      }
     }
+
+    updateState(newState)
 
     // Give the updateState a bit to finish before analyzing all state.portMeta
     setTimeout(this.reconcileModifiers, 100)
