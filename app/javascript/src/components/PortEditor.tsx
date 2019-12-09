@@ -3,6 +3,18 @@ import { DefaultPortModel } from "storm-react-diagrams";
 import { StateConsumer, ApplicationState, PortMeta } from "../Store";
 import { get } from "lodash";
 
+import './PortEditor.css'
+
+interface ShowIfItem {
+  name: string
+  hasIt: boolean
+}
+
+interface ItemChange {
+  name: string
+  action: string
+}
+
 interface PortEditorProps {
   port: DefaultPortModel
   removeChoice: () => void
@@ -14,21 +26,6 @@ interface PortEditorStateProps {
   updateState(state: Readonly<ApplicationState>): Readonly<ApplicationState>
 }
 
-interface ModifierSelectProps {
-  modifiers: string[]
-  value: string
-  onChange(value: string): void
-}
-
-const ModifierSelect: React.SFC<ModifierSelectProps> = ({ modifiers, value, onChange }) => (
-  <select value={value} onChange={(e) => onChange(e.target.value)}>
-    <option value=""></option>
-    {modifiers.map(modifier =>
-      <option key={modifier} value={modifier}>{modifier}</option>)
-    }
-  </select>
-)
-
 class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps, { optionsOpen: boolean }> {
   state = { optionsOpen: false }
 
@@ -39,9 +36,38 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
   render() {
     const { port, removeChoice, updateChoice, updateState, state: { modifiers } } = this.props
     const { optionsOpen } = this.state
+
+    // Legacy state
     const showIf = get(this.props.state, `portMeta.${port.id}.showIf`)
     const showUnless = get(this.props.state, `portMeta.${port.id}.showUnless`)
     const addsModifier = get(this.props.state, `portMeta.${port.id}.addsModifier`)
+
+    // New State
+    let showIfItems: [ShowIfItem] = get(this.props.state, `portMeta.${port.id}.showIfItems`) || []
+    let itemChanges: [ItemChange] = get(this.props.state, `portMeta.${port.id}.itemChanges`) || []
+
+    if (showIf) {
+      showIfItems.push({
+        name: showIf,
+        hasIt: true
+      })
+    }
+
+    if (showUnless) {
+      showIfItems.push({
+        name: showUnless,
+        hasIt: false
+      })
+    }
+
+    if (addsModifier) {
+      itemChanges = [
+        {
+          name: addsModifier,
+          action: "add"
+        }
+      ]
+    }
 
     return <>
       <li>
@@ -59,22 +85,42 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
 
       {optionsOpen && <>
         <li>
-          <span>Show If</span>
-          <ModifierSelect
-            value={showIf}
-            modifiers={modifiers}
-            onChange={(val) => this.handleShowChange({ showIf: val })}
-          />
-          <span>Show Unless</span>
-          <ModifierSelect
-            value={showUnless}
-            modifiers={modifiers}
-            onChange={(val) => this.handleShowChange({ showUnless: val })}
-          />
+          <div>
+            <b>Show If</b>
+
+            <table className="attributeTable">
+              <tr>
+                <th>Item</th>
+                <th>Has It?</th>
+              </tr>
+
+              {showIfItems.map(item => (
+                <tr>
+                  <td>{item.name}</td>
+                  <td>{item.hasIt ? "✔️" : "X"}</td>
+                </tr>
+              ))}
+            </table>
+          </div>
         </li>
         <li>
-          <span>Add Modifier When Selected:</span>
-          <input onBlur={this.handleAddModifier.bind(this)} defaultValue={addsModifier} />
+          <div>
+            <b>Items</b>
+
+            <table className="attributeTable">
+              <tr>
+                <th>Add/Remove</th>
+                <th>Item</th>
+              </tr>
+
+              {itemChanges.map(item => (
+                <tr>
+                  <td>{item.action}</td>
+                  <td>{item.name}</td>
+                </tr>
+              ))}
+            </table>
+          </div>
         </li>
       </>
       }
