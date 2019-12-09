@@ -1,19 +1,9 @@
 import * as React from "react";
 import { DefaultPortModel } from "storm-react-diagrams";
-import { StateConsumer, ApplicationState, PortMeta } from "../Store";
+import { StateConsumer, ApplicationState, PortMeta, ShowIfItem, ItemChange } from "../Store";
 import { get } from "lodash";
 
 import './PortEditor.css'
-
-interface ShowIfItem {
-  name: string
-  hasIt: boolean
-}
-
-interface ItemChange {
-  name: string
-  action: string
-}
 
 interface PortEditorProps {
   port: DefaultPortModel
@@ -29,8 +19,8 @@ interface PortEditorStateProps {
 interface PortEditorState {
   optionsOpen: boolean
   portMeta: {
-    showIfItems: [ShowIfItem]
-    itemChanges: [ItemChange]
+    showIfItems: ShowIfItem[]
+    itemChanges: ItemChange[]
   }
 }
 
@@ -85,9 +75,8 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
   }
 
   render() {
-    const { port, removeChoice, updateChoice, updateState, state: { modifiers } } = this.props
+    const { port, removeChoice, updateChoice } = this.props
     const { optionsOpen, portMeta: { showIfItems, itemChanges } } = this.state
-
 
     return <>
       <li>
@@ -112,12 +101,14 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
               <tr>
                 <th>Item</th>
                 <th>Has It?</th>
+                <th></th>
               </tr>
 
               {showIfItems.map(item => (
                 <tr>
                   <td>{item.name}</td>
                   <td>{item.hasIt ? "✔️" : "X"}</td>
+                  <td><a onClick={this.removeShowIf.bind(this, item.name)}>remove</a></td>
                 </tr>
               ))}
             </table>
@@ -145,6 +136,31 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
       </>
       }
     </>
+  }
+
+  removeShowIf = (itemName: string, e: React.MouseEvent<HTMLTableDataCellElement>) => {
+    e.preventDefault()
+
+    let newShowIfItems = this.state.portMeta.showIfItems.filter((item) => {
+      return item.name != itemName
+    })
+
+    this.state.portMeta.showIfItems = newShowIfItems
+
+    this.savePortMeta()
+  }
+
+  savePortMeta = () => {
+    const { state, updateState, port } = this.props
+    const { portMeta } = this.state
+
+    updateState({
+      ...state,
+      portMeta: {
+        ...state.portMeta,
+        [port.id]: portMeta
+      }
+    })
   }
 
   updatePortMeta = (value: { [key: string]: string }) => {
