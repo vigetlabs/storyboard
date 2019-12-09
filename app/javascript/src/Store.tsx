@@ -20,10 +20,25 @@ export interface MetaData {
 
 export interface PortMeta {
   [port_id: string]: {
+    // Legacy meta
     showIf?: string
     showUnless?: string
-    addsModifier: string
+    addsModifier?: string
+
+    // New meta
+    showIfItems?: ShowIfItem[]
+    itemChanges?: ItemChange[]
   }
+}
+
+export interface ShowIfItem {
+  name: string
+  hasIt: boolean
+}
+
+export interface ItemChange {
+  name: string
+  action: string
 }
 
 const applicationState: ApplicationState = {
