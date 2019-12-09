@@ -26,25 +26,27 @@ interface PortEditorStateProps {
   updateState(state: Readonly<ApplicationState>): Readonly<ApplicationState>
 }
 
-class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps, { optionsOpen: boolean }> {
-  state = { optionsOpen: false }
-
-  optionsButtonClick = () => {
-    this.setState(prevState => ({ optionsOpen: !prevState.optionsOpen }))
+interface PortEditorState {
+  optionsOpen: boolean
+  portMeta: {
+    showIfItems: [ShowIfItem]
+    itemChanges: [ItemChange]
   }
+}
 
-  render() {
-    const { port, removeChoice, updateChoice, updateState, state: { modifiers } } = this.props
-    const { optionsOpen } = this.state
+class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps, PortEditorState> {
+  constructor(props: PortEditorProps & PortEditorStateProps) {
+    super(props);
 
+    let { state, port } = props
     // Legacy state
-    const showIf = get(this.props.state, `portMeta.${port.id}.showIf`)
-    const showUnless = get(this.props.state, `portMeta.${port.id}.showUnless`)
-    const addsModifier = get(this.props.state, `portMeta.${port.id}.addsModifier`)
+    const showIf = get(state, `portMeta.${port.id}.showIf`)
+    const showUnless = get(state, `portMeta.${port.id}.showUnless`)
+    const addsModifier = get(state, `portMeta.${port.id}.addsModifier`)
 
     // New State
-    let showIfItems: [ShowIfItem] = get(this.props.state, `portMeta.${port.id}.showIfItems`) || []
-    let itemChanges: [ItemChange] = get(this.props.state, `portMeta.${port.id}.itemChanges`) || []
+    let showIfItems: [ShowIfItem] = get(state, `portMeta.${port.id}.showIfItems`) || []
+    let itemChanges: [ItemChange] = get(state, `portMeta.${port.id}.itemChanges`) || []
 
     if (showIf) {
       showIfItems.push({
@@ -68,6 +70,24 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
         }
       ]
     }
+
+    this.state = {
+      optionsOpen: false,
+      portMeta: {
+        showIfItems: showIfItems,
+        itemChanges: itemChanges
+      }
+    }
+  }
+
+  optionsButtonClick = () => {
+    this.setState(prevState => ({ optionsOpen: !prevState.optionsOpen }))
+  }
+
+  render() {
+    const { port, removeChoice, updateChoice, updateState, state: { modifiers } } = this.props
+    const { optionsOpen, portMeta: { showIfItems, itemChanges } } = this.state
+
 
     return <>
       <li>
