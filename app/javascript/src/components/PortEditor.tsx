@@ -163,50 +163,6 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     })
   }
 
-  updatePortMeta = (value: { [key: string]: string }) => {
-    const { port, state } = this.props
-    const { portMeta } = state;
-    const thisPortMeta = portMeta[port.id] || {};
-
-    // If we're deleting the addsModifier, let's clear the value
-    if (value.addsModifier == "") {
-      delete thisPortMeta.addsModifier
-      delete value.addsModifier
-    }
-
-    return {
-      ...portMeta,
-      [port.id]: {
-        ...thisPortMeta,
-        ...value
-      }
-    }
-  }
-
-  handleShowChange = (value: { [key: string]: string }) => {
-    const { state, updateState } = this.props
-    updateState({
-      ...state,
-      portMeta: this.updatePortMeta(value)
-    })
-  }
-
-  handleAddModifier = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { state, updateState } = this.props
-    const value = e.target.value;
-
-    let newPortMeta = this.updatePortMeta({ addsModifier: value })
-    let newModifiers = this.gatherModifiers(newPortMeta)
-
-    updateState({
-      ...state,
-      portMeta: newPortMeta,
-      modifiers: newModifiers
-    })
-
-
-  }
-
   // Returns a list of unique and existing modifiers
   gatherModifiers = (portMeta: PortMeta) => {
     const { updateState } = this.props
