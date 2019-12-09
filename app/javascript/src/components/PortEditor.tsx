@@ -45,8 +45,8 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     const addsModifier = get(state, `portMeta.${port.id}.addsModifier`)
 
     // New State
-    let showIfItems: [ShowIfItem] = get(state, `portMeta.${port.id}.showIfItems`) || []
-    let itemChanges: [ItemChange] = get(state, `portMeta.${port.id}.itemChanges`) || []
+    let showIfItems = get(state, `portMeta.${port.id}.showIfItems`) || []
+    let itemChanges = get(state, `portMeta.${port.id}.itemChanges`) || []
 
     if (showIf) {
       showIfItems.push({
