@@ -141,24 +141,28 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   private showIf(port: DefaultPortModel): boolean {
+    const { currentItems } = this.state
     const showIfData: ShowIfItem[] = get(this.props.portMeta as any, `${port.id}.showIfItems`)
 
     // If no data set, show the option
     if (!showIfData) return true
 
-    // Otherwise, check for presence / non-presence of items per config
+    // Otherwise, loop over showIf config
     // Bail if a negative case is found, otherwise return true
-    showIfData.forEach(showIf => {
-      // if has/notHas item return false
-      console.log(showIf)
-    })
+    for (let showIf of showIfData) {
+      // Should have it but doesn't
+      if (showIf.hasIt && currentItems.indexOf(showIf.name) === -1) {
+        return false
+      }
+
+      // Should not have it but does
+      if (!showIf.hasIt && currentItems.indexOf(showIf.name) !== -1) {
+        return false
+      }
+    }
 
     return true
   }
-
-  // private hasModifier(modifier: string) {
-  //   return this.state.currentModifiers.indexOf(modifier) !== -1
-  // }
 
   private ports(node: DefaultNodeModel): DefaultPortModel[] {
     let ports = []
@@ -241,7 +245,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     }
     let nextNode = this.getRandom(targetNodes) || 'empty'
 
-    console.log("Items are:", newItems)
     this.setState({
       lastFocus: this.state.focus,
       focus: nextNode,
