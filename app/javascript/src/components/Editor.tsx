@@ -18,6 +18,7 @@ import './Editor.css'
 import './FlowChart.css'
 import { StateConsumer, ApplicationState } from '../Store'
 import { save } from '../persistance'
+import { clone } from '../clone'
 
 interface EditorState {
   ready: boolean
@@ -49,7 +50,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.engine.installDefaultFactories()
 
     this.updateStory(this.props.state.story)
-    this.lastSavedState = this.serialize()
+    this.lastSavedState = clone(this.serialize())
   }
 
   async componentDidMount() {
@@ -334,7 +335,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
       if (noChange) {
         // Do nothing, but let the UI change around
       } else {
-        this.lastSavedState = newState
+        // Clone newState so changes to the sub objects won't tarnish lastSavedState
+        this.lastSavedState = clone(newState)
         await save(this.props.state.slug, newState)
       }
     } catch (error) {
