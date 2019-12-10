@@ -18,7 +18,7 @@ interface PortEditorStateProps {
 
 interface PortEditorState {
   optionsOpen: boolean
-  portMeta: {
+  thisPortMeta: {
     showIfItems: ShowIfItem[]
     itemChanges: ItemChange[]
   }
@@ -29,44 +29,10 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     super(props);
 
     let { state, port } = props
-    // Legacy state
-    const showIf = get(state, `portMeta.${port.id}.showIf`)
-    const showUnless = get(state, `portMeta.${port.id}.showUnless`)
-    const addsModifier = get(state, `portMeta.${port.id}.addsModifier`)
-
-    // New State
-    let showIfItems = get(state, `portMeta.${port.id}.showIfItems`) || []
-    let itemChanges = get(state, `portMeta.${port.id}.itemChanges`) || []
-
-    if (showIf) {
-      showIfItems.push({
-        name: showIf,
-        hasIt: true
-      })
-    }
-
-    if (showUnless) {
-      showIfItems.push({
-        name: showUnless,
-        hasIt: false
-      })
-    }
-
-    if (addsModifier) {
-      itemChanges = [
-        {
-          name: addsModifier,
-          action: "add"
-        }
-      ]
-    }
 
     this.state = {
       optionsOpen: false,
-      portMeta: {
-        showIfItems: showIfItems,
-        itemChanges: itemChanges
-      }
+      thisPortMeta: get(state, `portMeta.${port.id}`)
     }
   }
 
@@ -76,7 +42,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
 
   render() {
     const { port, removeChoice, updateChoice } = this.props
-    const { optionsOpen, portMeta: { showIfItems, itemChanges } } = this.state
+    const { optionsOpen, thisPortMeta: { showIfItems, itemChanges } } = this.state
 
     return <>
       <li>
@@ -98,19 +64,24 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
             <b>Show If</b>
 
             <table className="attributeTable">
-              <tr>
-                <th>Item</th>
-                <th>Has It?</th>
-                <th></th>
-              </tr>
-
-              {showIfItems.map(item => (
+              <thead>
                 <tr>
-                  <td>{item.name}</td>
-                  <td>{item.hasIt ? "✔️" : "X"}</td>
-                  <td><a onClick={this.removeShowIf.bind(this, item.name)}>remove</a></td>
+                  <th>Item</th>
+                  <th>Has It?</th>
+                  <th></th>
                 </tr>
-              ))}
+              </thead>
+
+
+              <tbody>
+                {showIfItems && showIfItems.map(item => (
+                  <tr key={item.name}>
+                    <td>{item.name}</td>
+                    <td>{item.hasIt ? "✔️" : "X"}</td>
+                    <td><a onClick={this.removeShowIf.bind(this, item.name)}>remove</a></td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         </li>
@@ -119,17 +90,21 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
             <b>Items</b>
 
             <table className="attributeTable">
-              <tr>
-                <th>Add/Remove</th>
-                <th>Item</th>
-              </tr>
-
-              {itemChanges.map(item => (
+              <thead>
                 <tr>
-                  <td>{item.action}</td>
-                  <td>{item.name}</td>
+                  <th>Add/Remove</th>
+                  <th>Item</th>
                 </tr>
-              ))}
+              </thead>
+
+              <tbody>
+                {itemChanges && itemChanges.map(item => (
+                  <tr key={item.name}>
+                    <td>{item.action}</td>
+                    <td>{item.name}</td>
+                  </tr>
+                ))}
+              </tbody>
             </table>
           </div>
         </li>
@@ -141,47 +116,27 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
   removeShowIf = (itemName: string, e: React.MouseEvent<HTMLTableDataCellElement>) => {
     e.preventDefault()
 
-    let newShowIfItems = this.state.portMeta.showIfItems.filter((item) => {
+    let newShowIfItems = this.state.thisPortMeta.showIfItems.filter((item) => {
       return item.name != itemName
     })
 
-    this.state.portMeta.showIfItems = newShowIfItems
+    this.state.thisPortMeta.showIfItems = newShowIfItems
 
     this.savePortMeta()
   }
 
   savePortMeta = () => {
+    const { thisPortMeta } = this.state
     const { state, updateState, port } = this.props
-    const { portMeta } = this.state
 
+    debugger
     updateState({
       ...state,
       portMeta: {
         ...state.portMeta,
-        [port.id]: portMeta
+        [port.id]: thisPortMeta
       }
     })
-  }
-
-  // Returns a list of unique and existing modifiers
-  gatherModifiers = (portMeta: PortMeta) => {
-    const { updateState } = this.props
-
-    let existingModifiers = []
-
-    for (let key in portMeta) {
-      let meta = portMeta[key]
-
-      if (meta.addsModifier) {
-        let value = meta.addsModifier
-
-        if (existingModifiers.indexOf(value) === -1) {
-          existingModifiers.push(value)
-        }
-      }
-    }
-
-    return existingModifiers
   }
 }
 
