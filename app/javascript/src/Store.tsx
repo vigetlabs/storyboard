@@ -19,20 +19,18 @@ export interface MetaData {
 }
 
 export interface PortMeta {
-  [port_id: string]: {
-    showIfItems?: ShowIfItem[]
-    itemChanges?: ItemChange[]
-  }
+  [port_id: string]: PortMetaContent
 }
 
-export interface ShowIfItem {
-  name: string
-  hasIt: boolean
-}
-
-export interface ItemChange {
-  name: string
-  action: string
+export interface PortMetaContent {
+  showIfItems?: {
+    name: string
+    hasIt: boolean
+  }[]
+  itemChanges?: {
+    name: string
+    action: string
+  }[]
 }
 
 const applicationState: ApplicationState = {
