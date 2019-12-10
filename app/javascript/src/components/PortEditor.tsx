@@ -99,10 +99,15 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
               </thead>
 
               <tbody>
-                {itemChanges && itemChanges.map((item, i) => (
-                  <tr key={item.name}>
-                    <td>{item.action}</td>
-                    <td>{item.name}</td>
+                {itemChanges && itemChanges.map((itemChange, i) => (
+                  <tr key={itemChange.name}>
+                    <td>
+                      <select value={itemChange.action} onChange={this.toggleItemChange.bind(this, i)}>
+                        <option key="add" value="add">Add</option>
+                        <option key="remove" value="remove">Remove</option>
+                      </select>
+                    </td>
+                    <td>{itemChange.name}</td>
                   </tr>
                 ))}
               </tbody>
@@ -126,7 +131,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     this.savePortMeta()
   }
 
-  toggleShowIf = (i: number, e: React.MouseEvent<HTMLTableDataCellElement>) => {
+  toggleShowIf = (i: number, e: React.MouseEvent) => {
     e.preventDefault()
 
     let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
@@ -136,23 +141,33 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     this.savePortMeta()
   }
 
-  removeShowIf = (i: number, e: React.MouseEvent<HTMLTableDataCellElement>) => {
+  removeShowIf = (index: number, e: React.MouseEvent) => {
     e.preventDefault()
 
     let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
-    newShowIfItems.splice(i, 1)
+    newShowIfItems.splice(index, 1)
 
     this.state.thisPortMeta.showIfItems = newShowIfItems
     this.savePortMeta()
   }
 
-  addShowIf = (e: React.MouseEvent<HTMLTableDataCellElement>) => {
+  addShowIf = (e: React.MouseEvent) => {
     e.preventDefault()
 
     let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
     newShowIfItems.push({name: "", hasIt: true})
 
     this.state.thisPortMeta.showIfItems = newShowIfItems
+    this.savePortMeta()
+  }
+
+  toggleItemChange = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
+    e.preventDefault()
+
+    let newItemChanges = clone(this.state.thisPortMeta.itemChanges || [])
+    newItemChanges[index].action = e.target.value
+
+    this.state.thisPortMeta.itemChanges = newItemChanges
     this.savePortMeta()
   }
 
