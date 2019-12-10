@@ -18,6 +18,7 @@ import './Editor.css'
 import './FlowChart.css'
 import { StateConsumer, ApplicationState } from '../Store'
 import { save } from '../persistance'
+import { clone } from '../clone'
 
 interface EditorState {
   ready: boolean
@@ -48,7 +49,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.engine.installDefaultFactories()
 
     this.updateStory(this.props.state.story)
-    this.lastSavedState = JSON.stringify(this.serialize())
+    this.lastSavedState = clone(this.serialize())
   }
 
   async componentDidMount() {
@@ -58,7 +59,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   componentDidUpdate({ state: { story } }: EditorProps) {
-    let { state: { story: newStory } } = this.props;
+    let {
+      state: { story: newStory }
+    } = this.props
     if (JSON.stringify(story) !== JSON.stringify(newStory)) {
       this.updateStory(newStory)
       this.forceUpdate()
@@ -147,7 +150,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
   private renderSave() {
     return (
-      <button className="EditorButton" onClick={() => {this.saveStory({force: true})}}>
+      <button
+        className="EditorButton"
+        onClick={() => {
+          this.saveStory({ force: true })
+        }}
+      >
         {this.state.saving ? 'Saving...' : 'Save'}
       </button>
     )
@@ -304,9 +312,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
     let reader = new FileReader()
 
     let scope = this
-    reader.onload = function () {
+    reader.onload = function() {
       try {
-        scope.props.updateState({ ...JSON.parse(`${this.result}`), slug: scope.props.state.slug })
+        scope.props.updateState({
+          ...JSON.parse(`${this.result}`),
+          slug: scope.props.state.slug
+        })
       } catch (error) {
         alert("Sorry, we couldn't parse your file :(")
       }
@@ -315,7 +326,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     reader.readAsText(file)
   }
 
-  private saveStory = async (opts: {force: boolean}) => {
+  private saveStory = async (opts: { force: boolean }) => {
     if (this.props.viewOnly) {
       return
     }
@@ -333,7 +344,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
       if (noChange) {
         // Do nothing, but let the UI change around
       } else {
-        this.lastSavedState = JSON.stringify(newState)
+        // Clone newState so changes to the sub objects won't tarnish lastSavedState
+        this.lastSavedState = clone(newState)
         await save(this.props.state.slug, newState)
       }
     } catch (error) {
