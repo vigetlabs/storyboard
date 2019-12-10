@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DefaultPortModel } from "storm-react-diagrams";
-import { StateConsumer, ApplicationState, PortMeta, ShowIfItem, ItemChange } from "../Store";
+import { StateConsumer, ApplicationState, PortMetaContent } from "../Store";
 import { get } from "lodash";
 
 import './PortEditor.css'
@@ -18,10 +18,7 @@ interface PortEditorStateProps {
 
 interface PortEditorState {
   optionsOpen: boolean
-  thisPortMeta: {
-    showIfItems: ShowIfItem[]
-    itemChanges: ItemChange[]
-  }
+  thisPortMeta: PortMetaContent
 }
 
 class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps, PortEditorState> {
@@ -116,7 +113,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
   removeShowIf = (itemName: string, e: React.MouseEvent<HTMLTableDataCellElement>) => {
     e.preventDefault()
 
-    let newShowIfItems = this.state.thisPortMeta.showIfItems.filter((item) => {
+    let newShowIfItems = (this.state.thisPortMeta.showIfItems || []).filter((item) => {
       return item.name != itemName
     })
 
@@ -129,7 +126,6 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     const { thisPortMeta } = this.state
     const { state, updateState, port } = this.props
 
-    debugger
     updateState({
       ...state,
       portMeta: {
