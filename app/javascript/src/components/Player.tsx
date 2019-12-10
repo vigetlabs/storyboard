@@ -10,10 +10,11 @@ import {
 
 import './Player.css'
 
-import { MetaData, PortMeta } from '../Store'
+import { MetaData, PortMeta, ShowIfItem, ItemChange } from '../Store'
 import { PlayerIntro } from './PlayerIntro'
 import { PlayerInvalid } from './PlayerInvalid'
 import { PlayerEnd, PlayerDeadEnd } from './PlayerEnd'
+import { clone } from '../clone'
 
 interface PlayerProps {
   description: string
@@ -28,7 +29,7 @@ interface PlayerState {
   started: boolean
   lastFocus?: string
   focus?: string
-  currentModifiers: string[]
+  currentItems: string[]
 }
 
 class Player extends React.Component<PlayerProps, PlayerState> {
@@ -37,7 +38,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
   state: PlayerState = {
     started: false,
-    currentModifiers: []
+    currentItems: []
   }
 
   constructor(props: PlayerProps) {
@@ -120,7 +121,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return (
       <menu className="PlayerChoices">
         {this.ports(node).map(port => {
-          let show = this.showIf(port) && this.showUnless(port)
+          let show = this.showIf(port)
 
           return show ? (
             <div key={port.getID()}>
@@ -139,19 +140,25 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     )
   }
 
-  // If there is no modifier always return true
-  // If there is a modifier make sure that the user has it
   private showIf(port: DefaultPortModel): boolean {
-    const modifier: string | undefined = get(this.props.portMeta as any, `${port.id}.showIf`)
-    return !modifier || this.hasModifier(modifier)
+    const showIfData: ShowIfItem[] = get(this.props.portMeta as any, `${port.id}.showIfItems`)
+
+    // If no data set, show the option
+    if (!showIfData) return true
+
+    // Otherwise, check for presence / non-presence of items per config
+    // Bail if a negative case is found, otherwise return true
+    showIfData.forEach(showIf => {
+      // if has/notHas item return false
+      console.log(showIf)
+    })
+
+    return true
   }
 
-  // If there is no modifier always return true
-  // If there is a modifier make sure that the user does not have it
-  private showUnless(port: DefaultPortModel): boolean {
-    const modifier: string | undefined = get(this.props.portMeta as any, `${port.id}.showUnless`)
-    return !modifier || !this.hasModifier(modifier)
-  }
+  // private hasModifier(modifier: string) {
+  //   return this.state.currentModifiers.indexOf(modifier) !== -1
+  // }
 
   private ports(node: DefaultNodeModel): DefaultPortModel[] {
     let ports = []
@@ -169,7 +176,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   private restart = () => {
     this.setState({
       focus: this.findStartKey(),
-      currentModifiers: []
+      currentItems: []
     })
   }
 
@@ -198,10 +205,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return this.getRandom(viableStartNodes)
   }
 
-  private hasModifier(modifier: string) {
-    return this.state.currentModifiers.indexOf(modifier) !== -1
-  }
-
   private resetScroll() {
     window.scrollTo(0, 0)
   }
@@ -209,9 +212,26 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   private makeChoice(port: DefaultPortModel, event: Event) {
     event.preventDefault()
 
-    const modifier = get(this.props.portMeta as any, `${port.id}.addsModifier`)
-    let targetNodes = []
+    const itemChanges: ItemChange[] = get(this.props.portMeta as any, `${port.id}.itemChanges`) || []
+    let newItems = clone(this.state.currentItems)
+    itemChanges.forEach(change => {
+      if (change.action === "add") {
+        // Add item if it isn't in the set already
+        if (newItems.indexOf(change.name) === -1) {
+          newItems.push(change.name)
+        }
+      } else {
+        // Remove item if it's in the set
+        let itemIndex = newItems.indexOf(change.name)
+        if (itemIndex !== -1) {
+          newItems.splice(itemIndex, 1)
+        }
+      }
+    })
 
+    // If port links to multiple scenes, select one at random
+    // Odds are there's just one link but you never know
+    let targetNodes = []
     for (let key in port.links) {
       let link = port.links[key]
 
@@ -219,16 +239,14 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         targetNodes.push(link.targetPort.parent.id)
       }
     }
+    let nextNode = this.getRandom(targetNodes) || 'empty'
 
-    let randomTarget = this.getRandom(targetNodes) || 'empty'
-
-    this.setState(state => ({
+    console.log("Items are:", newItems)
+    this.setState({
       lastFocus: this.state.focus,
-      focus: randomTarget,
-      currentModifiers: modifier
-        ? [...state.currentModifiers, modifier]
-        : state.currentModifiers
-    }), this.resetScroll)
+      focus: nextNode,
+      currentItems: newItems
+    }, this.resetScroll)
   }
 
   private getRandom(nodes: string[]) {

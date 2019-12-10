@@ -23,14 +23,18 @@ export interface PortMeta {
 }
 
 export interface PortMetaContent {
-  showIfItems?: {
-    name: string
-    hasIt: boolean
-  }[]
-  itemChanges?: {
-    name: string
-    action: string
-  }[]
+  showIfItems?: ShowIfItem[]
+  itemChanges?: ItemChange[]
+}
+
+export interface ShowIfItem {
+  name: string
+  hasIt: boolean
+}
+
+export interface ItemChange {
+  name: string
+  action: "add" | "remove"
 }
 
 const applicationState: ApplicationState = {
