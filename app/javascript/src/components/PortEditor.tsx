@@ -153,21 +153,28 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     newShowIfItems.push({name: "", hasIt: true})
 
     this.state.thisPortMeta.showIfItems = newShowIfItems
-
-    // Trigger a re-render, but don't save new showIf to global state (udpateState)
-    this.setState(this.state)
+    this.savePortMeta()
   }
 
   savePortMeta = () => {
     const { thisPortMeta } = this.state
     const { state, updateState, port } = this.props
 
+    let newPortMeta: PortMetaContent = clone(thisPortMeta)
+
+    // Remove empty showIf conditions
+    if (newPortMeta.showIfItems) {
+      newPortMeta.showIfItems = newPortMeta.showIfItems.filter(showIf => {
+        return !!showIf.name
+      })
+    }
+
     // Clone here and elsewhere so we get immutable objects in global state
     updateState({
       ...state,
       portMeta: {
         ...state.portMeta,
-        [port.id]: clone(thisPortMeta)
+        [port.id]: newPortMeta
       }
     })
   }
