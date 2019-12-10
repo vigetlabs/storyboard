@@ -19,12 +19,6 @@ export interface MetaData {
 
 export interface PortMeta {
   [port_id: string]: {
-    // Legacy meta
-    showIf?: string
-    showUnless?: string
-    addsModifier?: string
-
-    // New meta
     showIfItems?: ShowIfItem[]
     itemChanges?: ItemChange[]
   }
