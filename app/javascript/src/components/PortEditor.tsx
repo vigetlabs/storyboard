@@ -74,7 +74,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                 {showIfItems && showIfItems.map(item => (
                   <tr key={item.name}>
                     <td>{item.name}</td>
-                    <td>{item.hasIt ? "✔️" : "X"}</td>
+                    <td><a onClick={this.changeShowIf.bind(this, item.name)}>{item.hasIt ? "✔️" : "X"}</a></td>
                     <td><a onClick={this.removeShowIf.bind(this, item.name)}>remove</a></td>
                   </tr>
                 ))}
@@ -110,6 +110,21 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     </>
   }
 
+  changeShowIf = (itemName: string, e: React.MouseEvent<HTMLTableDataCellElement>) => {
+    e.preventDefault()
+
+    let newShowIfItems = (this.state.thisPortMeta.showIfItems || []).map((item) => {
+      if (item.name == itemName) {
+        item.hasIt = !item.hasIt
+      }
+
+      return item
+    })
+
+    this.state.thisPortMeta.showIfItems = newShowIfItems
+    this.savePortMeta()
+  }
+
   removeShowIf = (itemName: string, e: React.MouseEvent<HTMLTableDataCellElement>) => {
     e.preventDefault()
 
@@ -118,7 +133,6 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     })
 
     this.state.thisPortMeta.showIfItems = newShowIfItems
-
     this.savePortMeta()
   }
 
