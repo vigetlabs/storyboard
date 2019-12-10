@@ -41,6 +41,6 @@ class UpdatePortMetaForFancyModifiers < ActiveRecord::Migration[5.2]
   end
 
   def down
-    # no op
+    # https://www.youtube.com/watch?v=AjGXn249Fc0
   end
 end
