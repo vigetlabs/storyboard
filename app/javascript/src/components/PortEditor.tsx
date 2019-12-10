@@ -2,6 +2,7 @@ import * as React from "react";
 import { DefaultPortModel } from "storm-react-diagrams";
 import { StateConsumer, ApplicationState, PortMetaContent } from "../Store";
 import { get } from "lodash";
+import { clone } from "../clone";
 
 import './PortEditor.css'
 
@@ -29,12 +30,8 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
 
     this.state = {
       optionsOpen: false,
-      thisPortMeta: get(state, `portMeta.${port.id}`)
+      thisPortMeta: clone(get(state, `portMeta.${port.id}`) || {})
     }
-  }
-
-  optionsButtonClick = () => {
-    this.setState(prevState => ({ optionsOpen: !prevState.optionsOpen }))
   }
 
   render() {
@@ -69,17 +66,24 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                 </tr>
               </thead>
 
-
               <tbody>
-                {showIfItems && showIfItems.map(item => (
-                  <tr key={item.name}>
-                    <td>{item.name}</td>
-                    <td><a onClick={this.changeShowIf.bind(this, item.name)}>{item.hasIt ? "✔️" : "X"}</a></td>
-                    <td><a onClick={this.removeShowIf.bind(this, item.name)}>remove</a></td>
+                {showIfItems && showIfItems.map((showIf, i) => (
+                  <tr key={i}>
+                    <td>
+                      <select value={showIf.name} onChange={this.selectShowIf.bind(this, i)}>
+                        <option key="-1"></option>
+                        {this.possibleModifiers(showIf.name).map((item, i) => (
+                          <option key={i} value={item}>{item}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td><a onClick={this.toggleShowIf.bind(this, i)}>{showIf.hasIt ? "✔️" : "X"}</a></td>
+                    <td><a onClick={this.removeShowIf.bind(this, i)}>remove</a></td>
                   </tr>
                 ))}
               </tbody>
             </table>
+            <a onClick={this.addShowIf.bind(this)}>+</a>
           </div>
         </li>
         <li>
@@ -95,7 +99,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
               </thead>
 
               <tbody>
-                {itemChanges && itemChanges.map(item => (
+                {itemChanges && itemChanges.map((item, i) => (
                   <tr key={item.name}>
                     <td>{item.action}</td>
                     <td>{item.name}</td>
@@ -110,42 +114,86 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     </>
   }
 
-  changeShowIf = (itemName: string, e: React.MouseEvent<HTMLTableDataCellElement>) => {
-    e.preventDefault()
+  optionsButtonClick = () => {
+    this.setState(prevState => ({ optionsOpen: !prevState.optionsOpen }))
+  }
 
-    let newShowIfItems = (this.state.thisPortMeta.showIfItems || []).map((item) => {
-      if (item.name == itemName) {
-        item.hasIt = !item.hasIt
-      }
-
-      return item
-    })
+  selectShowIf = (i: number, e: React.ChangeEvent<HTMLSelectElement>) => {
+    let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
+    newShowIfItems[i].name = e.target.value
 
     this.state.thisPortMeta.showIfItems = newShowIfItems
     this.savePortMeta()
   }
 
-  removeShowIf = (itemName: string, e: React.MouseEvent<HTMLTableDataCellElement>) => {
+  toggleShowIf = (i: number, e: React.MouseEvent<HTMLTableDataCellElement>) => {
     e.preventDefault()
 
-    let newShowIfItems = (this.state.thisPortMeta.showIfItems || []).filter((item) => {
-      return item.name != itemName
-    })
+    let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
+    newShowIfItems[i].hasIt = !newShowIfItems[i].hasIt
 
     this.state.thisPortMeta.showIfItems = newShowIfItems
     this.savePortMeta()
+  }
+
+  removeShowIf = (i: number, e: React.MouseEvent<HTMLTableDataCellElement>) => {
+    e.preventDefault()
+
+    let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
+    newShowIfItems.splice(i, 1)
+
+    this.state.thisPortMeta.showIfItems = newShowIfItems
+    this.savePortMeta()
+  }
+
+  addShowIf = (e: React.MouseEvent<HTMLTableDataCellElement>) => {
+    e.preventDefault()
+
+    let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
+    newShowIfItems.push({name: "", hasIt: true})
+
+    this.state.thisPortMeta.showIfItems = newShowIfItems
+
+    // Trigger a re-render, but don't save new showIf to global state (udpateState)
+    this.setState(this.state)
   }
 
   savePortMeta = () => {
     const { thisPortMeta } = this.state
     const { state, updateState, port } = this.props
 
+    // Clone here and elsewhere so we get immutable objects in global state
     updateState({
       ...state,
       portMeta: {
         ...state.portMeta,
-        [port.id]: thisPortMeta
+        [port.id]: clone(thisPortMeta)
       }
+    })
+  }
+
+  possibleModifiers: (c:string) => string[] = (current) => {
+    let { portMeta } = this.props.state
+    let { thisPortMeta } = this.state
+
+    let toReturn: string[] = []
+
+    for (let key in portMeta) {
+      let changes = portMeta[key].itemChanges || []
+
+      changes.forEach((change) => {
+        if (change.action === "add" && toReturn.indexOf(change.name) === -1) {
+          toReturn.push(change.name)
+        }
+      })
+    }
+
+    let existing = (thisPortMeta.showIfItems || []).map((showIf) => {
+      return showIf.name
+    })
+
+    return toReturn.filter((name) => {
+      return name === current || (existing.indexOf(name) === -1)
     })
   }
 }
