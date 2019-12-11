@@ -107,7 +107,12 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                         <option key="remove" value="remove">Remove</option>
                       </select>
                     </td>
-                    <td>{itemChange.name}</td>
+                    <td>
+                      <input
+                        onBlur={this.setItemChange.bind(this, i)}
+                        defaultValue={itemChange.name}
+                      />
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -123,19 +128,19 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     this.setState(prevState => ({ optionsOpen: !prevState.optionsOpen }))
   }
 
-  selectShowIf = (i: number, e: React.ChangeEvent<HTMLSelectElement>) => {
+  selectShowIf = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
     let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
-    newShowIfItems[i].name = e.target.value
+    newShowIfItems[index].name = e.target.value
 
     this.state.thisPortMeta.showIfItems = newShowIfItems
     this.savePortMeta()
   }
 
-  toggleShowIf = (i: number, e: React.MouseEvent) => {
+  toggleShowIf = (index: number, e: React.MouseEvent) => {
     e.preventDefault()
 
     let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
-    newShowIfItems[i].hasIt = !newShowIfItems[i].hasIt
+    newShowIfItems[index].hasIt = !newShowIfItems[index].hasIt
 
     this.state.thisPortMeta.showIfItems = newShowIfItems
     this.savePortMeta()
@@ -158,6 +163,14 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     newShowIfItems.push({name: "", hasIt: true})
 
     this.state.thisPortMeta.showIfItems = newShowIfItems
+    this.savePortMeta()
+  }
+
+  setItemChange = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+    let newItemChanges = clone(this.state.thisPortMeta.itemChanges || [])
+    newItemChanges[index].name = e.target.value
+
+    this.state.thisPortMeta.itemChanges = newItemChanges
     this.savePortMeta()
   }
 
