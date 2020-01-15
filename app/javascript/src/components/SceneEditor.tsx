@@ -29,6 +29,7 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     // TODO: replace this. It doesn't matter much here but this breaks typechecking as get always returns `any`
     const text = get(state, `meta.${focus.id}.text`)
     const notes = get(state, `meta.${focus.id}.notes`)
+    console.log(text)
     return (
       <aside className="SceneEditor" onKeyUp={this.trapKeys}>
         <div className="SceneEditorField">
@@ -44,26 +45,28 @@ class SceneEditor extends React.Component<SceneEditorProps> {
           name="content"
           title="Content"
           defaultValue={text}
-          onChange={this.onChangeContent}
+          onChange={this.onChangeContent.bind(this)}
+          // onChange={this.onChangeContent}
+
         />
         <div className="SceneEditorField">
           <h3 className="SceneEditorHeading">Choices</h3>
 
           <ChoiceEditor focus={focus} requestPaint={requestPaint} />
+          </div>
 
-          {/* <SceneEditorTextAreaField
+        <SceneEditorTextAreaField
           name="notes"
           title="Notes"
           defaultValue={notes}
-          onChange={this.onChangeNotes}
-        /> */}
-        </div>
+          onChange={this.onChangeNotes.bind(this)}
+        />
       </aside>
     )
   }
 
 
-  private onChangeContent(html: string) {
+   private onChangeContent(html: string) {
    // console.log(html.props)
     const { focus, state, updateState } = this.props
 
@@ -132,8 +135,10 @@ type SceneEditorTextAreaFieldProps = {
 function SceneEditorTextAreaField({ name, title, defaultValue, onChange}: SceneEditorTextAreaFieldProps) {
     let inputRef: React.RefObject<HTMLTextAreaElement> = React.createRef()
   //editor: React.RefObject<HTMLTextAreaElement> = React.createRef()
+
   
   React.useEffect(() => {
+    console.log(inputRef);
     if (inputRef.current) {
       $R(inputRef.current, {
         buttons: ['format', 'bold', 'italic', 'lists'],
