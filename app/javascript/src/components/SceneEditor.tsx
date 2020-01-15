@@ -21,18 +21,14 @@ interface SceneEditorProps {
 }
 
 class SceneEditor extends React.Component<SceneEditorProps> {
-  editor: React.RefObject<HTMLTextAreaElement> = React.createRef()
 
-  componentDidMount() {
-    this.install()
-  }
 
   render() {
     const { state, focus, requestPaint } = this.props
 
     // TODO: replace this. It doesn't matter much here but this breaks typechecking as get always returns `any`
     const text = get(state, `meta.${focus.id}.text`)
-
+    const notes = get(state, `meta.${focus.id}.notes`)
     return (
       <aside className="SceneEditor" onKeyUp={this.trapKeys}>
         <div className="SceneEditorField">
@@ -44,35 +40,40 @@ class SceneEditor extends React.Component<SceneEditorProps> {
           />
         </div>
 
-        <div className="SceneEditorField">
-          <label className="SceneEditorHeading" htmlFor="content">Content</label>
-          <textarea name="content" ref={this.editor} defaultValue={text} />
-        </div>
-
+        <SceneEditorTextAreaField
+          name="content"
+          title="Content"
+          defaultValue={text}
+          onChange={this.onChangeContent}
+        />
         <div className="SceneEditorField">
           <h3 className="SceneEditorHeading">Choices</h3>
 
           <ChoiceEditor focus={focus} requestPaint={requestPaint} />
+
+          {/* <SceneEditorTextAreaField
+          name="notes"
+          title="Notes"
+          defaultValue={notes}
+          onChange={this.onChangeNotes}
+        /> */}
         </div>
       </aside>
     )
   }
 
-  private install() {
-    if (this.editor.current) {
-      $R(this.editor.current, {
-        buttons: ['format', 'bold', 'italic', 'lists'],
-        callbacks: {
-          synced: (html: string) => this.onChange(html)
-        }
-      })
-    }
-  }
 
-  private onChange(html: string) {
+  private onChangeContent(html: string) {
+   // console.log(html.props)
     const { focus, state, updateState } = this.props
 
     updateState(set(state, `meta.${focus.id}.text`, html))
+  }
+
+  private onChangeNotes(html: string) {
+    const { focus, state, updateState } = this.props
+
+    updateState(set(state, `meta.${focus.id}.notes`, html))
   }
 
   private onNameChange = (event: React.FormEvent<HTMLInputElement>) => {
@@ -118,5 +119,35 @@ export default ({ focus, requestPaint, onClear }: ConsumerProps) => {
         />
       )}
     </StateConsumer>
+  )
+}
+
+type SceneEditorTextAreaFieldProps = {
+  name: string,
+  title: string,
+  defaultValue: string,
+  onChange: (arg0: string) => void
+}
+
+function SceneEditorTextAreaField({ name, title, defaultValue, onChange}: SceneEditorTextAreaFieldProps) {
+    let inputRef: React.RefObject<HTMLTextAreaElement> = React.createRef()
+  //editor: React.RefObject<HTMLTextAreaElement> = React.createRef()
+  
+  React.useEffect(() => {
+    if (inputRef.current) {
+      $R(inputRef.current, {
+        buttons: ['format', 'bold', 'italic', 'lists'],
+        callbacks: {
+          synced: (html: string) => onChange(html)
+        }
+      })
+    }
+  }, [inputRef.current])
+
+  return (
+    <div className="SceneEditorField">
+      <label className="SceneEditorHeading" htmlFor={name}>{title}</label>
+      <textarea name={name} ref={inputRef} defaultValue={defaultValue} />
+    </div>
   )
 }
