@@ -46,7 +46,7 @@ class SceneEditor extends React.Component<SceneEditorProps> {
           defaultValue={text}
           placeholderText=""
           instructionalText=""
-          onChange={this.onChangeContent.bind(this)}
+          onChange={this.onChangeContent}
 
         />
         <div className="SceneEditorField">
@@ -61,20 +61,20 @@ class SceneEditor extends React.Component<SceneEditorProps> {
           placeholderText="Enter any editor-only notes you have here"
           instructionalText="This box is for adding comments, new ideas, or general notes for this scene. These notes are not visible to the user."
           defaultValue={notes}
-          onChange={this.onChangeNotes.bind(this)}
+          onChange={this.onChangeNotes}
         />
       </aside>
     )
   }
 
 
-  private onChangeContent(html: string) {
+  onChangeContent = (html: string) => {
     const { focus, state, updateState } = this.props
 
     updateState(set(state, `meta.${focus.id}.text`, html))
   }
 
-  private onChangeNotes(html: string) {
+  onChangeNotes = (html: string) => {
     const { focus, state, updateState } = this.props
 
     updateState(set(state, `meta.${focus.id}.notes`, html))
