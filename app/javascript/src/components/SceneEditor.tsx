@@ -53,7 +53,7 @@ class SceneEditor extends React.Component<SceneEditorProps> {
           <h3 className="SceneEditorHeading">Choices</h3>
 
           <ChoiceEditor focus={focus} requestPaint={requestPaint} />
-          </div>
+        </div>
 
         <SceneEditorTextAreaField
           name="notes"
@@ -68,7 +68,7 @@ class SceneEditor extends React.Component<SceneEditorProps> {
   }
 
 
-   private onChangeContent(html: string) {
+  private onChangeContent(html: string) {
     const { focus, state, updateState } = this.props
 
     updateState(set(state, `meta.${focus.id}.text`, html))
