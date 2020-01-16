@@ -24,6 +24,7 @@ export interface PortMeta {
 export interface PortMetaContent {
   showIfItems?: ShowIfItem[]
   itemChanges?: ItemChange[]
+  playerStats?: PlayerStat[]
 }
 
 export interface ShowIfItem {
@@ -33,6 +34,12 @@ export interface ShowIfItem {
 
 export interface ItemChange {
   name: string
+  action: "add" | "remove"
+}
+
+export interface PlayerStat {
+  name: string,
+  value: number,
   action: "add" | "remove"
 }
 
