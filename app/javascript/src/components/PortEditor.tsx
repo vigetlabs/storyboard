@@ -36,7 +36,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
 
   render() {
     const { port, removeChoice, updateChoice } = this.props
-    const { optionsOpen, thisPortMeta: { showIfItems, itemChanges } } = this.state
+    const { optionsOpen, thisPortMeta: { showIfItems, itemChanges, playerStats } } = this.state
 
     return <>
       <li>
@@ -117,6 +117,49 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                 ))}
               </tbody>
             </table>
+            <a onClick={this.addItemChanges.bind(this)}>+</a>
+          </div>
+        </li>
+
+        <li>
+          <div>
+            <b>Stats</b>
+
+            <table className="attributeTable">
+              <thead>
+                <tr>
+                  <th>Stat</th>
+                  <th></th>
+                  <th>#</th>
+                </tr>
+              </thead>
+              <tbody>
+                {playerStats && playerStats.map((playerStat, i) => (
+                  <tr key={playerStat.name}>
+                    <td>
+                      <input
+                        onBlur={this.setPlayerStatName.bind(this, i)}
+                        defaultValue = {playerStat.name}
+                      />
+                    </td>
+                    <td>
+                      <select value={playerStat.action} onChange={this.togglePlayerStats.bind(this, i)}>
+                        <option key="add" value="add">+</option>
+                        <option key="remove" value="remove">-</option>
+                      </select>
+                    </td>
+                    <td>
+                      <input
+                        onBlur={this.setPlayerStatValue.bind(this, i)}
+                        defaultValue={(playerStat.value) ? playerStat.value.toString() : ""}
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+
+            </table>
+            <a onClick={this.addPlayerStats.bind(this)}>+</a>
           </div>
         </li>
       </>
@@ -166,6 +209,16 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     this.savePortMeta()
   }
 
+  addItemChanges = (e: React.MouseEvent) => {
+    e.preventDefault()
+
+    let newItemChanges = clone(this.state.thisPortMeta.itemChanges || [])
+    newItemChanges.push({name: "", hasIt: true})
+
+    this.state.thisPortMeta.itemChanges = newItemChanges
+    this.savePortMeta()
+  }
+
   setItemChange = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
     let newItemChanges = clone(this.state.thisPortMeta.itemChanges || [])
     newItemChanges[index].name = e.target.value
@@ -181,6 +234,41 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     newItemChanges[index].action = e.target.value
 
     this.state.thisPortMeta.itemChanges = newItemChanges
+    this.savePortMeta()
+  }
+
+  addPlayerStats = (e: React.MouseEvent) => {
+    e.preventDefault()
+
+    let newPlayerStats = clone(this.state.thisPortMeta.playerStats || [])
+    newPlayerStats.push({name: "",  value: undefined })
+
+    this.state.thisPortMeta.playerStats = newPlayerStats
+    this.savePortMeta()
+  }
+
+  setPlayerStatName = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+    let newPlayerStats = clone(this.state.thisPortMeta.playerStats || [])
+    newPlayerStats[index].name = e.target.value
+
+    this.state.thisPortMeta.playerStats = newPlayerStats
+    this.savePortMeta()
+  }
+  setPlayerStatValue = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+    let newPlayerStats = clone(this.state.thisPortMeta.playerStats || [])
+    newPlayerStats[index].value = e.target.value
+
+    this.state.thisPortMeta.playerStats = newPlayerStats
+    this.savePortMeta()
+  }
+  
+  togglePlayerStats = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
+    e.preventDefault()
+
+    let newPlayerStats = clone(this.state.thisPortMeta.playerStats || [])
+    newPlayerStats[index].action = e.target.value
+
+    this.state.thisPortMeta.playerStats = newPlayerStats
     this.savePortMeta()
   }
 
