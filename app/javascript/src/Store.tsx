@@ -13,7 +13,8 @@ export interface ApplicationState {
 export interface MetaData {
   [id: string]: {
     title: string
-    text: string
+    text: string,
+    notes: string
   }
 }
 

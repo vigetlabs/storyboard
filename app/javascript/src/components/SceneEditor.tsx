@@ -29,7 +29,6 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     // TODO: replace this. It doesn't matter much here but this breaks typechecking as get always returns `any`
     const text = get(state, `meta.${focus.id}.text`)
     const notes = get(state, `meta.${focus.id}.notes`)
-    console.log(text)
     return (
       <aside className="SceneEditor" onKeyUp={this.trapKeys}>
         <div className="SceneEditorField">
@@ -45,8 +44,9 @@ class SceneEditor extends React.Component<SceneEditorProps> {
           name="content"
           title="Content"
           defaultValue={text}
+          placeholderText=""
+          instructionalText=""
           onChange={this.onChangeContent.bind(this)}
-          // onChange={this.onChangeContent}
 
         />
         <div className="SceneEditorField">
@@ -57,7 +57,9 @@ class SceneEditor extends React.Component<SceneEditorProps> {
 
         <SceneEditorTextAreaField
           name="notes"
-          title="Notes"
+          title="Editor Notes"
+          placeholderText="Enter any editor-only notes you have here"
+          instructionalText="This box is for adding comments, new ideas, or general notes for this scene. These notes are not visible to the user."
           defaultValue={notes}
           onChange={this.onChangeNotes.bind(this)}
         />
@@ -67,7 +69,6 @@ class SceneEditor extends React.Component<SceneEditorProps> {
 
 
    private onChangeContent(html: string) {
-   // console.log(html.props)
     const { focus, state, updateState } = this.props
 
     updateState(set(state, `meta.${focus.id}.text`, html))
@@ -129,16 +130,20 @@ type SceneEditorTextAreaFieldProps = {
   name: string,
   title: string,
   defaultValue: string,
+  placeholderText: string,
+  instructionalText: string,
   onChange: (arg0: string) => void
 }
 
-function SceneEditorTextAreaField({ name, title, defaultValue, onChange}: SceneEditorTextAreaFieldProps) {
-    let inputRef: React.RefObject<HTMLTextAreaElement> = React.createRef()
-  //editor: React.RefObject<HTMLTextAreaElement> = React.createRef()
+/**
+ * 
+ * New abstracted-out way of render react components for the text areas, since the Content and Notes areas are very similar
+ */
+function SceneEditorTextAreaField({ name, title, defaultValue, placeholderText, instructionalText, onChange}: SceneEditorTextAreaFieldProps) {
+  let inputRef: React.RefObject<HTMLTextAreaElement> = React.createRef()
 
   
   React.useEffect(() => {
-    console.log(inputRef);
     if (inputRef.current) {
       $R(inputRef.current, {
         buttons: ['format', 'bold', 'italic', 'lists'],
@@ -152,7 +157,8 @@ function SceneEditorTextAreaField({ name, title, defaultValue, onChange}: SceneE
   return (
     <div className="SceneEditorField">
       <label className="SceneEditorHeading" htmlFor={name}>{title}</label>
-      <textarea name={name} ref={inputRef} defaultValue={defaultValue} />
+      <textarea placeholder={placeholderText} name={name} ref={inputRef} defaultValue={defaultValue} />
+      <p>{instructionalText}</p>
     </div>
   )
 }

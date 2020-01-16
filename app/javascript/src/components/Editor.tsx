@@ -34,7 +34,7 @@ interface EditorProps {
 class Editor extends React.Component<EditorProps, EditorState> {
   engine: DiagramEngine
   model: DiagramModel
-  lastSavedState: ApplicationState
+  lastSavedState: string
 
   constructor(props: EditorProps) {
     super(props)
@@ -44,12 +44,11 @@ class Editor extends React.Component<EditorProps, EditorState> {
       selected: null,
       saving: false
     }
-
     this.engine = new DiagramEngine()
     this.engine.installDefaultFactories()
 
     this.updateStory(this.props.state.story)
-    this.lastSavedState = this.serialize()
+    this.lastSavedState = JSON.stringify(this.serialize())
   }
 
   async componentDidMount() {
@@ -323,7 +322,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
     const saveStart = Date.now()
     const newState = this.serialize()
-    const noChange = JSON.stringify(newState) === JSON.stringify(this.lastSavedState)
+    const noChange = JSON.stringify(newState) === this.lastSavedState
 
     // Don't save if nothing happened
     if (noChange && !opts.force) return
@@ -334,7 +333,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       if (noChange) {
         // Do nothing, but let the UI change around
       } else {
-        this.lastSavedState = newState
+        this.lastSavedState = JSON.stringify(newState)
         await save(this.props.state.slug, newState)
       }
     } catch (error) {
