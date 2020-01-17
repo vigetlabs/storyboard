@@ -23,13 +23,20 @@ export interface PortMeta {
 
 export interface PortMetaContent {
   showIfItems?: ShowIfItem[]
+  showIfStats?: ShowIfStat[]
   itemChanges?: ItemChange[]
-  playerStats?: PlayerStat[]
+  statChanges?: PlayerStat[]
 }
 
 export interface ShowIfItem {
   name: string
   hasIt: boolean
+}
+
+export interface ShowIfStat {
+  name: string
+  operator: string
+  value: number
 }
 
 export interface ItemChange {
