@@ -36,8 +36,8 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
 
   render() {
     const { port, removeChoice, updateChoice } = this.props
-    const { optionsOpen, thisPortMeta: { showIfItems, itemChanges, playerStats } } = this.state
 
+    const { optionsOpen, thisPortMeta: { showIfItems, showIfStats, itemChanges, statChanges: statChanges } } = this.state
     return <>
       <li>
         <input
@@ -65,31 +65,69 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                   <th></th>
                 </tr>
               </thead>
-
               <tbody>
                 {showIfItems && showIfItems.map((showIf, i) => (
                   <tr key={i}>
                     <td>
-                      <select value={showIf.name} onChange={this.selectShowIf.bind(this, i)}>
+                      <select value={showIf.name} onChange={this.selectShowIfItem.bind(this, i)}>
                         <option key="-1"></option>
-                        {this.possibleModifiers(showIf.name).map((item, i) => (
+                        {this.possibleItemModifiers(showIf.name).map((item, i) => (
                           <option key={i} value={item}>{item}</option>
                         ))}
                       </select>
                     </td>
-                    <td><a onClick={this.toggleShowIf.bind(this, i)}>{showIf.hasIt ? "✔️" : "X"}</a></td>
-                    <td><a onClick={this.removeShowIf.bind(this, i)}>remove</a></td>
+                    <td><a onClick={this.toggleShowIfItem.bind(this, i)}>{showIf.hasIt ? "✔️" : "X"}</a></td>
+                    <td><a onClick={this.removeShowIfItem.bind(this, i)}>remove</a></td>
                   </tr>
                 ))}
               </tbody>
             </table>
-            <a onClick={this.addShowIf.bind(this)}>+</a>
+            <a onClick={this.addShowIfItem.bind(this)}>+</a>
+            <table className="attributeTable">
+              <thead>
+                <tr>
+                  <th>Stat</th>
+                  <th>&lt; &gt;</th>
+                  <th> # </th>
+                </tr>
+              </thead>
+              <tbody>
+                {showIfStats && showIfStats.map((showIf, i) => (
+                  <tr key={i}>
+                    <td>
+                      <select value={showIf.name} onChange={this.selectShowIfStat.bind(this, i)}>
+                        <option key="-1"></option>
+                        {this.possibleStatModifiers(showIf.name).map((item, i) => (
+                          <option key={i} value={item}>{item}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td>
+                      <select value={showIf.operator} onChange={this.selectShowIfStatOperator.bind(this, i)}>
+                        <option key="-1"></option>
+                        {["<", ">", "<=", ">="].map((item, i) => (
+                          <option key={i} value={item}>{item}</option>
+                        ))}
+                      </select>
+                    </td>
+                    <td>
+                      <input
+                        onBlur={this.setShowIfStatValue.bind(this, i)}
+                        defaultValue={(showIf.value) ? showIf.value.toString() : ""}
+                      />
+                    </td>
+
+                    <td><a onClick={this.removeShowIfStat.bind(this, i)}>r</a></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <a onClick={this.addShowIfStat.bind(this)}>+</a>
           </div>
         </li>
         <li>
           <div>
             <b>Items</b>
-
             <table className="attributeTable">
               <thead>
                 <tr>
@@ -134,32 +172,31 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                 </tr>
               </thead>
               <tbody>
-                {playerStats && playerStats.map((playerStat, i) => (
-                  <tr key={playerStat.name}>
+                {statChanges && statChanges.map((statChange, i) => (
+                  <tr key={statChange.name}>
                     <td>
                       <input
-                        onBlur={this.setPlayerStatName.bind(this, i)}
-                        defaultValue = {playerStat.name}
+                        onBlur={this.setStatName.bind(this, i)}
+                        defaultValue={statChange.name}
                       />
                     </td>
                     <td>
-                      <select value={playerStat.action} onChange={this.togglePlayerStats.bind(this, i)}>
+                      <select value={statChange.action} onChange={this.toggleStatChanges.bind(this, i)}>
                         <option key="add" value="add">+</option>
                         <option key="remove" value="remove">-</option>
                       </select>
                     </td>
                     <td>
                       <input
-                        onBlur={this.setPlayerStatValue.bind(this, i)}
-                        defaultValue={(playerStat.value) ? playerStat.value.toString() : ""}
+                        onBlur={this.setStatValue.bind(this, i)}
+                        defaultValue={(statChange.value) ? statChange.value.toString() : ""}
                       />
                     </td>
                   </tr>
                 ))}
               </tbody>
-
             </table>
-            <a onClick={this.addPlayerStats.bind(this)}>+</a>
+            <a onClick={this.addStatChanges.bind(this)}>+</a>
           </div>
         </li>
       </>
@@ -171,7 +208,10 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     this.setState(prevState => ({ optionsOpen: !prevState.optionsOpen }))
   }
 
-  selectShowIf = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
+  /**
+   * Show If Items
+   */
+  selectShowIfItem = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
     let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
     newShowIfItems[index].name = e.target.value
 
@@ -179,7 +219,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     this.savePortMeta()
   }
 
-  toggleShowIf = (index: number, e: React.MouseEvent) => {
+  toggleShowIfItem = (index: number, e: React.MouseEvent) => {
     e.preventDefault()
 
     let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
@@ -189,7 +229,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     this.savePortMeta()
   }
 
-  removeShowIf = (index: number, e: React.MouseEvent) => {
+  removeShowIfItem = (index: number, e: React.MouseEvent) => {
     e.preventDefault()
 
     let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
@@ -199,21 +239,73 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     this.savePortMeta()
   }
 
-  addShowIf = (e: React.MouseEvent) => {
+  addShowIfItem = (e: React.MouseEvent) => {
     e.preventDefault()
 
     let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
-    newShowIfItems.push({name: "", hasIt: true})
+    newShowIfItems.push({ name: "", hasIt: true })
 
     this.state.thisPortMeta.showIfItems = newShowIfItems
     this.savePortMeta()
   }
 
+  /**
+   * Show If Stats
+   */
+  selectShowIfStat = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
+    let newShowIfStats = clone(this.state.thisPortMeta.showIfStats || [])
+    newShowIfStats[index].name = e.target.value
+
+    this.state.thisPortMeta.showIfStats = newShowIfStats
+    this.savePortMeta()
+  }
+
+  selectShowIfStatOperator = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+    e.preventDefault()
+
+    let newShowIfStats = clone(this.state.thisPortMeta.showIfStats || [])
+    newShowIfStats[index].operator = e.target.value
+
+    this.state.thisPortMeta.showIfStats = newShowIfStats
+    this.savePortMeta()
+  }
+
+  setShowIfStatValue = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+    let newShowIfStats = clone(this.state.thisPortMeta.showIfStats || [])
+    newShowIfStats[index].value = e.target.value
+
+    this.state.thisPortMeta.showIfStats = newShowIfStats
+    this.savePortMeta()
+  }
+
+  removeShowIfStat = (index: number, e: React.MouseEvent) => {
+    e.preventDefault()
+
+    let newShowIfStats = clone(this.state.thisPortMeta.showIfStats || [])
+    newShowIfStats.splice(index, 1)
+
+    this.state.thisPortMeta.showIfStats = newShowIfStats
+    this.savePortMeta()
+  }
+
+  addShowIfStat = (e: React.MouseEvent) => {
+    e.preventDefault()
+
+    let newShowIfStats = clone(this.state.thisPortMeta.showIfStats || [])
+    newShowIfStats.push({ name: "", operator: "", value: 0 })
+
+    this.state.thisPortMeta.showIfStats = newShowIfStats
+    this.savePortMeta()
+  }
+
+  /**
+   * Items and Item Changes
+   */
   addItemChanges = (e: React.MouseEvent) => {
     e.preventDefault()
 
     let newItemChanges = clone(this.state.thisPortMeta.itemChanges || [])
-    newItemChanges.push({name: "", hasIt: true})
+    newItemChanges.push({ name: "", action: "add" })
 
     this.state.thisPortMeta.itemChanges = newItemChanges
     this.savePortMeta()
@@ -237,38 +329,41 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     this.savePortMeta()
   }
 
-  addPlayerStats = (e: React.MouseEvent) => {
+  /**
+   * Stat Changes
+   */
+  addStatChanges = (e: React.MouseEvent) => {
     e.preventDefault()
 
-    let newPlayerStats = clone(this.state.thisPortMeta.playerStats || [])
-    newPlayerStats.push({name: "",  value: undefined })
+    let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
+    newStatChanges.push({ name: "", value: undefined })
 
-    this.state.thisPortMeta.playerStats = newPlayerStats
+    this.state.thisPortMeta.statChanges = newStatChanges
     this.savePortMeta()
   }
 
-  setPlayerStatName = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
-    let newPlayerStats = clone(this.state.thisPortMeta.playerStats || [])
-    newPlayerStats[index].name = e.target.value
+  setStatName = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+    let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
+    newStatChanges[index].name = e.target.value
 
-    this.state.thisPortMeta.playerStats = newPlayerStats
+    this.state.thisPortMeta.statChanges = newStatChanges
     this.savePortMeta()
   }
-  setPlayerStatValue = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
-    let newPlayerStats = clone(this.state.thisPortMeta.playerStats || [])
-    newPlayerStats[index].value = e.target.value
+  setStatValue = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+    let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
+    newStatChanges[index].value = e.target.value
 
-    this.state.thisPortMeta.playerStats = newPlayerStats
+    this.state.thisPortMeta.statChanges = newStatChanges
     this.savePortMeta()
   }
-  
-  togglePlayerStats = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
+
+  toggleStatChanges = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault()
 
-    let newPlayerStats = clone(this.state.thisPortMeta.playerStats || [])
-    newPlayerStats[index].action = e.target.value
+    let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
+    newStatChanges[index].action = e.target.value
 
-    this.state.thisPortMeta.playerStats = newPlayerStats
+    this.state.thisPortMeta.statChanges = newStatChanges
     this.savePortMeta()
   }
 
@@ -295,10 +390,9 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     })
   }
 
-  possibleModifiers: (c:string) => string[] = (current) => {
+  possibleItemModifiers: (c: string) => string[] = (current) => {
     let { portMeta } = this.props.state
     let { thisPortMeta } = this.state
-
     let toReturn: string[] = []
 
     for (let key in portMeta) {
@@ -319,7 +413,33 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
       return name === current || (existing.indexOf(name) === -1)
     })
   }
+
+  possibleStatModifiers: (c: string) => string[] = (current) => {
+    let { portMeta } = this.props.state
+    let { thisPortMeta } = this.state
+    let toReturn: string[] = []
+
+    for (let key in portMeta) {
+      let changes = portMeta[key].statChanges || []
+
+      changes.forEach((change) => {
+        if (toReturn.indexOf(change.name) === -1) {
+          toReturn.push(change.name)
+        }
+      })
+    }
+
+    let existing = (thisPortMeta.showIfStats || []).map((showIf) => {
+      return showIf.name
+    })
+
+    return toReturn.filter((name) => {
+      return name === current || (existing.indexOf(name) === -1)
+    })
+  }
+
 }
+
 
 export default (props: PortEditorProps) => <StateConsumer>
   {({ state, updateState }) =>
