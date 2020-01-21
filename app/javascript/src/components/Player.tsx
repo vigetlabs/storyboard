@@ -10,11 +10,12 @@ import {
 
 import './Player.css'
 
-import { MetaData, PortMeta, ShowIfItem, ItemChange } from '../Store'
+import { MetaData, PortMeta, ShowIfItem, ItemChange, ShowIfStat, PlayerStat } from '../Store'
 import { PlayerIntro } from './PlayerIntro'
 import { PlayerInvalid } from './PlayerInvalid'
 import { PlayerEnd, PlayerDeadEnd } from './PlayerEnd'
 import { clone } from '../clone'
+import { Stats } from 'fs'
 
 interface PlayerProps {
   description: string
@@ -121,9 +122,9 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return (
       <menu className="PlayerChoices">
         {this.ports(node).map(port => {
-          let show = this.showIf(port)
-
-          return show ? (
+          let showItem = this.showIfItem(port)
+          let showStat = this.showIfStat(port)
+          return showItem && showStat ? (
             <div key={port.getID()}>
               <a
                 className="PlayerChoice"
@@ -140,16 +141,16 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     )
   }
 
-  private showIf(port: DefaultPortModel): boolean {
+  private showIfItem(port: DefaultPortModel): boolean {
     const { currentItems } = this.state
-    const showIfData: ShowIfItem[] = get(this.props.portMeta as any, `${port.id}.showIfItems`)
+    const showIfItems: ShowIfItem[] = get(this.props.portMeta as any, `${port.id}.showIfItems`)
 
     // If no data set, show the option
-    if (!showIfData) return true
+    if (!showIfItems) return true
 
     // Otherwise, loop over showIf config
     // Bail if a negative case is found, otherwise return true
-    for (let showIf of showIfData) {
+    for (let showIf of showIfItems) {
       // Should have it but doesn't
       if (showIf.hasIt && currentItems.indexOf(showIf.name) === -1) {
         return false
@@ -159,6 +160,41 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       if (!showIf.hasIt && currentItems.indexOf(showIf.name) !== -1) {
         return false
       }
+    }
+
+    return true
+  }
+
+  private showIfStat(port: DefaultPortModel): boolean {
+    const { currentItems } = this.state
+    const showIfStats: ShowIfStat[] = get(this.props.portMeta as any, `${port.id}.showIfStats`)
+    // const playerStats: PlayerStat[] = get(this.props.portMeta as any, `${port.id}.statChanges`)
+
+    // this.props.portMeta.some(test)
+    // If no data set, show the option
+    if (!showIfStats) return true
+
+    // Otherwise, loop over showIf config
+    for (let showIf of showIfStats) {
+      // Get the stat related to this stat check
+      let currentStat = (Object.values(this.props.portMeta).find(obj => {
+        return obj.statChanges![0].name === showIf.name
+      }))!.statChanges![0]
+
+      // Performs the various operations on the two numbers
+      switch (showIf.operator) {
+        case "<":
+          return Number(currentStat.value) < Number(showIf.value)
+        case "≤":
+          return Number(currentStat.value) <= Number(showIf.value)
+        case ">":
+          return Number(currentStat.value) > Number(showIf.value)
+        case "≥":
+          return Number(currentStat.value) >= Number(showIf.value)
+
+      }
+
+
     }
 
     return true
