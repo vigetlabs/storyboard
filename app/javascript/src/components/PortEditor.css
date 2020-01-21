@@ -6,3 +6,39 @@
 a {
   cursor: pointer;
 }
+
+
+section {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+label {
+  background: #eee;
+  border: 1px solid #ddd;
+  padding: .5em 1em;
+  cursor: pointer;
+  order: 1;
+}
+
+div {
+  width: 100%;
+  padding: 1em;
+  border: 1px solid #ddd;
+  background: #fff;
+  order: 2; // Pushes it to the end.
+}
+
+input[type=radio],
+div {
+  display: none;
+}
+
+input[type=radio]:checked + label {
+  background: #fff;
+  border-bottom: 1px solid black;
+}
+
+input[type=radio]:checked + label + div {
+  display: block;
+}

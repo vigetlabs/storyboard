@@ -10,7 +10,7 @@ import {
 
 import './Player.css'
 
-import { MetaData, PortMeta, ShowIfItem, ItemChange, ShowIfStat, PlayerStat } from '../Store'
+import { MetaData, PortMeta, ShowIfItem, ItemChange, ShowIfStat, StatChange } from '../Store'
 import { PlayerIntro } from './PlayerIntro'
 import { PlayerInvalid } from './PlayerInvalid'
 import { PlayerEnd, PlayerDeadEnd } from './PlayerEnd'
@@ -26,11 +26,17 @@ interface PlayerProps {
   title: string
 }
 
+interface Stat {
+  name: string
+  value: number
+}
+
 interface PlayerState {
   started: boolean
   lastFocus?: string
   focus?: string
   currentItems: string[]
+  currentStats: Stat[]
 }
 
 class Player extends React.Component<PlayerProps, PlayerState> {
@@ -39,7 +45,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
   state: PlayerState = {
     started: false,
-    currentItems: []
+    currentItems: [],
+    currentStats: []
   }
 
   constructor(props: PlayerProps) {
@@ -165,21 +172,19 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return true
   }
 
-  private showIfStat(port: DefaultPortModel): boolean {
-    const { currentItems } = this.state
-    const showIfStats: ShowIfStat[] = get(this.props.portMeta as any, `${port.id}.showIfStats`)
-    // const playerStats: PlayerStat[] = get(this.props.portMeta as any, `${port.id}.statChanges`)
 
-    // this.props.portMeta.some(test)
+
+  private showIfStat(port: DefaultPortModel): boolean {
+    const showIfStats: ShowIfStat[] = get(this.props.portMeta as any, `${port.id}.showIfStats`)
+
     // If no data set, show the option
     if (!showIfStats) return true
-
     // Otherwise, loop over showIf config
     for (let showIf of showIfStats) {
       // Get the stat related to this stat check
-      let currentStat = (Object.values(this.props.portMeta).find(obj => {
-        return obj.statChanges![0].name === showIf.name
-      }))!.statChanges![0]
+      let currentStat = this.state.currentStats.filter(obj => {
+        return obj.name === showIf.name
+      })[0]
 
       // Performs the various operations on the two numbers
       switch (showIf.operator) {
@@ -191,10 +196,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           return Number(currentStat.value) > Number(showIf.value)
         case "≥":
           return Number(currentStat.value) >= Number(showIf.value)
-
       }
-
-
     }
 
     return true
@@ -216,7 +218,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   private restart = () => {
     this.setState({
       focus: this.findStartKey(),
-      currentItems: []
+      currentItems: [],
+      currentStats: []
     })
   }
 
@@ -253,7 +256,11 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     event.preventDefault()
 
     const itemChanges: ItemChange[] = get(this.props.portMeta as any, `${port.id}.itemChanges`) || []
+    const statChanges: StatChange[] = get(this.props.portMeta as any, `${port.id}.statChanges`) || []
+
     let newItems = clone(this.state.currentItems)
+    let newStats = clone(this.state.currentStats)
+
     itemChanges.forEach(change => {
       if (change.action === "add") {
         // Add item if it isn't in the set already
@@ -265,6 +272,28 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         let itemIndex = newItems.indexOf(change.name)
         if (itemIndex !== -1) {
           newItems.splice(itemIndex, 1)
+        }
+      }
+    })
+
+    statChanges.forEach(change => {
+      let indexOfStat = (newStats.findIndex((obj: Stat) => {
+        return obj.name === change.name
+      }))
+
+      // Need to add it to the list of stats
+      if (indexOfStat === -1) {
+        let curStat: Stat = { name: change.name, value: change.action === "+" ? change.value : change.value * -1 }
+        newStats.push(curStat)
+      }
+      else {
+        if (change.action === "+") {
+          // Add it to the total if it already exists
+          newStats[indexOfStat].value = Number(newStats[indexOfStat].value) + Number(change.value)
+
+        } else {
+          // Subtract it from the total  
+          newStats[indexOfStat].value = Number(newStats[indexOfStat].value) - Number(change.value)
         }
       }
     })
@@ -284,7 +313,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     this.setState({
       lastFocus: this.state.focus,
       focus: nextNode,
-      currentItems: newItems
+      currentItems: newItems,
+      currentStats: newStats
     }, this.resetScroll)
   }
 

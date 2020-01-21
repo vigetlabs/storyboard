@@ -26,7 +26,7 @@ export interface PortMetaContent {
   showIfItems?: ShowIfItem[]
   showIfStats?: ShowIfStat[]
   itemChanges?: ItemChange[]
-  statChanges?: PlayerStat[]
+  statChanges?: StatChange[]
 }
 
 export interface ShowIfItem {
@@ -45,10 +45,10 @@ export interface ItemChange {
   action: "add" | "remove"
 }
 
-export interface PlayerStat {
+export interface StatChange {
   name: string,
   value: number,
-  action: "add" | "remove"
+  action: "+" | "-"
 }
 
 const applicationState: ApplicationState = {
