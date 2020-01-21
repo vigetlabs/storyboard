@@ -87,7 +87,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
               <thead>
                 <tr>
                   <th>Stat</th>
-                  <th>&lt; &gt;</th>
+                  <th> &gt; &lt;</th>
                   <th> # </th>
                 </tr>
               </thead>
@@ -105,7 +105,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                     <td>
                       <select value={showIf.operator} onChange={this.selectShowIfStatOperator.bind(this, i)}>
                         <option key="-1"></option>
-                        {["<", ">", "<=", ">="].map((item, i) => (
+                        {["<", ">", "≤", "≥"].map((item, i) => (
                           <option key={i} value={item}>{item}</option>
                         ))}
                       </select>
@@ -117,7 +117,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                       />
                     </td>
 
-                    <td><a onClick={this.removeShowIfStat.bind(this, i)}>r</a></td>
+                    <td><a onClick={this.removeShowIfStat.bind(this, i)}>rem</a></td>
                   </tr>
                 ))}
               </tbody>
@@ -374,6 +374,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     let newPortMeta: PortMetaContent = clone(thisPortMeta)
 
     // Remove empty showIf conditions
+    // TODO: Add something here for showIfStats
     if (newPortMeta.showIfItems) {
       newPortMeta.showIfItems = newPortMeta.showIfItems.filter(showIf => {
         return !!showIf.name
