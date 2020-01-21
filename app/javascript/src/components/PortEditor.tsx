@@ -37,7 +37,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
   render() {
     const { port, removeChoice, updateChoice } = this.props
 
-    const { optionsOpen, thisPortMeta: { showIfItems, showIfStats, itemChanges, statChanges: statChanges } } = this.state
+    const { optionsOpen, thisPortMeta: { showIfItems, showIfStats, itemChanges, statChanges } } = this.state
     return <>
       <li>
         <input
@@ -151,6 +151,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                         defaultValue={itemChange.name}
                       />
                     </td>
+                    <td><a onClick={this.removeItemChanges.bind(this, i)}>remove</a></td>
                   </tr>
                 ))}
               </tbody>
@@ -182,8 +183,8 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                     </td>
                     <td>
                       <select value={statChange.action} onChange={this.toggleStatChanges.bind(this, i)}>
-                        <option key="add" value="add">+</option>
-                        <option key="remove" value="remove">-</option>
+                        <option key="+" value="+">+</option>
+                        <option key="-" value="-">-</option>
                       </select>
                     </td>
                     <td>
@@ -192,6 +193,8 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                         defaultValue={(statChange.value) ? statChange.value.toString() : ""}
                       />
                     </td>
+                    <td><a onClick={this.removeStatChanges.bind(this, i)}>remove</a></td>
+
                   </tr>
                 ))}
               </tbody>
@@ -311,6 +314,16 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     this.savePortMeta()
   }
 
+  removeItemChanges = (index: number, e: React.MouseEvent) => {
+    e.preventDefault()
+
+    let newItemChanges = clone(this.state.thisPortMeta.itemChanges || [])
+    newItemChanges.splice(index, 1)
+
+    this.state.thisPortMeta.itemChanges = newItemChanges
+    this.savePortMeta()
+  }
+
   setItemChange = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
     let newItemChanges = clone(this.state.thisPortMeta.itemChanges || [])
     newItemChanges[index].name = e.target.value
@@ -336,12 +349,21 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     e.preventDefault()
 
     let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
-    newStatChanges.push({ name: "", value: undefined })
+    newStatChanges.push({ name: "", value: undefined, action: "+" })
 
     this.state.thisPortMeta.statChanges = newStatChanges
     this.savePortMeta()
   }
 
+  removeStatChanges = (index: number, e: React.MouseEvent) => {
+    e.preventDefault()
+
+    let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
+    newStatChanges.splice(index, 1)
+
+    this.state.thisPortMeta.statChanges = newStatChanges
+    this.savePortMeta()
+  }
   setStatName = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
     let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
     newStatChanges[index].name = e.target.value
