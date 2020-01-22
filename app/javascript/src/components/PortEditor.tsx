@@ -45,7 +45,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
           onChange={updateChoice}
         />{' '}
         <button onClick={this.optionsButtonClick}>
-          {optionsOpen ? '>' : 'v'}
+          {optionsOpen ? 'v' : '>'}
         </button>
         <button onClick={removeChoice}>
           Delete
@@ -58,8 +58,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
           <label htmlFor="items">Items</label>
 
           <div className="flexDiv">
-            <b>Items</b>
-            <table className="attributeTable">
+              <table>
               <thead>
                 <tr>
                   <th>Add/Remove</th>
@@ -69,7 +68,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
 
               <tbody>
                 {itemChanges && itemChanges.map((itemChange, i) => (
-                  <tr key={itemChange.name}>
+                  <tr key={itemChange.name.concat(i.toString())}>
                     <td>
                       <select value={itemChange.action} onChange={this.toggleItemChange.bind(this, i)}>
                         <option key="add" value="add">Add</option>
@@ -82,19 +81,21 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                         defaultValue={itemChange.name}
                       />
                     </td>
-                    <td><a onClick={this.removeItemChanges.bind(this, i)}>remove</a></td>
+                    <td><a onClick={this.removeItemChanges.bind(this, i)}>❌</a></td>
                   </tr>
                 ))}
               </tbody>
+              <tfoot>
+                <a onClick={this.addItemChanges.bind(this)}>➕</a>
+              </tfoot>
             </table>
-            <a onClick={this.addItemChanges.bind(this)}>+</a>
 
           </div>
           <input id="stats" type="radio" name="grp" />
           <label htmlFor="stats">Stats</label>
 
           <div className="flexDiv">
-            <table className="attributeTable">
+            <table>
               <thead>
                 <tr>
                   <th>Stat</th>
@@ -104,7 +105,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
               </thead>
               <tbody>
                 {statChanges && statChanges.map((statChange, i) => (
-                  <tr key={statChange.name}>
+                  <tr key={statChange.name.concat(i.toString())}>
                     <td>
                       <input
                         onBlur={this.setStatName.bind(this, i)}
@@ -113,8 +114,8 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                     </td>
                     <td>
                       <select value={statChange.action} onChange={this.toggleStatChanges.bind(this, i)}>
-                        <option key="+" value="+">+</option>
-                        <option key="-" value="-">-</option>
+                        <option key="+" value="+">➕</option>
+                        <option key="-" value="-">➖</option>
                       </select>
                     </td>
                     <td>
@@ -123,20 +124,21 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                         defaultValue={(statChange.value) ? statChange.value.toString() : ""}
                       />
                     </td>
-                    <td><a onClick={this.removeStatChanges.bind(this, i)}>remove</a></td>
+                    <td><a onClick={this.removeStatChanges.bind(this, i)}>❌</a></td>
 
                   </tr>
                 ))}
               </tbody>
+              <tfoot>
+                <a onClick={this.addStatChanges.bind(this)}>➕</a>
+              </tfoot>
             </table>
-            <a onClick={this.addStatChanges.bind(this)}>+</a>
           </div>
           <input id="showif" type="radio" name="grp" />
           <label htmlFor="showif">Show If</label>
           <div className="flexDiv">
-            <b>Show If</b>
 
-            <table className="attributeTable">
+            <table cellSpacing="10">
               <thead>
                 <tr>
                   <th>Item</th>
@@ -156,13 +158,16 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                       </select>
                     </td>
                     <td><a onClick={this.toggleShowIfItem.bind(this, i)}>{showIf.hasIt ? "✔️" : "X"}</a></td>
-                    <td><a onClick={this.removeShowIfItem.bind(this, i)}>remove</a></td>
+                    <td><a onClick={this.removeShowIfItem.bind(this, i)}>❌</a></td>
                   </tr>
                 ))}
               </tbody>
+              <tfoot>
+               <a onClick={this.addShowIfItem.bind(this)}>➕</a>
+              </tfoot>
             </table>
-            <a onClick={this.addShowIfItem.bind(this)}>+</a>
-            <table className="attributeTable">
+            <hr />
+            <table>
               <thead>
                 <tr>
                   <th>Stat</th>
@@ -196,12 +201,14 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                       />
                     </td>
 
-                    <td><a onClick={this.removeShowIfStat.bind(this, i)}>rem</a></td>
+                    <td><a onClick={this.removeShowIfStat.bind(this, i)}>❌</a></td>
                   </tr>
                 ))}
               </tbody>
+              <tfoot>
+               <a onClick={this.addShowIfStat.bind(this)}>➕</a>
+              </tfoot>
             </table>
-            <a onClick={this.addShowIfStat.bind(this)}>+</a>
 
           </div>
 
@@ -335,6 +342,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
   }
 
   setItemChange = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+    console.log("Here:", index)
     let newItemChanges = clone(this.state.thisPortMeta.itemChanges || [])
     newItemChanges[index].name = e.target.value
 
@@ -406,9 +414,13 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     let newPortMeta: PortMetaContent = clone(thisPortMeta)
 
     // Remove empty showIf conditions
-    // TODO: Add something here for showIfStats
     if (newPortMeta.showIfItems) {
       newPortMeta.showIfItems = newPortMeta.showIfItems.filter(showIf => {
+        return !!showIf.name
+      })
+    }
+    if (newPortMeta.showIfStats) {
+      newPortMeta.showIfStats = newPortMeta.showIfStats.filter(showIf => {
         return !!showIf.name
       })
     }
@@ -443,7 +455,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     })
 
     return toReturn.filter((name) => {
-      return name === current || (existing.indexOf(name) === -1)
+      return name && (name === current || (existing.indexOf(name) === -1))
     })
   }
 
@@ -467,7 +479,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     })
 
     return toReturn.filter((name) => {
-      return name === current || (existing.indexOf(name) === -1)
+      return name && (name === current || (existing.indexOf(name) === -1))
     })
   }
 
