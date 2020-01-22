@@ -21,16 +21,16 @@ label {
   order: 1;
 }
 
-div {
+.flexDiv {
   width: 100%;
   padding: 1em;
   border: 1px solid #ddd;
   background: #fff;
-  order: 2; // Pushes it to the end.
+  order: 2;  
 }
 
 input[type=radio],
-div {
+.flexDiv {
   display: none;
 }
 
@@ -39,6 +39,6 @@ input[type=radio]:checked + label {
   border-bottom: 1px solid black;
 }
 
-input[type=radio]:checked + label + div {
+input[type=radio]:checked + label + .flexDiv {
   display: block;
 }
