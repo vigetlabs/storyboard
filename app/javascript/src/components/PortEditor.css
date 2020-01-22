@@ -1,6 +1,9 @@
 .attributeTable {
-  border: 1px solid black;
-  width: 200px;
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 0 3em 0;
+  padding: 0;
+
 }
 
 a {
@@ -11,6 +14,10 @@ a {
 section {
   display: flex;
   flex-wrap: wrap;
+}
+
+table{
+  margin: 0 auto;
 }
 
 label {
