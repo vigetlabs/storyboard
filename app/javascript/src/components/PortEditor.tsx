@@ -49,12 +49,91 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
         </button>
         <button onClick={removeChoice}>
           Delete
-        </button>
+          </button>
       </li>
+      <section>
 
-      {optionsOpen && <>
-        <li>
-          <div>
+        {optionsOpen && <>
+          <input id="items" type="radio" name="grp" defaultChecked />
+          <label htmlFor="items">Items</label>
+
+          <div className="flexDiv">
+            <b>Items</b>
+            <table className="attributeTable">
+              <thead>
+                <tr>
+                  <th>Add/Remove</th>
+                  <th>Item</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                {itemChanges && itemChanges.map((itemChange, i) => (
+                  <tr key={itemChange.name}>
+                    <td>
+                      <select value={itemChange.action} onChange={this.toggleItemChange.bind(this, i)}>
+                        <option key="add" value="add">Add</option>
+                        <option key="remove" value="remove">Remove</option>
+                      </select>
+                    </td>
+                    <td>
+                      <input
+                        onBlur={this.setItemChange.bind(this, i)}
+                        defaultValue={itemChange.name}
+                      />
+                    </td>
+                    <td><a onClick={this.removeItemChanges.bind(this, i)}>remove</a></td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <a onClick={this.addItemChanges.bind(this)}>+</a>
+
+          </div>
+          <input id="stats" type="radio" name="grp" />
+          <label htmlFor="stats">Stats</label>
+
+          <div className="flexDiv">
+            <table className="attributeTable">
+              <thead>
+                <tr>
+                  <th>Stat</th>
+                  <th></th>
+                  <th>#</th>
+                </tr>
+              </thead>
+              <tbody>
+                {statChanges && statChanges.map((statChange, i) => (
+                  <tr key={statChange.name}>
+                    <td>
+                      <input
+                        onBlur={this.setStatName.bind(this, i)}
+                        defaultValue={statChange.name}
+                      />
+                    </td>
+                    <td>
+                      <select value={statChange.action} onChange={this.toggleStatChanges.bind(this, i)}>
+                        <option key="+" value="+">+</option>
+                        <option key="-" value="-">-</option>
+                      </select>
+                    </td>
+                    <td>
+                      <input
+                        onBlur={this.setStatValue.bind(this, i)}
+                        defaultValue={(statChange.value) ? statChange.value.toString() : ""}
+                      />
+                    </td>
+                    <td><a onClick={this.removeStatChanges.bind(this, i)}>remove</a></td>
+
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <a onClick={this.addStatChanges.bind(this)}>+</a>
+          </div>
+          <input id="showif" type="radio" name="grp" />
+          <label htmlFor="showif">Show If</label>
+          <div className="flexDiv">
             <b>Show If</b>
 
             <table className="attributeTable">
@@ -123,87 +202,18 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
               </tbody>
             </table>
             <a onClick={this.addShowIfStat.bind(this)}>+</a>
+
           </div>
-        </li>
-        <li>
-          <div>
-            <b>Items</b>
-            <table className="attributeTable">
-              <thead>
-                <tr>
-                  <th>Add/Remove</th>
-                  <th>Item</th>
-                </tr>
-              </thead>
 
-              <tbody>
-                {itemChanges && itemChanges.map((itemChange, i) => (
-                  <tr key={itemChange.name}>
-                    <td>
-                      <select value={itemChange.action} onChange={this.toggleItemChange.bind(this, i)}>
-                        <option key="add" value="add">Add</option>
-                        <option key="remove" value="remove">Remove</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input
-                        onBlur={this.setItemChange.bind(this, i)}
-                        defaultValue={itemChange.name}
-                      />
-                    </td>
-                    <td><a onClick={this.removeItemChanges.bind(this, i)}>remove</a></td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <a onClick={this.addItemChanges.bind(this)}>+</a>
-          </div>
-        </li>
 
-        <li>
-          <div>
-            <b>Stats</b>
+        </>}
 
-            <table className="attributeTable">
-              <thead>
-                <tr>
-                  <th>Stat</th>
-                  <th></th>
-                  <th>#</th>
-                </tr>
-              </thead>
-              <tbody>
-                {statChanges && statChanges.map((statChange, i) => (
-                  <tr key={statChange.name}>
-                    <td>
-                      <input
-                        onBlur={this.setStatName.bind(this, i)}
-                        defaultValue={statChange.name}
-                      />
-                    </td>
-                    <td>
-                      <select value={statChange.action} onChange={this.toggleStatChanges.bind(this, i)}>
-                        <option key="+" value="+">+</option>
-                        <option key="-" value="-">-</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input
-                        onBlur={this.setStatValue.bind(this, i)}
-                        defaultValue={(statChange.value) ? statChange.value.toString() : ""}
-                      />
-                    </td>
-                    <td><a onClick={this.removeStatChanges.bind(this, i)}>remove</a></td>
 
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <a onClick={this.addStatChanges.bind(this)}>+</a>
-          </div>
-        </li>
-      </>
-      }
+      </section>
+
+
+
+
     </>
   }
 
