@@ -292,7 +292,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
 
   setShowIfStatValue = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
     let newShowIfStats = clone(this.state.thisPortMeta.showIfStats || [])
-    newShowIfStats[index].value = e.target.value
+    newShowIfStats[index].value = parseInt(e.target.value, 0)
 
     this.state.thisPortMeta.showIfStats = newShowIfStats
     this.savePortMeta()
@@ -352,6 +352,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
 
   toggleItemChange = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault()
+    if (e.target.value !== "add" && e.target.value !== "remove") return
 
     let newItemChanges = clone(this.state.thisPortMeta.itemChanges || [])
     newItemChanges[index].action = e.target.value
@@ -367,7 +368,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     e.preventDefault()
 
     let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
-    newStatChanges.push({ name: "", value: undefined, action: "+" })
+    newStatChanges.push({ name: "", value: 0, action: "+" })
 
     this.state.thisPortMeta.statChanges = newStatChanges
     this.savePortMeta()
@@ -391,7 +392,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
   }
   setStatValue = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
     let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
-    newStatChanges[index].value = e.target.value
+    newStatChanges[index].value = parseInt(e.target.value, 0)
 
     this.state.thisPortMeta.statChanges = newStatChanges
     this.savePortMeta()
@@ -399,6 +400,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
 
   toggleStatChanges = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
     e.preventDefault()
+    if (e.target.value !== "+" && e.target.value !== "-") return
 
     let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
     newStatChanges[index].action = e.target.value
