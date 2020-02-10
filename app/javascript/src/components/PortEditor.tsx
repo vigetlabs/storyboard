@@ -421,6 +421,20 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
       })
     }
 
+    // Remove empty stat changes
+    if (newPortMeta.itemChanges) {
+      newPortMeta.itemChanges = newPortMeta.itemChanges.filter(itemChange => {
+        return !!itemChange.name
+      })
+    }
+
+    // Remove empty item changes
+    if (newPortMeta.statChanges) {
+      newPortMeta.statChanges = newPortMeta.statChanges.filter(statChange => {
+        return !!statChange.name
+      })
+    }
+
     // Clone here and elsewhere so we get immutable objects in global state
     updateState({
       ...state,
