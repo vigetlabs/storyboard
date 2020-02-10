@@ -35,7 +35,7 @@ interface EditorProps {
 class Editor extends React.Component<EditorProps, EditorState> {
   engine: DiagramEngine
   model: DiagramModel
-  lastSavedState: string
+  lastSavedState: ApplicationState
 
   constructor(props: EditorProps) {
     super(props)
@@ -333,7 +333,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
     const saveStart = Date.now()
     const newState = this.serialize()
-    const noChange = JSON.stringify(newState) === this.lastSavedState
+    const noChange =
+      JSON.stringify(newState) === JSON.stringify(this.lastSavedState)
 
     // Don't save if nothing happened
     if (noChange && !opts.force) return
