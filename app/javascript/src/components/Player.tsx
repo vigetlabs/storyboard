@@ -15,7 +15,6 @@ import { PlayerIntro } from './PlayerIntro'
 import { PlayerInvalid } from './PlayerInvalid'
 import { PlayerEnd, PlayerDeadEnd } from './PlayerEnd'
 import { clone } from '../clone'
-import { Stats } from 'fs'
 
 interface PlayerProps {
   description: string
@@ -116,7 +115,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           <div className="PlayerSceneContent">
             <div
               className="PlayerSceneBody"
-              dangerouslySetInnerHTML={{ __html: meta.text }}
+              dangerouslySetInnerHTML={{ __html: this.translate(meta.text) }}
             />
             {this.renderChoices(node)}
           </div>
@@ -292,7 +291,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           newStats[indexOfStat].value = Number(newStats[indexOfStat].value) + Number(change.value)
 
         } else {
-          // Subtract it from the total  
+          // Subtract it from the total
           newStats[indexOfStat].value = Number(newStats[indexOfStat].value) - Number(change.value)
         }
       }
@@ -316,6 +315,28 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       currentItems: newItems,
       currentStats: newStats
     }, this.resetScroll)
+  }
+
+  private translate(text: string) {
+    const tags = text.match(/\{\{(.+?)\}\}/g)
+
+    if (tags) {
+      tags.forEach(tag => {
+        const tagName = tag.replace(/[\{\}]/g, '')
+
+        const relevantStat = this.state.currentStats.find(stat => {
+          return stat.name == tagName
+        })
+
+        if (relevantStat) {
+          text = text.replace(tag, relevantStat.value.toString())
+        } else {
+          text = text.replace(tag, '0')
+        }
+      })
+    }
+
+    return text
   }
 
   private getRandom(nodes: string[]) {
