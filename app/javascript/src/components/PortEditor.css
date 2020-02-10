@@ -33,7 +33,8 @@ label {
   padding: 1em;
   border: 1px solid #ddd;
   background: #fff;
-  order: 2;  
+  order: 2;
+  margin-bottom: 8px;
 }
 
 input[type=radio],

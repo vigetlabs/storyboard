@@ -36,6 +36,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
 
   render() {
     const { port, removeChoice, updateChoice } = this.props
+    const key = port.id
 
     const { optionsOpen, thisPortMeta: { showIfItems, showIfStats, itemChanges, statChanges } } = this.state
     return <>
@@ -51,14 +52,14 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
           Delete
           </button>
       </li>
-      <section>
 
+      <section>
         {optionsOpen && <>
-          <input id="items" type="radio" name="grp" defaultChecked />
-          <label htmlFor="items">Items</label>
+          <input id={`items-${key}`} type="radio" name={`grp-${key}`} defaultChecked />
+          <label htmlFor={`items-${key}`}>Items</label>
 
           <div className="flexDiv">
-              <table>
+            <table>
               <thead>
                 <tr>
                   <th>Add/Remove</th>
@@ -91,8 +92,9 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
             </table>
 
           </div>
-          <input id="stats" type="radio" name="grp" />
-          <label htmlFor="stats">Stats</label>
+
+          <input id={`stats-${key}`} type="radio" name={`grp-${key}`} />
+          <label htmlFor={`stats-${key}`}>Stats</label>
 
           <div className="flexDiv">
             <table>
@@ -134,10 +136,11 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
               </tfoot>
             </table>
           </div>
-          <input id="showif" type="radio" name="grp" />
-          <label htmlFor="showif">Show If</label>
-          <div className="flexDiv">
 
+          <input id={`showif-${key}`} type="radio" name={`grp-${key}`} />
+          <label htmlFor={`showif-${key}`}>Show If</label>
+
+          <div className="flexDiv">
             <table cellSpacing="10">
               <thead>
                 <tr>
@@ -209,18 +212,9 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
                <a onClick={this.addShowIfStat.bind(this)}>➕</a>
               </tfoot>
             </table>
-
           </div>
-
-
         </>}
-
-
       </section>
-
-
-
-
     </>
   }
 
