@@ -1,8 +1,9 @@
-import * as React from "react";
-import { DefaultPortModel } from "storm-react-diagrams";
-import { StateConsumer, ApplicationState, PortMetaContent } from "../Store";
-import { get } from "lodash";
-import { clone } from "../clone";
+import * as React from 'react'
+import { FC } from 'react'
+import { DefaultPortModel } from 'storm-react-diagrams'
+import { StateConsumer, ApplicationState, PortMetaContent } from '../Store'
+import { get } from 'lodash'
+import { clone } from '../clone'
 
 import './PortEditor.css'
 
@@ -22,9 +23,32 @@ interface PortEditorState {
   thisPortMeta: PortMetaContent
 }
 
-class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps, PortEditorState> {
+const PortEditorHeader: FC = ({ children }) => (
+  <header className="pe-header">
+    <h3 className="pe-heading">{children}</h3>
+  </header>
+)
+
+const PortEditorRemoveButton: FC<{ onClick: () => void }> = props => (
+  <button className="pe-remove-btn" {...props}>
+    <span className="sr-only">Remove Item</span>❌
+  </button>
+)
+
+const PortEditorFooter: FC<{ onClick: () => void }> = props => (
+  <footer className="pe-footer">
+    <button className="pe-add-btn" {...props}>
+      <span className="sr-only">Add Item</span>➕
+    </button>
+  </footer>
+)
+
+class PortEditor extends React.Component<
+  PortEditorProps & PortEditorStateProps,
+  PortEditorState
+> {
   constructor(props: PortEditorProps & PortEditorStateProps) {
-    super(props);
+    super(props)
 
     let { state, port } = props
 
@@ -38,184 +62,262 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     const { port, removeChoice, updateChoice } = this.props
     const key = port.id
 
-    const { optionsOpen, thisPortMeta: { showIfItems, showIfStats, itemChanges, statChanges } } = this.state
-    return <>
-      <li>
-        <input
-          defaultValue={port.label}
-          onChange={updateChoice}
-        />{' '}
-        <button onClick={this.optionsButtonClick}>
-          {optionsOpen ? 'v' : '>'}
-        </button>
-        <button onClick={removeChoice}>
-          Delete
+    const {
+      optionsOpen,
+      thisPortMeta: { showIfItems, showIfStats, itemChanges, statChanges }
+    } = this.state
+    return (
+      <>
+        <li>
+          <input defaultValue={port.label} onChange={updateChoice} />{' '}
+          <button onClick={this.optionsButtonClick}>
+            {optionsOpen ? 'v' : '>'}
           </button>
-      </li>
+          <button onClick={removeChoice}>Delete</button>
+        </li>
 
-      <section>
-        {optionsOpen && <>
-          <input id={`items-${key}`} type="radio" name={`grp-${key}`} defaultChecked />
-          <label htmlFor={`items-${key}`}>Items</label>
+        <section>
+          {optionsOpen && (
+            <>
+              <input
+                id={`items-${key}`}
+                type="radio"
+                name={`grp-${key}`}
+                defaultChecked
+              />
+              <label htmlFor={`items-${key}`}>Items</label>
 
-          <div className="flexDiv">
-            <table>
-              <thead>
-                <tr>
-                  <th>Add/Remove</th>
-                  <th>Item</th>
-                </tr>
-              </thead>
+              <div className="flexDiv">
+                <PortEditorHeader>Add/Remove Item</PortEditorHeader>
 
-              <tbody>
-                {itemChanges && itemChanges.map((itemChange, i) => (
-                  <tr key={itemChange.name.concat(i.toString())}>
-                    <td>
-                      <select value={itemChange.action} onChange={this.toggleItemChange.bind(this, i)}>
-                        <option key="add" value="add">Add</option>
-                        <option key="remove" value="remove">Remove</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input
-                        onBlur={this.setItemChange.bind(this, i)}
-                        defaultValue={itemChange.name}
-                      />
-                    </td>
-                    <td><a onClick={this.removeItemChanges.bind(this, i)}>❌</a></td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <a onClick={this.addItemChanges.bind(this)}>➕</a>
-              </tfoot>
-            </table>
+                <ul className="pe-list">
+                  {itemChanges && itemChanges.length > 0 ? (
+                    itemChanges.map((itemChange, i) => (
+                      <li key={itemChange.name.concat(i.toString())}>
+                        <div>
+                          <label
+                            className="sr-only"
+                            htmlFor={`add-remove-${itemChange.name}`}
+                          >
+                            Add/Remove
+                          </label>
+                          <select
+                            id={`add-remove-${itemChange.name}`}
+                            value={itemChange.action}
+                            onChange={this.toggleItemChange.bind(this, i)}
+                          >
+                            <option key="add" value="add">
+                              Add
+                            </option>
+                            <option key="remove" value="remove">
+                              Remove
+                            </option>
+                          </select>
+                        </div>
+                        <div>
+                          <label
+                            className="sr-only"
+                            htmlFor={`name-for-${itemChange.name}`}
+                          >
+                            Item Name
+                          </label>
+                          <input
+                            id={`name-for-${itemChange.name}`}
+                            onBlur={this.setItemChange.bind(this, i)}
+                            defaultValue={itemChange.name}
+                          />
+                        </div>
+                        <PortEditorRemoveButton
+                          onClick={this.removeItemChanges.bind(this, i)}
+                        />
+                      </li>
+                    ))
+                  ) : (
+                    <li>No items</li>
+                  )}
+                </ul>
 
-          </div>
+                <PortEditorFooter onClick={this.addItemChanges.bind(this)} />
+              </div>
 
-          <input id={`stats-${key}`} type="radio" name={`grp-${key}`} />
-          <label htmlFor={`stats-${key}`}>Stats</label>
+              <input id={`stats-${key}`} type="radio" name={`grp-${key}`} />
+              <label htmlFor={`stats-${key}`}>Stats</label>
 
-          <div className="flexDiv">
-            <table>
-              <thead>
-                <tr>
-                  <th>Stat</th>
-                  <th></th>
-                  <th>#</th>
-                </tr>
-              </thead>
-              <tbody>
-                {statChanges && statChanges.map((statChange, i) => (
-                  <tr key={statChange.name.concat(i.toString())}>
-                    <td>
-                      <input
-                        onBlur={this.setStatName.bind(this, i)}
-                        defaultValue={statChange.name}
-                      />
-                    </td>
-                    <td>
-                      <select value={statChange.action} onChange={this.toggleStatChanges.bind(this, i)}>
-                        <option key="+" value="+">➕</option>
-                        <option key="-" value="-">➖</option>
-                      </select>
-                    </td>
-                    <td>
-                      <input
-                        onBlur={this.setStatValue.bind(this, i)}
-                        defaultValue={(statChange.value) ? statChange.value.toString() : ""}
-                      />
-                    </td>
-                    <td><a onClick={this.removeStatChanges.bind(this, i)}>❌</a></td>
+              <div className="flexDiv">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Stat</th>
+                      <th></th>
+                      <th>#</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {statChanges &&
+                      statChanges.map((statChange, i) => (
+                        <tr key={statChange.name.concat(i.toString())}>
+                          <td>
+                            <input
+                              onBlur={this.setStatName.bind(this, i)}
+                              defaultValue={statChange.name}
+                            />
+                          </td>
+                          <td>
+                            <select
+                              value={statChange.action}
+                              onChange={this.toggleStatChanges.bind(this, i)}
+                            >
+                              <option key="+" value="+">
+                                ➕
+                              </option>
+                              <option key="-" value="-">
+                                ➖
+                              </option>
+                            </select>
+                          </td>
+                          <td>
+                            <input
+                              onBlur={this.setStatValue.bind(this, i)}
+                              defaultValue={
+                                statChange.value
+                                  ? statChange.value.toString()
+                                  : ''
+                              }
+                            />
+                          </td>
+                          <td>
+                            <a onClick={this.removeStatChanges.bind(this, i)}>
+                              ❌
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                  <tfoot>
+                    <a onClick={this.addStatChanges.bind(this)}>➕</a>
+                  </tfoot>
+                </table>
+              </div>
 
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot>
-                <a onClick={this.addStatChanges.bind(this)}>➕</a>
-              </tfoot>
-            </table>
-          </div>
+              <input id={`showif-${key}`} type="radio" name={`grp-${key}`} />
+              <label htmlFor={`showif-${key}`}>Show If</label>
 
-          <input id={`showif-${key}`} type="radio" name={`grp-${key}`} />
-          <label htmlFor={`showif-${key}`}>Show If</label>
+              <div className="flexDiv">
+                <table cellSpacing="10">
+                  <thead>
+                    <tr>
+                      <th>Item</th>
+                      <th>Has It?</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {showIfItems &&
+                      showIfItems.map((showIf, i) => (
+                        <tr key={i}>
+                          <td>
+                            <select
+                              value={showIf.name}
+                              onChange={this.selectShowIfItem.bind(this, i)}
+                            >
+                              <option key="-1"></option>
+                              {this.possibleItemModifiers(showIf.name).map(
+                                (item, i) => (
+                                  <option key={i} value={item}>
+                                    {item}
+                                  </option>
+                                )
+                              )}
+                            </select>
+                          </td>
+                          <td>
+                            <a onClick={this.toggleShowIfItem.bind(this, i)}>
+                              {showIf.hasIt ? '✔️' : 'X'}
+                            </a>
+                          </td>
+                          <td>
+                            <a onClick={this.removeShowIfItem.bind(this, i)}>
+                              ❌
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                  <tfoot>
+                    <a onClick={this.addShowIfItem.bind(this)}>➕</a>
+                  </tfoot>
+                </table>
+                <hr />
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Stat</th>
+                      <th> &gt; &lt;</th>
+                      <th> # </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {showIfStats &&
+                      showIfStats.map((showIf, i) => (
+                        <tr key={i}>
+                          <td>
+                            <select
+                              value={showIf.name}
+                              onChange={this.selectShowIfStat.bind(this, i)}
+                            >
+                              <option key="-1"></option>
+                              {this.possibleStatModifiers(showIf.name).map(
+                                (item, i) => (
+                                  <option key={i} value={item}>
+                                    {item}
+                                  </option>
+                                )
+                              )}
+                            </select>
+                          </td>
+                          <td>
+                            <select
+                              value={showIf.operator}
+                              onChange={this.selectShowIfStatOperator.bind(
+                                this,
+                                i
+                              )}
+                            >
+                              <option key="-1"></option>
+                              {['<', '>', '≤', '≥'].map((item, i) => (
+                                <option key={i} value={item}>
+                                  {item}
+                                </option>
+                              ))}
+                            </select>
+                          </td>
+                          <td>
+                            <input
+                              onBlur={this.setShowIfStatValue.bind(this, i)}
+                              defaultValue={
+                                showIf.value ? showIf.value.toString() : ''
+                              }
+                            />
+                          </td>
 
-          <div className="flexDiv">
-            <table cellSpacing="10">
-              <thead>
-                <tr>
-                  <th>Item</th>
-                  <th>Has It?</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {showIfItems && showIfItems.map((showIf, i) => (
-                  <tr key={i}>
-                    <td>
-                      <select value={showIf.name} onChange={this.selectShowIfItem.bind(this, i)}>
-                        <option key="-1"></option>
-                        {this.possibleItemModifiers(showIf.name).map((item, i) => (
-                          <option key={i} value={item}>{item}</option>
-                        ))}
-                      </select>
-                    </td>
-                    <td><a onClick={this.toggleShowIfItem.bind(this, i)}>{showIf.hasIt ? "✔️" : "X"}</a></td>
-                    <td><a onClick={this.removeShowIfItem.bind(this, i)}>❌</a></td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot>
-               <a onClick={this.addShowIfItem.bind(this)}>➕</a>
-              </tfoot>
-            </table>
-            <hr />
-            <table>
-              <thead>
-                <tr>
-                  <th>Stat</th>
-                  <th> &gt; &lt;</th>
-                  <th> # </th>
-                </tr>
-              </thead>
-              <tbody>
-                {showIfStats && showIfStats.map((showIf, i) => (
-                  <tr key={i}>
-                    <td>
-                      <select value={showIf.name} onChange={this.selectShowIfStat.bind(this, i)}>
-                        <option key="-1"></option>
-                        {this.possibleStatModifiers(showIf.name).map((item, i) => (
-                          <option key={i} value={item}>{item}</option>
-                        ))}
-                      </select>
-                    </td>
-                    <td>
-                      <select value={showIf.operator} onChange={this.selectShowIfStatOperator.bind(this, i)}>
-                        <option key="-1"></option>
-                        {["<", ">", "≤", "≥"].map((item, i) => (
-                          <option key={i} value={item}>{item}</option>
-                        ))}
-                      </select>
-                    </td>
-                    <td>
-                      <input
-                        onBlur={this.setShowIfStatValue.bind(this, i)}
-                        defaultValue={(showIf.value) ? showIf.value.toString() : ""}
-                      />
-                    </td>
-
-                    <td><a onClick={this.removeShowIfStat.bind(this, i)}>❌</a></td>
-                  </tr>
-                ))}
-              </tbody>
-              <tfoot>
-               <a onClick={this.addShowIfStat.bind(this)}>➕</a>
-              </tfoot>
-            </table>
-          </div>
-        </>}
-      </section>
-    </>
+                          <td>
+                            <a onClick={this.removeShowIfStat.bind(this, i)}>
+                              ❌
+                            </a>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                  <tfoot>
+                    <a onClick={this.addShowIfStat.bind(this)}>➕</a>
+                  </tfoot>
+                </table>
+              </div>
+            </>
+          )}
+        </section>
+      </>
+    )
   }
 
   optionsButtonClick = () => {
@@ -225,7 +327,10 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
   /**
    * Show If Items
    */
-  selectShowIfItem = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
+  selectShowIfItem = (
+    index: number,
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
     newShowIfItems[index].name = e.target.value
 
@@ -257,7 +362,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     e.preventDefault()
 
     let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
-    newShowIfItems.push({ name: "", hasIt: true })
+    newShowIfItems.push({ name: '', hasIt: true })
 
     this.state.thisPortMeta.showIfItems = newShowIfItems
     this.savePortMeta()
@@ -266,7 +371,10 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
   /**
    * Show If Stats
    */
-  selectShowIfStat = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
+  selectShowIfStat = (
+    index: number,
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     let newShowIfStats = clone(this.state.thisPortMeta.showIfStats || [])
     newShowIfStats[index].name = e.target.value
 
@@ -274,7 +382,10 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     this.savePortMeta()
   }
 
-  selectShowIfStatOperator = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+  selectShowIfStatOperator = (
+    index: number,
+    e: React.FocusEvent<HTMLInputElement>
+  ) => {
     e.preventDefault()
 
     let newShowIfStats = clone(this.state.thisPortMeta.showIfStats || [])
@@ -284,7 +395,10 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     this.savePortMeta()
   }
 
-  setShowIfStatValue = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+  setShowIfStatValue = (
+    index: number,
+    e: React.FocusEvent<HTMLInputElement>
+  ) => {
     let newShowIfStats = clone(this.state.thisPortMeta.showIfStats || [])
     newShowIfStats[index].value = parseInt(e.target.value, 0)
 
@@ -306,7 +420,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     e.preventDefault()
 
     let newShowIfStats = clone(this.state.thisPortMeta.showIfStats || [])
-    newShowIfStats.push({ name: "", operator: "", value: 0 })
+    newShowIfStats.push({ name: '', operator: '', value: 0 })
 
     this.state.thisPortMeta.showIfStats = newShowIfStats
     this.savePortMeta()
@@ -319,7 +433,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     e.preventDefault()
 
     let newItemChanges = clone(this.state.thisPortMeta.itemChanges || [])
-    newItemChanges.push({ name: "", action: "add" })
+    newItemChanges.push({ name: '', action: 'add' })
 
     this.state.thisPortMeta.itemChanges = newItemChanges
     this.savePortMeta()
@@ -336,7 +450,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
   }
 
   setItemChange = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
-    console.log("Here:", index)
+    console.log('Here:', index)
     let newItemChanges = clone(this.state.thisPortMeta.itemChanges || [])
     newItemChanges[index].name = e.target.value
 
@@ -344,9 +458,12 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     this.savePortMeta()
   }
 
-  toggleItemChange = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
+  toggleItemChange = (
+    index: number,
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     e.preventDefault()
-    if (e.target.value !== "add" && e.target.value !== "remove") return
+    if (e.target.value !== 'add' && e.target.value !== 'remove') return
 
     let newItemChanges = clone(this.state.thisPortMeta.itemChanges || [])
     newItemChanges[index].action = e.target.value
@@ -362,7 +479,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     e.preventDefault()
 
     let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
-    newStatChanges.push({ name: "", value: 0, action: "+" })
+    newStatChanges.push({ name: '', value: 0, action: '+' })
 
     this.state.thisPortMeta.statChanges = newStatChanges
     this.savePortMeta()
@@ -392,9 +509,12 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     this.savePortMeta()
   }
 
-  toggleStatChanges = (index: number, e: React.ChangeEvent<HTMLSelectElement>) => {
+  toggleStatChanges = (
+    index: number,
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     e.preventDefault()
-    if (e.target.value !== "+" && e.target.value !== "-") return
+    if (e.target.value !== '+' && e.target.value !== '-') return
 
     let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
     newStatChanges[index].action = e.target.value
@@ -445,7 +565,7 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     })
   }
 
-  possibleItemModifiers: (c: string) => string[] = (current) => {
+  possibleItemModifiers: (c: string) => string[] = current => {
     let { portMeta } = this.props.state
     let { thisPortMeta } = this.state
     let toReturn: string[] = []
@@ -453,23 +573,23 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     for (let key in portMeta) {
       let changes = portMeta[key].itemChanges || []
 
-      changes.forEach((change) => {
-        if (change.action === "add" && toReturn.indexOf(change.name) === -1) {
+      changes.forEach(change => {
+        if (change.action === 'add' && toReturn.indexOf(change.name) === -1) {
           toReturn.push(change.name)
         }
       })
     }
 
-    let existing = (thisPortMeta.showIfItems || []).map((showIf) => {
+    let existing = (thisPortMeta.showIfItems || []).map(showIf => {
       return showIf.name
     })
 
-    return toReturn.filter((name) => {
-      return name && (name === current || (existing.indexOf(name) === -1))
+    return toReturn.filter(name => {
+      return name && (name === current || existing.indexOf(name) === -1)
     })
   }
 
-  possibleStatModifiers: (c: string) => string[] = (current) => {
+  possibleStatModifiers: (c: string) => string[] = current => {
     let { portMeta } = this.props.state
     let { thisPortMeta } = this.state
     let toReturn: string[] = []
@@ -477,31 +597,27 @@ class PortEditor extends React.Component<PortEditorProps & PortEditorStateProps,
     for (let key in portMeta) {
       let changes = portMeta[key].statChanges || []
 
-      changes.forEach((change) => {
+      changes.forEach(change => {
         if (toReturn.indexOf(change.name) === -1) {
           toReturn.push(change.name)
         }
       })
     }
 
-    let existing = (thisPortMeta.showIfStats || []).map((showIf) => {
+    let existing = (thisPortMeta.showIfStats || []).map(showIf => {
       return showIf.name
     })
 
-    return toReturn.filter((name) => {
-      return name && (name === current || (existing.indexOf(name) === -1))
+    return toReturn.filter(name => {
+      return name && (name === current || existing.indexOf(name) === -1)
     })
   }
-
 }
 
-
-export default (props: PortEditorProps) => <StateConsumer>
-  {({ state, updateState }) =>
-    <PortEditor
-      {...props}
-      state={state}
-      updateState={updateState}
-    />
-  }
-</StateConsumer>
+export default (props: PortEditorProps) => (
+  <StateConsumer>
+    {({ state, updateState }) => (
+      <PortEditor {...props} state={state} updateState={updateState} />
+    )}
+  </StateConsumer>
+)
