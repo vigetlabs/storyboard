@@ -3,27 +3,25 @@
   flex-wrap: wrap;
   margin: 0 0 3em 0;
   padding: 0;
-
 }
 
 a {
   cursor: pointer;
 }
 
-
 section {
   display: flex;
   flex-wrap: wrap;
 }
 
-table{
+/* table{
   margin: 0 auto;
-}
+} */
 
 label {
   background: #eee;
   border: 1px solid #ddd;
-  padding: .5em 1em;
+  padding: 0.5em 1em;
   cursor: pointer;
   order: 1;
 }
@@ -33,11 +31,10 @@ label {
   padding: 1em;
   border: 1px solid #ddd;
   background: #fff;
-  order: 2;
   margin-bottom: 8px;
 }
 
-input[type=radio],
+/* input[type=radio],
 .flexDiv {
   display: none;
 }
@@ -49,8 +46,58 @@ input[type=radio]:checked + label {
 
 input[type=radio]:checked + label + .flexDiv {
   display: block;
+} */
+
+.pe-list select {
+  height: 33px;
 }
 
-select {
-  height: 30px;
+.pe-header {
+  padding-bottom: 10px;
+}
+
+.pe-heading {
+  text-align: center;
+}
+
+.pe-list {
+  padding: 0;
+}
+
+.pe-list li {
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.pe-list div {
+  margin-right: 10px;
+}
+
+.pe-list input,
+.pe-list select {
+  color: #3d3d3d;
+}
+
+.pe-remove-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  padding: 0;
+}
+
+.pe-footer {
+  padding: 20px 0;
+  display: flex;
+  justify-content: center;
+}
+
+.pe-add-btn {
+  background: none;
+  border: none;
+  font-size: 16px;
+  width: 40px;
+  height: 40px;
+  border: 2px solid #afafaf;
+  border-radius: 99999px;
 }
