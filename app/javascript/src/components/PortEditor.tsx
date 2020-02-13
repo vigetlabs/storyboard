@@ -6,6 +6,7 @@ import { get } from 'lodash'
 import { clone } from '../clone'
 
 import './PortEditor.css'
+import { link } from 'fs'
 
 interface PortEditorProps {
   port: DefaultPortModel
@@ -23,6 +24,10 @@ interface PortEditorState {
   thisPortMeta: PortMetaContent
 }
 
+const deSpace = (str: string) => {
+  return str.replace(/\s/g, '')
+}
+
 const PortEditorHeader: FC = ({ children }) => (
   <header className="pe-header">
     <h3 className="pe-heading">{children}</h3>
@@ -31,14 +36,14 @@ const PortEditorHeader: FC = ({ children }) => (
 
 const PortEditorRemoveButton: FC<{ onClick: () => void }> = props => (
   <button className="pe-remove-btn" {...props}>
-    <span className="sr-only">Remove Item</span>❌
+    <span className="sr-only">Remove Item</span>
   </button>
 )
 
 const PortEditorFooter: FC<{ onClick: () => void }> = props => (
   <footer className="pe-footer">
     <button className="pe-add-btn" {...props}>
-      <span className="sr-only">Add Item</span>➕
+      <span className="sr-only">Add Item</span>
     </button>
   </footer>
 )
@@ -88,7 +93,7 @@ class PortEditor extends React.Component<
               <label htmlFor={`items-${key}`}>Items</label>
 
               <div className="flexDiv">
-                <PortEditorHeader>Add/Remove Item</PortEditorHeader>
+                <PortEditorHeader>Add/Remove Items</PortEditorHeader>
 
                 <ul className="pe-list">
                   {itemChanges && itemChanges.length > 0 ? (
@@ -144,174 +149,216 @@ class PortEditor extends React.Component<
               <label htmlFor={`stats-${key}`}>Stats</label>
 
               <div className="flexDiv">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Stat</th>
-                      <th></th>
-                      <th>#</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {statChanges &&
-                      statChanges.map((statChange, i) => (
-                        <tr key={statChange.name.concat(i.toString())}>
-                          <td>
-                            <input
-                              onBlur={this.setStatName.bind(this, i)}
-                              defaultValue={statChange.name}
-                            />
-                          </td>
-                          <td>
-                            <select
-                              value={statChange.action}
-                              onChange={this.toggleStatChanges.bind(this, i)}
-                            >
-                              <option key="+" value="+">
-                                ➕
-                              </option>
-                              <option key="-" value="-">
-                                ➖
-                              </option>
-                            </select>
-                          </td>
-                          <td>
-                            <input
-                              onBlur={this.setStatValue.bind(this, i)}
-                              defaultValue={
-                                statChange.value
-                                  ? statChange.value.toString()
-                                  : ''
-                              }
-                            />
-                          </td>
-                          <td>
-                            <a onClick={this.removeStatChanges.bind(this, i)}>
-                              ❌
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                  <tfoot>
-                    <a onClick={this.addStatChanges.bind(this)}>➕</a>
-                  </tfoot>
-                </table>
+                <PortEditorHeader>Increase/Decrease Stats</PortEditorHeader>
+
+                <ul className="pe-list">
+                  {statChanges && statChanges.length > 0 ? (
+                    statChanges.map((statChange, i) => (
+                      <li key={statChange.name.concat(i.toString())}>
+                        <div>
+                          <label
+                            className="sr-only"
+                            htmlFor={`stat-name-${statChange.name}`}
+                          >
+                            Stat Name
+                          </label>
+                          <input
+                            id={`stat-name-${statChange.name}`}
+                            onBlur={this.setStatName.bind(this, i)}
+                            defaultValue={statChange.name}
+                          />
+                        </div>
+                        <div>
+                          <label
+                            className="sr-only"
+                            htmlFor={`stat-decrease-increase-${statChange.name}`}
+                          >
+                            Increase/Decrease
+                          </label>
+                          <select
+                            id={`stat-decrease-increase-${statChange.name}`}
+                            value={statChange.action}
+                            onChange={this.toggleStatChanges.bind(this, i)}
+                          >
+                            <option key="+" value="+">
+                              ➕
+                            </option>
+                            <option key="-" value="-">
+                              ➖
+                            </option>
+                          </select>
+                        </div>
+                        <div>
+                          <label
+                            className="sr-only"
+                            htmlFor={`stat-value-${statChange.name}`}
+                          >
+                            Number Value (#)
+                          </label>
+                          <input
+                            id={`stat-value-${statChange.name}`}
+                            onBlur={this.setStatValue.bind(this, i)}
+                            defaultValue={
+                              statChange.value
+                                ? statChange.value.toString()
+                                : ''
+                            }
+                          />
+                        </div>
+                        <PortEditorRemoveButton
+                          onClick={this.removeStatChanges.bind(this, i)}
+                        />
+                      </li>
+                    ))
+                  ) : (
+                    <li>No Stats</li>
+                  )}
+                </ul>
+
+                <PortEditorFooter onClick={this.addStatChanges.bind(this)} />
               </div>
 
               <input id={`showif-${key}`} type="radio" name={`grp-${key}`} />
               <label htmlFor={`showif-${key}`}>Show If</label>
 
               <div className="flexDiv">
-                <table cellSpacing="10">
-                  <thead>
-                    <tr>
-                      <th>Item</th>
-                      <th>Has It?</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {showIfItems &&
-                      showIfItems.map((showIf, i) => (
-                        <tr key={i}>
-                          <td>
-                            <select
-                              value={showIf.name}
-                              onChange={this.selectShowIfItem.bind(this, i)}
-                            >
-                              <option key="-1"></option>
-                              {this.possibleItemModifiers(showIf.name).map(
-                                (item, i) => (
-                                  <option key={i} value={item}>
-                                    {item}
-                                  </option>
-                                )
-                              )}
-                            </select>
-                          </td>
-                          <td>
-                            <a onClick={this.toggleShowIfItem.bind(this, i)}>
-                              {showIf.hasIt ? '✔️' : 'X'}
-                            </a>
-                          </td>
-                          <td>
-                            <a onClick={this.removeShowIfItem.bind(this, i)}>
-                              ❌
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                  <tfoot>
-                    <a onClick={this.addShowIfItem.bind(this)}>➕</a>
-                  </tfoot>
-                </table>
-                <hr />
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Stat</th>
-                      <th> &gt; &lt;</th>
-                      <th> # </th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {showIfStats &&
-                      showIfStats.map((showIf, i) => (
-                        <tr key={i}>
-                          <td>
-                            <select
-                              value={showIf.name}
-                              onChange={this.selectShowIfStat.bind(this, i)}
-                            >
-                              <option key="-1"></option>
-                              {this.possibleStatModifiers(showIf.name).map(
-                                (item, i) => (
-                                  <option key={i} value={item}>
-                                    {item}
-                                  </option>
-                                )
-                              )}
-                            </select>
-                          </td>
-                          <td>
-                            <select
-                              value={showIf.operator}
-                              onChange={this.selectShowIfStatOperator.bind(
-                                this,
-                                i
-                              )}
-                            >
-                              <option key="-1"></option>
-                              {['<', '>', '≤', '≥'].map((item, i) => (
+                <PortEditorHeader>Add/Remove Item Conditions</PortEditorHeader>
+
+                <ul className="pe-list">
+                  {showIfItems && showIfItems.length > 0 ? (
+                    showIfItems.map((showIf, i) => (
+                      <li key={i}>
+                        <div>
+                          {console.log(showIf)}
+                          <label
+                            className="sr-only"
+                            htmlFor={`show-if-item-${deSpace(showIf.name)}`}
+                          >
+                            Item
+                          </label>
+                          <select
+                            id={`show-if-item-${deSpace(showIf.name)}`}
+                            value={showIf.name}
+                            onChange={this.selectShowIfItem.bind(this, i)}
+                          >
+                            <option key="-1"></option>
+                            {this.possibleItemModifiers(showIf.name).map(
+                              (item, i) => (
                                 <option key={i} value={item}>
                                   {item}
                                 </option>
-                              ))}
-                            </select>
-                          </td>
-                          <td>
-                            <input
-                              onBlur={this.setShowIfStatValue.bind(this, i)}
-                              defaultValue={
-                                showIf.value ? showIf.value.toString() : ''
-                              }
-                            />
-                          </td>
+                              )
+                            )}
+                          </select>
+                        </div>
+                        <div>
+                          <input
+                            id={`has-item-${deSpace(showIf.name)}`}
+                            type="checkbox"
+                            checked={showIf.hasIt}
+                            onChange={this.toggleShowIfItem.bind(this, i)}
+                          />
+                          <label htmlFor={`has-item-${deSpace(showIf.name)}`}>
+                            <span className="sr-only">Has it?</span>
+                          </label>
+                        </div>
+                        <PortEditorRemoveButton
+                          onClick={this.removeShowIfItem.bind(this, i)}
+                        />
+                      </li>
+                    ))
+                  ) : (
+                    <li>No item conditions</li>
+                  )}
+                </ul>
 
-                          <td>
-                            <a onClick={this.removeShowIfStat.bind(this, i)}>
-                              ❌
-                            </a>
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                  <tfoot>
-                    <a onClick={this.addShowIfStat.bind(this)}>➕</a>
-                  </tfoot>
-                </table>
+                <PortEditorFooter onClick={this.addShowIfItem.bind(this)} />
+                <hr />
+
+                <PortEditorHeader>Add/Remove Stat Conditions</PortEditorHeader>
+
+                <ul className="pe-list">
+                  {showIfStats && showIfStats.length > 0 ? (
+                    showIfStats.map((showIf, i) => (
+                      <li key={i}>
+                        <div>
+                          <label
+                            className="sr-only"
+                            htmlFor={`show-if-stat-${deSpace(showIf.name)}`}
+                          >
+                            Stat Name
+                          </label>
+                          <select
+                            id={`show-if-stat-${deSpace(showIf.name)}`}
+                            value={showIf.name}
+                            onChange={this.selectShowIfStat.bind(this, i)}
+                          >
+                            <option key="-1"></option>
+                            {this.possibleStatModifiers(showIf.name).map(
+                              (item, i) => (
+                                <option key={i} value={item}>
+                                  {item}
+                                </option>
+                              )
+                            )}
+                          </select>
+                        </div>
+                        <div>
+                          <label
+                            className="sr-only"
+                            htmlFor={`show-if-stat-condition-${deSpace(
+                              showIf.name
+                            )}`}
+                          >
+                            Condition
+                          </label>
+                          <select
+                            id={`show-if-stat-condition-${deSpace(
+                              showIf.name
+                            )}`}
+                            value={showIf.operator}
+                            onChange={this.selectShowIfStatOperator.bind(
+                              this,
+                              i
+                            )}
+                          >
+                            <option key="-1"></option>
+                            {['<', '>', '≤', '≥'].map((item, i) => (
+                              <option key={i} value={item}>
+                                {item}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div>
+                          <label
+                            className="sr-only"
+                            htmlFor={`show-if-stat-value-${deSpace(
+                              showIf.name
+                            )}`}
+                          >
+                            Condition
+                          </label>
+                          <input
+                            id={`show-if-stat-value-${deSpace(showIf.name)}`}
+                            onBlur={this.setShowIfStatValue.bind(this, i)}
+                            defaultValue={
+                              showIf.value ? showIf.value.toString() : ''
+                            }
+                          />
+                        </div>
+
+                        <PortEditorRemoveButton
+                          onClick={this.removeShowIfStat.bind(this, i)}
+                        />
+                      </li>
+                    ))
+                  ) : (
+                    <li>No Stat Conditions</li>
+                  )}
+                </ul>
+
+                <PortEditorFooter onClick={this.addShowIfStat.bind(this)} />
               </div>
             </>
           )}
@@ -339,8 +386,6 @@ class PortEditor extends React.Component<
   }
 
   toggleShowIfItem = (index: number, e: React.MouseEvent) => {
-    e.preventDefault()
-
     let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
     newShowIfItems[index].hasIt = !newShowIfItems[index].hasIt
 

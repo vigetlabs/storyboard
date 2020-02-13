@@ -52,12 +52,56 @@ input[type=radio]:checked + label + .flexDiv {
   height: 33px;
 }
 
+.pe-list input[type="checkbox"] {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0px;
+  position: absolute;
+  width: 1px;
+  height: auto;
+}
+
+.pe-list input[type="checkbox"] + label {
+  align-items: center;
+  background: none;
+  background: red;
+  border: none;
+  display: flex;
+  height: 33px;
+  justify-content: center;
+  padding: 0;
+  width: 33px;
+  border-radius: 5px;
+}
+
+.pe-list input[type="checkbox"] + label:after {
+  background: url(../images/x-icon.svg);
+  background-repeat: no-repeat;
+  background-size: contain;
+  content: '';
+  display: block;
+  height: 20px;
+  width: 20px;
+}
+
+.pe-list input[type="checkbox"]:checked + label {
+  background: var(--mkt-gold);
+}
+
+.pe-list input[type="checkbox"]:checked + label:after {
+  background: url(../images/check-icon.svg);
+}
+
 .pe-header {
   padding-bottom: 10px;
 }
 
 .pe-heading {
   text-align: center;
+  text-transform: uppercase;
 }
 
 .pe-list {
@@ -67,6 +111,7 @@ input[type=radio]:checked + label + .flexDiv {
 .pe-list li {
   display: flex;
   justify-content: center;
+  align-items: center;
   font-size: 16px;
 }
 
@@ -81,23 +126,67 @@ input[type=radio]:checked + label + .flexDiv {
 
 .pe-remove-btn {
   background: none;
-  border: none;
-  font-size: 16px;
+  background: red;
+  border-radius: 99999px;
+  border: 2px solid red;
+  flex-shrink: 0;
+  height: 20px;
+  margin-left: 5px;
   padding: 0;
+  position: relative;
+  width: 20px;
+}
+
+.pe-remove-btn::before {
+  background: white;
+  content: '';
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
 }
 
 .pe-footer {
-  padding: 20px 0;
   display: flex;
   justify-content: center;
+  padding: 20px 0;
 }
 
 .pe-add-btn {
   background: none;
-  border: none;
-  font-size: 16px;
-  width: 40px;
-  height: 40px;
-  border: 2px solid #afafaf;
+  background: var(--color-grey-button);
   border-radius: 99999px;
+  border: 2px solid var(--color-grey-button);
+  height: 40px;
+  position: relative;
+  width: 40px;
+}
+
+.pe-add-btn:hover {
+  background: var(--mkt-gold);
+  border-color: var(--mkt-gold);
+}
+
+.pe-add-btn::before,
+.pe-add-btn::after {
+  content: '';
+  display: block;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+}
+
+.pe-add-btn::before {
+  height: 4px;
+  width: 14px;
+}
+
+.pe-add-btn::after {
+  height: 14px;
+  width: 4px;
 }
