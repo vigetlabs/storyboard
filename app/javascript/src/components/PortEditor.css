@@ -14,10 +14,6 @@ section {
   flex-wrap: wrap;
 }
 
-/* table{
-  margin: 0 auto;
-} */
-
 label {
   background: #eee;
   border: 1px solid #ddd;
@@ -33,20 +29,6 @@ label {
   background: #fff;
   margin-bottom: 8px;
 }
-
-/* input[type=radio],
-.flexDiv {
-  display: none;
-}
-
-input[type=radio]:checked + label {
-  background: #fff;
-  border-bottom: 1px solid black;
-}
-
-input[type=radio]:checked + label + .flexDiv {
-  display: block;
-} */
 
 .pe-list select {
   height: 33px;
@@ -189,4 +171,29 @@ input[type=radio]:checked + label + .flexDiv {
 .pe-add-btn::after {
   height: 14px;
   width: 4px;
+}
+
+.pe-tabs {
+  display: flex;
+  align-items: flex-end;
+}
+
+.pe-tabs button {
+  background: #ddd;
+  border: 1px solid #ddd;
+  border-bottom: none;
+  border-left: none;
+  color: #3d4d4d;
+  font-size: 16px;
+  padding: 10px 20px;
+}
+
+.pe-tabs button:first-child {
+  border-left: 1px solid #ddd;
+}
+
+.pe-tabs button.pe-active-tab {
+  background: white;
+  padding-bottom: 13px;
+  padding-top: 13px;
 }
