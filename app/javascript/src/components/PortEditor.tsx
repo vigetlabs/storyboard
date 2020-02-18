@@ -59,7 +59,7 @@ class PortEditor extends React.Component<
     let { state, port } = props
 
     this.state = {
-      selectedTab: 'showif',
+      selectedTab: 'items',
       optionsOpen: false,
       thisPortMeta: clone(get(state, `portMeta.${port.id}`) || {})
     }
@@ -90,25 +90,25 @@ class PortEditor extends React.Component<
             <>
               <div className="pe-tabs">
                 <button
-                  className={selectedTab === 'showif' ? 'pe-active-tab' : ''}
-                  onClick={() => this.setSelectedTab('showif')}
-                >
-                  Show If
-                </button>
-                <button
-                  className={selectedTab === 'items' ? 'pe-active-tab' : ''}
+                  className={selectedTab === 'items' ? 'pe-active-tab' : 'pe-inactive-tab'}
                   onClick={() => this.setSelectedTab('items')}
                 >
                   Items
                 </button>
                 <button
-                  className={selectedTab === 'stats' ? 'pe-active-tab' : ''}
+                  className={selectedTab === 'stats' ? 'pe-active-tab' : 'pe-inactive-tab'}
                   onClick={() => this.setSelectedTab('stats')}
                 >
                   Stats
                 </button>
+                <button
+                  className={selectedTab === 'showif' ? 'pe-active-tab' : 'pe-inactive-tab'}
+                  onClick={() => this.setSelectedTab('showif')}
+                >
+                  Show If
+                </button>
               </div>
-              
+
               {selectedTab === 'items' && (
                 <div className="flexDiv">
                   <PortEditorHeader>Add/Remove Items</PortEditorHeader>
