@@ -197,3 +197,8 @@ label {
   padding-bottom: 13px;
   padding-top: 13px;
 }
+
+.pe-tabs button.pe-inactive-tab {
+  border: 1px solid #bdbdbd;
+  border-bottom: none;
+}
