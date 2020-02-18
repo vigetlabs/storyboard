@@ -67,7 +67,6 @@ class PortEditor extends React.Component<
 
   render() {
     const { port, removeChoice, updateChoice } = this.props
-    const key = port.id
 
     const {
       selectedTab,

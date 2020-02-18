@@ -3,7 +3,7 @@ class UpdatePortMetaForFancyModifiers < ActiveRecord::Migration[5.2]
     Adventure.find_each do |adventure|
       port_meta = adventure.content["portMeta"]
 
-      next if !port_meta
+      next if !port_meta.present?
 
       port_meta.each do |port_id, old_meta|
         new_meta = {}
@@ -37,6 +37,9 @@ class UpdatePortMetaForFancyModifiers < ActiveRecord::Migration[5.2]
 
         port_meta[port_id] = new_meta
       end
+
+      adventure.content["portMeta"] = port_meta
+      adventure.save!
     end
   end
 
