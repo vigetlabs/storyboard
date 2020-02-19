@@ -136,17 +136,17 @@ type SceneEditorTextAreaFieldProps = {
 }
 
 /**
- * 
+ *
  * New abstracted-out way of render react components for the text areas, since the Content and Notes areas are very similar
  */
 function SceneEditorTextAreaField({ name, title, defaultValue, placeholderText, instructionalText, onChange}: SceneEditorTextAreaFieldProps) {
   let inputRef: React.RefObject<HTMLTextAreaElement> = React.createRef()
 
-  
+
   React.useEffect(() => {
     if (inputRef.current) {
       $R(inputRef.current, {
-        buttons: ['format', 'bold', 'italic', 'lists'],
+        buttons: ['html', 'format', 'bold', 'italic', 'lists'],
         callbacks: {
           synced: (html: string) => onChange(html)
         }

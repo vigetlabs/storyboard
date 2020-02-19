@@ -85,3 +85,8 @@
 .SceneEditor .redactor-box.redactor-styles-on .redactor-toolbar {
   padding: 5px;
 }
+
+.redactor-toolbar a.re-button-icon, .redactor-air a.re-button-icon {
+  font-size: 16px;
+  padding: 9px 14px 6px;
+}
