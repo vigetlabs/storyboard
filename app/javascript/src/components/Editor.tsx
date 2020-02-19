@@ -61,21 +61,29 @@ class Editor extends React.Component<EditorProps, EditorState> {
     })
 
     document.onkeydown = e => {
-      e.preventDefault()
-
       if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key == 'z') {
         this.redo()
+        e.preventDefault()
       } else if ((e.metaKey || e.ctrlKey) && e.key == 'z') {
         this.undo()
+        e.preventDefault()
       }
     }
 
     setInterval(() => {
-      const newHistory = this.state.history.push(this.props.state)
-      this.setState({
-        ...this.state,
-        history: newHistory
-      })
+      let newHistory = clone(this.state.history)
+      let currentState = clone(this.serialize())
+
+      if (
+        JSON.stringify(currentState) !=
+        JSON.stringify(newHistory[newHistory.length - 1])
+      ) {
+        console.log('pushing new state!')
+        newHistory.push(currentState)
+        this.setState({ history: newHistory })
+      } else {
+        console.log('skip')
+      }
     }, 1000)
   }
 
