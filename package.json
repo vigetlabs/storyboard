@@ -21,6 +21,9 @@
   "devDependencies": {
     "webpack-dev-server": "^3.1.11"
   },
+  "scripts": {
+    "start": "./bin/webpack-dev-server"
+  },
   "resolutions": {
     "browserslist": "4.6.2",
     "caniuse-lite": "1.0.30000974"

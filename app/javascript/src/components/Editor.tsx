@@ -24,6 +24,7 @@ interface EditorState {
   ready: boolean
   selected: string | null
   saving: boolean
+  history: ApplicationState[]
 }
 
 interface EditorProps {
@@ -43,11 +44,13 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.state = {
       ready: false,
       selected: null,
-      saving: false
+      saving: false,
+      history: []
     }
     this.engine = new DiagramEngine()
     this.engine.installDefaultFactories()
 
+    console.log(this.props.state)
     this.updateStory(this.props.state.story)
     this.lastSavedState = clone(this.serialize())
   }
@@ -56,6 +59,24 @@ class Editor extends React.Component<EditorProps, EditorState> {
     setTimeout(() => {
       this.setState({ ready: true })
     })
+
+    document.onkeydown = e => {
+      e.preventDefault()
+
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key == 'z') {
+        this.redo()
+      } else if ((e.metaKey || e.ctrlKey) && e.key == 'z') {
+        this.undo()
+      }
+    }
+
+    setInterval(() => {
+      const newHistory = this.state.history.push(this.props.state)
+      this.setState({
+        ...this.state,
+        history: newHistory
+      })
+    }, 1000)
   }
 
   componentDidUpdate({ state: { story } }: EditorProps) {
@@ -115,8 +136,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
             </label>
 
             <div className="EditorButton -zooms">
-              <button onClick={() => this.setZoom(-1)}>-</button>
+              <button onClick={() => this.undo()}>U</button>
+              <button onClick={() => this.redo()}>R</button>
+            </div>
 
+            <div className="EditorButton -zooms">
+              <button onClick={() => this.setZoom(-1)}>-</button>
               <button onClick={() => this.setZoom(1)}>+</button>
             </div>
           </menu>
@@ -159,6 +184,14 @@ class Editor extends React.Component<EditorProps, EditorState> {
         {this.state.saving ? 'Saving...' : 'Save'}
       </button>
     )
+  }
+
+  private undo() {
+    console.log('undo')
+  }
+
+  private redo() {
+    console.log('redo')
   }
 
   private setZoom = (direction: number) => {
@@ -332,6 +365,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
 
     const saveStart = Date.now()
+
     const newState = this.serialize()
     const noChange =
       JSON.stringify(newState) === JSON.stringify(this.lastSavedState)
