@@ -10,7 +10,10 @@ import '../src/css/default/ThemeDark.css'
 // data from a variable rendered by the server if we don't reload we don't
 // get up to date data.  This is a workaround for that issue.
 // More info: https://stackoverflow.com/a/42063482/1153149
-window.addEventListener("pageshow", (e) => {
-  if (e.persisted || window.performance && window.performance.navigation.type === 2)
+window.addEventListener('pageshow', e => {
+  if (
+    e.persisted ||
+    (window.performance && window.performance.navigation.type === 2)
+  )
     location.reload(true)
 })

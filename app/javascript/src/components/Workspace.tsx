@@ -56,7 +56,7 @@ export default class Workspace extends React.Component<WorkspaceProps> {
 
   maybySaveStory = () => {
     if (!this.isMouseDown) {
-      this.props.saveStory({force: false})
+      this.props.saveStory({ force: false })
     }
   }
 }

@@ -13,7 +13,7 @@ export interface ApplicationState {
 export interface MetaData {
   [id: string]: {
     title: string
-    text: string,
+    text: string
     notes: string
   }
 }
@@ -42,13 +42,13 @@ export interface ShowIfStat {
 
 export interface ItemChange {
   name: string
-  action: "add" | "remove"
+  action: 'add' | 'remove'
 }
 
 export interface StatChange {
-  name: string,
-  value: number,
-  action: "+" | "-"
+  name: string
+  value: number
+  action: '+' | '-'
 }
 
 const applicationState: ApplicationState = {
@@ -77,7 +77,7 @@ interface Props {
 export class ApplicationComponent extends React.Component<
   Props,
   ApplicationState
-  > {
+> {
   static defaultProps = {
     story: seed.story,
     meta: seed.meta

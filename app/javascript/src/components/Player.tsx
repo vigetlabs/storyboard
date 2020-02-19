@@ -10,7 +10,14 @@ import {
 
 import './Player.css'
 
-import { MetaData, PortMeta, ShowIfItem, ItemChange, ShowIfStat, StatChange } from '../Store'
+import {
+  MetaData,
+  PortMeta,
+  ShowIfItem,
+  ItemChange,
+  ShowIfStat,
+  StatChange
+} from '../Store'
 import { PlayerIntro } from './PlayerIntro'
 import { PlayerInvalid } from './PlayerInvalid'
 import { PlayerEnd, PlayerDeadEnd } from './PlayerEnd'
@@ -149,7 +156,10 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
   private showIfItem(port: DefaultPortModel): boolean {
     const { currentItems } = this.state
-    const showIfItems: ShowIfItem[] = get(this.props.portMeta as any, `${port.id}.showIfItems`)
+    const showIfItems: ShowIfItem[] = get(
+      this.props.portMeta as any,
+      `${port.id}.showIfItems`
+    )
 
     // If no data set, show the option
     if (!showIfItems) return true
@@ -171,10 +181,11 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return true
   }
 
-
-
   private showIfStat(port: DefaultPortModel): boolean {
-    const showIfStats: ShowIfStat[] = get(this.props.portMeta as any, `${port.id}.showIfStats`)
+    const showIfStats: ShowIfStat[] = get(
+      this.props.portMeta as any,
+      `${port.id}.showIfStats`
+    )
 
     // If no data set, show the option
     if (!showIfStats) return true
@@ -187,13 +198,13 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
       // Performs the various operations on the two numbers
       switch (showIf.operator) {
-        case "<":
+        case '<':
           return Number(currentStat.value) < Number(showIf.value)
-        case "≤":
+        case '≤':
           return Number(currentStat.value) <= Number(showIf.value)
-        case ">":
+        case '>':
           return Number(currentStat.value) > Number(showIf.value)
-        case "≥":
+        case '≥':
           return Number(currentStat.value) >= Number(showIf.value)
       }
     }
@@ -254,14 +265,16 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   private makeChoice(port: DefaultPortModel, event: Event) {
     event.preventDefault()
 
-    const itemChanges: ItemChange[] = get(this.props.portMeta as any, `${port.id}.itemChanges`) || []
-    const statChanges: StatChange[] = get(this.props.portMeta as any, `${port.id}.statChanges`) || []
+    const itemChanges: ItemChange[] =
+      get(this.props.portMeta as any, `${port.id}.itemChanges`) || []
+    const statChanges: StatChange[] =
+      get(this.props.portMeta as any, `${port.id}.statChanges`) || []
 
     let newItems = clone(this.state.currentItems)
     let newStats = clone(this.state.currentStats)
 
     itemChanges.forEach(change => {
-      if (change.action === "add") {
+      if (change.action === 'add') {
         // Add item if it isn't in the set already
         if (newItems.indexOf(change.name) === -1) {
           newItems.push(change.name)
@@ -276,23 +289,26 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     })
 
     statChanges.forEach(change => {
-      let indexOfStat = (newStats.findIndex((obj: Stat) => {
+      let indexOfStat = newStats.findIndex((obj: Stat) => {
         return obj.name === change.name
-      }))
+      })
 
       // Need to add it to the list of stats
       if (indexOfStat === -1) {
-        let curStat: Stat = { name: change.name, value: change.action === "+" ? change.value : change.value * -1 }
+        let curStat: Stat = {
+          name: change.name,
+          value: change.action === '+' ? change.value : change.value * -1
+        }
         newStats.push(curStat)
-      }
-      else {
-        if (change.action === "+") {
+      } else {
+        if (change.action === '+') {
           // Add it to the total if it already exists
-          newStats[indexOfStat].value = Number(newStats[indexOfStat].value) + Number(change.value)
-
+          newStats[indexOfStat].value =
+            Number(newStats[indexOfStat].value) + Number(change.value)
         } else {
           // Subtract it from the total
-          newStats[indexOfStat].value = Number(newStats[indexOfStat].value) - Number(change.value)
+          newStats[indexOfStat].value =
+            Number(newStats[indexOfStat].value) - Number(change.value)
         }
       }
     })
@@ -309,12 +325,15 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     }
     let nextNode = this.getRandom(targetNodes) || 'empty'
 
-    this.setState({
-      lastFocus: this.state.focus,
-      focus: nextNode,
-      currentItems: newItems,
-      currentStats: newStats
-    }, this.resetScroll)
+    this.setState(
+      {
+        lastFocus: this.state.focus,
+        focus: nextNode,
+        currentItems: newItems,
+        currentStats: newStats
+      },
+      this.resetScroll
+    )
   }
 
   private translate(text: string) {

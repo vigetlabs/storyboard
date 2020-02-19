@@ -21,8 +21,6 @@ interface SceneEditorProps {
 }
 
 class SceneEditor extends React.Component<SceneEditorProps> {
-
-
   render() {
     const { state, focus, requestPaint } = this.props
 
@@ -32,7 +30,9 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     return (
       <aside className="SceneEditor" onKeyUp={this.trapKeys}>
         <div className="SceneEditorField">
-          <label className="SceneEditorHeading" htmlFor="title">Name</label>
+          <label className="SceneEditorHeading" htmlFor="title">
+            Name
+          </label>
           <input
             name="title"
             defaultValue={focus.name}
@@ -47,7 +47,6 @@ class SceneEditor extends React.Component<SceneEditorProps> {
           placeholderText=""
           instructionalText=""
           onChange={this.onChangeContent}
-
         />
         <div className="SceneEditorField">
           <h3 className="SceneEditorHeading">Choices</h3>
@@ -66,7 +65,6 @@ class SceneEditor extends React.Component<SceneEditorProps> {
       </aside>
     )
   }
-
 
   onChangeContent = (html: string) => {
     const { focus, state, updateState } = this.props
@@ -127,11 +125,11 @@ export default ({ focus, requestPaint, onClear }: ConsumerProps) => {
 }
 
 type SceneEditorTextAreaFieldProps = {
-  name: string,
-  title: string,
-  defaultValue: string,
-  placeholderText: string,
-  instructionalText: string,
+  name: string
+  title: string
+  defaultValue: string
+  placeholderText: string
+  instructionalText: string
   onChange: (arg0: string) => void
 }
 
@@ -139,9 +137,15 @@ type SceneEditorTextAreaFieldProps = {
  *
  * New abstracted-out way of render react components for the text areas, since the Content and Notes areas are very similar
  */
-function SceneEditorTextAreaField({ name, title, defaultValue, placeholderText, instructionalText, onChange}: SceneEditorTextAreaFieldProps) {
+function SceneEditorTextAreaField({
+  name,
+  title,
+  defaultValue,
+  placeholderText,
+  instructionalText,
+  onChange
+}: SceneEditorTextAreaFieldProps) {
   let inputRef: React.RefObject<HTMLTextAreaElement> = React.createRef()
-
 
   React.useEffect(() => {
     if (inputRef.current) {
@@ -156,8 +160,15 @@ function SceneEditorTextAreaField({ name, title, defaultValue, placeholderText, 
 
   return (
     <div className="SceneEditorField">
-      <label className="SceneEditorHeading" htmlFor={name}>{title}</label>
-      <textarea placeholder={placeholderText} name={name} ref={inputRef} defaultValue={defaultValue} />
+      <label className="SceneEditorHeading" htmlFor={name}>
+        {title}
+      </label>
+      <textarea
+        placeholder={placeholderText}
+        name={name}
+        ref={inputRef}
+        defaultValue={defaultValue}
+      />
       <p>{instructionalText}</p>
     </div>
   )
