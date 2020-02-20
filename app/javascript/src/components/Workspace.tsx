@@ -3,6 +3,8 @@ import * as React from 'react'
 interface WorkspaceProps {
   onClear: () => void
   onRelease: () => void
+  onCopy: () => void
+  onPaste: () => void
   saveStory: (opts: {}) => void
 }
 
@@ -22,9 +24,11 @@ export default class Workspace extends React.Component<WorkspaceProps> {
     return (
       <div
         className="EditorWorkspace"
+        tabIndex={0}
         onMouseUp={this.releaseMouse}
         onMouseDown={this.pressMouse}
         onMouseMove={this.dragMouse}
+        onKeyDown={this.handleKeyPress}
       >
         {this.props.children}
       </div>
@@ -52,6 +56,24 @@ export default class Workspace extends React.Component<WorkspaceProps> {
 
     this.isDragging =
       this.isMouseDown && now.valueOf() - this.mouseDown.valueOf() > 150
+  }
+
+  handleKeyPress = (event: any) => {
+    if((event.ctrlKey || event.metaKey) && event.keyCode == 67)
+        this.handleCopy()
+    if((event.ctrlKey || event.metaKey) && event.keyCode == 86)
+        this.handlePaste()
+  }
+
+  handleCopy = () => {
+    console.log("Copying all selected attributes...")
+    this.props.onCopy()
+  }
+
+  handlePaste = () => {
+    console.log("Pasting all selected attributes...")
+    this.props.onPaste()
+
   }
 
   maybySaveStory = () => {

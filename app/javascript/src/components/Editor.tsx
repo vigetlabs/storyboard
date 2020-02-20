@@ -19,6 +19,7 @@ import './FlowChart.css'
 import { StateConsumer, ApplicationState } from '../Store'
 import { save } from '../persistance'
 import { clone } from '../clone'
+import * as _ from 'lodash'
 
 interface EditorState {
   ready: boolean
@@ -35,6 +36,8 @@ interface EditorProps {
 class Editor extends React.Component<EditorProps, EditorState> {
   engine: DiagramEngine
   model: DiagramModel
+  copiedNodes: DefaultNodeModel[]
+  copiedLinks: DefaultLinkModel[]
   lastSavedState: ApplicationState
 
   constructor(props: EditorProps) {
@@ -97,6 +100,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
           onClear={this.clearSelection}
           onRelease={this.eventuallyForceUpdate}
           saveStory={this.saveStory}
+          onCopy={this.onCopy}
+          onPaste={this.onPaste}
         >
           <menu className="EditorTools">
             {viewOnly ? null : this.renderAddScene()}
@@ -361,6 +366,53 @@ class Editor extends React.Component<EditorProps, EditorState> {
         this.setState({ saving: false })
       }, timeLeft)
     }
+  }
+
+  private onCopy = () => {
+    const selectedNodes = this.model.getSelectedItems().filter(item => {
+      return item instanceof DefaultNodeModel
+    }) as DefaultNodeModel[]
+    const selectedLinks = this.model.getSelectedItems().filter(item => {
+      return item instanceof DefaultLinkModel
+    }) as DefaultLinkModel[]
+    this.copiedLinks = selectedLinks
+    this.copiedNodes = selectedNodes
+  }
+
+  private onPaste = () => {
+    for (let node of this.copiedNodes) {
+      this.createCopiedNode(node)
+    }
+    this.repaint()
+  }
+
+  private createCopiedNode = (nodeToCopy: DefaultNodeModel) => {
+    let node = _.cloneDeep(nodeToCopy)
+    let workspace = document.getElementsByClassName('EditorWorkspace')[0]
+    let clientWidth = workspace.clientWidth * 0.4
+    let clientHeight = workspace.clientHeight * 0.75
+
+    let zoomModifier = 100 / this.model.zoom
+    let targetX =
+      (clientWidth + this.rand(100) - this.model.offsetX) * zoomModifier
+    let targetY =
+      (clientHeight + this.rand(100) - this.model.offsetY) * zoomModifier
+
+    node.parent = new DiagramModel()
+    node.id = node.parent.id
+
+    node.setPosition(targetX, targetY)
+    node.addInPort('In')
+    node.color = '#ffeb3b'
+
+    this.watchNode(node)
+
+    this.model.addNode(node)
+
+    this.model.clearSelection()
+    node.selected = true
+
+
   }
 
   private calculateNodeColors = () => {
