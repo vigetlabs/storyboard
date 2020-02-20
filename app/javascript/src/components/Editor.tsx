@@ -370,18 +370,16 @@ class Editor extends React.Component<EditorProps, EditorState> {
   private onCopy = () => {
     const selectedNodes = this.model.getSelectedItems().filter(item => {
       return item instanceof DefaultNodeModel
-    })
+    }) as DefaultNodeModel[]
     const selectedLinks = this.model.getSelectedItems().filter(item => {
       return item instanceof DefaultLinkModel
-    })
-    console.log(selectedNodes)
-    console.log(selectedLinks)
-    // this.copiedLinks = selectedLinks
-    console.log(this.model)
+    }) as DefaultLinkModel[]
+    this.copiedLinks = selectedLinks
+    this.copiedNodes = selectedNodes
   }
 
   private onPaste = () => {
-    alert("hello! Paste")
+
 
   }
 
