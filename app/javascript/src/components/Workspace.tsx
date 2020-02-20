@@ -3,6 +3,8 @@ import * as React from 'react'
 interface WorkspaceProps {
   onClear: () => void
   onRelease: () => void
+  onCopy: () => void
+  onPaste: () => void
   saveStory: (opts: {}) => void
 }
 
@@ -65,10 +67,13 @@ export default class Workspace extends React.Component<WorkspaceProps> {
 
   handleCopy = () => {
     console.log("Copying all selected attributes...")
+    this.props.onCopy()
   }
 
   handlePaste = () => {
     console.log("Pasting all selected attributes...")
+    this.props.onPaste()
+
   }
 
   maybySaveStory = () => {

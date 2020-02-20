@@ -35,6 +35,8 @@ interface EditorProps {
 class Editor extends React.Component<EditorProps, EditorState> {
   engine: DiagramEngine
   model: DiagramModel
+  copiedNodes: DefaultNodeModel[]
+  copiedLinks: DefaultLinkModel[]
   lastSavedState: ApplicationState
 
   constructor(props: EditorProps) {
@@ -97,6 +99,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
           onClear={this.clearSelection}
           onRelease={this.eventuallyForceUpdate}
           saveStory={this.saveStory}
+          onCopy={this.onCopy}
+          onPaste={this.onPaste}
         >
           <menu className="EditorTools">
             {viewOnly ? null : this.renderAddScene()}
@@ -361,6 +365,24 @@ class Editor extends React.Component<EditorProps, EditorState> {
         this.setState({ saving: false })
       }, timeLeft)
     }
+  }
+
+  private onCopy = () => {
+    const selectedNodes = this.model.getSelectedItems().filter(item => {
+      return item instanceof DefaultNodeModel
+    })
+    const selectedLinks = this.model.getSelectedItems().filter(item => {
+      return item instanceof DefaultLinkModel
+    })
+    console.log(selectedNodes)
+    console.log(selectedLinks)
+    // this.copiedLinks = selectedLinks
+    console.log(this.model)
+  }
+
+  private onPaste = () => {
+    alert("hello! Paste")
+
   }
 
   private calculateNodeColors = () => {
