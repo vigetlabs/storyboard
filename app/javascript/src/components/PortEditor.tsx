@@ -270,7 +270,6 @@ class PortEditor extends React.Component<
                               value={showIf.name}
                               onChange={this.selectShowIfItem.bind(this, i)}
                             >
-                              <option key="-1"></option>
                               {this.possibleItemModifiers(showIf.name).map(
                                 (item, i) => (
                                   <option key={i} value={item}>
@@ -324,7 +323,6 @@ class PortEditor extends React.Component<
                               value={showIf.name}
                               onChange={this.selectShowIfStat.bind(this, i)}
                             >
-                              <option key="-1"></option>
                               {this.possibleStatModifiers(showIf.name).map(
                                 (item, i) => (
                                   <option key={i} value={item}>
@@ -353,8 +351,7 @@ class PortEditor extends React.Component<
                                 i
                               )}
                             >
-                              <option key="-1"></option>
-                              {['<', '>', '≤', '≥', '=', '!='].map(
+                              {['>', '<', '≥', '≤', '=', '!='].map(
                                 (item, i) => (
                                   <option key={i} value={item}>
                                     {item}
