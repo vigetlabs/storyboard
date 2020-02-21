@@ -380,8 +380,14 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private onPaste = () => {
+    for (let node of this.copiedNodes) {
+      this.createCopiedNode(node)
+    }
+    this.repaint()
+  }
 
-    let node = _.cloneDeep(this.copiedNodes[0])
+  private createCopiedNode = (nodeToCopy: DefaultNodeModel) => {
+    let node = _.cloneDeep(nodeToCopy)
     let workspace = document.getElementsByClassName('EditorWorkspace')[0]
     let clientWidth = workspace.clientWidth * 0.4
     let clientHeight = workspace.clientHeight * 0.75
@@ -406,7 +412,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.model.clearSelection()
     node.selected = true
 
-    this.repaint()
+
   }
 
   private calculateNodeColors = () => {
