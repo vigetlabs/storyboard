@@ -213,6 +213,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           return Number(currentStat.value) >= Number(showIf.value)
         case '=':
           return Number(currentStat.value) == Number(showIf.value)
+        case '!=':
+          return Number(currentStat.value) != Number(showIf.value)
       }
     }
 
