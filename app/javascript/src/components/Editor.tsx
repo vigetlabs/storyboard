@@ -19,6 +19,7 @@ import './FlowChart.css'
 import { StateConsumer, ApplicationState } from '../Store'
 import { save } from '../persistance'
 import { clone } from '../clone'
+import * as _ from 'lodash'
 
 interface EditorState {
   ready: boolean
@@ -379,8 +380,33 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private onPaste = () => {
+    // serialize
+    let node = _.cloneDeep(this.copiedNodes[0])
+    let workspace = document.getElementsByClassName('EditorWorkspace')[0]
+    let clientWidth = workspace.clientWidth * 0.4
+    let clientHeight = workspace.clientHeight * 0.75
 
+    let zoomModifier = 100 / this.model.zoom
+    let targetX =
+      (clientWidth + this.rand(100) - this.model.offsetX) * zoomModifier
+    let targetY =
+      (clientHeight + this.rand(100) - this.model.offsetY) * zoomModifier
 
+    node.parent = new DiagramModel()
+    node.id = "19239192030ABCDE"
+
+    node.setPosition(targetX, targetY)
+    node.addInPort('In')
+    node.color = '#ffeb3b'
+
+    this.watchNode(node)
+
+    this.model.addNode(node)
+
+    this.model.clearSelection()
+    node.selected = true
+
+    this.repaint()
   }
 
   private calculateNodeColors = () => {
