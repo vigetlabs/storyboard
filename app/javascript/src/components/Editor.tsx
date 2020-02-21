@@ -380,7 +380,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private onPaste = () => {
-    // serialize
+
     let node = _.cloneDeep(this.copiedNodes[0])
     let workspace = document.getElementsByClassName('EditorWorkspace')[0]
     let clientWidth = workspace.clientWidth * 0.4
@@ -393,7 +393,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       (clientHeight + this.rand(100) - this.model.offsetY) * zoomModifier
 
     node.parent = new DiagramModel()
-    node.id = "19239192030ABCDE"
+    node.id = node.parent.id
 
     node.setPosition(targetX, targetY)
     node.addInPort('In')
