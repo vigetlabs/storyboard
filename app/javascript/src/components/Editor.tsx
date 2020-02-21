@@ -380,24 +380,22 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private onPaste = () => {
+    this.model.clearSelection()
     for (let node of this.copiedNodes) {
-      this.createCopiedNode(node)
+      // the 100 is a temporary offset value. Can make a global constant or two, or have a smarter way of calc'ing
+      this.createCopiedNode(node, node.x+100, node.y+100)
     }
     this.repaint()
   }
 
-  private createCopiedNode = (nodeToCopy: DefaultNodeModel) => {
+  private createCopiedNode = (nodeToCopy: DefaultNodeModel, targetX: Number, targetY: Number) => {
     let node = _.cloneDeep(nodeToCopy)
-    let workspace = document.getElementsByClassName('EditorWorkspace')[0]
-    let clientWidth = workspace.clientWidth * 0.4
-    let clientHeight = workspace.clientHeight * 0.75
 
-    let zoomModifier = 100 / this.model.zoom
-    let targetX =
-      (clientWidth + this.rand(100) - this.model.offsetX) * zoomModifier
-    let targetY =
-      (clientHeight + this.rand(100) - this.model.offsetY) * zoomModifier
-
+    // Cleanup dangling references from the copied items
+    node.clearListeners()
+    Object.keys(node.getPorts()).forEach(function (key) {
+      node.removePort(node.getPorts()[key])
+    })
     node.parent = new DiagramModel()
     node.id = node.parent.id
 
@@ -408,10 +406,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.watchNode(node)
 
     this.model.addNode(node)
-
-    this.model.clearSelection()
     node.selected = true
-
 
   }
 
