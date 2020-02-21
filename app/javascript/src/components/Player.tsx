@@ -106,11 +106,16 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     }
 
     let meta = this.props.meta[focus] || { text: '' }
+    let translatedText = this.translate(meta.text)
     let choices = this.ports(node)
 
     if (choices.length <= 0) {
       return (
-        <PlayerEnd title={node.name} body={meta.text} onReplay={this.restart} />
+        <PlayerEnd
+          title={node.name}
+          body={translatedText}
+          onReplay={this.restart}
+        />
       )
     }
 
@@ -122,7 +127,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           <div className="PlayerSceneContent">
             <div
               className="PlayerSceneBody"
-              dangerouslySetInnerHTML={{ __html: this.translate(meta.text) }}
+              dangerouslySetInnerHTML={{ __html: translatedText }}
             />
             {this.renderChoices(node)}
           </div>
