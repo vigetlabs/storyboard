@@ -354,7 +354,7 @@ class PortEditor extends React.Component<
                               )}
                             >
                               <option key="-1"></option>
-                              {['<', '>', '≤', '≥'].map((item, i) => (
+                              {['<', '>', '≤', '≥', '='].map((item, i) => (
                                 <option key={i} value={item}>
                                   {item}
                                 </option>
