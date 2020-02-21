@@ -393,14 +393,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
     // Cleanup dangling references from the copied items
     node.clearListeners()
-    Object.keys(node.getPorts()).forEach(function (key) {
-      node.removePort(node.getPorts()[key])
-    })
+    this.copyPorts(node)
+
     node.parent = new DiagramModel()
     node.id = node.parent.id
 
     node.setPosition(targetX, targetY)
-    node.addInPort('In')
     node.color = '#ffeb3b'
 
     this.watchNode(node)
@@ -408,6 +406,21 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.model.addNode(node)
     node.selected = true
 
+  }
+
+  private copyPorts = (node: DefaultNodeModel) => {
+    Object.keys(node.getPorts()).forEach(function (key) {
+      let oldPort = node.getPorts()[key]
+      let newPort = _.cloneDeep(oldPort)
+
+      node.removePort(oldPort)
+
+      Object.keys(newPort.getLinks()).forEach(function (key) {
+        newPort.removeLink(newPort.getLinks()[key])
+      })
+
+      node.addPort(newPort)
+    })
   }
 
   private calculateNodeColors = () => {
