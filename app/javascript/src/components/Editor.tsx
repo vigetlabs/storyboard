@@ -7,7 +7,8 @@ import {
   DefaultNodeModel,
   DefaultPortModel,
   DiagramWidget,
-  NodeModel
+  NodeModel,
+  PointModel
 } from 'storm-react-diagrams'
 
 import SceneEditor from './SceneEditor'
@@ -20,6 +21,10 @@ import { StateConsumer, ApplicationState } from '../Store'
 import { save } from '../persistance'
 import { clone } from '../clone'
 import * as _ from 'lodash'
+import { link } from 'fs'
+import { node } from 'prop-types'
+
+let offset = 100
 
 interface EditorState {
   ready: boolean
@@ -37,7 +42,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
   engine: DiagramEngine
   model: DiagramModel
   copiedNodes: DefaultNodeModel[]
+  pastedNodes: DefaultNodeModel[]
   copiedLinks: DefaultLinkModel[]
+  pastedLinks: DefaultLinkModel[]
   lastSavedState: ApplicationState
 
   constructor(props: EditorProps) {
@@ -369,50 +376,134 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private onCopy = () => {
-    const selectedNodes = this.model.getSelectedItems().filter(item => {
+    const { model } = this
+
+    const selectedNodes = model.getSelectedItems().filter(item => {
       return item instanceof DefaultNodeModel
     }) as DefaultNodeModel[]
     const selectedLinks = this.model.getSelectedItems().filter(item => {
       return item instanceof DefaultLinkModel
     }) as DefaultLinkModel[]
+
     this.copiedLinks = selectedLinks
     this.copiedNodes = selectedNodes
+    this.pastedNodes = []
+    this.pastedLinks = []
   }
 
   private onPaste = () => {
-    for (let node of this.copiedNodes) {
-      this.createCopiedNode(node)
+    const { copiedNodes, model, pastedNodes, pastedLinks, copiedLinks } = this
+
+    model.clearSelection()
+
+    for (let node of copiedNodes) {
+      let copiedNode = this.createCopiedNode(
+        node,
+        node.x + offset,
+        node.y + offset
+      )
+      if (copiedNode) {
+        pastedNodes.push(copiedNode)
+      }
+    }
+    for (let link of copiedLinks) {
+      let copiedLink = this.createCopiedLink(link)
+      if (copiedLink) {
+        pastedLinks.push(copiedLink)
+      }
+    }
+
+    for (let node of pastedNodes) {
+      model.addNode(node)
+    }
+    for (let link of pastedLinks) {
+      model.addLink(link)
     }
     this.repaint()
   }
 
-  private createCopiedNode = (nodeToCopy: DefaultNodeModel) => {
+  private getRelatedNodes = (oldLink: DefaultLinkModel) => {
+    const { copiedNodes, pastedNodes } = this
+
+    let ret = []
+    for (let node of copiedNodes) {
+      for (let outPort of node.getOutPorts()) {
+        if (outPort === oldLink.getSourcePort()) {
+          ret.push(pastedNodes[copiedNodes.indexOf(node)])
+        }
+      }
+      for (let inPort of node.getInPorts()) {
+        if (inPort === oldLink.getTargetPort()) {
+          ret.push(pastedNodes[copiedNodes.indexOf(node)])
+        }
+      }
+    }
+    // Returns the array with the first element being the source, and second being the target
+    return ret
+  }
+
+  private createCopiedLink = (link: DefaultLinkModel) => {
+    let copiedLink = new DefaultLinkModel()
+    let relatedNodes = this.getRelatedNodes(link)
+    if (relatedNodes.length < 2) {
+      // The user copied one or more danging links (i.e. links that don't have a source and target port)
+      return
+    }
+    // Sets the source/destination of the link, and adds the link to the related nodes
+    let sourcePort = relatedNodes[0].getOutPorts()[0]
+    let targetPort = relatedNodes[1].getInPorts()[0]
+
+    copiedLink.sourcePort = sourcePort
+    copiedLink.targetPort = targetPort
+    // These lines below seem redundant, but removing them causes the pasted link(s) not to move with the rest of the objects until page reload
+    sourcePort.addLink(copiedLink)
+    targetPort.addLink(copiedLink)
+
+    for (let point of copiedLink.getPoints()) {
+      // Ensures the link moves with nodes visually
+      point.x =
+        link.getPoints()[copiedLink.getPoints().indexOf(point)].x + offset
+      point.y =
+        link.getPoints()[copiedLink.getPoints().indexOf(point)].y + offset
+    }
+
+    copiedLink.selected = true
+    return copiedLink
+  }
+
+  private createCopiedNode = (
+    nodeToCopy: DefaultNodeModel,
+    targetX: Number,
+    targetY: Number
+  ) => {
     let node = _.cloneDeep(nodeToCopy)
-    let workspace = document.getElementsByClassName('EditorWorkspace')[0]
-    let clientWidth = workspace.clientWidth * 0.4
-    let clientHeight = workspace.clientHeight * 0.75
 
-    let zoomModifier = 100 / this.model.zoom
-    let targetX =
-      (clientWidth + this.rand(100) - this.model.offsetX) * zoomModifier
-    let targetY =
-      (clientHeight + this.rand(100) - this.model.offsetY) * zoomModifier
-
+    // Cleanup dangling references from the copied items
+    node.clearListeners()
+    this.copyPorts(node)
     node.parent = new DiagramModel()
     node.id = node.parent.id
 
+    // Set attributes of this new scene
     node.setPosition(targetX, targetY)
-    node.addInPort('In')
     node.color = '#ffeb3b'
-
     this.watchNode(node)
-
-    this.model.addNode(node)
-
-    this.model.clearSelection()
     node.selected = true
 
+    return node
+  }
 
+  private copyPorts = (node: DefaultNodeModel) => {
+    Object.keys(node.getPorts()).forEach(function(key) {
+      let oldPort = node.getPorts()[key] as DefaultPortModel
+      let newPort = new DefaultPortModel(
+        oldPort.in,
+        oldPort.getName(),
+        oldPort.label
+      )
+      node.removePort(oldPort)
+      node.addPort(newPort)
+    })
   }
 
   private calculateNodeColors = () => {
