@@ -201,20 +201,23 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         return obj.name === showIf.name
       })[0]
 
+      let currentValue = currentStat ? Number(currentStat.value) : 0
+      let targetValue = Number(showIf.value)
+
       // Performs the various operations on the two numbers
       switch (showIf.operator) {
         case '<':
-          return Number(currentStat.value) < Number(showIf.value)
+          return currentValue < targetValue
         case '≤':
-          return Number(currentStat.value) <= Number(showIf.value)
+          return currentValue <= targetValue
         case '>':
-          return Number(currentStat.value) > Number(showIf.value)
+          return currentValue > targetValue
         case '≥':
-          return Number(currentStat.value) >= Number(showIf.value)
+          return currentValue >= targetValue
         case '=':
-          return Number(currentStat.value) == Number(showIf.value)
+          return currentValue == targetValue
         case '!=':
-          return Number(currentStat.value) != Number(showIf.value)
+          return currentValue != targetValue
       }
     }
 
