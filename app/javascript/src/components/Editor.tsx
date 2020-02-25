@@ -23,6 +23,8 @@ import { clone } from '../clone'
 import * as _ from 'lodash'
 import { link } from 'fs'
 
+let offset = 100;
+
 interface EditorState {
   ready: boolean
   selected: string | null
@@ -379,6 +381,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     const selectedLinks = this.model.getSelectedItems().filter(item => {
       return item instanceof DefaultLinkModel
     }) as DefaultLinkModel[]
+
     this.copiedLinks = selectedLinks
     this.copiedNodes = selectedNodes
     this.pastedNodes = []
@@ -389,13 +392,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.model.clearSelection()
 
     for (let node of this.copiedNodes) {
-      // the 100 is a temporary offset value. Can make a global constant or two, or have a smarter way of calc'ing
-      let copiedNode = this.createCopiedNode(node, node.x+100, node.y+100)
-      this.pastedNodes.push(copiedNode)
+      let copiedNode = this.createCopiedNode(node, node.x + offset, node.y  + offset)
+      if (copiedNode) {
+        this.pastedNodes.push(copiedNode)
+      }
     }
-
     for (let link of this.copiedLinks) {
-      console.log(link)
       let copiedLink = this.createCopiedLink(link)
       if (copiedLink) {
         this.pastedLinks.push(copiedLink)
@@ -411,7 +413,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.repaint()
   }
 
-  private getRelatedNodes = (newLink: DefaultLinkModel, oldLink: DefaultLinkModel) => {
+  private getRelatedNodes = (oldLink: DefaultLinkModel) => {
     let ret = []
     for (let node of this.copiedNodes) {
       for (let outPort of node.getOutPorts()) {
@@ -425,26 +427,31 @@ class Editor extends React.Component<EditorProps, EditorState> {
         }
       }
     }
+    // Returns the array with the first element being the source, and second being the target
     return ret
   }
 
   private createCopiedLink = (link: DefaultLinkModel) => {
     let copiedLink = new DefaultLinkModel()
-    let relatedNodes = this.getRelatedNodes(copiedLink, link)
+    let relatedNodes = this.getRelatedNodes(link)
     if (relatedNodes.length < 2) {
       // The user copied one or more danging links (i.e. links that don't have a source and target port)
       return
     }
+    // Sets the source/destination of the link, and adds the link to the related nodes
     copiedLink.sourcePort = relatedNodes[0].getOutPorts()[0]
     copiedLink.targetPort = relatedNodes[1].getInPorts()[0]
-    copiedLink.selected = true
+    // These lines below seem redundant, but removing them causes the pasted link(s) not to move with the rest of the objects until page reload
     relatedNodes[0].getOutPorts()[0].addLink(copiedLink)
     relatedNodes[1].getInPorts()[0].addLink(copiedLink)
+
     for (let point of copiedLink.getPoints()) {
-      point.x = link.getPoints()[copiedLink.getPoints().indexOf(point)].x +100
-      point.y = link.getPoints()[copiedLink.getPoints().indexOf(point)].y +100
+      // Ensures the link moves with nodes visually
+      point.x = link.getPoints()[copiedLink.getPoints().indexOf(point)].x + offset
+      point.y = link.getPoints()[copiedLink.getPoints().indexOf(point)].y + offset
     }
 
+    copiedLink.selected = true
     return copiedLink
   }
 
@@ -468,15 +475,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
   private copyPorts = (node: DefaultNodeModel) => {
     Object.keys(node.getPorts()).forEach(function (key) {
-      let oldPort = node.getPorts()[key]
-      let newPort = _.cloneDeep(oldPort)
-
+      let oldPort = node.getPorts()[key] as DefaultPortModel
+      let newPort = new DefaultPortModel(oldPort.in, oldPort.getName(), oldPort.label)
       node.removePort(oldPort)
-
-      Object.keys(newPort.getLinks()).forEach(function (key) {
-        let link = newPort.getLinks()[key] as DefaultLinkModel
-        newPort.removeLink(link)
-      })
       node.addPort(newPort)
     })
   }
