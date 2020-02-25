@@ -7,7 +7,8 @@ import {
   DefaultNodeModel,
   DefaultPortModel,
   DiagramWidget,
-  NodeModel
+  NodeModel,
+  PointModel
 } from 'storm-react-diagrams'
 
 import SceneEditor from './SceneEditor'
@@ -20,6 +21,7 @@ import { StateConsumer, ApplicationState } from '../Store'
 import { save } from '../persistance'
 import { clone } from '../clone'
 import * as _ from 'lodash'
+import { link } from 'fs'
 
 interface EditorState {
   ready: boolean
@@ -37,7 +39,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
   engine: DiagramEngine
   model: DiagramModel
   copiedNodes: DefaultNodeModel[]
+  pastedNodes: DefaultNodeModel[]
   copiedLinks: DefaultLinkModel[]
+  pastedLinks: DefaultLinkModel[]
   lastSavedState: ApplicationState
 
   constructor(props: EditorProps) {
@@ -377,15 +381,71 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }) as DefaultLinkModel[]
     this.copiedLinks = selectedLinks
     this.copiedNodes = selectedNodes
+    this.pastedNodes = []
+    this.pastedLinks = []
   }
 
   private onPaste = () => {
     this.model.clearSelection()
+
     for (let node of this.copiedNodes) {
       // the 100 is a temporary offset value. Can make a global constant or two, or have a smarter way of calc'ing
-      this.createCopiedNode(node, node.x+100, node.y+100)
+      let copiedNode = this.createCopiedNode(node, node.x+100, node.y+100)
+      this.pastedNodes.push(copiedNode)
+    }
+
+    for (let link of this.copiedLinks) {
+      console.log(link)
+      let copiedLink = this.createCopiedLink(link)
+      if (copiedLink) {
+        this.pastedLinks.push(copiedLink)
+      }
+    }
+
+    for (let node of this.pastedNodes) {
+      this.model.addNode(node)
+    }
+    for (let link of this.pastedLinks) {
+      this.model.addLink(link)
     }
     this.repaint()
+  }
+
+  private getRelatedNodes = (newLink: DefaultLinkModel, oldLink: DefaultLinkModel) => {
+    let ret = []
+    for (let node of this.copiedNodes) {
+      for (let outPort of node.getOutPorts()) {
+        if (outPort === oldLink.getSourcePort()) {
+          ret.push(this.pastedNodes[this.copiedNodes.indexOf(node)])
+        }
+      }
+      for (let inPort of node.getInPorts()) {
+        if (inPort === oldLink.getTargetPort()) {
+          ret.push(this.pastedNodes[this.copiedNodes.indexOf(node)])
+        }
+      }
+    }
+    return ret
+  }
+
+  private createCopiedLink = (link: DefaultLinkModel) => {
+    let copiedLink = new DefaultLinkModel()
+    let relatedNodes = this.getRelatedNodes(copiedLink, link)
+    if (relatedNodes.length < 2) {
+      // The user copied one or more danging links (i.e. links that don't have a source and target port)
+      return
+    }
+    copiedLink.sourcePort = relatedNodes[0].getOutPorts()[0]
+    copiedLink.targetPort = relatedNodes[1].getInPorts()[0]
+    copiedLink.selected = true
+    relatedNodes[0].getOutPorts()[0].addLink(copiedLink)
+    relatedNodes[1].getInPorts()[0].addLink(copiedLink)
+    for (let point of copiedLink.getPoints()) {
+      point.x = link.getPoints()[copiedLink.getPoints().indexOf(point)].x +100
+      point.y = link.getPoints()[copiedLink.getPoints().indexOf(point)].y +100
+    }
+
+    return copiedLink
   }
 
   private createCopiedNode = (nodeToCopy: DefaultNodeModel, targetX: Number, targetY: Number) => {
@@ -394,18 +454,16 @@ class Editor extends React.Component<EditorProps, EditorState> {
     // Cleanup dangling references from the copied items
     node.clearListeners()
     this.copyPorts(node)
-
     node.parent = new DiagramModel()
     node.id = node.parent.id
 
+    // Set attributes of this new scene
     node.setPosition(targetX, targetY)
     node.color = '#ffeb3b'
-
     this.watchNode(node)
-
-    this.model.addNode(node)
     node.selected = true
 
+    return node
   }
 
   private copyPorts = (node: DefaultNodeModel) => {
@@ -416,12 +474,13 @@ class Editor extends React.Component<EditorProps, EditorState> {
       node.removePort(oldPort)
 
       Object.keys(newPort.getLinks()).forEach(function (key) {
-        newPort.removeLink(newPort.getLinks()[key])
+        let link = newPort.getLinks()[key] as DefaultLinkModel
+        newPort.removeLink(link)
       })
-
       node.addPort(newPort)
     })
   }
+
 
   private calculateNodeColors = () => {
     let ids = Object.keys(this.model.nodes)
