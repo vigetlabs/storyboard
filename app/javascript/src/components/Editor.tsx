@@ -442,9 +442,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
     return ret
   }
 
-  private createCopiedLink = (link: DefaultLinkModel) => {
-    let copiedLink = new DefaultLinkModel()
-    let relatedNodes = this.getRelatedNodes(link)
+  private createCopiedLink = (copiedLink: DefaultLinkModel) => {
+    let pastedLink = new DefaultLinkModel()
+    let relatedNodes = this.getRelatedNodes(copiedLink)
     if (relatedNodes.length < 2) {
       // The user copied one or more danging links (i.e. links that don't have a source and target port)
       return
@@ -453,22 +453,24 @@ class Editor extends React.Component<EditorProps, EditorState> {
     let sourcePort = relatedNodes[0].getOutPorts()[0]
     let targetPort = relatedNodes[1].getInPorts()[0]
 
-    copiedLink.sourcePort = sourcePort
-    copiedLink.targetPort = targetPort
+    pastedLink.sourcePort = sourcePort
+    pastedLink.targetPort = targetPort
     // These lines below seem redundant, but removing them causes the pasted link(s) not to move with the rest of the objects until page reload
-    sourcePort.addLink(copiedLink)
-    targetPort.addLink(copiedLink)
+    sourcePort.addLink(pastedLink)
+    targetPort.addLink(pastedLink)
 
-    for (let point of copiedLink.getPoints()) {
+    for (let point of pastedLink.getPoints()) {
       // Ensures the link moves with nodes visually
-      point.x =
-        link.getPoints()[copiedLink.getPoints().indexOf(point)].x + offset
-      point.y =
-        link.getPoints()[copiedLink.getPoints().indexOf(point)].y + offset
+      let copiedPoint = copiedLink.getPoints()[
+        pastedLink.getPoints().indexOf(point)
+      ]
+
+      point.x = copiedPoint.x + offset
+      point.y = copiedPoint.y + offset
     }
 
-    copiedLink.selected = true
-    return copiedLink
+    pastedLink.selected = true
+    return pastedLink
   }
 
   private createCopiedNode = (
