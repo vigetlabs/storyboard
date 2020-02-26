@@ -422,19 +422,30 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.repaint()
   }
 
-  private getRelatedNodes = (oldLink: DefaultLinkModel) => {
+  private getRelatedPorts = (oldLink: DefaultLinkModel) => {
     const { copiedNodes, pastedNodes } = this
 
     let ret = []
     for (let node of copiedNodes) {
-      for (let outPort of node.getOutPorts()) {
+      // Iterates over the nodes that were copied to clipboard and then over their ports, returning them for the pasted links to use
+      let copiedOutPorts = node.getOutPorts()
+      let copiedInPorts = node.getInPorts()
+      let nodeIndex = copiedNodes.indexOf(node)
+
+      for (let outPort of copiedOutPorts) {
         if (outPort === oldLink.getSourcePort()) {
-          ret.push(pastedNodes[copiedNodes.indexOf(node)])
+          let portIndex = copiedOutPorts.indexOf(outPort)
+          ret.push(
+            pastedNodes[nodeIndex].getOutPorts()[portIndex]
+          )
         }
       }
-      for (let inPort of node.getInPorts()) {
+      for (let inPort of copiedInPorts) {
         if (inPort === oldLink.getTargetPort()) {
-          ret.push(pastedNodes[copiedNodes.indexOf(node)])
+          let portIndex = copiedInPorts.indexOf(inPort)
+          ret.push(
+            pastedNodes[nodeIndex].getInPorts()[portIndex]
+          )
         }
       }
     }
@@ -444,14 +455,14 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
   private createCopiedLink = (copiedLink: DefaultLinkModel) => {
     let pastedLink = new DefaultLinkModel()
-    let relatedNodes = this.getRelatedNodes(copiedLink)
-    if (relatedNodes.length < 2) {
+    let relatedPorts = this.getRelatedPorts(copiedLink)
+    if (relatedPorts.length < 2) {
       // The user copied one or more danging links (i.e. links that don't have a source and target port)
       return
     }
     // Sets the source/destination of the link, and adds the link to the related nodes
-    let sourcePort = relatedNodes[0].getOutPorts()[0]
-    let targetPort = relatedNodes[1].getInPorts()[0]
+    let sourcePort = relatedPorts[0]
+    let targetPort = relatedPorts[1]
 
     pastedLink.sourcePort = sourcePort
     pastedLink.targetPort = targetPort
@@ -496,8 +507,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private copyPorts = (node: DefaultNodeModel) => {
-    Object.keys(node.getPorts()).forEach(function(key) {
-      let oldPort = node.getPorts()[key] as DefaultPortModel
+    let ports = node.getPorts()
+
+    Object.keys(ports).forEach(function(key) {
+      let oldPort = ports[key] as DefaultPortModel
       let newPort = new DefaultPortModel(
         oldPort.in,
         oldPort.getName(),
