@@ -59,7 +59,6 @@ export default class Workspace extends React.Component<WorkspaceProps> {
   }
 
   handleKeyPress = (event: any) => {
-    event.preventDefault()
     if ((event.ctrlKey || event.metaKey) && event.keyCode == 67)
       this.handleCopy()
     if ((event.ctrlKey || event.metaKey) && event.keyCode == 86)
