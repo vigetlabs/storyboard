@@ -8,6 +8,9 @@ interface WorkspaceProps {
   saveStory: (opts: {}) => void
 }
 
+const C_KEY = 67
+const V_KEY = 86
+
 export default class Workspace extends React.Component<WorkspaceProps> {
   isMouseDown: Boolean = false
   isDragging: Boolean = false
@@ -59,21 +62,18 @@ export default class Workspace extends React.Component<WorkspaceProps> {
   }
 
   handleKeyPress = (event: any) => {
-    if((event.ctrlKey || event.metaKey) && event.keyCode == 67)
-        this.handleCopy()
-    if((event.ctrlKey || event.metaKey) && event.keyCode == 86)
-        this.handlePaste()
+    if ((event.ctrlKey || event.metaKey) && event.keyCode == C_KEY)
+      this.handleCopy()
+    if ((event.ctrlKey || event.metaKey) && event.keyCode == V_KEY)
+      this.handlePaste()
   }
 
   handleCopy = () => {
-    console.log("Copying all selected attributes...")
     this.props.onCopy()
   }
 
   handlePaste = () => {
-    console.log("Pasting all selected attributes...")
     this.props.onPaste()
-
   }
 
   maybySaveStory = () => {

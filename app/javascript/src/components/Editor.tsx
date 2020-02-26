@@ -7,8 +7,7 @@ import {
   DefaultNodeModel,
   DefaultPortModel,
   DiagramWidget,
-  NodeModel,
-  PointModel
+  NodeModel
 } from 'storm-react-diagrams'
 
 import SceneEditor from './SceneEditor'
@@ -21,8 +20,6 @@ import { StateConsumer, ApplicationState } from '../Store'
 import { save } from '../persistance'
 import { clone } from '../clone'
 import * as _ from 'lodash'
-import { link } from 'fs'
-import { node } from 'prop-types'
 
 let offset = 100
 
@@ -246,9 +243,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private getFocus(): DefaultNodeModel | null {
-    const selected = this.model.getSelectedItems().filter(item => {
-      return item instanceof DefaultNodeModel
-    })
+    const selected = this.model
+      .getSelectedItems()
+      .filter(item => item instanceof DefaultNodeModel)
 
     if (selected.length == 1) {
       return selected[0] as DefaultNodeModel
@@ -378,12 +375,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
   private onCopy = () => {
     const { model } = this
 
-    const selectedNodes = model.getSelectedItems().filter(item => {
-      return item instanceof DefaultNodeModel
-    }) as DefaultNodeModel[]
-    const selectedLinks = this.model.getSelectedItems().filter(item => {
-      return item instanceof DefaultLinkModel
-    }) as DefaultLinkModel[]
+    const selectedNodes = model
+      .getSelectedItems()
+      .filter(item => item instanceof DefaultNodeModel) as DefaultNodeModel[]
+    const selectedLinks = this.model
+      .getSelectedItems()
+      .filter(item => item instanceof DefaultLinkModel) as DefaultLinkModel[]
 
     this.copiedLinks = selectedLinks
     this.copiedNodes = selectedNodes
@@ -396,7 +393,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
     model.clearSelection()
 
-    for (let node of copiedNodes) {
+    copiedNodes.forEach(node => {
       let copiedNode = this.createCopiedNode(
         node,
         node.x + offset,
@@ -405,70 +402,74 @@ class Editor extends React.Component<EditorProps, EditorState> {
       if (copiedNode) {
         pastedNodes.push(copiedNode)
       }
-    }
-    for (let link of copiedLinks) {
+    })
+    copiedLinks.forEach(link => {
       let copiedLink = this.createCopiedLink(link)
       if (copiedLink) {
         pastedLinks.push(copiedLink)
       }
-    }
+    })
+    pastedNodes.forEach(node => model.addNode(node))
+    pastedLinks.forEach(link => model.addLink(link))
 
-    for (let node of pastedNodes) {
-      model.addNode(node)
-    }
-    for (let link of pastedLinks) {
-      model.addLink(link)
-    }
     this.repaint()
   }
 
-  private getRelatedNodes = (oldLink: DefaultLinkModel) => {
+  private getRelatedPorts = (oldLink: DefaultLinkModel) => {
     const { copiedNodes, pastedNodes } = this
 
-    let ret = []
-    for (let node of copiedNodes) {
-      for (let outPort of node.getOutPorts()) {
+    let ret: DefaultPortModel[] = []
+    copiedNodes.forEach(node => {
+      // Iterates over the nodes that were copied to clipboard and then over their ports, returning them for the pasted links to use
+      let copiedOutPorts = node.getOutPorts()
+      let copiedInPorts = node.getInPorts()
+      let nodeIndex = copiedNodes.indexOf(node)
+
+      copiedOutPorts.forEach(outPort => {
         if (outPort === oldLink.getSourcePort()) {
-          ret.push(pastedNodes[copiedNodes.indexOf(node)])
+          let portIndex = copiedOutPorts.indexOf(outPort)
+          ret.push(pastedNodes[nodeIndex].getOutPorts()[portIndex])
         }
-      }
-      for (let inPort of node.getInPorts()) {
+      })
+      copiedInPorts.forEach(inPort => {
         if (inPort === oldLink.getTargetPort()) {
-          ret.push(pastedNodes[copiedNodes.indexOf(node)])
+          let portIndex = copiedInPorts.indexOf(inPort)
+          ret.push(pastedNodes[nodeIndex].getInPorts()[portIndex])
         }
-      }
-    }
+      })
+    })
     // Returns the array with the first element being the source, and second being the target
     return ret
   }
 
-  private createCopiedLink = (link: DefaultLinkModel) => {
-    let copiedLink = new DefaultLinkModel()
-    let relatedNodes = this.getRelatedNodes(link)
-    if (relatedNodes.length < 2) {
+  private createCopiedLink = (copiedLink: DefaultLinkModel) => {
+    let pastedLink = new DefaultLinkModel()
+    let relatedPorts = this.getRelatedPorts(copiedLink)
+    if (relatedPorts.length < 2) {
       // The user copied one or more danging links (i.e. links that don't have a source and target port)
       return
     }
     // Sets the source/destination of the link, and adds the link to the related nodes
-    let sourcePort = relatedNodes[0].getOutPorts()[0]
-    let targetPort = relatedNodes[1].getInPorts()[0]
+    let sourcePort = relatedPorts[0]
+    let targetPort = relatedPorts[1]
 
-    copiedLink.sourcePort = sourcePort
-    copiedLink.targetPort = targetPort
+    pastedLink.sourcePort = sourcePort
+    pastedLink.targetPort = targetPort
     // These lines below seem redundant, but removing them causes the pasted link(s) not to move with the rest of the objects until page reload
-    sourcePort.addLink(copiedLink)
-    targetPort.addLink(copiedLink)
+    sourcePort.addLink(pastedLink)
+    targetPort.addLink(pastedLink)
 
-    for (let point of copiedLink.getPoints()) {
+    pastedLink.getPoints().forEach(point => {
       // Ensures the link moves with nodes visually
-      point.x =
-        link.getPoints()[copiedLink.getPoints().indexOf(point)].x + offset
-      point.y =
-        link.getPoints()[copiedLink.getPoints().indexOf(point)].y + offset
-    }
+      let copiedPoint = copiedLink.getPoints()[
+        pastedLink.getPoints().indexOf(point)
+      ]
+      point.x = copiedPoint.x + offset
+      point.y = copiedPoint.y + offset
+    })
 
-    copiedLink.selected = true
-    return copiedLink
+    pastedLink.selected = true
+    return pastedLink
   }
 
   private createCopiedNode = (
@@ -494,8 +495,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private copyPorts = (node: DefaultNodeModel) => {
-    Object.keys(node.getPorts()).forEach(function(key) {
-      let oldPort = node.getPorts()[key] as DefaultPortModel
+    let ports = node.getPorts()
+
+    Object.keys(ports).forEach(function(key) {
+      let oldPort = ports[key] as DefaultPortModel
       let newPort = new DefaultPortModel(
         oldPort.in,
         oldPort.getName(),
