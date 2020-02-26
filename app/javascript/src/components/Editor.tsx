@@ -435,17 +435,13 @@ class Editor extends React.Component<EditorProps, EditorState> {
       for (let outPort of copiedOutPorts) {
         if (outPort === oldLink.getSourcePort()) {
           let portIndex = copiedOutPorts.indexOf(outPort)
-          ret.push(
-            pastedNodes[nodeIndex].getOutPorts()[portIndex]
-          )
+          ret.push(pastedNodes[nodeIndex].getOutPorts()[portIndex])
         }
       }
       for (let inPort of copiedInPorts) {
         if (inPort === oldLink.getTargetPort()) {
           let portIndex = copiedInPorts.indexOf(inPort)
-          ret.push(
-            pastedNodes[nodeIndex].getInPorts()[portIndex]
-          )
+          ret.push(pastedNodes[nodeIndex].getInPorts()[portIndex])
         }
       }
     }
