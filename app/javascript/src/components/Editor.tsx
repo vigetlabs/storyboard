@@ -450,11 +450,14 @@ class Editor extends React.Component<EditorProps, EditorState> {
       return
     }
     // Sets the source/destination of the link, and adds the link to the related nodes
-    copiedLink.sourcePort = relatedNodes[0].getOutPorts()[0]
-    copiedLink.targetPort = relatedNodes[1].getInPorts()[0]
+    let sourcePort = relatedNodes[0].getOutPorts()[0]
+    let targetPort = relatedNodes[1].getInPorts()[0]
+
+    copiedLink.sourcePort = sourcePort
+    copiedLink.targetPort = targetPort
     // These lines below seem redundant, but removing them causes the pasted link(s) not to move with the rest of the objects until page reload
-    relatedNodes[0].getOutPorts()[0].addLink(copiedLink)
-    relatedNodes[1].getInPorts()[0].addLink(copiedLink)
+    sourcePort.addLink(copiedLink)
+    targetPort.addLink(copiedLink)
 
     for (let point of copiedLink.getPoints()) {
       // Ensures the link moves with nodes visually
