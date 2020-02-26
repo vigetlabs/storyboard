@@ -59,26 +59,24 @@ export default class Workspace extends React.Component<WorkspaceProps> {
   }
 
   handleKeyPress = (event: any) => {
-    if((event.ctrlKey || event.metaKey) && event.keyCode == 67)
-        this.handleCopy()
-    if((event.ctrlKey || event.metaKey) && event.keyCode == 86)
-        this.handlePaste()
+    event.preventDefault()
+    if ((event.ctrlKey || event.metaKey) && event.keyCode == 67)
+      this.handleCopy()
+    if ((event.ctrlKey || event.metaKey) && event.keyCode == 86)
+      this.handlePaste()
   }
 
   handleCopy = () => {
-    console.log("Copying all selected attributes...")
     this.props.onCopy()
   }
 
   handlePaste = () => {
-    console.log("Pasting all selected attributes...")
     this.props.onPaste()
-
   }
 
   maybySaveStory = () => {
     if (!this.isMouseDown) {
-      this.props.saveStory({force: false})
+      this.props.saveStory({ force: false })
     }
   }
 }
