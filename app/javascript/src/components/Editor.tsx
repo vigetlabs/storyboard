@@ -22,6 +22,7 @@ import { save } from '../persistance'
 import { clone } from '../clone'
 import * as _ from 'lodash'
 import { link } from 'fs'
+import { node } from 'prop-types'
 
 let offset = 100
 
@@ -375,7 +376,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private onCopy = () => {
-    const selectedNodes = this.model.getSelectedItems().filter(item => {
+    const { model } = this
+
+    const selectedNodes = model.getSelectedItems().filter(item => {
       return item instanceof DefaultNodeModel
     }) as DefaultNodeModel[]
     const selectedLinks = this.model.getSelectedItems().filter(item => {
@@ -389,45 +392,49 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private onPaste = () => {
-    this.model.clearSelection()
+    const { copiedNodes, model, pastedNodes, pastedLinks, copiedLinks } = this
 
-    for (let node of this.copiedNodes) {
+    model.clearSelection()
+
+    for (let node of copiedNodes) {
       let copiedNode = this.createCopiedNode(
         node,
         node.x + offset,
         node.y + offset
       )
       if (copiedNode) {
-        this.pastedNodes.push(copiedNode)
+        pastedNodes.push(copiedNode)
       }
     }
-    for (let link of this.copiedLinks) {
+    for (let link of copiedLinks) {
       let copiedLink = this.createCopiedLink(link)
       if (copiedLink) {
-        this.pastedLinks.push(copiedLink)
+        pastedLinks.push(copiedLink)
       }
     }
 
-    for (let node of this.pastedNodes) {
-      this.model.addNode(node)
+    for (let node of pastedNodes) {
+      model.addNode(node)
     }
-    for (let link of this.pastedLinks) {
-      this.model.addLink(link)
+    for (let link of pastedLinks) {
+      model.addLink(link)
     }
     this.repaint()
   }
 
   private getRelatedNodes = (oldLink: DefaultLinkModel) => {
+    const { copiedNodes, pastedNodes } = this
+
     let ret = []
-    for (let node of this.copiedNodes) {
+    for (let node of copiedNodes) {
       for (let outPort of node.getOutPorts()) {
         if (outPort === oldLink.getSourcePort()) {
-          ret.push(this.pastedNodes[this.copiedNodes.indexOf(node)])
+          ret.push(pastedNodes[copiedNodes.indexOf(node)])
         }
       }
       for (let inPort of node.getInPorts()) {
         if (inPort === oldLink.getTargetPort()) {
-          ret.push(this.pastedNodes[this.copiedNodes.indexOf(node)])
+          ret.push(pastedNodes[copiedNodes.indexOf(node)])
         }
       }
     }
