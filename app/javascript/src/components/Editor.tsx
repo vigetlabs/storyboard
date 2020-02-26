@@ -23,7 +23,7 @@ import { clone } from '../clone'
 import * as _ from 'lodash'
 import { link } from 'fs'
 
-let offset = 100;
+let offset = 100
 
 interface EditorState {
   ready: boolean
@@ -392,7 +392,11 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.model.clearSelection()
 
     for (let node of this.copiedNodes) {
-      let copiedNode = this.createCopiedNode(node, node.x + offset, node.y  + offset)
+      let copiedNode = this.createCopiedNode(
+        node,
+        node.x + offset,
+        node.y + offset
+      )
       if (copiedNode) {
         this.pastedNodes.push(copiedNode)
       }
@@ -447,15 +451,21 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
     for (let point of copiedLink.getPoints()) {
       // Ensures the link moves with nodes visually
-      point.x = link.getPoints()[copiedLink.getPoints().indexOf(point)].x + offset
-      point.y = link.getPoints()[copiedLink.getPoints().indexOf(point)].y + offset
+      point.x =
+        link.getPoints()[copiedLink.getPoints().indexOf(point)].x + offset
+      point.y =
+        link.getPoints()[copiedLink.getPoints().indexOf(point)].y + offset
     }
 
     copiedLink.selected = true
     return copiedLink
   }
 
-  private createCopiedNode = (nodeToCopy: DefaultNodeModel, targetX: Number, targetY: Number) => {
+  private createCopiedNode = (
+    nodeToCopy: DefaultNodeModel,
+    targetX: Number,
+    targetY: Number
+  ) => {
     let node = _.cloneDeep(nodeToCopy)
 
     // Cleanup dangling references from the copied items
@@ -474,14 +484,17 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private copyPorts = (node: DefaultNodeModel) => {
-    Object.keys(node.getPorts()).forEach(function (key) {
+    Object.keys(node.getPorts()).forEach(function(key) {
       let oldPort = node.getPorts()[key] as DefaultPortModel
-      let newPort = new DefaultPortModel(oldPort.in, oldPort.getName(), oldPort.label)
+      let newPort = new DefaultPortModel(
+        oldPort.in,
+        oldPort.getName(),
+        oldPort.label
+      )
       node.removePort(oldPort)
       node.addPort(newPort)
     })
   }
-
 
   private calculateNodeColors = () => {
     let ids = Object.keys(this.model.nodes)
