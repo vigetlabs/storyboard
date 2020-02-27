@@ -418,26 +418,26 @@ class Editor extends React.Component<EditorProps, EditorState> {
   private getRelatedPorts = (oldLink: DefaultLinkModel) => {
     const { copiedNodes, pastedNodes } = this
 
-    let ret = []
-    for (let node of copiedNodes) {
+    let ret: DefaultPortModel[] = []
+    copiedNodes.forEach(node => {
       // Iterates over the nodes that were copied to clipboard and then over their ports, returning them for the pasted links to use
       let copiedOutPorts = node.getOutPorts()
       let copiedInPorts = node.getInPorts()
       let nodeIndex = copiedNodes.indexOf(node)
 
-      for (let outPort of copiedOutPorts) {
+      copiedOutPorts.forEach(outPort => {
         if (outPort === oldLink.getSourcePort()) {
           let portIndex = copiedOutPorts.indexOf(outPort)
           ret.push(pastedNodes[nodeIndex].getOutPorts()[portIndex])
         }
-      }
-      for (let inPort of copiedInPorts) {
+      })
+      copiedInPorts.forEach(inPort => {
         if (inPort === oldLink.getTargetPort()) {
           let portIndex = copiedInPorts.indexOf(inPort)
           ret.push(pastedNodes[nodeIndex].getInPorts()[portIndex])
         }
-      }
-    }
+      })
+    })
     // Returns the array with the first element being the source, and second being the target
     return ret
   }
@@ -459,15 +459,14 @@ class Editor extends React.Component<EditorProps, EditorState> {
     sourcePort.addLink(pastedLink)
     targetPort.addLink(pastedLink)
 
-    for (let point of pastedLink.getPoints()) {
+    pastedLink.getPoints().forEach(point => {
       // Ensures the link moves with nodes visually
       let copiedPoint = copiedLink.getPoints()[
         pastedLink.getPoints().indexOf(point)
       ]
-
       point.x = copiedPoint.x + offset
       point.y = copiedPoint.y + offset
-    }
+    })
 
     pastedLink.selected = true
     return pastedLink
