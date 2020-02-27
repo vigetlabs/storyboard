@@ -7,8 +7,7 @@ import {
   DefaultNodeModel,
   DefaultPortModel,
   DiagramWidget,
-  NodeModel,
-  PointModel
+  NodeModel
 } from 'storm-react-diagrams'
 
 import SceneEditor from './SceneEditor'
@@ -21,8 +20,6 @@ import { StateConsumer, ApplicationState } from '../Store'
 import { save } from '../persistance'
 import { clone } from '../clone'
 import * as _ from 'lodash'
-import { link } from 'fs'
-import { node } from 'prop-types'
 
 let offset = 100
 
@@ -246,9 +243,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private getFocus(): DefaultNodeModel | null {
-    const selected = this.model.getSelectedItems().filter(item => {
-      return item instanceof DefaultNodeModel
-    })
+    const selected = this.model
+      .getSelectedItems()
+      .filter(item => item instanceof DefaultNodeModel)
 
     if (selected.length == 1) {
       return selected[0] as DefaultNodeModel
@@ -378,12 +375,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
   private onCopy = () => {
     const { model } = this
 
-    const selectedNodes = model.getSelectedItems().filter(item => {
-      return item instanceof DefaultNodeModel
-    }) as DefaultNodeModel[]
-    const selectedLinks = this.model.getSelectedItems().filter(item => {
-      return item instanceof DefaultLinkModel
-    }) as DefaultLinkModel[]
+    const selectedNodes = model
+      .getSelectedItems()
+      .filter(item => item instanceof DefaultNodeModel) as DefaultNodeModel[]
+    const selectedLinks = this.model
+      .getSelectedItems()
+      .filter(item => item instanceof DefaultLinkModel) as DefaultLinkModel[]
 
     this.copiedLinks = selectedLinks
     this.copiedNodes = selectedNodes
@@ -396,7 +393,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
     model.clearSelection()
 
-    for (let node of copiedNodes) {
+    copiedNodes.forEach(node => {
       let copiedNode = this.createCopiedNode(
         node,
         node.x + offset,
@@ -405,20 +402,16 @@ class Editor extends React.Component<EditorProps, EditorState> {
       if (copiedNode) {
         pastedNodes.push(copiedNode)
       }
-    }
-    for (let link of copiedLinks) {
+    })
+    copiedLinks.forEach(link => {
       let copiedLink = this.createCopiedLink(link)
       if (copiedLink) {
         pastedLinks.push(copiedLink)
       }
-    }
+    })
+    pastedNodes.forEach(node => model.addNode(node))
+    pastedLinks.forEach(link => model.addLink(link))
 
-    for (let node of pastedNodes) {
-      model.addNode(node)
-    }
-    for (let link of pastedLinks) {
-      model.addLink(link)
-    }
     this.repaint()
   }
 
