@@ -19,8 +19,14 @@
           <div class="card-title">
             <%= adventure %>
           </div>
+
         <% end %>
-      </div>
+          <%= link_to offline_adventure_path(adventure) do %>
+            <div class = "offline-text">
+              <p>Offline Version</p>
+              </div>
+          <%end%>
+       </div>
     <% end %>
   </div>
 </div>

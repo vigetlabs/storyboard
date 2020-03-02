@@ -1,5 +1,5 @@
 class AdventuresController < ApplicationController
-  before_action :set_adventure, only: [:show, :edit, :update, :destroy, :details, :source]
+  before_action :set_adventure, only: [:show, :edit, :update, :destroy, :details, :source, :offline]
 
   def index
   end
@@ -35,6 +35,11 @@ class AdventuresController < ApplicationController
       layout: 'editor',
       locals: { view_only: true }
   end
+
+  def offline
+    render layout: 'player'
+  end
+
 
   def create
     @adventure = Adventure.new(adventure_params)
