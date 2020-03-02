@@ -13,7 +13,7 @@ import { load } from '../src/persistance'
 const slug = SEED.slug
 
 async function render() {
-  const content = await load(slug)
+  const content = SEED.isOffline ? SEED.story : await load(slug)
 
   if (content) {
     ReactDOM.render(
@@ -24,6 +24,7 @@ async function render() {
         meta={content.meta}
         portMeta={content.portMeta}
         theme={SEED.theme}
+        isOffline={SEED.isOffline}
       />,
       document.getElementById('player')
     )
