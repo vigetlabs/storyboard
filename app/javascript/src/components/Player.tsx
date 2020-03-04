@@ -30,6 +30,7 @@ interface PlayerProps {
   story: Object
   theme: string
   title: string
+  isOffline: boolean
 }
 
 interface Stat {

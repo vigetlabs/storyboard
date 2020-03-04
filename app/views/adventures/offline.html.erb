@@ -6,6 +6,8 @@
 <% else %>
   <%= link_to 'Source', [:source, @adventure], class: "SlantButton" %>
 <% end %>
+
+<%= link_to 'Save', [:save_offline, @adventure], class: "SlantButton"%>
 </div>
 
 <div class="Player" id="player"></div>
@@ -16,6 +18,8 @@
     title: "<%== escape_javascript @adventure.title %>",
     description: "<%== escape_javascript @adventure.description %>",
     theme: "<%== escape_javascript @adventure.theme.capitalize %>",
-    isOffline: false
+    story: <%== @adventure.content.to_json %>,
+    isOffline: true
+
   }
 </script>

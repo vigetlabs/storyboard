@@ -30,6 +30,10 @@ class AdventuresController < ApplicationController
     render layout: 'editor'
   end
 
+  def save_offline
+    puts("hey")
+  end
+
   def source
     render 'edit',
       layout: 'editor',

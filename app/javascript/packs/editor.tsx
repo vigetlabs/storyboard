@@ -8,7 +8,7 @@ import * as ReactDOM from 'react-dom'
 
 import Tutorial from '../src/components/Tutorial'
 import Editor from '../src/components/Editor'
-import { ApplicationComponent } from '../src/Store'
+import { ApplicationComponent, MetaData, PortMeta } from '../src/Store'
 import { load } from '../src/persistance'
 import defaultStory from '../src/seed'
 
@@ -30,6 +30,12 @@ declare global {
     description: string
     theme: string
     viewOnly: boolean
+    isOffline: boolean
+    story: {
+      story: any
+      meta: MetaData
+      portMeta: PortMeta
+    }
   }
 }
 
