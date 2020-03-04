@@ -7,7 +7,7 @@
   <%= link_to 'Source', [:source, @adventure], class: "SlantButton" %>
 <% end %>
 
-<%= link_to 'Save', [:save_offline, @adventure], class: "SlantButton"%>
+<%= link_to 'Save', [:offline, @adventure], class: "SlantButton", download: @adventure.title%>
 </div>
 
 <div class="Player" id="player"></div>
