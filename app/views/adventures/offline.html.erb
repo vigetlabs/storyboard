@@ -7,12 +7,29 @@
   <%= link_to 'Source', [:source, @adventure], class: "SlantButton" %>
 <% end %>
 
-<%= link_to 'Save', [:offline, @adventure], class: "SlantButton", download: @adventure.title%>
+<%= link_to 'Save', class: "SlantButton"%>
+<a href="#" id='escape' onClick="wahey()">escape</a>
 </div>
-
-<div class="Player" id="player"></div>
+\<div class="Player" id="player"></div>
 
 <script>
+function wahey(){
+  console.log(document);
+document.location =
+        'data:text/attachment;base64,' + // Notice the new "base64" bit!
+        utf8_to_b64(document.getElementById('escape').innerHTML);
+            //utf8_to_b64(document.documentElement.innerHTML); //To Download Entire Html Source
+};
+
+
+function utf8_to_b64( str ) {
+  return window.btoa(unescape(encodeURIComponent( str )));
+}
+
+</script>
+
+<script>
+
   var SEED = {
     slug: "<%= @adventure.to_param %>",
     title: "<%== escape_javascript @adventure.title %>",
