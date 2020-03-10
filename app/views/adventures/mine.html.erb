@@ -16,15 +16,20 @@
           <div class="card-image">
             <iframe src="<%= adventure_path(adventure) %>"></iframe>
           </div>
+          <% end %>
+
+          <div class="card-container">
+          <%= link_to adventure do %>
           <div class="card-title">
             <%= adventure %>
           </div>
-
-        <% end %>
+          <%end%>
           <%= link_to offline_adventure_path(adventure) do %>
             <div class = "offline-text">
               <p>Offline Version</p>
               </div>
+          </div>
+
           <%end%>
        </div>
     <% end %>
