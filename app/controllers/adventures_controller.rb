@@ -1,5 +1,5 @@
 class AdventuresController < ApplicationController
-  before_action :set_adventure, only: [:show, :edit, :update, :destroy, :details, :source, :offline, :save_offline]
+  before_action :set_adventure, only: [:show, :edit, :update, :destroy, :details, :source, :offline]
 
   def index
   end
@@ -28,27 +28,6 @@ class AdventuresController < ApplicationController
     end
 
     render layout: 'editor'
-  end
-
-
-  def save_offline
-    puts("hey")
-    # if params[:download]
-      save_page_html
-    # end
-  end
-
-  def save_page_html
-
-    path = URI(request.referer).path.gsub(/[^0-9a-z]/i, '')
-    # query = URI(request.referer).query.gsub(/[^0-9a-z]/i, '')
-    filename ="test.html"
-
-    #TRESCLOUD - we render the page into a variable and process it
-    page = render_to_string(:offline, layout: 'player')
-    #TRESCLOUD - we send the file for download!
-    send_data(page, :filename => filename, :type => "text/css")
-
   end
 
   def source

@@ -15,7 +15,6 @@ Rails.application.routes.draw do
   resources :adventures, path: "/" do
     get "details", on: :member, as: :details
     get "source", on: :member
-    get "save_offline", on: :member
     get "offline", on: :member
     get "mine", on: :collection, as: :my
     get "csv", on: :collection
