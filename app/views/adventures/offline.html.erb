@@ -1,11 +1,7 @@
 <% content_for :theme, "#{@adventure.theme.capitalize}Theme" %>
 
 <div class="PlayerActions">
-<% if @adventure.editable_by?(current_user) %>
-  <%= link_to 'Edit', [:edit, @adventure], class: "SlantButton" %>
-<% else %>
-  <%= link_to 'Source', [:source, @adventure], class: "SlantButton" %>
-<% end %>
+
 <a href="#" id="saveBtn", class="SlantButton">Save</a>
 </div>
 
