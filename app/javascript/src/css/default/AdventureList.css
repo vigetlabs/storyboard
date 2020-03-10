@@ -48,9 +48,14 @@
   transform-origin: 0 0;
 }
 
+.AdventureList .card .card-container {
+  overflow: auto;
+}
+
 .AdventureList .card .card-title {
   margin: 10px;
   text-decoration: none;
+  float: left;
 }
 
 .AdventureList .card .offline-text {

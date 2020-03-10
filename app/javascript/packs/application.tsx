@@ -1,6 +1,7 @@
 import '../src/global.css'
 import '../src/type.css'
 import '../src/button.css'
+import '../src/modal.css'
 import '../src/css/default/AccountForm.css'
 import '../src/css/default/AdventureList.css'
 import '../src/css/default/StoryIndex.css'
