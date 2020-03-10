@@ -3,6 +3,7 @@
 
 import '../src/global.css'
 import '../src/button.css'
+import '../src/modal.css'
 
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
