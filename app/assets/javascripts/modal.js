@@ -25,9 +25,9 @@ document.onkeydown = function(event) {
   }
 }
 
-function a() {
+function resetStyles() {
   modal.style.display = modalStyle
   btn.style.display = 'block'
 }
 
-window.addEventListener('focus', a)
+window.addEventListener('focus', resetStyles)
