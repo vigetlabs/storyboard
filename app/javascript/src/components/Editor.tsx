@@ -53,6 +53,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     console.log(this.props.state)
     this.updateStory(this.props.state.story)
     this.lastSavedState = clone(this.serialize())
+    // this.historyPos = 0
   }
 
   async componentDidMount() {
@@ -95,6 +96,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       this.updateStory(newStory)
       this.forceUpdate()
     }
+    console.log('componentDidUpdate')
   }
 
   updateStory(story: any) {
@@ -196,6 +198,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
   private undo() {
     console.log('undo')
+    let history = clone(this.state.history)
+    console.log(history)
+    // this.setState({story: lastSlug.story})
   }
 
   private redo() {
