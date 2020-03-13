@@ -52,6 +52,11 @@ class AdventuresController < ApplicationController
   end
 
   def update
+    if !@adventure.editable_by?(current_user)
+      flash[:alert] = "You can't modify that Adventure"
+      return redirect_to root_url
+    end
+
     if @adventure.update(adventure_params)
       redirect_to [:edit, @adventure]
     else
@@ -60,6 +65,10 @@ class AdventuresController < ApplicationController
   end
 
   def details
+    if !@adventure.editable_by?(current_user)
+      flash[:alert] = "You can't modify that Adventure"
+      return redirect_to root_url
+    end
   end
 
   def destroy
