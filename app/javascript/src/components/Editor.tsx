@@ -372,6 +372,26 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
   }
 
+  private getLinksThatShouldBeSelected = () => {
+    const { copiedNodes } = this
+    let linksToAdd: DefaultLinkModel[] = []
+
+    copiedNodes.forEach(sourceNode => {
+      sourceNode.getOutPorts().forEach(outPort => {
+        for (const [key, value] of Object.entries(outPort.getLinks())) {
+          if (!value.isSelected()) {
+            let targetNode = value.getTargetPort().getNode() as DefaultNodeModel
+            if (copiedNodes.includes(targetNode)) {
+              linksToAdd.push(value as DefaultLinkModel)
+            }
+          }
+        }
+      })
+    })
+
+    return linksToAdd
+  }
+
   private onCopy = () => {
     const { model } = this
 
@@ -381,9 +401,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
     const selectedLinks = this.model
       .getSelectedItems()
       .filter(item => item instanceof DefaultLinkModel) as DefaultLinkModel[]
-
-    this.copiedLinks = selectedLinks
     this.copiedNodes = selectedNodes
+    this.copiedLinks = selectedLinks.concat(this.getLinksThatShouldBeSelected())
+
     this.pastedNodes = []
     this.pastedLinks = []
   }
