@@ -418,11 +418,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
     const selectedLinks = this.model
       .getSelectedItems()
       .filter(item => item instanceof DefaultLinkModel) as DefaultLinkModel[]
-    this.copiedLinks = selectedLinks
     this.copiedNodes = selectedNodes
-    this.copiedLinks = this.copiedLinks.concat(
-      this.getLinksThatShouldBeSelected()
-    )
+    this.copiedLinks = selectedLinks.concat(this.getLinksThatShouldBeSelected())
 
     this.pastedNodes = []
     this.pastedLinks = []
