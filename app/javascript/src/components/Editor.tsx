@@ -376,37 +376,20 @@ class Editor extends React.Component<EditorProps, EditorState> {
     const { copiedNodes } = this
     let linksToAdd: DefaultLinkModel[] = []
 
-    copiedNodes.forEach(firstNode => {
-      copiedNodes.forEach(secondNode => {
-        if (firstNode !== secondNode) {
-          const temp = this.getUnselectedLinks(firstNode, secondNode)
-          linksToAdd = linksToAdd.concat(temp)
+    copiedNodes.forEach(node => {
+      node.getOutPorts().forEach(outPort => {
+        for (const [key, value] of Object.entries(outPort.getLinks())) {
+          if (!value.isSelected()) {
+            let node2 = value.getTargetPort().getNode() as DefaultNodeModel
+            if (copiedNodes.includes(node2)) {
+              linksToAdd.push(value as DefaultLinkModel)
+            }
+          }
         }
       })
     })
-    return linksToAdd
-  }
 
-  private getUnselectedLinks = (
-    firstNode: DefaultNodeModel,
-    secondNode: DefaultNodeModel
-  ) => {
-    let unselectedLinks: DefaultLinkModel[] = []
-    let linkIds: string[] = []
-    firstNode.getOutPorts().forEach(outPort => {
-      for (const [key, value] of Object.entries(outPort.getLinks())) {
-        linkIds.push(key)
-      }
-    })
-    secondNode.getInPorts().forEach(inPort => {
-      let links = inPort.getLinks()
-      linkIds.forEach(linkId => {
-        if (links[linkId] && !links[linkId].isSelected()) {
-          unselectedLinks.push(links[linkId] as DefaultLinkModel)
-        }
-      })
-    })
-    return unselectedLinks
+    return linksToAdd
   }
 
   private onCopy = () => {
