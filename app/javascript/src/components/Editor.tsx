@@ -376,12 +376,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
     const { copiedNodes } = this
     let linksToAdd: DefaultLinkModel[] = []
 
-    copiedNodes.forEach(node => {
-      node.getOutPorts().forEach(outPort => {
+    copiedNodes.forEach(sourceNode => {
+      sourceNode.getOutPorts().forEach(outPort => {
         for (const [key, value] of Object.entries(outPort.getLinks())) {
           if (!value.isSelected()) {
-            let node2 = value.getTargetPort().getNode() as DefaultNodeModel
-            if (copiedNodes.includes(node2)) {
+            let targetNode = value.getTargetPort().getNode() as DefaultNodeModel
+            if (copiedNodes.includes(targetNode)) {
               linksToAdd.push(value as DefaultLinkModel)
             }
           }
