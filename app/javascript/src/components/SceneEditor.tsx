@@ -27,6 +27,9 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     // TODO: replace this. It doesn't matter much here but this breaks typechecking as get always returns `any`
     const text = get(state, `meta.${focus.id}.text`)
     const notes = get(state, `meta.${focus.id}.notes`)
+    const isFinal = get(state, `meta.${focus.id}.isFinal`)
+    // console.log("state:")
+    // console.log(state)
     return (
       <aside className="SceneEditor" onKeyUp={this.trapKeys}>
         <div className="SceneEditorField">
@@ -54,6 +57,8 @@ class SceneEditor extends React.Component<SceneEditorProps> {
           <ChoiceEditor focus={focus} requestPaint={requestPaint} />
         </div>
 
+        <input type="checkbox" checked={isFinal} onChange={this.onChangeFinal}></input>
+
         <SceneEditorTextAreaField
           name="notes"
           title="Editor Notes"
@@ -77,6 +82,14 @@ class SceneEditor extends React.Component<SceneEditorProps> {
 
     updateState(set(state, `meta.${focus.id}.notes`, html))
   }
+
+  onChangeFinal = () => {
+    const { focus, state, updateState } = this.props
+    const isFinal = get(state, `meta.${focus.id}.isFinal`)
+    const updatedIsFinal = isFinal ? !isFinal : true
+    updateState(set(state, `meta.${focus.id}.isFinal`, updatedIsFinal))
+  }
+
 
   private onNameChange = (event: React.FormEvent<HTMLInputElement>) => {
     this.props.focus.name = event.currentTarget.value

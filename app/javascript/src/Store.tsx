@@ -15,6 +15,7 @@ export interface MetaData {
     title: string
     text: string
     notes: string
+    isFinal: boolean
   }
 }
 
