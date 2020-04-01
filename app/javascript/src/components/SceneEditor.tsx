@@ -28,8 +28,7 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     const text = get(state, `meta.${focus.id}.text`)
     const notes = get(state, `meta.${focus.id}.notes`)
     const isFinal = get(state, `meta.${focus.id}.isFinal`)
-    // console.log("state:")
-    // console.log(state)
+
     return (
       <aside className="SceneEditor" onKeyUp={this.trapKeys}>
         <div className="SceneEditorField">
@@ -53,11 +52,8 @@ class SceneEditor extends React.Component<SceneEditorProps> {
         />
         <div className="SceneEditorField">
           <h3 className="SceneEditorHeading">Choices</h3>
-
           <ChoiceEditor focus={focus} requestPaint={requestPaint} />
         </div>
-
-        <input type="checkbox" checked={isFinal} onChange={this.onChangeFinal}></input>
 
         <SceneEditorTextAreaField
           name="notes"
@@ -66,6 +62,12 @@ class SceneEditor extends React.Component<SceneEditorProps> {
           instructionalText="This box is for adding comments, new ideas, or general notes for this scene. These notes are not visible to the user."
           defaultValue={notes}
           onChange={this.onChangeNotes}
+        />
+        <SceneEditorSettingsFields
+          name="Settings"
+          checkboxText="Mark this Scene as Final"
+          checkboxDefault={isFinal}
+          onChange={this.onChangeFinal}
         />
       </aside>
     )
@@ -86,8 +88,8 @@ class SceneEditor extends React.Component<SceneEditorProps> {
   onChangeFinal = () => {
     const { focus, state, updateState } = this.props
     const isFinal = get(state, `meta.${focus.id}.isFinal`)
-    const updatedIsFinal = isFinal ? !isFinal : true
-    updateState(set(state, `meta.${focus.id}.isFinal`, updatedIsFinal))
+
+    updateState(set(state, `meta.${focus.id}.isFinal`, !isFinal))
   }
 
 
@@ -144,6 +146,33 @@ type SceneEditorTextAreaFieldProps = {
   placeholderText: string
   instructionalText: string
   onChange: (arg0: string) => void
+}
+
+type SceneEditorSettingsFieldsProps = {
+  name: string,
+  checkboxText: string,
+  checkboxDefault: boolean,
+  onChange: () => void
+}
+
+function SceneEditorSettingsFields({
+  name,
+  checkboxText,
+  checkboxDefault,
+  onChange
+}: SceneEditorSettingsFieldsProps) {
+
+  return (
+    <div className="SceneEditorField">
+      <label className="SceneEditorHeading">
+        {name}
+      </label>
+      <div className="checkboxes">
+      <label htmlFor="finalCheckbox"><input type="checkbox" id="finalCheckbox" defaultChecked={checkboxDefault} onClick={onChange} />
+        Mark this scene as final?</label>
+      </div>
+    </div>
+  )
 }
 
 /**

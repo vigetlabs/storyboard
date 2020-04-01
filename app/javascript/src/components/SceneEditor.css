@@ -21,6 +21,7 @@
   padding: 10px 10px 12px;
 }
 
+
 .SceneEditorHeading {
   display: block;
   font-weight: bold;
@@ -90,3 +91,13 @@
   font-size: 16px;
   padding: 9px 14px 6px;
 }
+
+.checkboxes label {
+  display: inline-block;
+  white-space: nowrap;
+}
+.checkboxes input {
+  box-shadow: none;
+  vertical-align: middle;
+}
+

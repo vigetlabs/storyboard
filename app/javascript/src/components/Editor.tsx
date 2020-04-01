@@ -534,6 +534,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
     ids.map(id => {
       let node = this.model.nodes[id] as DefaultNodeModel
+      let meta = this.props.state.meta[id]
 
       let inPortsWithLinks = []
       let outPortsWithLinks = []
@@ -560,6 +561,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
       } else if (!inPortsWithLinks.length && !outPortsWithLinks.length) {
         // orphan: has no [in/out ports with links]
         node.color = '#ffeb3b'
+      } else if (meta.isFinal) {
+        // has been marked as complete
+        node.color = '#808080'
       } else if (!outPorts.length) {
         // end: has no out ports
         node.color = '#f6412d'
