@@ -20,11 +20,13 @@ import { StateConsumer, ApplicationState } from '../Store'
 import { save } from '../persistance'
 import { clone } from '../clone'
 
+// import CustomDiagramModel from '../CustomDiagramModel'
+// import CustomNodeModel from '../CustomNodeModel'
+
 interface EditorState {
   ready: boolean
   selected: string | null
   saving: boolean
-  history: ApplicationState[]
 }
 
 interface EditorProps {
@@ -37,6 +39,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
   engine: DiagramEngine
   model: DiagramModel
   lastSavedState: ApplicationState
+  past: ApplicationState[]
+  future: ApplicationState[]
 
   constructor(props: EditorProps) {
     super(props)
@@ -45,15 +49,14 @@ class Editor extends React.Component<EditorProps, EditorState> {
       ready: false,
       selected: null,
       saving: false,
-      history: []
     }
     this.engine = new DiagramEngine()
     this.engine.installDefaultFactories()
 
-    console.log(this.props.state)
+    this.past = [this.props.state]
+    this.future = []
     this.updateStory(this.props.state.story)
     this.lastSavedState = clone(this.serialize())
-    // this.historyPos = 0
   }
 
   async componentDidMount() {
@@ -72,18 +75,14 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
 
     setInterval(() => {
-      let newHistory = clone(this.state.history)
       let currentState = clone(this.serialize())
+      let pastState = this.past[this.past.length - 1]
 
-      if (
-        JSON.stringify(currentState) !=
-        JSON.stringify(newHistory[newHistory.length - 1])
-      ) {
-        console.log('pushing new state!')
-        newHistory.push(currentState)
-        this.setState({ history: newHistory })
+      if (JSON.stringify(currentState) != JSON.stringify(pastState))  {
+        this.past.push(currentState)
+        console.log(clone(this.past))
       } else {
-        console.log('skip')
+        console.log('nothing new')
       }
     }, 1000)
   }
@@ -96,7 +95,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
       this.updateStory(newStory)
       this.forceUpdate()
     }
-    console.log('componentDidUpdate')
   }
 
   updateStory(story: any) {
@@ -198,9 +196,13 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
   private undo() {
     console.log('undo')
-    let history = clone(this.state.history)
-    console.log(history)
-    // this.setState({story: lastSlug.story})
+
+    this.past.pop()
+    let previousState = clone(this.past[this.past.length - 1])
+
+    if (previousState)  {
+      this.props.updateState(previousState)
+    }
   }
 
   private redo() {
