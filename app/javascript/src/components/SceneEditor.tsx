@@ -139,6 +139,33 @@ export default ({ focus, requestPaint, onClear }: ConsumerProps) => {
 
 
 
+type SceneEditorSettingsFieldsProps = {
+  name: string,
+  checkboxText: string,
+  checkboxDefault: boolean,
+  onChange: () => void
+}
+
+function SceneEditorSettingsFields({
+  name,
+  checkboxText,
+  checkboxDefault,
+  onChange
+}: SceneEditorSettingsFieldsProps) {
+
+  return (
+    <div className="SceneEditorField">
+      <label className="SceneEditorHeading" htmlFor={name}>
+        {name}
+      </label>
+    <div>
+      Mark this scene as final?
+      <input type="checkbox" defaultChecked={checkboxDefault} onClick={onChange}/>
+    </div>
+  </div>
+  )
+}
+
 /**
  *
  * New abstracted-out way of render react components for the text areas, since the Content and Notes areas are very similar
