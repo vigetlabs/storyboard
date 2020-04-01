@@ -88,9 +88,6 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     updateState(set(state, `meta.${focus.id}.notes`, html))
   }
 
-
-
-
   private onNameChange = (event: React.FormEvent<HTMLInputElement>) => {
     this.props.focus.name = event.currentTarget.value
     this.props.requestPaint()
