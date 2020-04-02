@@ -155,10 +155,10 @@ function SceneEditorSettingsFields({
       <label className="SceneEditorHeading" htmlFor={name}>
         {name}
       </label>
-    <div>
-      Mark this scene as final?
-      <input type="checkbox" defaultChecked={checkboxDefault} onClick={onChange}/>
-    </div>
+      <div>
+        Mark this scene as final?
+        <input type="checkbox" defaultChecked={checkboxDefault} onClick={onChange}/>
+      </div>
   </div>
   )
 }
