@@ -48,7 +48,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.state = {
       ready: false,
       selected: null,
-      saving: false,
+      saving: false
     }
     this.engine = new DiagramEngine()
     this.engine.installDefaultFactories()
@@ -78,9 +78,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
       let currentState = clone(this.serialize())
       let pastState = this.past[this.past.length - 1]
 
-      if (JSON.stringify(currentState) != JSON.stringify(pastState))  {
+      if (JSON.stringify(currentState) != JSON.stringify(pastState)) {
         this.past.push(currentState)
-        console.log(clone(this.past))
+        this.future = []
       } else {
         console.log('nothing new')
       }
@@ -196,17 +196,29 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
   private undo() {
     console.log('undo')
+    if (this.past.length > 1) {
+      let currentState = this.past.pop()
+      if (currentState) this.future.push(currentState)
 
-    this.past.pop()
-    let previousState = clone(this.past[this.past.length - 1])
-
-    if (previousState)  {
+      let previousState = clone(this.past[this.past.length - 1])
       this.props.updateState(previousState)
+    } else {
+      console.log('nothing to undo')
     }
   }
 
   private redo() {
     console.log('redo')
+
+    if (this.future.length) {
+      let futureState = this.future.pop()
+      if (futureState) {
+        this.past.push(futureState)
+        this.props.updateState(futureState)
+      }
+    } else {
+      console.log('nothing to redo')
+    }
   }
 
   private setZoom = (direction: number) => {
