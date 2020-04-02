@@ -74,13 +74,17 @@ class Editor extends React.Component<EditorProps, EditorState> {
       }
     }
 
-    setInterval(() => {
+    setTimeout(() => {
       let currentState = clone(this.serialize())
       let pastState = this.past[this.past.length - 1]
 
       if (JSON.stringify(currentState) != JSON.stringify(pastState)) {
         this.past.push(currentState)
         this.future = []
+
+        // console.log('currentState', currentState)
+        // console.log('pastState', pastState)
+        // console.log('past', this.past)
       } else {
         console.log('nothing new')
       }
@@ -88,6 +92,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   componentDidUpdate({ state: { story } }: EditorProps) {
+    console.log('componentDidUpdate')
+
     let {
       state: { story: newStory }
     } = this.props
@@ -95,6 +101,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
       this.updateStory(newStory)
       this.forceUpdate()
     }
+
+    // track history
   }
 
   updateStory(story: any) {
@@ -209,7 +217,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
   private redo() {
     console.log('redo')
-
     if (this.future.length) {
       let futureState = this.future.pop()
       if (futureState) {
