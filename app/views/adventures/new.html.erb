@@ -39,6 +39,11 @@
     <% end %>
 
     <div class="Field">
+      <%= f.label :password, "Add password?" %>
+      <%= f.text_area :password, placeholder: "password" %>
+    </div>
+
+    <div class="Field">
       <button class="SlantButton">Create Story</button>
     </div>
   <% end %>

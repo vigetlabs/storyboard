@@ -14,7 +14,11 @@ class AdventuresController < ApplicationController
   end
 
   def show
-    render layout: 'player'
+    if @adventure.password_digest != ""
+      render layout: 'authenticate_player'
+    else
+      render layout: 'player'
+    end
   end
 
   def new
@@ -103,7 +107,8 @@ class AdventuresController < ApplicationController
       :slug,
       :description,
       :public,
-      :theme
+      :theme,
+      :password
     )
   end
 end
