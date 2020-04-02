@@ -18,6 +18,8 @@ class Adventure < ApplicationRecord
 
   belongs_to :user, optional: true
 
+  has_secure_password validations: false
+
   validates :title, :theme, presence: true
 
   def to_s
