@@ -20,10 +20,11 @@ class AdventuresController < ApplicationController
 
   def authenticate
     if @adventure.authenticate(params[:adventure][:password])
-      session[:authenticated] = true
+      session[@adventure.title] = true
       redirect_to adventure_path
     else
-      redirect_to root_url
+      flash[:alert] = "Incorrect Password"
+      render :authenticate_player
     end
   end
 
@@ -62,6 +63,9 @@ class AdventuresController < ApplicationController
     if @adventure.save
       redirect_to [:edit, @adventure]
     else
+      if @adventure.errors[:password]
+        flash[:alert] = "Your password must be between 3 and 32 characters"
+      end
       render :new
     end
   end
@@ -114,13 +118,14 @@ class AdventuresController < ApplicationController
       :description,
       :public,
       :theme,
-      :password
+      :password,
+      :has_password
     )
   end
 
   def check_authentication
-    unless session[:authenticated] || @adventure.password_digest == ""
-      render layout: 'authenticate_player'
+    if @adventure.has_password? && !session[@adventure.title]
+      render :authenticate_player
     end
   end
 end

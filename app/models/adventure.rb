@@ -18,12 +18,16 @@ class Adventure < ApplicationRecord
 
   belongs_to :user, optional: true
 
-  has_secure_password validations: false
-
   validates :title, :theme, presence: true
+
+  validates :password, length: (3..32), presence: true, if: :has_password
 
   def to_s
     title
+  end
+
+  def authenticate(entered_password)
+    password? && password == entered_password
   end
 
   def to_param

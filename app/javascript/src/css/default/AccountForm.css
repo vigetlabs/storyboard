@@ -30,6 +30,10 @@
   font-weight: normal;
 }
 
+.AccountForm .Field.-passwordField {
+  display: none
+}
+
 .AccountForm .Field input[type="email"],
 .AccountForm .Field input[type="text"],
 .AccountForm .Field input[type="url"],
