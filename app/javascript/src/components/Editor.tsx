@@ -73,27 +73,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
         e.preventDefault()
       }
     }
-
-    setTimeout(() => {
-      let currentState = clone(this.serialize())
-      let pastState = this.past[this.past.length - 1]
-
-      if (JSON.stringify(currentState) != JSON.stringify(pastState)) {
-        this.past.push(currentState)
-        this.future = []
-
-        // console.log('currentState', currentState)
-        // console.log('pastState', pastState)
-        // console.log('past', this.past)
-      } else {
-        console.log('nothing new')
-      }
-    }, 1000)
   }
 
   componentDidUpdate({ state: { story } }: EditorProps) {
-    console.log('componentDidUpdate')
-
     let {
       state: { story: newStory }
     } = this.props
@@ -103,6 +85,15 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
 
     // track history
+    let currentState = clone(this.serialize())
+    let pastState = this.past[this.past.length - 1]
+
+    if (JSON.stringify(currentState) != JSON.stringify(pastState)) {
+      this.past.push(currentState)
+      this.future = []
+    } else {
+      console.log('nothing new')
+    }
   }
 
   updateStory(story: any) {
@@ -209,7 +200,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
       if (currentState) this.future.push(currentState)
 
       let previousState = clone(this.past[this.past.length - 1])
-      this.props.updateState(previousState)
+
+      this.updateStory(previousState.story)
+      this.forceUpdate()
     } else {
       console.log('nothing to undo')
     }
@@ -221,7 +214,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
       let futureState = this.future.pop()
       if (futureState) {
         this.past.push(futureState)
-        this.props.updateState(futureState)
+
+        this.updateStory(futureState.story)
+        this.forceUpdate()
       }
     } else {
       console.log('nothing to redo')
