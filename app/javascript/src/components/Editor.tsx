@@ -539,7 +539,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
       let inPortsWithLinks = []
       let outPortsWithLinks = []
       let outPorts = []
+<<<<<<< HEAD
       let isFinal = meta ? meta.isFinal : false
+=======
+>>>>>>> 5de1905... Update styles a bit and remove uneccessary ternaries. Might want a fed to look at some of this styling -- can't seem to get the label text to be INSIDE the label
 
       for (let key in node.ports) {
         let port = node.ports[key] as DefaultPortModel
@@ -562,7 +565,11 @@ class Editor extends React.Component<EditorProps, EditorState> {
       } else if (!inPortsWithLinks.length && !outPortsWithLinks.length) {
         // orphan: has no [in/out ports with links]
         node.color = '#ffeb3b'
+<<<<<<< HEAD
       } else if (isFinal) {
+=======
+      } else if (meta.isFinal) {
+>>>>>>> 5de1905... Update styles a bit and remove uneccessary ternaries. Might want a fed to look at some of this styling -- can't seem to get the label text to be INSIDE the label
         // has been marked as complete
         node.color = '#808080'
       } else if (!outPorts.length) {
