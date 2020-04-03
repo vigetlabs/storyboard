@@ -88,17 +88,6 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     updateState(set(state, `meta.${focus.id}.notes`, html))
   }
 
-<<<<<<< HEAD
-=======
-  onChangeFinal = () => {
-    const { focus, state, updateState } = this.props
-    const isFinal = get(state, `meta.${focus.id}.isFinal`)
-
-    updateState(set(state, `meta.${focus.id}.isFinal`, !isFinal))
-  }
-
-
->>>>>>> 5de1905... Update styles a bit and remove uneccessary ternaries. Might want a fed to look at some of this styling -- can't seem to get the label text to be INSIDE the label
   private onNameChange = (event: React.FormEvent<HTMLInputElement>) => {
     this.props.focus.name = event.currentTarget.value
     this.props.requestPaint()
