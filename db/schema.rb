@@ -26,7 +26,8 @@ ActiveRecord::Schema.define(version: 2020_04_02_175913) do
     t.json "content", default: {}
     t.string "theme", default: "light"
     t.string "featured"
-    t.string "password_digest", default: "", null: false
+    t.string "password", default: "", null: false
+    t.boolean "has_password", default: false, null: false
     t.index ["user_id"], name: "index_adventures_on_user_id"
   end
 

@@ -246,6 +246,7 @@ PLATFORMS
 
 DEPENDENCIES
   awesome_print
+  bcrypt
   bootsnap (>= 1.1.0)
   capistrano-db-tasks!
   capybara (>= 2.15)

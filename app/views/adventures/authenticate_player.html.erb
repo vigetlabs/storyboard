@@ -1,0 +1,16 @@
+<div class="AccountForm Container">
+  <h1 class="PageBanner">View a<br>Private Story</h1>
+  <%= form_for :adventure, url: authenticate_adventure_path do |f| %>
+    <div class="Field">
+      <%= f.label :password, "Enter password to access this story" %>
+      <%= f.text_field :password, value: nil%>
+    </div>
+    <div class="Field">
+      <button class="SlantButton">Access Story</button>
+    </div>
+  <% end %>
+  <footer class="AccountFormFooter">
+    <%= link_to 'Back', adventures_path %>
+  </footer>
+</div>
+
