@@ -1,5 +1,6 @@
 class AdventuresController < ApplicationController
-  before_action :set_adventure, only: [:show, :edit, :update, :destroy, :details, :source, :offline]
+  before_action :set_adventure, only: [:show, :edit, :update, :destroy, :details, :source, :offline, :authenticate]
+  before_action :check_authentication, only: [:show]
 
   def index
   end
@@ -14,10 +15,15 @@ class AdventuresController < ApplicationController
   end
 
   def show
-    if @adventure.password_digest != ""
-      render layout: 'authenticate_player'
+    render layout: 'player'
+  end
+
+  def authenticate
+    if @adventure.authenticate(params[:adventure][:password])
+      session[:authenticated] = true
+      redirect_to adventure_path
     else
-      render layout: 'player'
+      redirect_to root_url
     end
   end
 
@@ -110,5 +116,11 @@ class AdventuresController < ApplicationController
       :theme,
       :password
     )
+  end
+
+  def check_authentication
+    unless session[:authenticated] || @adventure.password_digest == ""
+      render layout: 'authenticate_player'
+    end
   end
 end
