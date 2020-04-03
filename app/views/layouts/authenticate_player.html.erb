@@ -1,7 +1,12 @@
-<%= form_for :adventure do |f| %>
+<%= form_for :adventure, url: authenticate_adventure_path do |f| %>
 
     <div class="Field">
       <%= f.label :password, "Add password?" %>
       <%= f.text_area :password, placeholder: "password" %>
     </div>
+
+    <div class="Field">
+      <button class="SlantButton">Access Story</button>
+    </div>
+
 <% end %>
