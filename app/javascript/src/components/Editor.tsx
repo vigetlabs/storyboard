@@ -20,9 +20,6 @@ import { StateConsumer, ApplicationState } from '../Store'
 import { save } from '../persistance'
 import { clone } from '../clone'
 
-// import CustomDiagramModel from '../CustomDiagramModel'
-// import CustomNodeModel from '../CustomNodeModel'
-
 interface EditorState {
   ready: boolean
   selected: string | null
