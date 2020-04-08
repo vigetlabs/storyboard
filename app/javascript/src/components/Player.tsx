@@ -69,13 +69,24 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   componentDidMount() {
-    this.setState({
-      focus: this.findStartKey()
-    })
+    if (window.location.hash == '') {
+      this.setState({
+        focus: this.findStartKey()
+      })
+    } else {
+      let currentState = JSON.parse(
+        decodeURI(window.location.hash.replace(/^\#/, ''))
+      )
+      this.setState(currentState)
+    }
   }
 
   start = () => {
     this.setState({ started: true })
+  }
+
+  componentDidUpdate() {
+    window.location.hash = JSON.stringify(this.state)
   }
 
   render() {
