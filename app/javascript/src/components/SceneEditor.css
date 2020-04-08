@@ -92,12 +92,26 @@
   padding: 9px 14px 6px;
 }
 
+.settingsButton {
+  border: none;
+  background: none;
+  float: right;
+}
+
+.checkboxes {
+  width: 100%;
+}
+
 .checkboxes label {
-  display: inline-block;
+  align-items: center;
+  display: flex;
   white-space: nowrap;
 }
+
 .checkboxes input {
   box-shadow: none;
+  height: auto;
   vertical-align: middle;
+  width: auto;
 }
 

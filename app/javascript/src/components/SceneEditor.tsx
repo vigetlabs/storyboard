@@ -8,6 +8,8 @@ import { get, set } from 'lodash'
 import { DefaultNodeModel } from 'storm-react-diagrams'
 import { StateConsumer, ApplicationState } from '../Store'
 import ChoiceEditor from './ChoiceEditor'
+import SettingsEditor from './SettingsEditor'
+
 
 declare function $R(el: HTMLElement, options: any): void
 declare function $R(el: HTMLElement, fun: string, arg: string): void
@@ -63,12 +65,13 @@ class SceneEditor extends React.Component<SceneEditorProps> {
           defaultValue={notes}
           onChange={this.onChangeNotes}
         />
-        <SceneEditorSettingsFields
+        <SettingsEditor
           state={this.props.state}
           updateState={this.props.updateState}
           focus={focus}
           checkboxDefault={isFinal}
         />
+        <br/><br/>
       </aside>
     )
   }
@@ -185,84 +188,4 @@ type SceneEditorTextAreaFieldProps = {
   placeholderText: string
   instructionalText: string
   onChange: (arg0: string) => void
-}
-
-interface SceneEditorSettingsState {
-  checkboxText: string,
-  // checkboxDefault: boolean,
-  optionsOpen: boolean,
-  // focus: DefaultNodeModel
-  // onChange: () => void
-}
-
-
-
-interface SceneEditorSettingsStateProps {
-  state: ApplicationState
-  updateState(state: Readonly<ApplicationState>): Readonly<ApplicationState>
-  focus: DefaultNodeModel,
-  checkboxDefault: boolean
-}
-
-
-
-class SceneEditorSettingsFields extends React.Component<
-SceneEditorSettingsStateProps,
-SceneEditorSettingsState
-> {
-
-  constructor(props: SceneEditorSettingsStateProps) {
-    super(props)
-
-    let { state } = props
-
-    this.state = {
-      optionsOpen: false,
-      checkboxText: "Test",
-      // checkboxDefault: get(state, `meta.${focus.id}.isFinal`)
-      // onChange: onChangeFinal()
-    }
-
-  }
-  render() {
-    const { optionsOpen } = this.state
-    const { checkboxDefault } = this.props
-
-    return(
-    <div className="SceneEditorField">
-      <label className="SceneEditorHeading">
-        Settings
-        <button onClick={this.optionsButtonClick}>
-      {optionsOpen ? 'v' : '>'}
-
-        </button>
-      </label>
-      <section>
-        {optionsOpen && (
-          <>
-      <div className="checkboxes">
-      <label htmlFor="finalCheckbox"><input type="checkbox" id="finalCheckbox" defaultChecked={checkboxDefault} onClick={this.onChangeFinal} />
-        Mark this scene as final?</label>
-      </div>
-
-          </>
-        )}
-      </section>
-    </div>
-  )
-}
-optionsButtonClick = () => {
-  console.log("Hey")
-  this.setState(prevState => ({ optionsOpen: !prevState.optionsOpen }))
-
-}
-
-onChangeFinal = () => {
-  const { focus, state, updateState } = this.props
-  const isFinal = get(state, `meta.${focus.id}.isFinal`)
-  updateState(set(state, `meta.${focus.id}.isFinal`, !isFinal))
-}
-
-
-
 }
