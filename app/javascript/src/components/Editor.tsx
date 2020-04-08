@@ -72,16 +72,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
     if (JSON.stringify(story) !== JSON.stringify(newStory)) {
       this.updateStory(newStory)
       this.forceUpdate()
-    }
-
-    // track history
-    let currentState = clone(this.serialize())
-    let pastState = this.past[this.past.length - 1]
-
-    if (JSON.stringify(currentState) != JSON.stringify(pastState)) {
-      this.past.push(currentState)
-      this.future = []
-      console.log('update')
     } else {
       console.log('nothing new')
     }
