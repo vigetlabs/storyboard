@@ -143,25 +143,6 @@ type SceneEditorSettingsFieldsProps = {
   onChange: () => void
 }
 
-function SceneEditorSettingsFields({
-  name,
-  checkboxText,
-  checkboxDefault,
-  onChange
-}: SceneEditorSettingsFieldsProps) {
-
-  return (
-    <div className="SceneEditorField">
-      <label className="SceneEditorHeading">
-        {name}
-      </label>
-      <div className="checkboxes">
-      <label htmlFor="finalCheckbox"><input type="checkbox" id="finalCheckbox" defaultChecked={checkboxDefault} onClick={onChange} />
-        Mark this scene as final?</label>
-      </div>
-    </div>
-  )
-}
 
 /**
  *
