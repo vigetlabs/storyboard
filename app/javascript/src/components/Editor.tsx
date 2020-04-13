@@ -539,6 +539,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       let inPortsWithLinks = []
       let outPortsWithLinks = []
       let outPorts = []
+      let isFinal = meta ? meta.isFinal : false
 
       for (let key in node.ports) {
         let port = node.ports[key] as DefaultPortModel
@@ -561,7 +562,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
       } else if (!inPortsWithLinks.length && !outPortsWithLinks.length) {
         // orphan: has no [in/out ports with links]
         node.color = '#ffeb3b'
-      } else if (meta.isFinal) {
+      } else if (isFinal) {
         // has been marked as complete
         node.color = '#808080'
       } else if (!outPorts.length) {
