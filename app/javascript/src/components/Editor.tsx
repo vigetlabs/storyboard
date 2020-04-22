@@ -20,6 +20,8 @@ import { StateConsumer, ApplicationState } from '../Store'
 import { save } from '../persistance'
 import { clone } from '../clone'
 
+import { Undo, Redo } from '@material-ui/icons'
+
 interface EditorState {
   ready: boolean
   selected: string | null
@@ -140,8 +142,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
             </label>
 
             <div className="EditorButton -zooms">
-              <button onClick={() => this.undo()}>U</button>
-              <button onClick={() => this.redo()}>R</button>
+              <button onClick={() => this.undo()}>
+                <Undo />
+              </button>
+              <button onClick={() => this.redo()}>
+                <Redo />
+              </button>
             </div>
 
             <div className="EditorButton -zooms">
