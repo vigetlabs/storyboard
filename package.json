@@ -4,6 +4,8 @@
   "dependencies": {
     "@babel/core": "^7.0.0-0",
     "@babel/preset-react": "^7.0.0",
+    "@material-ui/core": "^4.9.11",
+    "@material-ui/icons": "^4.9.1",
     "@rails/webpacker": "4.0.7",
     "@types/lodash": "^4.14.118",
     "@types/node": "^12.6.9",
@@ -20,6 +22,9 @@
   },
   "devDependencies": {
     "webpack-dev-server": "^3.1.11"
+  },
+  "scripts": {
+    "start": "./bin/webpack-dev-server"
   },
   "resolutions": {
     "browserslist": "4.6.2",

@@ -23,6 +23,8 @@ import * as _ from 'lodash'
 
 let offset = 100
 
+import { Undo, Redo } from '@material-ui/icons'
+
 interface EditorState {
   ready: boolean
   selected: string | null
@@ -43,6 +45,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
   copiedLinks: DefaultLinkModel[]
   pastedLinks: DefaultLinkModel[]
   lastSavedState: ApplicationState
+  past: ApplicationState[]
+  future: ApplicationState[]
 
   constructor(props: EditorProps) {
     super(props)
@@ -55,6 +59,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.engine = new DiagramEngine()
     this.engine.installDefaultFactories()
 
+    this.past = [this.props.state]
+    this.future = []
     this.updateStory(this.props.state.story)
     this.lastSavedState = clone(this.serialize())
   }
@@ -63,6 +69,16 @@ class Editor extends React.Component<EditorProps, EditorState> {
     setTimeout(() => {
       this.setState({ ready: true })
     })
+
+    document.onkeydown = e => {
+      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key == 'z') {
+        this.redo()
+        e.preventDefault()
+      } else if ((e.metaKey || e.ctrlKey) && e.key == 'z') {
+        this.undo()
+        e.preventDefault()
+      }
+    }
   }
 
   componentDidUpdate({ state: { story } }: EditorProps) {
@@ -72,6 +88,17 @@ class Editor extends React.Component<EditorProps, EditorState> {
     if (JSON.stringify(story) !== JSON.stringify(newStory)) {
       this.updateStory(newStory)
       this.forceUpdate()
+    }
+
+    // track history
+    let currentState = clone(this.serialize())
+    let pastState = this.past[this.past.length - 1]
+
+    if (JSON.stringify(currentState) != JSON.stringify(pastState)) {
+      this.past.push(currentState)
+      this.future = []
+    } else {
+      console.log('nothing new')
     }
   }
 
@@ -124,8 +151,16 @@ class Editor extends React.Component<EditorProps, EditorState> {
             </label>
 
             <div className="EditorButton -zooms">
-              <button onClick={() => this.setZoom(-1)}>-</button>
+              <button onClick={() => this.undo()}>
+                <Undo />
+              </button>
+              <button onClick={() => this.redo()}>
+                <Redo />
+              </button>
+            </div>
 
+            <div className="EditorButton -zooms">
+              <button onClick={() => this.setZoom(-1)}>-</button>
               <button onClick={() => this.setZoom(1)}>+</button>
             </div>
           </menu>
@@ -168,6 +203,36 @@ class Editor extends React.Component<EditorProps, EditorState> {
         {this.state.saving ? 'Saving...' : 'Save'}
       </button>
     )
+  }
+
+  private undo() {
+    console.log('undo')
+    if (this.past.length > 1) {
+      let currentState = this.past.pop()
+      if (currentState) this.future.push(currentState)
+
+      let previousState = clone(this.past[this.past.length - 1])
+
+      this.updateStory(previousState.story)
+      this.forceUpdate()
+    } else {
+      console.log('nothing to undo')
+    }
+  }
+
+  private redo() {
+    console.log('redo')
+    if (this.future.length) {
+      let futureState = this.future.pop()
+      if (futureState) {
+        this.past.push(futureState)
+
+        this.updateStory(futureState.story)
+        this.forceUpdate()
+      }
+    } else {
+      console.log('nothing to redo')
+    }
   }
 
   private setZoom = (direction: number) => {
@@ -341,6 +406,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
 
     const saveStart = Date.now()
+
     const newState = this.serialize()
     const noChange =
       JSON.stringify(newState) === JSON.stringify(this.lastSavedState)
