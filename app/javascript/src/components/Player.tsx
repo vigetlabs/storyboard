@@ -73,7 +73,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   componentDidMount() {
-    if (window.location.hash == '') {
+    if (window.location.hash == '' || window.location.hash == null) {
       this.setState({
         focus: this.findStartKey()
       })
