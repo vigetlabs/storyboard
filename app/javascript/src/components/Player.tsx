@@ -349,22 +349,33 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     )
   }
 
+  private strip(html: string){
+    var doc = new DOMParser().parseFromString(html, 'text/html');
+    return doc.body.textContent || "";
+  }
+
   private translate(text: string) {
     const tags = text.match(/\{\{(.+?)\}\}/g)
-
     if (tags) {
       tags.forEach(tag => {
         const tagName = tag.replace(/[\{\}]/g, '')
-
-        const relevantStat = this.state.currentStats.find(stat => {
-          return stat.name == tagName
+        const trimmed = this.strip(tagName).trim()
+        const addArray = trimmed.split("+")
+        var sum = 0
+        addArray.forEach(item => {
+          const relevantStat = this.state.currentStats.find(stat => {
+            return stat.name == item.trim()
+          })
+          if (relevantStat) {
+            text = text.replace(tag, relevantStat.value.toString())
+          } else {
+            text = text.replace(tag, '0')
+          }
+          console.log(text)
+          sum += parseInt(text)
         })
-
-        if (relevantStat) {
-          text = text.replace(tag, relevantStat.value.toString())
-        } else {
-          text = text.replace(tag, '0')
-        }
+        console.log(sum)
+        text = sum.toString()
       })
     }
 
