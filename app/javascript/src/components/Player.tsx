@@ -23,6 +23,8 @@ import { PlayerInvalid } from './PlayerInvalid'
 import { PlayerEnd, PlayerDeadEnd } from './PlayerEnd'
 import { clone } from '../clone'
 
+var CryptoJS = require('crypto-js')
+
 interface PlayerProps {
   description: string
   meta: MetaData
@@ -50,6 +52,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   engine: DiagramEngine
   model: DiagramModel
 
+  private passphrase = 'labrats'
+
   state: PlayerState = {
     started: false,
     currentItems: [],
@@ -69,13 +73,29 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   componentDidMount() {
-    this.setState({
-      focus: this.findStartKey()
-    })
+    if (window.location.hash == '' || window.location.hash == null) {
+      this.setState({
+        focus: this.findStartKey()
+      })
+    } else {
+      let bytes = CryptoJS.AES.decrypt(
+        window.location.hash.replace(/^\#/, ''),
+        this.passphrase
+      )
+      let currentState = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
+      this.setState(currentState)
+    }
   }
 
   start = () => {
     this.setState({ started: true })
+  }
+
+  componentDidUpdate() {
+    window.location.hash = CryptoJS.AES.encrypt(
+      JSON.stringify(this.state),
+      this.passphrase
+    ).toString()
   }
 
   render() {

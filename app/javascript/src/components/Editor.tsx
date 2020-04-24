@@ -88,6 +88,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
     if (JSON.stringify(story) !== JSON.stringify(newStory)) {
       this.updateStory(newStory)
       this.forceUpdate()
+    } else {
+      console.log('nothing new')
     }
 
     // track history
