@@ -71,7 +71,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
     })
 
     document.onkeydown = e => {
-      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key == 'z') {
+      if (
+        ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key == 'z') ||
+        ((e.metaKey || e.ctrlKey) && e.key == 'y')
+      ) {
         this.redo()
         e.preventDefault()
       } else if ((e.metaKey || e.ctrlKey) && e.key == 'z') {
