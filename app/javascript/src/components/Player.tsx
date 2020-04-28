@@ -361,35 +361,33 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         const tagName = tag.replace(/[\{\}]/g, '')
         const trimmed = this.strip(tagName).trim()
         const addArray = trimmed.split("+")
-        console.log(addArray)
         const otherArray = addArray.map(function (x) {
           return x.trim()
         });
-        console.log(otherArray)
-        // var sum = otherArray.reduce(function(a, b) {
-        //   return a + b
-        // }, 0);
-        var sum = 0
-        console.log(sum)
-        otherArray.forEach(item => {
-          const relevantStat = this.state.currentStats.find(stat => {
-            return stat.name == item
-          })
-          sum += relevantStat ? relevantStat.value : 0
-          console.log(relevantStat)
-          if (relevantStat) {
-            text = text.replace(tag, relevantStat.value.toString())
-          } else {
-            text = text.replace(tag, '0')
-          }
-          console.log(text)
+        const statArray = otherArray.map(item => {
+          const relevantStat = this.findStat(item)
+          return relevantStat ? relevantStat.value: 0
         })
-        console.log(sum)
-        text = sum.toString()
+        const value = this.execute(statArray, 1) // 1 for add, -1 for subtract
+        text = text.replace(tag, value.toString())
       })
     }
 
     return text
+  }
+
+  private findStat(item: string) {
+    return this.state.currentStats.find((stat: { name: string }) => {
+      return stat.name == item
+    })
+  }
+
+  private execute(statArray: number[], sign: number) {
+    var sum = 0
+    statArray.forEach((stat) => {
+      sum += stat * sign
+    });
+    return sum
   }
 
   private getRandom(nodes: string[]) {
