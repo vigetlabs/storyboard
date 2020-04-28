@@ -24,6 +24,7 @@ import { PlayerEnd, PlayerDeadEnd } from './PlayerEnd'
 import { clone } from '../clone'
 
 var CryptoJS = require('crypto-js')
+var Parser = require('expr-eval').Parser;
 
 interface PlayerProps {
   description: string
@@ -379,17 +380,20 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     if (tags) {
       tags.forEach(tag => {
         const tagName = tag.replace(/[\{\}]/g, '')
-        const trimmed = this.strip(tagName).trim()
-        const addArray = trimmed.split("+")
-        const otherArray = addArray.map(function (x) {
-          return x.trim()
-        });
-        const statArray = otherArray.map(item => {
-          const relevantStat = this.findStat(item)
-          return relevantStat ? relevantStat.value: 0
+        var cleanedTag = this.strip(tagName)
+
+        const operands = cleanedTag.split(/[+*/-]/g)
+        const statArray = operands.map(item => {
+          return this.findStat(item.trim())
         })
-        const value = this.execute(statArray, 1) // 1 for add, -1 for subtract
-        text = text.replace(tag, value.toString())
+        statArray.forEach(stat => {
+          if (stat) {
+            cleanedTag = cleanedTag.replace(new RegExp(stat.name), stat.value.toString())
+          }
+        });
+
+        const evaluated = Parser.evaluate(cleanedTag.replace(/\s/g, ""))
+        text = text.replace(tag, evaluated)
       })
     }
 
@@ -400,14 +404,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return this.state.currentStats.find((stat: { name: string }) => {
       return stat.name == item
     })
-  }
-
-  private execute(statArray: number[], sign: number) {
-    var sum = 0
-    statArray.forEach((stat) => {
-      sum += stat * sign
-    });
-    return sum
   }
 
   private getRandom(nodes: string[]) {
