@@ -23,6 +23,8 @@ import { PlayerInvalid } from './PlayerInvalid'
 import { PlayerEnd, PlayerDeadEnd } from './PlayerEnd'
 import { clone } from '../clone'
 
+var Parser = require('expr-eval').Parser;
+
 interface PlayerProps {
   description: string
   meta: MetaData
@@ -359,17 +361,25 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     if (tags) {
       tags.forEach(tag => {
         const tagName = tag.replace(/[\{\}]/g, '')
-        const trimmed = this.strip(tagName).trim()
+        var trimmed = this.strip(tagName).trim()
+        console.log(trimmed)
+
         const addArray = trimmed.split("+")
         const otherArray = addArray.map(function (x) {
           return x.trim()
         });
         const statArray = otherArray.map(item => {
-          const relevantStat = this.findStat(item)
-          return relevantStat ? relevantStat.value: 0
+          return this.findStat(item)
         })
-        const value = this.execute(statArray, 1) // 1 for add, -1 for subtract
-        text = text.replace(tag, value.toString())
+        statArray.forEach(stat => {
+          if (stat) {
+            trimmed = trimmed.replace(new RegExp(stat.name), stat.value.toString())
+          }
+        });
+
+        const evaluated = Parser.evaluate(trimmed.replace(/\s/g, ""))
+        // const value = this.execute(statArray, 1) // 1 for add, -1 for subtract
+        text = text.replace(tag, evaluated)
       })
     }
 
