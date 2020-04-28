@@ -361,18 +361,28 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         const tagName = tag.replace(/[\{\}]/g, '')
         const trimmed = this.strip(tagName).trim()
         const addArray = trimmed.split("+")
+        console.log(addArray)
+        const otherArray = addArray.map(function (x) {
+          return x.trim()
+        });
+        console.log(otherArray)
+        // var sum = otherArray.reduce(function(a, b) {
+        //   return a + b
+        // }, 0);
         var sum = 0
-        addArray.forEach(item => {
+        console.log(sum)
+        otherArray.forEach(item => {
           const relevantStat = this.state.currentStats.find(stat => {
-            return stat.name == item.trim()
+            return stat.name == item
           })
+          sum += relevantStat ? relevantStat.value : 0
+          console.log(relevantStat)
           if (relevantStat) {
             text = text.replace(tag, relevantStat.value.toString())
           } else {
             text = text.replace(tag, '0')
           }
           console.log(text)
-          sum += parseInt(text)
         })
         console.log(sum)
         text = sum.toString()
