@@ -361,24 +361,19 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     if (tags) {
       tags.forEach(tag => {
         const tagName = tag.replace(/[\{\}]/g, '')
-        var trimmed = this.strip(tagName).trim()
-        console.log(trimmed)
+        var cleanedTag = this.strip(tagName)
 
-        const addArray = trimmed.split("+")
-        const otherArray = addArray.map(function (x) {
-          return x.trim()
-        });
-        const statArray = otherArray.map(item => {
-          return this.findStat(item)
+        const operands = cleanedTag.split(/[+*/-]/g)
+        const statArray = operands.map(item => {
+          return this.findStat(item.trim())
         })
         statArray.forEach(stat => {
           if (stat) {
-            trimmed = trimmed.replace(new RegExp(stat.name), stat.value.toString())
+            cleanedTag = cleanedTag.replace(new RegExp(stat.name), stat.value.toString())
           }
         });
 
-        const evaluated = Parser.evaluate(trimmed.replace(/\s/g, ""))
-        // const value = this.execute(statArray, 1) // 1 for add, -1 for subtract
+        const evaluated = Parser.evaluate(cleanedTag.replace(/\s/g, ""))
         text = text.replace(tag, evaluated)
       })
     }
@@ -390,14 +385,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return this.state.currentStats.find((stat: { name: string }) => {
       return stat.name == item
     })
-  }
-
-  private execute(statArray: number[], sign: number) {
-    var sum = 0
-    statArray.forEach((stat) => {
-      sum += stat * sign
-    });
-    return sum
   }
 
   private getRandom(nodes: string[]) {
