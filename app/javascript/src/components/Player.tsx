@@ -368,7 +368,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         const statArray = operands.map(item => {
           return this.findStat(item.trim())
         })
-        console.log(statArray)
 
         var expressionVariables = {} as any;
         statArray.forEach(stat => {
@@ -382,14 +381,25 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           evaluated = Parser.evaluate(cleanedTag.replace(/\s/g, ""), expressionVariables )
         }
         catch(err) {
-          console.log(err)
-          evaluated = "Unidentified variable"
+          var errors = [] as any
+          operands.forEach(item => {
+            if (this.findInvalidStat(item.trim())) {
+              errors += item
+            }
+          })
+          evaluated = "Unidentified variable(s): " + errors
         }
         text = text.replace(tag, evaluated.toString())
       })
     }
 
     return text
+  }
+
+  private findInvalidStat(item: string) {
+    return !(this.state.currentStats.some((stat: { name: string}) => {
+      return item === stat.name
+    })) && isNaN(Number(item))
   }
 
   private findStat(item: string) {
