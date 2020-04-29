@@ -23,7 +23,8 @@ import { PlayerInvalid } from './PlayerInvalid'
 import { PlayerEnd, PlayerDeadEnd } from './PlayerEnd'
 import { clone } from '../clone'
 
-var Parser = require('expr-eval').Parser;
+import { Parser } from 'expr-eval'
+
 
 interface PlayerProps {
   description: string
@@ -367,14 +368,24 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         const statArray = operands.map(item => {
           return this.findStat(item.trim())
         })
+        console.log(statArray)
+
+        var expressionVariables = {} as any;
         statArray.forEach(stat => {
           if (stat) {
-            cleanedTag = cleanedTag.replace(new RegExp(stat.name), stat.value.toString())
+            expressionVariables[stat.name] = stat.value
           }
         });
+        var evaluated;
 
-        const evaluated = Parser.evaluate(cleanedTag.replace(/\s/g, ""))
-        text = text.replace(tag, evaluated)
+        try {
+          evaluated = Parser.evaluate(cleanedTag.replace(/\s/g, ""), expressionVariables )
+        }
+        catch(err) {
+          console.log(err)
+          evaluated = "Unidentified variable"
+        }
+        text = text.replace(tag, evaluated.toString())
       })
     }
 
