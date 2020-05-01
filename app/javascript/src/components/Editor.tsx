@@ -71,7 +71,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
     })
 
     document.onkeydown = e => {
-      if ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key == 'z') {
+      if (
+        ((e.metaKey || e.ctrlKey) && e.shiftKey && e.key == 'z') ||
+        ((e.metaKey || e.ctrlKey) && e.key == 'y')
+      ) {
         this.redo()
         e.preventDefault()
       } else if ((e.metaKey || e.ctrlKey) && e.key == 'z') {
@@ -88,6 +91,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
     if (JSON.stringify(story) !== JSON.stringify(newStory)) {
       this.updateStory(newStory)
       this.forceUpdate()
+    } else {
+      console.log('nothing new')
     }
 
     // track history

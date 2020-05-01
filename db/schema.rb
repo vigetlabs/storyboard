@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_10_124359) do
+ActiveRecord::Schema.define(version: 2020_04_02_175913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -26,6 +26,8 @@ ActiveRecord::Schema.define(version: 2019_12_10_124359) do
     t.json "content", default: {}
     t.string "theme", default: "light"
     t.string "featured"
+    t.string "password", default: "", null: false
+    t.boolean "has_password", default: false, null: false
     t.index ["user_id"], name: "index_adventures_on_user_id"
   end
 

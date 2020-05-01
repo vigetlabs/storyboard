@@ -36,7 +36,21 @@
           </em>
         </div>
       </div>
+      <div class="Field -checkbox">
+        <%= f.check_box :has_password, onchange: "togglePasswordField(this)" %>
+        <%= f.label :has_password, "Add Password?"%>
+        <div class="hint">
+          <em>
+            If checked, others must enter a password to play this Story.
+          </em>
+        </div>
+      </div>
+      <div class="Field -passwordField">
+        <%= f.label :password, "Password" %>
+        <%= f.text_field :password %>
+      </div>
     <% end %>
+
 
     <div class="Field">
       <button class="SlantButton">Create Story</button>
@@ -47,3 +61,12 @@
     <%= link_to 'Back', adventures_path %>
   </footer>
 </div>
+
+
+<script>
+  window.onload = togglePasswordField(document.getElementById("adventure_has_password"))
+  function togglePasswordField(obj) {
+    var elem = document.getElementsByClassName("Field -passwordField")
+    elem[0].style.display = obj.checked ? 'block' : 'none'
+  }
+</script>

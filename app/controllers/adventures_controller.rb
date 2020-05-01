@@ -1,5 +1,6 @@
 class AdventuresController < ApplicationController
-  before_action :set_adventure, only: [:show, :edit, :update, :destroy, :details, :source, :offline]
+  before_action :set_adventure, only: [:show, :edit, :update, :destroy, :details, :source, :offline, :authenticate]
+  before_action :check_authentication, only: [:show]
 
   def index
   end
@@ -15,6 +16,16 @@ class AdventuresController < ApplicationController
 
   def show
     render layout: 'player'
+  end
+
+  def authenticate
+    if @adventure.authenticate(params[:adventure][:password])
+      session[@adventure.title] = true
+      redirect_to adventure_path
+    else
+      flash[:alert] = "Incorrect Password"
+      render :authenticate_player
+    end
   end
 
   def new
@@ -52,6 +63,9 @@ class AdventuresController < ApplicationController
     if @adventure.save
       redirect_to [:edit, @adventure]
     else
+      if @adventure.errors[:password]
+        flash[:alert] = "Your password must be between 3 and 32 characters"
+      end
       render :new
     end
   end
@@ -103,7 +117,15 @@ class AdventuresController < ApplicationController
       :slug,
       :description,
       :public,
-      :theme
+      :theme,
+      :password,
+      :has_password
     )
+  end
+
+  def check_authentication
+    if @adventure.has_password? && !session[@adventure.title]
+      render :authenticate_player
+    end
   end
 end

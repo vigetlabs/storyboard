@@ -16,6 +16,7 @@ Rails.application.routes.draw do
     get "details", on: :member, as: :details
     get "source", on: :member
     get "offline", on: :member
+    post "authenticate", on: :member
     get "mine", on: :collection, as: :my
     get "csv", on: :collection
   end
