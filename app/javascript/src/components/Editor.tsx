@@ -91,8 +91,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
     if (JSON.stringify(story) !== JSON.stringify(newStory)) {
       this.updateStory(newStory)
       this.forceUpdate()
-    } else {
-      console.log('nothing new')
     }
 
     // track history
@@ -102,8 +100,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
     if (JSON.stringify(currentState) != JSON.stringify(pastState)) {
       this.past.push(currentState)
       this.future = []
-    } else {
-      console.log('nothing new')
     }
   }
 
