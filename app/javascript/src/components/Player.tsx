@@ -27,9 +27,6 @@ import { Parser } from 'expr-eval'
 var CryptoJS = require('crypto-js')
 
 
-import { Parser } from 'expr-eval'
-
-
 interface PlayerProps {
   description: string
   meta: MetaData
