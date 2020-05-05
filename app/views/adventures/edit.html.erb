@@ -14,8 +14,8 @@
     <% if !view_only && @adventure.editable_by?(current_user) %>
       <%= link_to 'Edit', [:details, @adventure], class: "SlantButton -large" %>
     <% end %>
-
-    <%= link_to 'Play', @adventure, class: "SlantButton -large" %>
+    <%= link_to 'Debug', [@adventure, {debug: true}], class: "SlantButton -large" %>
+    <%= link_to 'Play', [@adventure, {debug: false}], class: "SlantButton -large" %>
   </nav>
 </header>
 
