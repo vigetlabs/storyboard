@@ -26,7 +26,6 @@ import { Parser } from 'expr-eval'
 
 var CryptoJS = require('crypto-js')
 
-
 interface PlayerProps {
   description: string
   meta: MetaData
@@ -35,6 +34,7 @@ interface PlayerProps {
   theme: string
   title: string
   isOffline: boolean
+  debug: boolean
 }
 
 interface Stat {
@@ -87,6 +87,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       let currentState = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
       this.setState(currentState)
     }
+
+    console.log(this.props.debug)
   }
 
   start = () => {
@@ -371,9 +373,9 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     )
   }
 
-  private strip(html: string){
-    var doc = new DOMParser().parseFromString(html, 'text/html');
-    return doc.body.textContent || "";
+  private strip(html: string) {
+    var doc = new DOMParser().parseFromString(html, 'text/html')
+    return doc.body.textContent || ''
   }
 
   private translate(text: string) {
@@ -388,25 +390,27 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           return this.findStat(item.trim())
         })
 
-        var expressionVariables = {} as any;
+        var expressionVariables = {} as any
         statArray.forEach(stat => {
           if (stat) {
             expressionVariables[stat.name] = stat.value
           }
-        });
-        var evaluated;
+        })
+        var evaluated
 
         try {
-          evaluated = Parser.evaluate(cleanedTag.replace(/\s/g, ""), expressionVariables )
-        }
-        catch(err) {
+          evaluated = Parser.evaluate(
+            cleanedTag.replace(/\s/g, ''),
+            expressionVariables
+          )
+        } catch (err) {
           var errors = [] as any
           operands.forEach(item => {
             if (this.findInvalidStat(item.trim())) {
               errors += item
             }
           })
-          evaluated = "Unidentified variable(s): " + errors
+          evaluated = 'Unidentified variable(s): ' + errors
         }
         text = text.replace(tag, evaluated.toString())
       })
@@ -416,9 +420,11 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   private findInvalidStat(item: string) {
-    return !(this.state.currentStats.some((stat: { name: string}) => {
-      return item === stat.name
-    })) && isNaN(Number(item))
+    return (
+      !this.state.currentStats.some((stat: { name: string }) => {
+        return item === stat.name
+      }) && isNaN(Number(item))
+    )
   }
 
   private findStat(item: string) {

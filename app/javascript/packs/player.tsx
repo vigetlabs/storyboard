@@ -15,6 +15,7 @@ const slug = SEED.slug
 
 async function render() {
   const content = SEED.isOffline ? SEED.story : await load(slug)
+  const player = document.getElementById('player')
 
   if (content) {
     ReactDOM.render(
@@ -26,8 +27,9 @@ async function render() {
         portMeta={content.portMeta}
         theme={SEED.theme}
         isOffline={SEED.isOffline}
+        debug={player!.dataset.debug == 'true'}
       />,
-      document.getElementById('player')
+      player
     )
   }
 }
