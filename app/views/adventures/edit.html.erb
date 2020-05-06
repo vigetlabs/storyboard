@@ -15,7 +15,7 @@
       <%= link_to 'Edit', [:details, @adventure], class: "SlantButton -large" %>
     <% end %>
     <%= link_to 'Debug', [@adventure, {debug: true}], class: "SlantButton -large" %>
-    <%= link_to 'Play', [@adventure, {debug: false}], class: "SlantButton -large" %>
+    <%= link_to 'Play', @adventure, class: "SlantButton -large" %>
   </nav>
 </header>
 
