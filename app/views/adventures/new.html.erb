@@ -10,63 +10,9 @@
     </p>
   <% end %>
 
-  <%= form_for @adventure do |f| %>
-    <div class="Field">
-      <%= f.label :title, "What's your title?" %>
-      <%= f.text_field :title, placeholder: "enter title name here" %>
-    </div>
-
-    <div class="Field">
-      <%= f.label :description, "What's the premise?" %>
-      <%= f.text_area :description, placeholder: "describe the context of the story" %>
-    </div>
-
-    <div class="Field">
-      <%= f.label :Theme %>
-      <%= f.select :theme, options_for_select(Adventure::THEMES) %>
-    </div>
-
-    <% if current_user %>
-      <div class="Field -checkbox">
-        <%= f.check_box :public %>
-        <%= f.label :public %>
-        <div class="hint">
-          <em>
-            If checked, others will be able to edit the source of the Story.
-          </em>
-        </div>
-      </div>
-      <div class="Field -checkbox">
-        <%= f.check_box :has_password, onchange: "togglePasswordField(this)" %>
-        <%= f.label :has_password, "Add Password?"%>
-        <div class="hint">
-          <em>
-            If checked, others must enter a password to play this Story.
-          </em>
-        </div>
-      </div>
-      <div class="Field -passwordField">
-        <%= f.label :password, "Password" %>
-        <%= f.text_field :password %>
-      </div>
-    <% end %>
-
-
-    <div class="Field">
-      <button class="SlantButton">Create Story</button>
-    </div>
-  <% end %>
+  <%= render "shared/adventure_form", is_update: false, correct_user: current_user %>
 
   <footer class="AccountFormFooter">
     <%= link_to 'Back', adventures_path %>
   </footer>
 </div>
-
-
-<script>
-  window.onload = togglePasswordField(document.getElementById("adventure_has_password"))
-  function togglePasswordField(obj) {
-    var elem = document.getElementsByClassName("Field -passwordField")
-    elem[0].style.display = obj.checked ? 'block' : 'none'
-  }
-</script>
