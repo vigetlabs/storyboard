@@ -87,8 +87,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       let currentState = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))
       this.setState(currentState)
     }
-
-    console.log(this.props.debug)
   }
 
   start = () => {
@@ -96,10 +94,12 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   componentDidUpdate() {
-    window.location.hash = CryptoJS.AES.encrypt(
-      JSON.stringify(this.state),
-      this.passphrase
-    ).toString()
+    if (this.props.debug) {
+      window.location.hash = CryptoJS.AES.encrypt(
+        JSON.stringify(this.state),
+        this.passphrase
+      ).toString()
+    }
   }
 
   render() {
