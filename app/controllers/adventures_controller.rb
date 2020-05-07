@@ -123,7 +123,7 @@ class AdventuresController < ApplicationController
   end
 
   def check_authentication
-    if @adventure.has_password? && !session[@adventure.title]
+    if !@adventure.editable_by?(current_user) && (@adventure.has_password? && !session[@adventure.title])
       render :authenticate_player
     end
   end
