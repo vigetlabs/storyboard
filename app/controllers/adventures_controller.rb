@@ -63,9 +63,7 @@ class AdventuresController < ApplicationController
     if @adventure.save
       redirect_to [:edit, @adventure]
     else
-      if @adventure.errors[:password]
-        flash[:alert] = "Your password must be between 3 and 32 characters"
-      end
+      display_errors(:create)
       render :new
     end
   end
@@ -79,6 +77,7 @@ class AdventuresController < ApplicationController
     if @adventure.update(adventure_params)
       redirect_to [:edit, @adventure]
     else
+      display_errors(:update)
       render :details
     end
   end
@@ -126,6 +125,16 @@ class AdventuresController < ApplicationController
   def check_authentication
     if @adventure.has_password? && !session[@adventure.title]
       render :authenticate_player
+    end
+  end
+
+  def display_errors(method)
+    # the slug validation technically "runs" on create, even though it is not a field
+    if method == :create
+      @adventure.errors.delete(:slug)
+    end
+    if @adventure.errors.any?
+      flash[:alert] = @adventure.errors.full_messages.join(", ")
     end
   end
 end
