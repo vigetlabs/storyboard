@@ -16,6 +16,14 @@ describe "Adventures" do
       expect(page).to have_current_path("/")
       expect(page).to have_content("You can't modify that Adventure")
     end
+
+    it "lets you access a public story" do
+      visit adventure_path(adventure)
+
+      expect(page).to have_current_path(adventure_path(adventure))
+      # Should change this to the story's title once I figure out how to have content in factory bot stories
+      expect(page).to have_content("Source")
+      end
   end
 
 
