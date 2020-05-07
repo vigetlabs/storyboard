@@ -11,7 +11,7 @@ describe "Adventures" do
     end
 
     it "does not let you edit someone a user's story" do
-      visit "/" + adventure.slug + "/edit"
+      visit edit_adventure_path(adventure)
 
       expect(page).to have_current_path("/")
       expect(page).to have_content("You can't modify that Adventure")
