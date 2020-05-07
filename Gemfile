@@ -40,6 +40,6 @@ group :test do
   gem 'capybara', '>= 2.15'
   gem 'chromedriver-helper'
   gem 'database_cleaner',   '~> 0.9.1'
-  gem 'factory_girl_rails', '~> 4.1.0'
+  gem "factory_bot_rails"
   gem 'selenium-webdriver'
 end
