@@ -25,7 +25,6 @@ gem 'capistrano-db-tasks', {
 group :development, :test do
   gem 'pry-rails'
   gem 'rspec-rails', '~> 4.0.0'
-
 end
 
 group :development do
