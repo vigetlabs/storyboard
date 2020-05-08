@@ -8,7 +8,9 @@ require 'rspec/rails'
 require 'database_cleaner'
 require 'capybara/rspec'
 require 'support/factory_bot.rb'
+
 # Add additional requires below this line. Rails is not loaded until this point!
+include Warden::Test::Helpers
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
