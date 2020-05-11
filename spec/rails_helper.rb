@@ -10,7 +10,6 @@ require 'capybara/rspec'
 require 'support/factory_bot.rb'
 require 'webdrivers'
 
-
 include Warden::Test::Helpers
 
 Capybara.register_driver :chrome do |app|
