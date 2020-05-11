@@ -4,6 +4,8 @@ FactoryBot.define do
     description { "Test Story" }
     title { "Test Story" }
     slug { "test-story"}
+    has_password { false }
+    password { "" }
     theme { "light" }
     content {   {"slug"=>"test-empty-content",
       "story"=>
