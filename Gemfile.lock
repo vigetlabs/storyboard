@@ -253,6 +253,7 @@ DEPENDENCIES
   chromedriver-helper
   devise
   listen (>= 3.0.5, < 3.2)
+  net-scp (>= 1.0.0)
   pg (>= 0.18, < 2.0)
   pointless_feedback (~> 4.0.6)
   pry-rails
