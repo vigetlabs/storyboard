@@ -11,6 +11,7 @@ GIT
   specs:
     viget-deployment (2.0.0)
       capistrano (~> 2.15.0)
+        net-scp (>= 1.0.0)
       whenever (~> 0.8.0)
 
 GEM
