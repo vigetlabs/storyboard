@@ -16,3 +16,11 @@ jobs:
             bundle update capistrano
       - run:
             bundle install --full-index
+      - run: node --version
+      - run: yarn --version
+      - run: yarn install
+
+      - run:
+          name: RSpec
+          command: bundle exec rspec --profile --format RspecJunitFormatter --out ~/storyboard/tmp/test-results/rspec/results.xml --format progress
+          no_output_timeout: 1h
