@@ -12,6 +12,8 @@ require 'webdrivers'
 
 include Warden::Test::Helpers
 
+Webdrivers::Chromedriver.required_version = '2.45'
+
 Capybara.register_driver :chrome do |app|
   Capybara::Selenium::Driver.new(app, browser: :chrome)
 end
