@@ -20,6 +20,7 @@ jobs:
 
     executor: ruby/default
     steps:
+      - browser-tools/install-chromedriver
       - checkout
       - run:
           name: Which bundler?
