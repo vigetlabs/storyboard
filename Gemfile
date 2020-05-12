@@ -41,5 +41,4 @@ group :test do
   gem 'database_cleaner',   '~> 0.9.1'
   gem "factory_bot_rails"
   gem 'selenium-webdriver'
-  gem 'webdrivers', '~> 4.0'
 end
