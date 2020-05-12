@@ -30,8 +30,6 @@ jobs:
             bundle update capistrano
       - run:
             bundle install --full-index
-      - run:
-            bundle exec rake webdrivers:chromedriver:version
       - run: node --version
       - run: yarn --version
       - run: yarn install
