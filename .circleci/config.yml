@@ -5,7 +5,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/ruby:2.5.1-node-browsers
+      - image: circleci/ruby:2.5.1-stretch-node-browsers
         environment:
           RAILS_ENV: test
           DATABASE_URL: "postgresql://root@localhost/adventure-time_test?pool=5"
