@@ -6,7 +6,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: circleci/ruby:2.5.1-stretch-node-browsers
+      - image: circleci/ruby:2.5.1-stretch-node
         environment:
           RAILS_ENV: test
           DATABASE_URL: "postgresql://root@localhost/adventure-time_test?pool=5"
@@ -21,7 +21,7 @@ jobs:
 
     executor: ruby/default
     steps:
-      - browser-tools/install-chromedriver
+      - browser-tools/install-chrome
       - checkout
       - run:
           name: Which bundler?
