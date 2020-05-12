@@ -22,5 +22,5 @@ jobs:
 
       - run:
           name: RSpec
-          command: bundle exec rspec --profile --format RspecJunitFormatter --out ~/storyboard/tmp/test-results/rspec/results.xml --format progress
+          command: bundle exec rspec
           no_output_timeout: 1h
