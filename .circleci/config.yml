@@ -6,6 +6,13 @@ jobs:
   build:
     docker:
       - image: circleci/ruby:2.5.1-stretch-node
+        environment:
+          RAILS_ENV: test
+          DATABASE_URL: "postgresql://root@localhost/adventure-time_test?pool=5"
+          BUNDLER_PATH: vendor/bundle
+          BUNDLER_JOBS: 4
+          YARN_CACHE_FOLDER: ~/.cache/yarn
+
     executor: ruby/default
     steps:
       - checkout
