@@ -1,18 +1,3 @@
-GIT
-  remote: https://github.com/efatsi/capistrano-db-tasks.git
-  revision: f5ec28b024858913fe70feaacb77f3fede606325
-  branch: 0.2.1
-  specs:
-    capistrano-db-tasks (0.2.1)
-
-GIT
-  remote: https://github.com/vigetlabs/viget-deployment.git
-  revision: 478e2482da382ede863b92d5e38c8f270938ba14
-  specs:
-    viget-deployment (2.0.0)
-      capistrano (~> 2.15.0)
-      whenever (~> 0.8.0)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -81,12 +66,6 @@ GEM
     bootsnap (1.3.2)
       msgpack (~> 1.0)
     builder (3.2.3)
-    capistrano (2.15.9)
-      highline
-      net-scp (>= 1.0.1)
-      net-sftp (>= 2.0.0)
-      net-ssh (>= 2.0.14)
-      net-ssh-gateway (>= 1.1.0)
     capybara (3.10.1)
       addressable
       mini_mime (>= 0.1.3)
@@ -100,7 +79,6 @@ GEM
     chromedriver-helper (2.1.0)
       archive-zip (~> 0.10)
       nokogiri (~> 1.8)
-    chronic (0.10.2)
     coderay (1.1.2)
     concurrent-ruby (1.1.5)
     crass (1.0.5)
@@ -129,7 +107,6 @@ GEM
     ffi (1.9.25)
     globalid (0.4.1)
       activesupport (>= 4.2.0)
-    highline (2.0.0)
     i18n (1.6.0)
       concurrent-ruby (~> 1.0)
     io-like (0.3.0)
@@ -170,13 +147,6 @@ GEM
       railties (>= 3.1)
     msgpack (1.2.4)
     multipart-post (2.0.0)
-    net-scp (1.2.1)
-      net-ssh (>= 2.6.5)
-    net-sftp (2.1.2)
-      net-ssh (>= 2.6.5)
-    net-ssh (5.0.2)
-    net-ssh-gateway (2.0.0)
-      net-ssh (>= 4.0.0)
     nio4r (2.3.1)
     nokogiri (1.10.5)
       mini_portile2 (~> 2.4.0)
@@ -305,9 +275,6 @@ GEM
     websocket-driver (0.7.0)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.3)
-    whenever (0.8.4)
-      activesupport (>= 2.3.4)
-      chronic (>= 0.6.3)
     xpath (3.2.0)
       nokogiri (~> 1.8)
 
@@ -319,7 +286,6 @@ DEPENDENCIES
   awesome_print
   bcrypt
   bootsnap (>= 1.1.0)
-  capistrano-db-tasks!
   capybara (>= 2.15)
   chromedriver-helper
   database_cleaner (~> 0.9.1)
@@ -339,7 +305,6 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   stat_board (~> 1.1.0)
   uglifier
-  viget-deployment (= 2.0.0)!
   web-console (>= 3.3.0)
   webpacker (~> 4.0.7)
 

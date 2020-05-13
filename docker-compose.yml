@@ -1,0 +1,25 @@
+version: "2"
+
+volumes:
+  db-data:
+    external: false
+
+services:
+  db:
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_DB: adventure-time_test
+    image: postgres:9.3-alpine
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
+
+  app:
+    build: .
+    command: bash -c "bundle install && rm -f tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
+

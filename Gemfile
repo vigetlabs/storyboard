@@ -17,11 +17,11 @@ gem 'pointless_feedback', '~> 4.0.6'
 gem 'stat_board', '~> 1.1.0'
 gem 'administrate', '~> 0.13.0'
 
-gem 'capistrano-db-tasks', {
-  :github  => 'efatsi/capistrano-db-tasks',
-  :require => false,
-  :branch  => '0.2.1'
-}
+# gem 'capistrano-db-tasks', {
+#   :github  => 'efatsi/capistrano-db-tasks',
+#   :require => false,
+#   :branch  => '0.2.1'
+# }
 
 group :development, :test do
   gem 'pry-rails'
@@ -32,7 +32,7 @@ group :development do
   gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'viget-deployment', '2.0.0', github: 'vigetlabs/viget-deployment', require: false
+  # gem 'viget-deployment', '2.0.0', github: 'vigetlabs/viget-deployment', require: false
   gem 'web-console', '>= 3.3.0'
 end
 
