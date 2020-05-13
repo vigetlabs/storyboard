@@ -102,16 +102,32 @@ describe "Adventures" do
       end
 
       it "lets you view your stories" do
-        visit "/mine"
+        visit my_adventures_path
 
         expect(page).to have_content(adventure.description)
       end
 
-      it "lets you edit your story" do
+      it "lets you create a story", js:true do
+        visit new_adventure_path
+        fill_in "adventure_title", with: "Zork"
+        click_on "Create Story"
+
+        expect(page).to have_content("SETTINGS")
+        expect(page).to have_content("Add scene")
+      end
+
+      it "lets you edit your story details" do
         visit details_adventure_path(adventure)
 
         expect(page).to have_content("What's your title?")
         expect(page).to have_content("Story URL")
+      end
+
+      it "lets you edit your story", js:true do
+        visit edit_adventure_path(adventure)
+
+        expect(page).to have_content("SETTINGS")
+        expect(page).to have_content("Add scene")
       end
 
       it "does not allow you to update a story with a blank title" do
@@ -127,6 +143,15 @@ describe "Adventures" do
 
         expect(page).not_to have_current_path(edit_adventure_path(adventure))
         expect(page).to have_content("Title can't be blank")
+      end
+
+      it "lets you delete a story" do
+        visit details_adventure_path(adventure)
+        click_on "Delete"
+        # click_on "OK"
+
+        expect(page).to have_content("Adventure was successfully destroyed.")
+        expect(page).to have_current_path(my_adventures_path)
       end
     end
   end
@@ -166,6 +191,13 @@ describe "Adventures" do
       visit "/"
       click_on "Create a Story"
       expect(page).to have_content("What's your title?")
+    end
+
+    it "does not let you view /mine" do
+      visit my_adventures_path
+
+      expect(page).to have_content("You must be logged in to view your Adventures")
+      expect(page).to have_current_path("/")
     end
 
     it "does not let you edit a user's story" do
