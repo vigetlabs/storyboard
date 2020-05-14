@@ -1,0 +1,42 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@0.1.2
+  browser-tools: circleci/browser-tools@1.0.0
+
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.5.1-stretch-node
+        environment:
+          RAILS_ENV: test
+          DATABASE_URL: "postgresql://root@localhost/adventure-time_test?pool=5"
+          BUNDLER_PATH: vendor/bundle
+          BUNDLER_JOBS: 4
+          YARN_CACHE_FOLDER: ~/.cache/yarn
+      - image: circleci/postgres:9.3-alpine-ram
+        environment:
+          POSTGRES_USER: root
+          POSTGRES_DB: adventure-time_test
+          TZ: "/usr/share/zoneinfo/America/New_York"
+
+    executor: ruby/default
+    steps:
+      - browser-tools/install-chrome
+      - checkout
+      - run:
+          name: Which bundler?
+          command: bundle -v
+      - run:
+            bundle update capistrano
+      - run:
+            bundle install --full-index
+      - run: node --version
+      - run: yarn --version
+      - run: yarn install
+
+      - run:
+          name: RSpec
+          command: bundle exec rspec
+          no_output_timeout: 1h
+      - store_artifacts:
+          path: coverage

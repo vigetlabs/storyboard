@@ -24,6 +24,7 @@ gem 'capistrano-db-tasks', {
 
 group :development, :test do
   gem 'pry-rails'
+  gem 'rspec-rails', '~> 4.0.0'
 end
 
 group :development do
@@ -37,5 +38,8 @@ end
 group :test do
   gem 'capybara', '>= 2.15'
   gem 'chromedriver-helper'
+  gem 'database_cleaner',   '~> 0.9.1'
+  gem "factory_bot_rails"
   gem 'selenium-webdriver'
+  gem 'simplecov', require: false
 end
