@@ -242,7 +242,7 @@ GEM
       actionpack (>= 4.0)
       activesupport (>= 4.0)
       sprockets (>= 3.0.0)
-    stat_board (1.0.1)
+    stat_board (1.0.2)
       rails (>= 3.2.0)
     thor (0.20.3)
     thread_safe (0.3.6)
@@ -297,7 +297,7 @@ DEPENDENCIES
   simplecov
   spring
   spring-watcher-listen (~> 2.0.0)
-  stat_board (~> 1.0.1)
+  stat_board (~> 1.0.2)
   uglifier
   viget-deployment (= 2.0.0)!
   web-console (>= 3.3.0)
