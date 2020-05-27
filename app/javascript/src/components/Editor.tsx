@@ -80,6 +80,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
       } else if ((e.metaKey || e.ctrlKey) && e.key == 'z') {
         this.undo()
         e.preventDefault()
+      } else if ((e.metaKey || e.ctrlKey) && e.key == 's') {
+        this.saveStory({ force: true })
+        e.preventDefault()
       }
     }
   }
