@@ -1,4 +1,11 @@
 Rails.application.routes.draw do
+  namespace :admin do
+    resources :adventures
+    resources :users
+
+    root to: "adventures#index"
+  end
+
   mount StatBoard::Engine, at: 'stats'
   mount PointlessFeedback::Engine, :at => '/feedback'
   devise_for :users
