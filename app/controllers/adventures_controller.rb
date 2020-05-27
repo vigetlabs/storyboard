@@ -118,7 +118,8 @@ class AdventuresController < ApplicationController
       :public,
       :theme,
       :password,
-      :has_password
+      :has_password,
+      :show_source
     )
   end
 

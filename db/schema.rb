@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_04_02_175913) do
+ActiveRecord::Schema.define(version: 2020_05_27_151913) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,6 +28,7 @@ ActiveRecord::Schema.define(version: 2020_04_02_175913) do
     t.string "featured"
     t.string "password", default: "", null: false
     t.boolean "has_password", default: false, null: false
+    t.boolean "show_source", default: true, null: false
     t.index ["user_id"], name: "index_adventures_on_user_id"
   end
 

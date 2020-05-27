@@ -103,6 +103,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   render() {
+    this.hideSourceButton()
+
     let { focus, started } = this.state
     let { title, description } = this.props
 
@@ -135,6 +137,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     let choices = this.ports(node)
 
     if (choices.length <= 0) {
+      this.showSourceButton()
+
       return (
         <PlayerEnd
           title={node.name}
@@ -159,6 +163,20 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         </div>
       </main>
     )
+  }
+
+  private hideSourceButton() {
+    let a: any = document.getElementsByClassName('-source-link')[0]
+    if (a) {
+      a.style.display = 'none'
+    }
+  }
+
+  private showSourceButton() {
+    let a: any = document.getElementsByClassName('-source-link')[0]
+    if (a) {
+      a.style.display = 'inherit'
+    }
   }
 
   private renderChoices(node: DefaultNodeModel) {
@@ -264,6 +282,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
   private restart = () => {
     this.setState({
+      started: false,
       focus: this.findStartKey(),
       currentItems: [],
       currentStats: []

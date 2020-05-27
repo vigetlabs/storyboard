@@ -1,4 +1,4 @@
-@import "../../variables.css";
+@import '../../variables.css';
 
 .AccountForm {
   margin: 24px auto;
@@ -30,15 +30,19 @@
   font-weight: normal;
 }
 
-.AccountForm .Field.-passwordField {
-  display: none
+.AccountForm .Field.-checkbox .hint {
+  max-width: 500px;
 }
 
-.AccountForm .Field input[type="email"],
-.AccountForm .Field input[type="text"],
-.AccountForm .Field input[type="url"],
+.AccountForm .Field.-passwordField {
+  display: none;
+}
+
+.AccountForm .Field input[type='email'],
+.AccountForm .Field input[type='text'],
+.AccountForm .Field input[type='url'],
 .AccountForm .Field textarea,
-.AccountForm .Field input[type="password"] {
+.AccountForm .Field input[type='password'] {
   background: transparent;
   border: 1px solid white;
   color: inherit;

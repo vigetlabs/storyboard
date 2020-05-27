@@ -46,6 +46,16 @@
     </div>
   <% end %>
 
+  <div class="Field -checkbox">
+    <%= f.check_box :show_source %>
+    <%= f.label :show_source, "Make the story's source viewable?" %>
+    <div class="hint">
+      <em>
+        If checked, a link to the story source will be available when a user gets to the end of a play through.
+      </em>
+    </div>
+  </div>
+
   <div class="Field">
     <button class="SlantButton"> <%= is_update ? "Update" : "Create" %> Story</button>
   </div>
