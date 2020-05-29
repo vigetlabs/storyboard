@@ -258,7 +258,6 @@ class PortEditor extends React.Component<
                       showIfItems.map((showIf, i) => (
                         <li key={i}>
                           <div>
-                            {console.log(showIf)}
                             <label
                               className="sr-only"
                               htmlFor={`show-if-item-${deSpace(showIf.name)}`}
@@ -444,7 +443,8 @@ class PortEditor extends React.Component<
     e.preventDefault()
 
     let newShowIfItems = clone(this.state.thisPortMeta.showIfItems || [])
-    newShowIfItems.push({ name: '', hasIt: true })
+    let name = this.possibleItemModifiers('')[0] || ''
+    newShowIfItems.push({ name: name, hasIt: true })
 
     this.state.thisPortMeta.showIfItems = newShowIfItems
     this.savePortMeta()
@@ -502,7 +502,8 @@ class PortEditor extends React.Component<
     e.preventDefault()
 
     let newShowIfStats = clone(this.state.thisPortMeta.showIfStats || [])
-    newShowIfStats.push({ name: '', operator: '', value: 0 })
+    let name = this.possibleStatModifiers('')[0] || ''
+    newShowIfStats.push({ name: name, operator: '', value: 0 })
 
     this.state.thisPortMeta.showIfStats = newShowIfStats
     this.savePortMeta()
@@ -532,7 +533,6 @@ class PortEditor extends React.Component<
   }
 
   setItemChange = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
-    console.log('Here:', index)
     let newItemChanges = clone(this.state.thisPortMeta.itemChanges || [])
     newItemChanges[index].name = e.target.value
 

@@ -210,7 +210,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private undo() {
-    console.log('undo')
     if (this.past.length > 1) {
       let currentState = this.past.pop()
       if (currentState) this.future.push(currentState)
@@ -219,13 +218,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
       this.updateStory(previousState.story)
       this.forceUpdate()
-    } else {
-      console.log('nothing to undo')
     }
   }
 
   private redo() {
-    console.log('redo')
     if (this.future.length) {
       let futureState = this.future.pop()
       if (futureState) {
@@ -234,8 +230,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
         this.updateStory(futureState.story)
         this.forceUpdate()
       }
-    } else {
-      console.log('nothing to redo')
     }
   }
 
