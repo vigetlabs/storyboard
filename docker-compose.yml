@@ -26,7 +26,7 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - .:/usr/src/app
+      - .:/usr/src/app:delegated
       - yarn:/usr/src/app/node_modules
       - gems:/usr/local/bundle
       - log:/usr/src/app/log
