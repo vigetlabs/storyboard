@@ -5,6 +5,7 @@ class UserDashboard < Administrate::BaseDashboard
     adventures: Field::HasMany,
     id: Field::Number,
     email: Field::String,
+    can_be_emailed: Field::Boolean,
     sign_in_count: Field::Number,
     current_sign_in_at: Field::DateTime,
     last_sign_in_at: Field::DateTime,
@@ -24,6 +25,7 @@ class UserDashboard < Administrate::BaseDashboard
     id
     adventures
     email
+    can_be_emailed
     sign_in_count
     current_sign_in_at
     last_sign_in_at
@@ -35,6 +37,7 @@ class UserDashboard < Administrate::BaseDashboard
 
   FORM_ATTRIBUTES = %i[
     email
+    can_be_emailed
   ].freeze
 
   COLLECTION_FILTERS = {}.freeze
