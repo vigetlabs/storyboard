@@ -1,0 +1,36 @@
+<p>
+  Hello,
+</p>
+
+<p>
+  Storyboard is conducting an online survey to gather user feedback and to learn more about how people use Storyboard. Your input would be incredibly helpful, and be used to inform the future of Storyboard.
+</p>
+
+<p>
+  All respondents who complete the survey will be entered in a drawing to win a $20 Amazon.com gift card.
+</p>
+
+<p>
+  It should take 5-10 minutes to complete. You may access the survey using the link below.
+</p>
+
+<p>
+  <%= link_to "https://www.surveygizmo.com/s3/5759951/Storyboard-User-Survey", "https://www.surveygizmo.com/s3/5759951/Storyboard-User-Survey" %>
+</p>
+
+<p>
+  If you have any questions, you can contact Laura Sweltz at laura.sweltz@viget.com.
+</p>
+
+<p>
+  Thank you,
+  <br>
+  Storyboard Team
+</p>
+
+<br>
+<hr>
+
+<p>
+  Don’t want to hear from us again? <%= link_to "Unsubscribe here", new_unsubscribe_url(email: @user.email) %>.
+</p>

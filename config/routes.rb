@@ -17,6 +17,9 @@ Rails.application.routes.draw do
   post "/api/:id", to: "api/adventures#update"
   get "/api/:id", to: "api/adventures#show"
 
+  get "unsubscribe", to: "unsubscribes#new", as: :new_unsubscribe
+  resources :unsubscribes, only: [:create]
+
   # Keep this block at the bottom so the "/:id adventures#show"
   # doesn't catch other routes
   resources :adventures, path: "/" do

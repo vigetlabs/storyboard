@@ -1,0 +1,10 @@
+<div class="AccountForm Container">
+  <%= form_for :unsubscribe, url: unsubscribes_path do |f| %>
+    <div class="Field">
+      <%= f.label :email %>
+      <%= f.email_field :email, value: params[:email] %>
+    </div>
+
+    <%= f.submit "Unsubscribe", class: "btn" %>
+  <% end %>
+</div>

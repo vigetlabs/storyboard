@@ -2,6 +2,7 @@
 @import './reset.css';
 @import './css/default/AdventureHeader.css';
 @import './css/default/Badge.css';
+@import './css/default/Button.css';
 @import './css/default/Brand.css';
 @import './css/default/Footer.css';
 
@@ -23,7 +24,7 @@ main {
 
 .screenreader-only {
   border: 0;
-  clip: rect(0,0,0,0);
+  clip: rect(0, 0, 0, 0);
   height: 1px;
   margin: -1px;
   overflow: hidden;
