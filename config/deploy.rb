@@ -5,7 +5,7 @@ require 'capistrano-db-tasks'
 
 set :application, 'storyboard'
 set :repository,  'git@github.com:vigetlabs/adventure-time.git'
-set :branch,      'master'
+set :branch,      'main'
 
 before 'deploy:assets:precompile', 'deploy:assets:node_modules'
 
