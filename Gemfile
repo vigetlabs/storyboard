@@ -16,6 +16,7 @@ gem 'sentry-raven'
 gem 'pointless_feedback', '~> 4.0.6'
 gem 'stat_board', '~> 1.1.0'
 gem 'administrate', '~> 0.13.0'
+gem 'dragonfly-s3_data_store'
 
 gem 'capistrano-db-tasks', {
   :github  => 'efatsi/capistrano-db-tasks',
