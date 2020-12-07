@@ -116,6 +116,16 @@ describe "Adventures" do
         expect(page).to have_content("Add scene")
       end
 
+      it "displays age verification" do
+        visit new_adventure_path
+
+        expect(page).to have_content("Add Age Verification?")
+        expect(page).to have_content("If checked, others must verify their age to engage this Story.")
+        expect(page).to have_content("Age Limit")
+
+        # add test for checkbox
+      end
+
       it "lets you edit your story details" do
         visit details_adventure_path(adventure)
 

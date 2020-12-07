@@ -22,6 +22,14 @@ class Adventure < ApplicationRecord
 
   validates :password, length: (3..32), presence: true, if: :has_password
 
+  def age_limit
+    true
+  end
+
+  def has_age_limit
+    # add age_limit as boolean on model, run migration
+  end
+
   def to_s
     title
   end
