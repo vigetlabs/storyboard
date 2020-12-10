@@ -44,6 +44,20 @@
       <%= f.label :password, "Password" %>
       <%= f.text_field :password %>
     </div>
+
+    <div class="Field -checkbox">
+      <%= f.check_box :has_age_limit, onchange: "toggleAgeLimitField(this)" %>
+      <%= f.label :has_age_limit, "Add Age Verification?"%>
+      <div class="hint">
+        <em>
+          If checked, others must verify their age to engage this Story.
+        </em>
+      </div>
+    </div>
+    <div class="Field -ageLimitField">
+      <%= f.label :age_limit, "Age Limit" %>
+      <%= f.number_field :age_limit, step: :any %>
+    </div>
   <% end %>
 
   <div class="Field -checkbox">
@@ -62,9 +76,20 @@
 <% end %>
 
 <script>
-  window.onload = togglePasswordField(document.getElementById("adventure_has_password"))
+  window.onload = togglePasswordField(document.getElementById("adventure_has_password"), document.getElementById("adventure_has_age_limit"))
+
+  function toggles(passwordObj, ageObj) {
+    togglePasswordField(passwordObj);
+    toggleAgeLimitField(ageObj);
+  }
+
   function togglePasswordField(obj) {
     var elem = document.getElementsByClassName("Field -passwordField")
+    elem[0].style.display = obj.checked ? 'block' : 'none'
+  }
+
+  function toggleAgeLimitField(obj) {
+    var elem = document.getElementsByClassName("Field -ageLimitField")
     elem[0].style.display = obj.checked ? 'block' : 'none'
   }
 </script>
