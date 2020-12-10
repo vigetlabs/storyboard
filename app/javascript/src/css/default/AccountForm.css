@@ -52,6 +52,16 @@
   width: 100%;
 }
 
+.AccountForm .Field input[type='ageLimit'] {
+  background: transparent;
+  border: 1px solid white;
+  color: inherit;
+  font-size: 16px;
+  padding: 8px;
+  max-width: 475px;
+  width: 100%;
+}
+
 .FieldHint {
   font-size: 14px;
   font-style: italic;
