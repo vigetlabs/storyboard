@@ -19,14 +19,14 @@ class AdventuresController < ApplicationController
   end
 
   def authenticate
-    type, value = get_type_and_value
+    value, type = get_type_and_value
 
     if @adventure.authenticate(value, type)
-      session[@adventure.title] = true
+      session["#{@adventure.slug}-#{type}"] = true
       redirect_to adventure_path
     else
       flash[:alert] = "Access Restricted Due to #{type}"
-      render :authenticate_player if type == "Password"
+      render :authenticate_player_password if type == "Password"
       render :authenticate_player_age if type == "Age"
     end
   end
@@ -129,9 +129,10 @@ class AdventuresController < ApplicationController
   end
 
   def check_authentication
-    if !@adventure.editable_by?(current_user) && (@adventure.has_password? && !session[@adventure.title])
-      render :authenticate_player
-    elsif !@adventure.editable_by?(current_user) && (@adventure.has_age_limit? && !session[@adventure.title])
+
+    if !@adventure.editable_by?(current_user) && (@adventure.has_password? && !session["#{@adventure.slug}-Password"])
+      render :authenticate_player_password
+    elsif !@adventure.editable_by?(current_user) && (@adventure.has_age_limit? && !session["#{@adventure.slug}-Age"])
       render :authenticate_player_age
     end
   end
@@ -148,9 +149,9 @@ class AdventuresController < ApplicationController
 
   def get_type_and_value
     if params[:adventure][:password]
-      ["Password", params[:adventure][:password]]
+      [params[:adventure][:password], "Password"]
     elsif params[:adventure][:age_limit]
-      ["Age", params[:adventure][:age_limit]]
+      [params[:adventure][:age_limit], "Age"]
     end
   end
 end
