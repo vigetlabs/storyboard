@@ -205,6 +205,7 @@ describe "Adventures" do
 
       it "requires age input on a story with an age gate" do
         visit adventure_path(age_limit)
+        binding.pry
 
         expect(page).to have_content("Enter your age to access this story")
       end
