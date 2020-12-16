@@ -45,18 +45,9 @@
 .AccountForm .Field input[type='email'],
 .AccountForm .Field input[type='text'],
 .AccountForm .Field input[type='url'],
+.AccountForm .Field input[type='number'],
 .AccountForm .Field textarea,
 .AccountForm .Field input[type='password'] {
-  background: transparent;
-  border: 1px solid white;
-  color: inherit;
-  font-size: 16px;
-  padding: 8px;
-  max-width: 475px;
-  width: 100%;
-}
-
-.AccountForm .Field input[type='ageLimit'] {
   background: transparent;
   border: 1px solid white;
   color: inherit;
