@@ -205,13 +205,14 @@ describe "Adventures" do
 
       it "requires age input on a story with an age gate" do
         visit adventure_path(age_limit)
+        binding.pry
 
         expect(page).to have_content("Enter your age to access this story")
       end
 
-      it "does not allow you to view a story if your age not at or beyond the limit", js: true do
+      it "does not allow you to view a story if your age is not at or beyond the limit", js: true do
         visit adventure_path(age_limit)
-        fill_in "age_limit", with: "16"
+        fill_in "age", with: "16"
         click_on "Access Story"
 
         expect(page).to have_content("Enter your age to access this story")
