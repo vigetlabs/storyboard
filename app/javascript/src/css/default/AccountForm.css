@@ -38,6 +38,10 @@
   display: none;
 }
 
+.AccountForm .Field.-ageLimitField {
+  display: none;
+}
+
 .AccountForm .Field input[type='email'],
 .AccountForm .Field input[type='text'],
 .AccountForm .Field input[type='url'],
