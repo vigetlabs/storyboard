@@ -116,6 +116,19 @@ describe "Adventures" do
         expect(page).to have_content("Add scene")
       end
 
+      it "displays age verification", js:true do
+        visit new_adventure_path
+
+        expect(page).to have_content("Add Age Verification?")
+        expect(page).to have_content("If checked, others must verify their age to engage this Story.")
+
+        find(:css, "#adventure_has_age_limit").set(true)
+        expect(page).to have_content("Age Limit")
+
+        find(:css, "#adventure_has_age_limit").set(false)
+        expect(page).to_not have_content("Age Limit")
+      end
+
       it "lets you edit your story details" do
         visit details_adventure_path(adventure)
 
@@ -174,12 +187,40 @@ describe "Adventures" do
         click_on "Access Story"
 
         expect(page).to have_content("Enter password to access this story")
-        expect(page).to have_content("Incorrect Password")
+        expect(page).to have_content("Access Restricted Due to Password")
       end
 
       it "allows you to view a password protected story with the correct password", js: true do
         visit adventure_path(adventure_password)
         fill_in "password", with: "password"
+        click_on "Access Story"
+
+        expect(page).to have_content("Test Story")
+        expect(page).to have_content("begin")
+      end
+    end
+
+    context "when dealing with age protected stories" do
+      let!(:age_limit) { create(:adventure, user: user, slug: "test-story-age", has_age_limit: true, age_limit: 21) }
+
+      it "requires age input on a story with an age gate" do
+        visit adventure_path(age_limit)
+
+        expect(page).to have_content("Enter your age to access this story")
+      end
+
+      it "does not allow you to view a story if your age is not at or beyond the limit", js: true do
+        visit adventure_path(age_limit)
+        fill_in "age", with: "16"
+        click_on "Access Story"
+
+        expect(page).to have_content("Enter your age to access this story")
+        expect(page).to have_content("Access Restricted Due to Age")
+      end
+
+      it "allows you to view an age protected story with the correct age", js: true do
+        visit adventure_path(age_limit)
+        fill_in "age", with: "23"
         click_on "Access Story"
 
         expect(page).to have_content("Test Story")

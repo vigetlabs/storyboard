@@ -1,0 +1,15 @@
+<div class="AccountForm Container">
+  <h1 class="PageBanner">View an<br>Age Protected Story</h1>
+  <%= form_for :adventure, url: authenticate_adventure_path do |f| %>
+    <div class="Field">
+      <%= f.label :age_limit, "Enter your age to access this story" %>
+      <%= f.number_field :age_limit, value: nil, step: :any %>
+    </div>
+    <div class="Field">
+      <button class="SlantButton">Access Story</button>
+    </div>
+  <% end %>
+  <footer class="AccountFormFooter">
+    <%= link_to 'Back', adventures_path %>
+  </footer>
+</div>

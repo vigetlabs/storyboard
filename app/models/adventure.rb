@@ -22,12 +22,18 @@ class Adventure < ApplicationRecord
 
   validates :password, length: (3..32), presence: true, if: :has_password
 
+  validates :age_limit, numericality: { only_integer: true }, presence: true, if: :has_age_limit
+
   def to_s
     title
   end
 
-  def authenticate(entered_password)
-    password? && password == entered_password
+  def authenticate(entered_value, type)
+    if type == "Password"
+      password? && password == entered_value
+    elsif type == "Age"
+      age_limit? && entered_value.to_i >= age_limit
+    end
   end
 
   def to_param

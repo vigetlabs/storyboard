@@ -38,9 +38,14 @@
   display: none;
 }
 
+.AccountForm .Field.-ageLimitField {
+  display: none;
+}
+
 .AccountForm .Field input[type='email'],
 .AccountForm .Field input[type='text'],
 .AccountForm .Field input[type='url'],
+.AccountForm .Field input[type='number'],
 .AccountForm .Field textarea,
 .AccountForm .Field input[type='password'] {
   background: transparent;
