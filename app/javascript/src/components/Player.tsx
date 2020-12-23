@@ -42,12 +42,18 @@ interface Stat {
   value: number
 }
 
+interface StateSnapshot {
+  focus: string
+  currentItems: string[]
+  currentStats: Stat[]
+}
+
 interface PlayerState {
   started: boolean
-  lastFocus?: string
   focus?: string
   currentItems: string[]
   currentStats: Stat[]
+  history: StateSnapshot[]
 }
 
 class Player extends React.Component<PlayerProps, PlayerState> {
@@ -59,7 +65,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   state: PlayerState = {
     started: false,
     currentItems: [],
-    currentStats: []
+    currentStats: [],
+    history: []
   }
 
   constructor(props: PlayerProps) {
@@ -154,6 +161,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           <h1 className="PlayerSceneTitle">{node.name}</h1>
 
           <div className="PlayerSceneContent">
+            <button onClick={this.goBack.bind(this)}>Go Back</button>
             <div
               className="PlayerSceneBody"
               dangerouslySetInnerHTML={{ __html: translatedText }}
@@ -272,6 +280,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
     for (let key in node.ports) {
       let port = node.ports[key]
+      // return out ports for given node (choices)
       if (port.in === false) {
         ports.push(port)
       }
@@ -381,12 +390,39 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     }
     let nextNode = this.getRandom(targetNodes) || 'empty'
 
+    // grab copy of current state, stash it in a new history object
+    // history arr = [{focus:, currentItems:, currentStats:}]
+    let newHistory = clone(this.state.history)
+    newHistory.push({
+      focus: this.state.focus,
+      currentItems: this.state.currentItems,
+      currentStats: this.state.currentStats
+    })
+
     this.setState(
       {
-        lastFocus: this.state.focus,
         focus: nextNode,
         currentItems: newItems,
-        currentStats: newStats
+        currentStats: newStats,
+        history: newHistory
+      },
+      this.resetScroll
+    )
+  }
+
+  private goBack() {
+    let newHistory = clone(this.state.history)
+    var last = newHistory.pop()
+
+    this.setState(
+      {
+        // node is just an id for the scene
+        // update state with history array
+        // use lastFocus as pointer to previous node
+        focus: last.focus,
+        currentItems: last.currentItems,
+        currentStats: last.currentStats,
+        history: newHistory
       },
       this.resetScroll
     )
