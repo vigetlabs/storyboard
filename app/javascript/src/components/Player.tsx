@@ -42,18 +42,17 @@ interface Stat {
   value: number
 }
 
-interface StateSnapshot {
-  focus: string
-  currentItems: string[]
-  currentStats: Stat[]
-}
-
 interface PlayerState {
   started: boolean
+  lastFocus?: string
   focus?: string
   currentItems: string[]
   currentStats: Stat[]
-  history: StateSnapshot[]
+  previousState: [{
+    focus?: string
+    currentItems: string[]
+    currentStats: Stat[]
+  }]
 }
 
 class Player extends React.Component<PlayerProps, PlayerState> {
@@ -66,7 +65,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     started: false,
     currentItems: [],
     currentStats: [],
-    history: []
+    previousState: []
   }
 
   constructor(props: PlayerProps) {
@@ -157,11 +156,11 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
     return (
       <main className="PlayerScene">
+      {this.goBack()}
         <div className="PlayerForeground">
           <h1 className="PlayerSceneTitle">{node.name}</h1>
 
           <div className="PlayerSceneContent">
-            <button onClick={this.goBack.bind(this)}>Go Back</button>
             <div
               className="PlayerSceneBody"
               dangerouslySetInnerHTML={{ __html: translatedText }}
@@ -207,6 +206,29 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           ) : null
         })}
       </menu>
+    )
+  }
+
+  private goBack() {
+    return (
+      <a className="SlantButton" id="back-button" onClick={this.setPreviousState.bind(this)} >
+        Back
+      </a>
+    )
+  }
+
+  private setPreviousState() {
+    let previous = this.state.previousState
+    previous.splice(-1)
+    let last = this.state.previousState.length - 1
+    this.setState(
+      {
+        focus: this.state.previousState[last].focus,
+        currentItems: this.state.previousState[last].currentItems,
+        currentStats: this.state.previousState[last].currentStats,
+        previousState: previous
+      },
+      this.resetScroll
     )
   }
 
@@ -389,40 +411,19 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       }
     }
     let nextNode = this.getRandom(targetNodes) || 'empty'
-
-    // grab copy of current state, stash it in a new history object
-    // history arr = [{focus:, currentItems:, currentStats:}]
-    let newHistory = clone(this.state.history)
-    newHistory.push({
+    let previous = {
       focus: this.state.focus,
       currentItems: this.state.currentItems,
       currentStats: this.state.currentStats
-    })
+    }
 
     this.setState(
       {
+        lastFocus: this.state.focus,
         focus: nextNode,
         currentItems: newItems,
         currentStats: newStats,
-        history: newHistory
-      },
-      this.resetScroll
-    )
-  }
-
-  private goBack() {
-    let newHistory = clone(this.state.history)
-    var last = newHistory.pop()
-
-    this.setState(
-      {
-        // node is just an id for the scene
-        // update state with history array
-        // use lastFocus as pointer to previous node
-        focus: last.focus,
-        currentItems: last.currentItems,
-        currentStats: last.currentStats,
-        history: newHistory
+        previousState: this.state.previousState.concat(previous)
       },
       this.resetScroll
     )
