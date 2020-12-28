@@ -42,17 +42,19 @@ interface Stat {
   value: number
 }
 
+interface StateSnapshot {
+  focus?: string
+  currentItems: string[]
+  currentStats: Stat[]
+}
+
 interface PlayerState {
   started: boolean
   lastFocus?: string
   focus?: string
   currentItems: string[]
   currentStats: Stat[]
-  previousState: [{
-    focus?: string
-    currentItems: string[]
-    currentStats: Stat[]
-  }]
+  history: StateSnapshot[]
 }
 
 class Player extends React.Component<PlayerProps, PlayerState> {
@@ -65,7 +67,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     started: false,
     currentItems: [],
     currentStats: [],
-    previousState: []
+    history: []
   }
 
   constructor(props: PlayerProps) {
@@ -156,7 +158,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
     return (
       <main className="PlayerScene">
-      {this.goBack()}
+      {this.goBackButton()}
         <div className="PlayerForeground">
           <h1 className="PlayerSceneTitle">{node.name}</h1>
 
@@ -209,24 +211,23 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     )
   }
 
-  private goBack() {
+  private goBackButton() {
     return (
-      <a className="SlantButton" id="back-button" onClick={this.setPreviousState.bind(this)} >
+      <a className="SlantButton" id="back-button" onClick={this.revertToPreviousState.bind(this)} >
         Back
       </a>
     )
   }
 
-  private setPreviousState() {
-    let previous = this.state.previousState
-    previous.splice(-1)
-    let last = this.state.previousState.length - 1
+  private revertToPreviousState() {
+    let newHistory = clone(this.state.history)
+
+    // remove last element from history array and assign it to lastHistory
+    let lastHistory = newHistory.pop()
     this.setState(
       {
-        focus: this.state.previousState[last].focus,
-        currentItems: this.state.previousState[last].currentItems,
-        currentStats: this.state.previousState[last].currentStats,
-        previousState: previous
+        ...lastHistory,
+        history: newHistory
       },
       this.resetScroll
     )
@@ -411,11 +412,13 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       }
     }
     let nextNode = this.getRandom(targetNodes) || 'empty'
-    let previous = {
+
+    let newHistory = clone(this.state.history)
+    newHistory.push({
       focus: this.state.focus,
       currentItems: this.state.currentItems,
       currentStats: this.state.currentStats
-    }
+    })
 
     this.setState(
       {
@@ -423,7 +426,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         focus: nextNode,
         currentItems: newItems,
         currentStats: newStats,
-        previousState: this.state.previousState.concat(previous)
+        history: newHistory
       },
       this.resetScroll
     )
