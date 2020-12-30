@@ -15,7 +15,8 @@
     slug: "<%= @adventure.to_param %>",
     title: "<%== escape_javascript @adventure.title %>",
     description: "<%== escape_javascript @adventure.description %>",
+    backButton: <%= @adventure.back_button %>,
     theme: "<%== escape_javascript @adventure.theme.capitalize %>",
-    isOffline: false
+    isOffline: false,
   }
 </script>
