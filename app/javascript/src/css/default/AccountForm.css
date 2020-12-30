@@ -34,11 +34,9 @@
   max-width: 500px;
 }
 
-.AccountForm .Field.-passwordField {
-  display: none;
-}
-
-.AccountForm .Field.-ageLimitField {
+.AccountForm .Field.-passwordField,
+.AccountForm .Field.-ageLimitField,
+.AccountForm .Field.-backButtonField {
   display: none;
 }
 
