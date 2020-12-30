@@ -34,6 +34,7 @@ interface PlayerProps {
   theme: string
   title: string
   isOffline: boolean
+  backButton: boolean
   debug: boolean
 }
 
@@ -158,7 +159,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
     return (
       <main className="PlayerScene">
-      {this.goBackButton()}
+      {this.goBackButton(this.props.backButton)}
         <div className="PlayerForeground">
           <h1 className="PlayerSceneTitle">{node.name}</h1>
 
@@ -211,12 +212,12 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     )
   }
 
-  private goBackButton() {
-    return (
+  private goBackButton(displayButton) {
+    return displayButton ? (
       <a className="SlantButton" id="back-button" onClick={this.revertToPreviousState.bind(this)} >
         Back
       </a>
-    )
+    ) : null
   }
 
   private revertToPreviousState() {
