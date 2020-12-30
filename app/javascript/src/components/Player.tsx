@@ -51,7 +51,6 @@ interface StateSnapshot {
 
 interface PlayerState {
   started: boolean
-  lastFocus?: string
   focus?: string
   currentItems: string[]
   currentStats: Stat[]
@@ -132,7 +131,10 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     }
 
     if (focus === 'empty') {
-      return <PlayerDeadEnd onReplay={this.restart} />
+      return <PlayerDeadEnd
+        onReplay={this.restart}
+        onGoBack={this.revertToPreviousState.bind(this)}
+      />
     }
 
     let node = this.model.getNode(focus) as DefaultNodeModel
@@ -153,6 +155,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           title={node.name}
           body={translatedText}
           onReplay={this.restart}
+          onGoBack={this.revertToPreviousState.bind(this)}
         />
       )
     }
@@ -227,6 +230,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     let lastHistory = newHistory.pop()
     this.setState(
       {
+        ...this.state,
         ...lastHistory,
         history: newHistory
       },
@@ -423,7 +427,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
     this.setState(
       {
-        lastFocus: this.state.focus,
         focus: nextNode,
         currentItems: newItems,
         currentStats: newStats,
