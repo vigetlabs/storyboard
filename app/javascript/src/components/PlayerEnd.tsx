@@ -4,11 +4,15 @@ interface Props {
   title: string
   body: string
   onReplay: () => void
+  onGoBack: () => void
 }
 
-export const PlayerEnd: React.SFC<Props> = ({ title, body, onReplay }) => {
+export const PlayerEnd: React.SFC<Props> = ({ title, body, onReplay, onGoBack }) => {
   return (
     <main className="PlayerEnd">
+      <a className="SlantButton" id="back-button" onClick={(onGoBack)}>
+        Back
+      </a>
       <div className="PlayerForeground">
         <h1 className="PlayerEndTitle">{title}</h1>
 
@@ -29,14 +33,16 @@ export const PlayerEnd: React.SFC<Props> = ({ title, body, onReplay }) => {
 
 interface DeadEndProps {
   onReplay: () => void
+  onGoBack: () => void
 }
 
-export const PlayerDeadEnd: React.SFC<DeadEndProps> = ({ onReplay }) => {
+export const PlayerDeadEnd: React.SFC<DeadEndProps> = ({ onReplay, onGoBack }) => {
   return (
     <PlayerEnd
       title="Dead End"
       body="That choice wasn't tied to a new scene. You should fix that. Try replaying the story."
       onReplay={onReplay}
+      onGoBack={onGoBack}
     />
   )
 }

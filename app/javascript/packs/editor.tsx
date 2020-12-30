@@ -31,6 +31,7 @@ declare global {
     theme: string
     viewOnly: boolean
     isOffline: boolean
+    backButton: boolean
     story: {
       story: any
       meta: MetaData
