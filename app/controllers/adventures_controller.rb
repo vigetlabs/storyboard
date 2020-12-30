@@ -124,6 +124,7 @@ class AdventuresController < ApplicationController
       :has_password,
       :age_limit,
       :has_age_limit,
+      :back_button,
       :show_source
     )
   end
