@@ -58,6 +58,21 @@
       <%= f.label :age_limit, "Age Limit" %>
       <%= f.number_field :age_limit, step: :any %>
     </div>
+
+    <div class="Field -checkbox">
+      <%= f.check_box :back_button, onchange: "toggleBackButtonField(this)" %>
+      <%= f.label :back_button, "Add Back Button?"%>
+      <div class="hint">
+        <em>
+          If checked, a back button in the upper left will takes the user to the previous scene.
+        </em>
+      </div>
+    </div>
+    <div class="Field -backButtonField">
+      <p>
+        The back button is now enabled for this story.
+      </p>
+    </div>
   <% end %>
 
   <div class="Field -checkbox">
@@ -76,11 +91,14 @@
 <% end %>
 
 <script>
-  window.onload = toggles(document.getElementById("adventure_has_password"), document.getElementById("adventure_has_age_limit"))
+  window.onload = toggles(document.getElementById("adventure_has_password"),
+                          document.getElementById("adventure_has_age_limit"),
+                          document.getElementById("adventure_back_button"))
 
-  function toggles(passwordObj, ageObj) {
+  function toggles(passwordObj, ageObj, backObj) {
     togglePasswordField(passwordObj);
     toggleAgeLimitField(ageObj);
+    toggleBackButtonField(backObj);
   }
 
   function togglePasswordField(obj) {
@@ -91,5 +109,16 @@
   function toggleAgeLimitField(obj) {
     var elem = document.getElementsByClassName("Field -ageLimitField")
     elem[0].style.display = obj.checked ? 'block' : 'none'
+  }
+
+  function toggleBackButtonField(obj) {
+    toggleIt('hello')
+    var elem = document.getElementsByClassName("Field -backButtonField")
+    elem[0].style.display = obj.checked ? 'block' : 'none'
+  }
+
+  function toggleIt(word) {
+    console.log(word)
+
   }
 </script>
