@@ -159,7 +159,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
     return (
       <main className="PlayerScene">
-      {this.goBackButton(this.props.backButton)}
+        {this.goBackButton()}
         <div className="PlayerForeground">
           <h1 className="PlayerSceneTitle">{node.name}</h1>
 
@@ -212,8 +212,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     )
   }
 
-  private goBackButton(displayButton) {
-    return displayButton ? (
+  private goBackButton() {
+    return this.props.backButton ? (
       <a className="SlantButton" id="back-button" onClick={this.revertToPreviousState.bind(this)} >
         Back
       </a>
