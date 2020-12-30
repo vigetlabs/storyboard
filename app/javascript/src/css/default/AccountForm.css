@@ -35,8 +35,7 @@
 }
 
 .AccountForm .Field.-passwordField,
-.AccountForm .Field.-ageLimitField,
-.AccountForm .Field.-backButtonField {
+.AccountForm .Field.-ageLimitField {
   display: none;
 }
 
