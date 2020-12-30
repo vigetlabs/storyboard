@@ -27,6 +27,7 @@ async function render() {
         portMeta={content.portMeta}
         theme={SEED.theme}
         isOffline={SEED.isOffline}
+        backButton={SEED.backButton}
         debug={player!.dataset.debug == 'true'}
       />,
       player
