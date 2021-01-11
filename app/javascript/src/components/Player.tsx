@@ -173,8 +173,22 @@ class Player extends React.Component<PlayerProps, PlayerState> {
             />
             {this.renderChoices(node)}
           </div>
+
+          {this.debugger()}
         </div>
       </main>
+    )
+  }
+
+  private debugger() {
+    return (
+      <div className="debugWrap">
+        <h3>Current Choices:</h3>
+          <h4> Set Stats </h4>
+          {this.storyAttrs("stat")}
+          <h4> Set Items </h4>
+          {this.storyAttrs("item")}
+      </div>
     )
   }
 
@@ -214,6 +228,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       </menu>
     )
   }
+
 
   private goBackButton() {
     return this.props.backButton ? (
