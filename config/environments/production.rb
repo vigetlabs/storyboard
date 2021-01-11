@@ -90,8 +90,8 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   ActionMailer::Base.smtp_settings = {
-    user_name:            Rails.application.credentials.sendgrid_username,
-    password:             Rails.application.credentials.sendgrid_password,
+    user_name:            'apikey',
+    password:             Rails.application.credentials.sendgrid_api_key,
     domain:               'storyboard.viget.com',
     address:              'smtp.sendgrid.net',
     port:                 587,
