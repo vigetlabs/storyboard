@@ -180,6 +180,35 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     )
   }
 
+  private handleChange(event: any, target: any) {
+    let currFocus = clone(this.state.focus)
+    let currItems = clone(this.state.currentItems)
+    let currStats = clone(this.state.currentStats)
+    let currHistory = clone(this.state.history)
+    let newStats = []
+
+    const newValue = event;
+    const attr = target;
+
+    for (let i = 0; i < currStats.length; i++) {
+      let statObject = currStats[i];
+      if (statObject.name === target) {
+        statObject.value = event.target.value
+      }
+      newStats.push(statObject)
+    }
+
+    this.setState(
+      {
+        focus: currFocus,
+        currentItems: currItems,
+        currentStats: newStats,
+        history: currHistory
+      },
+      this.resetScroll
+    )
+  }
+
   private storyAttrs(key: string) {
     const sceneValues = Object.values(this.props.portMeta)
     const sceneEntries = sceneValues.map(obj => Object.entries(obj).filter(([k, v]) => k === `${key}Changes`))
