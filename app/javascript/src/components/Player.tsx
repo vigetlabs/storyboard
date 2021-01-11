@@ -180,6 +180,29 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     )
   }
 
+  private storyAttrs(key: string) {
+    const sceneValues = Object.values(this.props.portMeta)
+    const sceneEntries = sceneValues.map(obj => Object.entries(obj).filter(([k, v]) => k === `${key}Changes`))
+    const withValues = sceneEntries.filter(a => a.length > 0)
+    const firstValue = withValues.map(a => a[0])
+    const secondValue = firstValue.map(a => a[1])
+    const names = secondValue.map(a => a.map((o: any) => o.name))
+    const flattenedNames = names.reduce((accumulator, value) => accumulator.concat(value), [])
+    const uniqueAttrSet = new Set(flattenedNames)
+    const uniqueAttrArr = Array.from(uniqueAttrSet)
+
+    return (
+      <div>
+        {uniqueAttrArr.map((given, index) => (
+          <>
+            <p key={index}>{given}: </p>
+            <input className="DebuggerInput" onChange={(e) => this.handleChange(e, given)}/>
+          </>
+        ))}
+      </div>
+    );
+  }
+
   private debugger() {
     return (
       <div className="debugWrap">
