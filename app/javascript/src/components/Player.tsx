@@ -180,33 +180,35 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     )
   }
 
-  private handleChange(event: any, target: any) {
-    let currFocus = clone(this.state.focus)
-    let currItems = clone(this.state.currentItems)
+  private handleStats(event: any, target: any) {
+    const currFocus = clone(this.state.focus)
+    const currItems = clone(this.state.currentItems)
     let currStats = clone(this.state.currentStats)
-    let currHistory = clone(this.state.history)
-    let newStats = []
+    const currHistory = clone(this.state.history)
 
-    const newValue = event;
-    const attr = target;
-
-    for (let i = 0; i < currStats.length; i++) {
-      let statObject = currStats[i];
-      if (statObject.name === target) {
-        statObject.value = event.target.value
+    currStats.map(stat => {
+      if (stat.name === target) {
+        stat.value = event.target.value
       }
-      newStats.push(statObject)
-    }
+    })
 
     this.setState(
       {
         focus: currFocus,
         currentItems: currItems,
-        currentStats: newStats,
+        currentStats: currStats,
         history: currHistory
       },
       this.resetScroll
     )
+  }
+
+  private handleChange(event: any, target: any, type: string) {
+    if (type === "stat") {
+      this.handleStats(event, target)
+    } else if (type === "item") {
+      this.handleItems(event, target)
+    }
   }
 
   private storyAttrs(key: string) {
@@ -225,7 +227,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         {uniqueAttrArr.map((given, index) => (
           <>
             <p key={index}>{given}: </p>
-            <input className="DebuggerInput" onChange={(e) => this.handleChange(e, given)}/>
+            <input className="DebuggerInput" onChange={(e) => this.handleChange(e, given, key)}/>
           </>
         ))}
       </div>
@@ -236,9 +238,11 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return (
       <div className="debugWrap">
         <h3>Current Choices:</h3>
-          <h4> Set Stats </h4>
+          <h4> Stats </h4>
+          <p> Enter numerical value for Statistic: </p>
           {this.storyAttrs("stat")}
-          <h4> Set Items </h4>
+          <h4> Items </h4>
+          <p> Enter "add" or "remove" to edit the desired item: </p>
           {this.storyAttrs("item")}
       </div>
     )
