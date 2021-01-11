@@ -203,6 +203,30 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     )
   }
 
+  private handleItems(event: any, target: any) {
+    const currFocus = clone(this.state.focus)
+    let currItems = clone(this.state.currentItems)
+    const currStats = clone(this.state.currentStats)
+    const currHistory = clone(this.state.history)
+    const value = event.target.value
+
+    if (value === "add") {
+      currItems.push(target)
+    } else if (value === "remove") {
+      currItems = currItems.filter(item => item !== target)
+    }
+
+    this.setState(
+      {
+        focus: currFocus,
+        currentItems: currItems,
+        currentStats: currStats,
+        history: currHistory
+      },
+      this.resetScroll
+    )
+  }
+
   private handleChange(event: any, target: any, type: string) {
     if (type === "stat") {
       this.handleStats(event, target)
