@@ -40,3 +40,16 @@
   top: 1rem;
   left: 1rem;
 }
+
+.DebuggerInput {
+  height: 2rem;
+  width: 15rem;
+}
+
+.debugWrap {
+  width: 20rem;
+  padding: 2em;
+  border: 2px solid red;
+  background: #ddd;
+  margin-bottom: 9px;
+}
