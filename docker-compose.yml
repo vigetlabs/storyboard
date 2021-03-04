@@ -27,6 +27,8 @@ services:
       - 3000:3000
     tty: true
     stdin_open: true
+    environment:
+      WEBPACKER_DEV_SERVER_HOST: webpack
     volumes:
       - .:/usr/src/app:delegated
       - yarn:/usr/src/app/node_modules
@@ -36,3 +38,22 @@ services:
       - type: bind
         source: /run/host-services/ssh-auth.sock
         target: /run/host-services/ssh-auth.sock
+
+  webpack:
+    build:
+      context: .
+      dockerfile: ./.docker-config/Dockerfile
+    entrypoint: ./.docker-config/entrypoint.sh
+    command: ./bin/webpack-dev-server
+    volumes:
+      - .:/usr/src/app:delegated
+
+      # Lean on gem & yarn caches from app
+      - gems:/usr/local/bundle
+      - yarn:/usr/src/app/node_modules
+    ports:
+      - '3035:3035'
+    environment:
+      NODE_ENV: development
+      RAILS_ENV: development
+      WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
