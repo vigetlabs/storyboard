@@ -862,6 +862,21 @@
     webpack-cli "^3.3.2"
     webpack-sources "^1.3.0"
 
+"@react-dnd/asap@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@react-dnd/asap/-/asap-4.0.0.tgz#b300eeed83e9801f51bd66b0337c9a6f04548651"
+  integrity sha512-0XhqJSc6pPoNnf8DhdsPHtUhRzZALVzYMTzRwV4VI6DJNJ/5xxfL9OQUwb8IH5/2x7lSf7nAZrnzUD+16VyOVQ==
+
+"@react-dnd/invariant@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@react-dnd/invariant/-/invariant-2.0.0.tgz#09d2e81cd39e0e767d7da62df9325860f24e517e"
+  integrity sha512-xL4RCQBCBDJ+GRwKTFhGUW8GXa4yoDfJrPbLblc3U09ciS+9ZJXJ3Qrcs/x2IODOdIE5kQxvMmE2UKyqUictUw==
+
+"@react-dnd/shallowequal@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@react-dnd/shallowequal/-/shallowequal-2.0.0.tgz#a3031eb54129f2c66b2753f8404266ec7bf67f0a"
+  integrity sha512-Pc/AFTdwZwEKJxFJvlxrSmGe/di+aAOBn60sremrpLo6VI/6cmiUYNNwlI5KNYttg7uypzA3ILPMPgxB2GYZEg==
+
 "@types/events@*":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
@@ -2539,6 +2554,15 @@ diffie-hellman@^5.0.0:
     bn.js "^4.1.0"
     miller-rabin "^4.0.0"
     randombytes "^2.0.0"
+
+dnd-core@12.0.1:
+  version "12.0.1"
+  resolved "https://registry.yarnpkg.com/dnd-core/-/dnd-core-12.0.1.tgz#2263391d6de218801770df4d345294a5f1eccc48"
+  integrity sha512-KzfKXQM9t9uSBO7DFmrILVgXUCShpY3/MbnLPF9/wg1Wcvq2KblbeT72GhjcrplS9cz0DFXilE1NXy43n8plag==
+  dependencies:
+    "@react-dnd/asap" "^4.0.0"
+    "@react-dnd/invariant" "^2.0.0"
+    redux "^4.0.5"
 
 dns-equal@^1.0.0:
   version "1.0.0"
@@ -6121,6 +6145,23 @@ rc@^1.2.7:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
+react-dnd-html5-backend@^12.1.1:
+  version "12.1.1"
+  resolved "https://registry.yarnpkg.com/react-dnd-html5-backend/-/react-dnd-html5-backend-12.1.1.tgz#73aa9043f5a2da5b192503593d620d30c0bd7348"
+  integrity sha512-cQZgfuSGQEwHdvdoPtfUOvcrS8rye/V0hU046LjY/BLSgcrdjtQVviE2d/81QQaeJpvK00JizctsZqVY7IvHgA==
+  dependencies:
+    dnd-core "12.0.1"
+
+react-dnd@^13.1.1:
+  version "13.1.1"
+  resolved "https://registry.yarnpkg.com/react-dnd/-/react-dnd-13.1.1.tgz#ea6d3f15cccf542a3ebfb978c097b2e3b1d1c962"
+  integrity sha512-oxQW8846omV1l3Pm2zY/atvNxryx+blW1rxnSmoGvFMgmxXpOHulaXrlXgxRH+OLRvLt2cfVTSxZ4ykbzBypaw==
+  dependencies:
+    "@react-dnd/invariant" "^2.0.0"
+    "@react-dnd/shallowequal" "^2.0.0"
+    dnd-core "12.0.1"
+    hoist-non-react-statics "^3.3.2"
+
 react-dom@^16.6.1:
   version "16.8.6"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.8.6.tgz#71d6303f631e8b0097f56165ef608f051ff6e10f"
@@ -6151,6 +6192,15 @@ react-transition-group@^4.3.0:
     loose-envify "^1.4.0"
     prop-types "^15.6.2"
 
+react@16.14:
+  version "16.14.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.14.0.tgz#94d776ddd0aaa37da3eda8fc5b6b18a4c9a3114d"
+  integrity sha512-0X2CImDkJGApiAlcf0ODKIneSwBPhqJawOa5wCtKbu7ZECrmS26NvtSILynQ66cgkT/RJ4LidJOc3bUESwmU8g==
+  dependencies:
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.2"
+
 react@^16.3.2:
   version "16.6.1"
   resolved "https://registry.yarnpkg.com/react/-/react-16.6.1.tgz#ee2aef4f0a09e494594882029821049772f915fe"
@@ -6160,16 +6210,6 @@ react@^16.3.2:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
     scheduler "^0.11.0"
-
-react@^16.6.1:
-  version "16.8.6"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.8.6.tgz#ad6c3a9614fd3a4e9ef51117f54d888da01f2bbe"
-  integrity sha512-pC0uMkhLaHm11ZSJULfOBqV4tIZkx87ZLvbbQYunNixAAvjnC+snJCg0XQXn9VIsttVsbZP/H/ewzgsd5fxKXw==
-  dependencies:
-    loose-envify "^1.1.0"
-    object-assign "^4.1.1"
-    prop-types "^15.6.2"
-    scheduler "^0.13.6"
 
 read-cache@^1.0.0:
   version "1.0.0"
@@ -6233,6 +6273,14 @@ redent@^1.0.0:
   dependencies:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
+
+redux@^4.0.5:
+  version "4.0.5"
+  resolved "https://registry.yarnpkg.com/redux/-/redux-4.0.5.tgz#4db5de5816e17891de8a80c424232d06f051d93f"
+  integrity sha512-VSz1uMAH24DM6MF72vcojpYPtrTUu3ByVWfPL1nPfVRb5mZVTve5GnNCUV53QM/BZ66xfWrm0CTWoM+Xlz8V1w==
+  dependencies:
+    loose-envify "^1.4.0"
+    symbol-observable "^1.2.0"
 
 regenerate-unicode-properties@^8.0.2:
   version "8.1.0"
@@ -7074,6 +7122,11 @@ svgo@^1.0.0:
     stable "^0.1.8"
     unquote "~1.1.1"
     util.promisify "~1.0.0"
+
+symbol-observable@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
+  integrity sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==
 
 tapable@^1.0.0, tapable@^1.1.0:
   version "1.1.3"

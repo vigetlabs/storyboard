@@ -19,12 +19,13 @@ interface SceneEditorProps {
   updateState(state: Readonly<ApplicationState>): Readonly<ApplicationState>
   focus: DefaultNodeModel
   requestPaint: () => void
+  updateDiagram: () => void
   onClear: () => void
 }
 
 class SceneEditor extends React.Component<SceneEditorProps> {
   render() {
-    const { state, focus, requestPaint } = this.props
+    const { state, focus, requestPaint, updateDiagram } = this.props
 
     // TODO: replace this. It doesn't matter much here but this breaks typechecking as get always returns `any`
     const text = get(state, `meta.${focus.id}.text`)
@@ -54,7 +55,7 @@ class SceneEditor extends React.Component<SceneEditorProps> {
         />
         <div className="SceneEditorField">
           <h3 className="SceneEditorHeading">Choices</h3>
-          <ChoiceEditor focus={focus} requestPaint={requestPaint} />
+          <ChoiceEditor focus={focus} requestPaint={requestPaint} updateDiagram={updateDiagram} />
         </div>
 
         <SceneEditorTextAreaField
@@ -111,10 +112,11 @@ class SceneEditor extends React.Component<SceneEditorProps> {
 interface ConsumerProps {
   focus: DefaultNodeModel | null
   requestPaint: () => void
+  updateDiagram: () => void
   onClear: () => void
 }
 
-export default ({ focus, requestPaint, onClear }: ConsumerProps) => {
+export default ({ focus, requestPaint, onClear, updateDiagram }: ConsumerProps) => {
   if (focus == null) {
     return null
   }
@@ -125,6 +127,7 @@ export default ({ focus, requestPaint, onClear }: ConsumerProps) => {
         <SceneEditor
           key={focus.id}
           requestPaint={requestPaint}
+          updateDiagram={updateDiagram}
           focus={focus}
           onClear={onClear}
           {...props}

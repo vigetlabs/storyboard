@@ -177,6 +177,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
         <SceneEditor
           focus={this.getFocus()}
+          updateDiagram={this.updateWithSerialization}
           requestPaint={this.eventuallyForceUpdate}
           onClear={this.clearSelection}
         />
@@ -318,6 +319,11 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private repaint = () => this.engine.repaintCanvas()
+
+  private updateWithSerialization = () => {
+    this.eventuallyForceUpdate()
+    this.updateStory(this.model.serializeDiagram())
+  }
 
   private eventuallyForceUpdate = () =>
     requestAnimationFrame(() => {

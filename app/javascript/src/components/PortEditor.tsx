@@ -4,6 +4,7 @@ import { DefaultPortModel } from 'storm-react-diagrams'
 import { StateConsumer, ApplicationState, PortMetaContent } from '../Store'
 import { get } from 'lodash'
 import { clone } from '../clone'
+import { Choice } from './Choice'
 
 import './PortEditor.css'
 import { link } from 'fs'
@@ -12,6 +13,8 @@ interface PortEditorProps {
   port: DefaultPortModel
   removeChoice: () => void
   updateChoice: () => void
+  moveChoice: () => void
+  index: number
 }
 
 interface PortEditorStateProps {
@@ -66,8 +69,7 @@ class PortEditor extends React.Component<
   }
 
   render() {
-    const { port, removeChoice, updateChoice } = this.props
-
+    const { port, removeChoice, updateChoice, moveChoice, index } = this.props
     const {
       selectedTab,
       optionsOpen,
@@ -76,13 +78,16 @@ class PortEditor extends React.Component<
 
     return (
       <>
-        <li>
-          <input defaultValue={port.label} onChange={updateChoice} />{' '}
-          <button onClick={this.optionsButtonClick}>
-            {optionsOpen ? 'v' : '>'}
-          </button>
-          <button onClick={removeChoice}>Delete</button>
-        </li>
+        <Choice
+          id={port.id}
+          index={index}
+          port={port}
+          removeChoice={removeChoice}
+          updateChoice={updateChoice}
+          optionsButtonClick={this.optionsButtonClick}
+          optionsOpen={optionsOpen}
+          moveChoice={moveChoice}
+        />
 
         <section>
           {optionsOpen && (
