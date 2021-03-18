@@ -3,6 +3,10 @@ import { FC, useRef } from 'react'
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd'
 import { XYCoord } from 'dnd-core'
 import { DefaultPortModel } from 'storm-react-diagrams';
+import UnfoldMoreIcon from '@material-ui/icons/UnfoldMore';
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import MenuOpenIcon from '@material-ui/icons/MenuOpen';
+import MenuIcon from '@material-ui/icons/Menu';
 
 interface ChoiceProps {
   id: any
@@ -82,13 +86,19 @@ export const Choice: FC<ChoiceProps> = ({ id, index, port, removeChoice, updateC
   drag(drop(ref))
 
   return (
-    <li data-handler-id={handlerId} style={{ opacity: isDragging ? 0.5 : 1 }}>
-      <button ref={ref} style={{cursor: 'move'}} >{'--'}</button>
-      <input defaultValue={port.label} onChange={updateChoice} />{' '}
-      <button onClick={optionsButtonClick}>
-        {optionsOpen ? 'v' : '>'}
-      </button>
-      <button onClick={removeChoice}>Delete</button>
-    </li>
+    <div ref={preview}>
+      <li data-handler-id={handlerId} style={{ opacity: isDragging ? 0.5 : 1 }}>
+        <button ref={ref} style={{cursor: 'move'}}>
+          <UnfoldMoreIcon />
+        </button>
+        <input defaultValue={port.label} onChange={updateChoice} />{' '}
+        <button onClick={optionsButtonClick}>
+          {optionsOpen ? <MenuOpenIcon /> : <MenuIcon />}
+        </button>
+        <button onClick={removeChoice}>
+          <DeleteOutlineIcon />
+        </button>
+      </li>
+    </div>
   )
 };
