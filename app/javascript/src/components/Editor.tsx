@@ -709,6 +709,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
   }
 }
+
 interface InboundProps {
   viewOnly: boolean
 }
