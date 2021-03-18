@@ -100,32 +100,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
     let currentState = clone(this.serialize())
     let pastState = this.past[this.past.length - 1]
 
-    if(currentState.story.links > pastState.story.links) { // Detect new link
-      let currentNodes = [...currentState.story.nodes] // Grab a copy of all current nodes
-      let updatedName: string = ''
-      let latestLink = Object.assign(new DefaultLinkModel(), currentState.story.links[currentState.story.links.length - 1])
-      let sourcePort = Object.assign(new DefaultPortModel(false, ''))
-      let targetNode = Object.assign(new DefaultNodeModel())
-
-      currentNodes.forEach(node => {
-        if(node.id === latestLink.source) {
-          sourcePort = node.ports.filter(port => port.id === latestLink.sourcePort)
-          updatedName = sourcePort[0].label
-        }
-
-        if(node.id === latestLink.target) {
-           targetNode = node
-        }
-      })
-
-      if(targetNode.name === "New Scene") {
-        targetNode.name = updatedName // Update name
-        let i = currentNodes.indexOf(targetNode)
-        currentNodes.splice(i, 1, targetNode)
-        newStory.links = currentState.story.links
-        newStory.nodes = currentNodes
-        this.updateStory(newStory)
-      }
+    if(currentState.story.links > pastState.story.links) {
+      this.handleSceneName(currentState, newStory)
     }
 
     if (JSON.stringify(currentState) != JSON.stringify(pastState)) {
@@ -144,6 +120,40 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
     this.engine.setDiagramModel(model)
     this.model = model
+  }
+
+  private handleSceneName = (
+    currentState: any,
+    newStory: any,
+    ) => {
+    let currentNodes = [...currentState.story.nodes]
+    let updatedName: string = ''
+    let latestLink = Object.assign(new DefaultLinkModel(), currentState.story.links[currentState.story.links.length - 1])
+    let sourcePort = Object.assign(new DefaultPortModel(false, ''))
+    let targetNode = Object.assign(new DefaultNodeModel())
+
+    currentNodes.forEach(node => {
+      if(node.id === latestLink.source) {
+        sourcePort = node.ports.filter((port: DefaultPortModel) => port.id === latestLink.sourcePort)
+        updatedName = sourcePort[0].label
+      }
+
+      if(node.id === latestLink.target) {
+         targetNode = node
+      }
+    })
+
+    if(targetNode.name === "New Scene") {
+      let targetNodeIndex = currentNodes.indexOf(targetNode)
+
+      targetNode.name = updatedName
+
+      currentNodes.splice(targetNodeIndex, 1, targetNode)
+      newStory.links = currentState.story.links
+      newStory.nodes = currentNodes
+
+      this.updateStory(newStory)
+    }
   }
 
   render() {
@@ -699,7 +709,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
   }
 }
-
 interface InboundProps {
   viewOnly: boolean
 }
