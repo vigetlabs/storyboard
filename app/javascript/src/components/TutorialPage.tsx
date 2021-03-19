@@ -13,6 +13,7 @@ interface TutorialPageContent {
   text: string[]
   intro?: boolean
   image?: string
+  url?: string
 }
 
 const pages: TutorialPageContent[] = [
@@ -55,30 +56,49 @@ const pages: TutorialPageContent[] = [
   {
     title: '#5 - Advance Choice Logic',
     text: [
-      'You can attach modifiers to choices, and use those modifiers to hide and show choices in other scenes.',
-      'For example, the “Teleport to Moon” choice might only be available to the reader if the “has teleporter” modifier was picked up in an earlier choice.'
+      'When it comes to choices, you have the option to use some advanced logic.',
+      'For example, you can make a choice available only if the player has a particular item.',
+      'You can also add stats to your player depending on their choices.'
     ],
-    image: require('../images/tutorial/advanced.gif')
+    image: require('../images/tutorial/introduction_to_advanced_logic.gif')
   },
   {
-    title: '#6 - Saving',
+    title: '#6 - Making Use of Items',
+    text: [
+      'You can directly configure a choice to add or remove an item.',
+      'This allows you to add conditional logic based on whether the item is available.'
+    ],
+    image: require('../images/tutorial/using_items.gif'),
+    url: 'https://storyboard.viget.com/items-example'
+  },
+  {
+    title: '#7 - How Stats Work',
+    text: [
+      'Stats give you the option to create a more interactive experience.',
+      'For example, you are presented with two shields and only one of them will give you enough \'Defense\' to protect you.',
+    ],
+    image: require('../images/tutorial/using_stats.gif'),
+    url: 'https://storyboard.viget.com/stats-example'
+  },
+  {
+    title: '#8 - Saving',
     text: [
       'Your story will be autosaved as you build it out. You can also manually do so by clicking “Save” to save your progress.'
     ],
     image: require('../images/tutorial/saving.gif')
   },
   {
-    title: '#6 - Editing Story Details',
+    title: '#9 - Editing Story Details',
     text: [
       'You can change the title, description, and theme of your story by clicking the “Edit” button.'
     ]
   },
   {
-    title: '#7 - Time to Play!',
+    title: '#10 - Time to Play!',
     text: ['Press “Play” to read your story and get a shareable link.']
   },
   {
-    title: '#8 - Disclaimer',
+    title: '#11 - Disclaimer',
     text: [
       "This project was primarily built in a weekend, so you may encounter some quirks along the way. If something doesn't look right, saving your story and refreshing the page might do the trick. If saving isn't working, you can export your story as a last resort.",
       'And of course, feel free to drop us a note in our feedback form (available from the footer on the homepage).',
@@ -105,6 +125,7 @@ class TutorialPage extends React.Component<TPProps, TPState> {
         </div>
         <div className="TutorialContent">
           {this.getText()}
+          {this.hasUrl() ? this.renderUrl() : null}
 
           {this.currentPage().intro ? this.renderSkipLink() : null}
           {!this.hasNext() ? this.renderOkayLink() : null}
@@ -147,6 +168,10 @@ class TutorialPage extends React.Component<TPProps, TPState> {
 
   private getImage() {
     return this.currentPage().image
+  }
+
+  private getUrl() {
+    return this.currentPage().url
   }
 
   private renderSkipLink() {
@@ -202,8 +227,22 @@ class TutorialPage extends React.Component<TPProps, TPState> {
     )
   }
 
+  private renderUrl() {
+    return(
+      <div>
+        <a href={this.getUrl()} target="_blank" rel="noopener noreferrer">
+          Try our demo story!
+        </a>
+      </div>
+    )
+  }
+
   private hasImage() {
     return !!this.getImage()
+  }
+
+  private hasUrl() {
+    return !!this.getUrl()
   }
 
   private hasPrevious() {
