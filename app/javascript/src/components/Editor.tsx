@@ -21,6 +21,8 @@ import { save } from '../persistance'
 import { clone } from '../clone'
 import * as _ from 'lodash'
 
+import { defaultNodeName } from '../constants'
+
 let offset = 100
 
 import { Undo, Redo } from '@material-ui/icons'
@@ -100,6 +102,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     let currentState = clone(this.serialize())
     let pastState = this.past[this.past.length - 1]
 
+    // allows us to know when the user adds a new link
     if(currentState.story.links > pastState.story.links) {
       this.handleSceneName(currentState, newStory)
     }
@@ -143,15 +146,19 @@ class Editor extends React.Component<EditorProps, EditorState> {
       }
     })
 
-    if(targetNode.name === "New Scene") {
+    if(targetNode.name === defaultNodeName) {
       let targetNodeIndex = currentNodes.indexOf(targetNode)
 
       targetNode.name = updatedName
 
+      // replace the node at this index with the updated targetNode
       currentNodes.splice(targetNodeIndex, 1, targetNode)
+
+      // apply updates to the newStory object
       newStory.links = currentState.story.links
       newStory.nodes = currentNodes
 
+      // trigger an update passing in the new story
       this.updateStory(newStory)
     }
   }
@@ -374,7 +381,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private addScene = () => {
-    let node = new DefaultNodeModel('New Scene')
+    let node = new DefaultNodeModel(defaultNodeName)
 
     let workspace = document.getElementsByClassName('EditorWorkspace')[0]
     let clientWidth = workspace.clientWidth * 0.4
