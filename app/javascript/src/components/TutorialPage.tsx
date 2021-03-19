@@ -54,16 +54,20 @@ const pages: TutorialPageContent[] = [
     image: require('../images/tutorial/navigation.gif')
   },
   {
-    title: '#5 - Advance Choice Logic',
+    title: '#5 - Editing Story Details',
     text: [
-      'When it comes to choices, you have the option to use some advanced logic.',
-      'For example, you can make a choice available only if the player has a particular item.',
-      'You can also add stats to your player depending on their choices.'
-    ],
-    image: require('../images/tutorial/introduction_to_advanced_logic.gif')
+      'You can change the title, description, and theme of your story by clicking the “Edit” button.'
+    ]
   },
   {
-    title: '#6 - Making Use of Items',
+    title: '#6 - Saving',
+    text: [
+      'Your story will be autosaved as you build it out. You can also manually do so by clicking “Save” to save your progress.'
+    ],
+    image: require('../images/tutorial/saving.gif')
+  },
+  {
+      title: '#7 - Advanced - Using Items',
     text: [
       'You can directly configure a choice to add or remove an item.',
       'This allows you to add conditional logic based on whether the item is available.'
@@ -72,7 +76,7 @@ const pages: TutorialPageContent[] = [
     url: 'https://storyboard.viget.com/items-example'
   },
   {
-    title: '#7 - How Stats Work',
+    title: '#8 - Advanced - Using Stats',
     text: [
       'Stats give you the option to create a more interactive experience.',
       'For example, you are presented with two shields and only one of them will give you enough \'Defense\' to protect you.',
@@ -81,17 +85,12 @@ const pages: TutorialPageContent[] = [
     url: 'https://storyboard.viget.com/stats-example'
   },
   {
-    title: '#8 - Saving',
+    title: '#9 - Advanced - Using Conditions',
     text: [
-      'Your story will be autosaved as you build it out. You can also manually do so by clicking “Save” to save your progress.'
+      'Using conditions allows you to show a choice only if the conditions are met.',
+      'Conditions can be used interchangeably with items and stats.',
     ],
-    image: require('../images/tutorial/saving.gif')
-  },
-  {
-    title: '#9 - Editing Story Details',
-    text: [
-      'You can change the title, description, and theme of your story by clicking the “Edit” button.'
-    ]
+    image: require('../images/tutorial/using_conditions.gif')
   },
   {
     title: '#10 - Time to Play!',
