@@ -196,6 +196,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
               <input
                 type="file"
                 onChange={event => this.loadFile(event.target.files)}
+                style={{ width: '100%' }}
               />
             </label>
 
