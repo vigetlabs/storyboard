@@ -13,7 +13,7 @@
     "@types/react-dom": "^16.0.9",
     "crypto-js": "^4.0.0",
     "expr-eval": "^2.0.2",
-    "lodash": "^4.17.13",
+    "lodash": "^4.17.21",
     "prop-types": "^15.6.2",
     "react": "16.14",
     "react-dnd": "^13.1.1",
