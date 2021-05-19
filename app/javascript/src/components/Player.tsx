@@ -173,8 +173,127 @@ class Player extends React.Component<PlayerProps, PlayerState> {
             />
             {this.renderChoices(node)}
           </div>
+
+          {this.debugger()}
         </div>
       </main>
+    )
+  }
+
+  private handleStats(event: any, target: any) {
+    const currFocus = clone(this.state.focus)
+    const currItems = clone(this.state.currentItems)
+    let currStats = clone(this.state.currentStats)
+    const currHistory = clone(this.state.history)
+
+    if (currStats.some(stat => stat.name === target)) {
+      currStats.map(stat => {
+        if (stat.name === target) { stat.value = parseInt(event.target.value)}
+      })
+    } else {
+      currStats.push({name: target, value: parseInt(event.target.value)})
+    }
+
+    this.setState(
+      {
+        focus: currFocus,
+        currentItems: currItems,
+        currentStats: currStats,
+        history: currHistory
+      },
+      this.resetScroll
+    )
+  }
+
+  private handleItems(event: any, target: any) {
+    const currFocus = clone(this.state.focus)
+    let currItems = clone(this.state.currentItems)
+    const currStats = clone(this.state.currentStats)
+    const currHistory = clone(this.state.history)
+    const value = event.target.value
+
+    if (value === "add") {
+      currItems.push(target)
+    } else if (value === "remove") {
+      currItems = currItems.filter(item => item !== target)
+    }
+
+    this.setState(
+      {
+        focus: currFocus,
+        currentItems: currItems,
+        currentStats: currStats,
+        history: currHistory
+      },
+      this.resetScroll
+    )
+  }
+
+  private handleChange(event: any, target: any, type: string) {
+    if (type === "stat") {
+      this.handleStats(event, target)
+    } else if (type === "item") {
+      this.handleItems(event, target)
+    }
+  }
+
+  private currValue(target: any, type: string) {
+    if (type === "stat") {
+      let currStats = clone(this.state.currentStats);
+      currStats = currStats.filter((k) => k.name === target);
+
+      if (currStats[0] === undefined) {
+        return 0
+      } else {
+        return currStats[0].value
+      }
+
+    } else if (type === "item") {
+      let currItems = clone(this.state.currentItems);
+
+      if (currItems.includes(target) === false) {
+        return 0
+      } else {
+        const countTarget = currItems.reduce((acc, val) => (val === target ? acc + 1 : acc), 0);
+        return countTarget
+      }
+    }
+  }
+
+  private storyAttrs(key: string) {
+    const sceneValues = Object.values(this.props.portMeta)
+    const sceneEntries = sceneValues.map(obj => Object.entries(obj).filter(([k, v]) => k === `${key}Changes`))
+    const nestedAttrValues = sceneEntries.filter(a => a.length > 0)
+    const attrValues = nestedAttrValues.map(a => a[0]).map(a => a[1])
+    const attrNames = attrValues.map(a => a.map((o: any) => o.name))
+    const flattenedNames = attrNames.reduce((acc, value) => acc.concat(value), [])
+    const uniqueAttrSet = new Set(flattenedNames)
+    const uniqueAttrArr = Array.from(uniqueAttrSet)
+    const check = this.state.currentStats
+
+    return (
+      <div>
+        {uniqueAttrArr.map((given, index) => (
+          <>
+            <p key={index}>{given}: </p>
+            <input className="DebuggerInput" value={this.currValue(given, key)} onChange={(e) => this.handleChange(e, given, key)}/>
+          </>
+        ))}
+      </div>
+    );
+  }
+
+  private debugger() {
+    return (
+      <div className="debugWrap">
+        <h3>Current Choices:</h3>
+          <h4> Stats </h4>
+          <p> Enter numerical value for Statistic: </p>
+          {this.storyAttrs("stat")}
+          <h4> Items </h4>
+          <p> Enter "add" or "remove" to edit the desired item: </p>
+          {this.storyAttrs("item")}
+      </div>
     )
   }
 
@@ -214,6 +333,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       </menu>
     )
   }
+
 
   private goBackButton() {
     return this.props.backButton ? (
