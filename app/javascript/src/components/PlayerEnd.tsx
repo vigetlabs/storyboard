@@ -3,11 +3,20 @@ import * as React from 'react'
 interface Props {
   title: string
   body: string
+  image: string
   onReplay: () => void
   onGoBack: () => void
 }
 
-export const PlayerEnd: React.SFC<Props> = ({ title, body, onReplay, onGoBack }) => {
+export const PlayerEnd: React.SFC<Props> = ({ title, body, image, onReplay, onGoBack }) => {
+  const imageContent = () => {
+    if (image) {
+      return <img src={image} alt='' width='400' />
+    } else {
+      return
+    }
+  }
+
   return (
     <main className="PlayerEnd">
       <a className="SlantButton" id="back-button" onClick={(onGoBack)}>
@@ -15,13 +24,12 @@ export const PlayerEnd: React.SFC<Props> = ({ title, body, onReplay, onGoBack })
       </a>
       <div className="PlayerForeground">
         <h1 className="PlayerEndTitle">{title}</h1>
-
         <div className="PlayerEndContent">
+          {imageContent()}
           <div
             className="PlayerEndBody"
             dangerouslySetInnerHTML={{ __html: body }}
           />
-
           <button className="PlayerEndReplay" onClick={onReplay} type="button">
             Replay
           </button>
@@ -41,6 +49,7 @@ export const PlayerDeadEnd: React.SFC<DeadEndProps> = ({ onReplay, onGoBack }) =
     <PlayerEnd
       title="Dead End"
       body="That choice wasn't tied to a new scene. You should fix that. Try replaying the story."
+      image=''
       onReplay={onReplay}
       onGoBack={onGoBack}
     />

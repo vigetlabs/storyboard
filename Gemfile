@@ -16,6 +16,9 @@ gem 'sentry-raven'
 gem 'pointless_feedback', '~> 4.0.6'
 gem 'stat_board', '~> 1.1.0'
 gem 'administrate', '~> 0.13.0'
+gem "dragonfly"
+gem "dragonfly-s3_data_store"
+gem 'mimemagic', github: 'mimemagicrb/mimemagic', ref: '01f92d86d15d85cfd0f20dabd025dcbd36a8a60f'
 
 gem 'capistrano-db-tasks', {
   :github  => 'efatsi/capistrano-db-tasks',
@@ -38,9 +41,9 @@ end
 
 group :test do
   gem 'capybara', '>= 2.15'
-  gem 'chromedriver-helper'
   gem 'database_cleaner',   '~> 0.9.1'
   gem "factory_bot_rails"
   gem 'selenium-webdriver'
   gem 'simplecov', require: false
+  gem 'webdrivers', '< 4.1'
 end

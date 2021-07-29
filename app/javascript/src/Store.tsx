@@ -16,6 +16,7 @@ export interface MetaData {
     text: string
     notes: string
     isFinal: boolean
+    image: string
   }
 }
 

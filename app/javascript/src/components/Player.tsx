@@ -143,7 +143,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       return <PlayerInvalid />
     }
 
-    let meta = this.props.meta[focus] || { text: '' }
+    let meta = this.props.meta[focus] || { text: '', image: '' }
     let translatedText = this.translate(meta.text)
     let choices = this.ports(node)
 
@@ -154,10 +154,19 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         <PlayerEnd
           title={node.name}
           body={translatedText}
+          image= {meta.image}
           onReplay={this.restart}
           onGoBack={this.revertToPreviousState.bind(this)}
         />
       )
+    }
+
+    const imageContent = () => {
+      if (meta.image) {
+        return <img src={meta.image} alt='' width='400' />
+      } else {
+        return
+      }
     }
 
     return (
@@ -167,6 +176,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           <h1 className="PlayerSceneTitle">{node.name}</h1>
 
           <div className="PlayerSceneContent">
+            {imageContent()}
             <div
               className="PlayerSceneBody"
               dangerouslySetInnerHTML={{ __html: translatedText }}

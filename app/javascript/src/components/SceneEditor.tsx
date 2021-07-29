@@ -9,6 +9,7 @@ import { DefaultNodeModel } from 'storm-react-diagrams'
 import { StateConsumer, ApplicationState } from '../Store'
 import ChoiceEditor from './ChoiceEditor'
 import SettingsEditor from './SettingsEditor'
+import { savePhoto, removePhoto } from '../persistance'
 
 
 declare function $R(el: HTMLElement, options: any): void
@@ -31,6 +32,20 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     const text = get(state, `meta.${focus.id}.text`)
     const notes = get(state, `meta.${focus.id}.notes`)
     const isFinal = get(state, `meta.${focus.id}.isFinal`)
+    const image = get(state, `meta.${focus.id}.image`)
+
+    const imagesContent = () => {
+      if (image) {
+        return (
+          <div>
+            <img src={image} alt='' width='100%' />
+            <button onClick={this.removeImage}>Remove Image</button>
+          </div>
+        )
+      } else {
+        return <input type="file" accept="image/*" onChange={this.onFileChange} />
+      }
+    }
 
     return (
       <aside className="SceneEditor" onKeyUp={this.trapKeys}>
@@ -56,6 +71,11 @@ class SceneEditor extends React.Component<SceneEditorProps> {
         <div className="SceneEditorField">
           <h3 className="SceneEditorHeading">Choices</h3>
           <ChoiceEditor focus={focus} requestPaint={requestPaint} updateDiagram={updateDiagram} />
+        </div>
+
+        <div className="SceneEditorField">
+          <h3 className="SceneEditorHeading">Image</h3>
+          {imagesContent()}
         </div>
 
         <SceneEditorTextAreaField
@@ -87,6 +107,31 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     const { focus, state, updateState } = this.props
 
     updateState(set(state, `meta.${focus.id}.notes`, html))
+  }
+
+  onFileChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const { focus, state, updateState } = this.props
+
+    if (event && event.currentTarget && event.currentTarget.files
+      && event.currentTarget.files.length > 0) {
+      let file = event.currentTarget.files[0]
+      let reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          savePhoto(focus.id, reader.result, state, updateState)
+          this.render()
+        }
+      }
+    }
+  };
+
+  removeImage = () => {
+    const { focus, state, updateState } = this.props
+
+    removePhoto(focus.id)
+    updateState(set(state, `meta.${focus.id}.image`, undefined))
+    this.render()
   }
 
   private onNameChange = (event: React.FormEvent<HTMLInputElement>) => {
