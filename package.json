@@ -14,11 +14,13 @@
     "crypto-js": "^4.0.0",
     "expr-eval": "^2.0.2",
     "lodash": "^4.17.13",
+    "node-sass": "^4.14.1",
     "prop-types": "^15.6.2",
     "react": "16.14",
     "react-dnd": "^13.1.1",
     "react-dnd-html5-backend": "^12.1.1",
     "react-dom": "^16.6.1",
+    "react-s3": "^1.3.1",
     "storm-react-diagrams": "^5.2.1",
     "ts-loader": "6.0.3",
     "typescript": "^3.1.6",
@@ -31,7 +33,7 @@
     "start": "./bin/webpack-dev-server"
   },
   "resolutions": {
-    "browserslist": "4.6.2",
-    "caniuse-lite": "1.0.30000974"
+    "browserslist": "4.16.6",
+    "caniuse-lite": "1.0.30001219"
   }
 }

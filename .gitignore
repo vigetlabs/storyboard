@@ -27,6 +27,7 @@
 /config/master.key
 /public/packs
 /public/packs-test
+/public/system
 /node_modules
 yarn-debug.log*
 .yarn-integrity

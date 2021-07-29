@@ -2,13 +2,16 @@ if Adventure.count == 0
   puts "Seeding Public Adventure"
   Adventure.create(
     title: "Pointless Adventure",
-    description: "It's the pointless one!"
+    description: "It's the pointless one!",
+    has_password: false
   )
 
   puts "Seeding Private Adventure"
   Adventure.create(
     title: "Private Adventure",
-    description: "It's the private one! Good luck finding it!"
+    description: "It's the private one! Good luck finding it!",
+    has_password: true,
+    password: "password"
   )
 
   [
@@ -26,13 +29,16 @@ if Adventure.count == 0
     puts "  - Public Adventure"
     Adventure.create(
       user: user,
-      title: "#{name.capitalize}'s Adventure"
+      title: "#{name.capitalize}'s Adventure",
+      has_password: false
     )
 
     puts "  - Private Adventure"
     Adventure.create(
       user: user,
-      title: "#{name.capitalize}'s _Secret_ Adventure"
+      title: "#{name.capitalize}'s _Secret_ Adventure",
+      has_password: true,
+      password: "password"
     )
   end
 end
