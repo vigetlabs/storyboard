@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { FC } from 'react'
 import { get } from 'lodash'
 
 import {
@@ -57,6 +58,32 @@ interface PlayerState {
   history: StateSnapshot[]
 }
 
+const DebuggerRemoveButton: FC<{ onClick: () => void }> = props => (
+  <button className="d-remove-btn" {...props}>
+    <span className="sr-only">Remove Item</span>
+  </button>
+)
+
+const DebuggerFooter: FC<{ onClick: () => void }> = props => (
+  <footer className="d-footer">
+    <button className="d-add-btn" {...props}>
+      <span className="sr-only">Add Item</span>
+    </button>
+  </footer>
+)
+
+const DebuggerStatAddButton: FC<{ onClick: () => void }> = props => (
+  <button className="d-stat-add-btn" {...props}>
+    <span className="sr-only">Remove Item</span>
+  </button>
+)
+
+const DebuggerStatSubtractButton: FC<{ onClick: () => void }> = props => (
+  <button className="d-stat-subtract-btn" {...props}>
+    <span className="sr-only">Remove Item</span>
+  </button>
+)
+
 class Player extends React.Component<PlayerProps, PlayerState> {
   engine: DiagramEngine
   model: DiagramModel
@@ -99,15 +126,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
   start = () => {
     this.setState({ started: true })
-  }
-
-  componentDidUpdate() {
-    if (this.props.debug) {
-      window.location.hash = CryptoJS.AES.encrypt(
-        JSON.stringify(this.state),
-        this.passphrase
-      ).toString()
-    }
   }
 
   render() {
@@ -154,7 +172,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         <PlayerEnd
           title={node.name}
           body={translatedText}
-          image= {meta.image}
+          image={meta.image}
           onReplay={this.restart}
           onGoBack={this.revertToPreviousState.bind(this)}
         />
@@ -184,6 +202,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
             {this.renderChoices(node)}
           </div>
         </div>
+        {this.renderDebugger()}
       </main>
     )
   }
@@ -200,6 +219,105 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     if (a) {
       a.style.display = 'inherit'
     }
+  }
+
+  private renderDebugger() {
+    return this.props.debug ? (
+      <div>
+        <div className="d-helper"></div>
+        <div className="debugger">
+          <div className="d-section">
+            <h4><u>Current Items</u></h4>
+            <ul className="d-list">
+              {this.state.currentItems.map((item, i) => {
+                return (
+                  <li key={item.concat(i.toString())}>
+                    <div>
+                      <label
+                        className="sr-only"
+                        htmlFor={`name-for-${item}`}
+                      >
+                        Item Name
+                      </label>
+                      <select
+                        id={`name-for-${item}`}
+                        value={item}
+                        onChange={this.setItem.bind(this, i)}
+                      >
+                        {this.possibleItems(item).map(
+                          (item, i) => (
+                            <option key={i} value={item}>
+                              {item}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                    <DebuggerRemoveButton
+                      onClick={this.removeItem.bind(this, i)}
+                    />
+                  </li>
+                )
+              })}
+            </ul>
+            <DebuggerFooter onClick={this.addItem.bind(this)} />
+          </div>
+          <div className="d-section">
+            <h4><u>Current Stats</u></h4>
+            <ul className="d-list">
+              {this.state.currentStats.map((stat, i) => {
+                return (
+                  <li key={stat.name.concat(i.toString())}>
+                    <div>
+                      <label
+                        className="sr-only"
+                        htmlFor={`stat-name-${stat.name}`}
+                      >
+                        Stat Name
+                      </label>
+                      <select
+                        id={`stat-name-${stat.name}`}
+                        value={stat.name}
+                        onChange={this.setStatName.bind(this, i)}
+                      >
+                        {this.possibleStats(stat.name).map(
+                          (item, i) => (
+                            <option key={i} value={item}>
+                              {item}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                    <div className="d-stat-edit">
+                      <div>
+                        <label
+                          className="sr-only"
+                          htmlFor={`stat-value-${stat.name}`}
+                        >
+                          Number Value (#)
+                        </label>
+                        <p>{stat.value}</p>
+                      </div>
+                      <DebuggerStatAddButton
+                        onClick={this.incrementStat.bind(this, i)}
+                      />
+                      <DebuggerStatSubtractButton
+                        onClick={this.decrementStat.bind(this, i)}
+                      />
+                    </div>
+                    <DebuggerRemoveButton
+                      onClick={this.removeStat.bind(this, i)}
+                    />
+                  </li>
+                )
+              })}
+            </ul>
+            <DebuggerFooter onClick={this.addStat.bind(this)} />
+          </div>
+        </div>
+      </div>
+    ) : null
   }
 
   private renderChoices(node: DefaultNodeModel) {
@@ -508,6 +626,141 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
   private getRandom(nodes: string[]) {
     return nodes[Math.floor(Math.random() * nodes.length)]
+  }
+
+  private debugRerender() {
+    this.setState({
+      focus: this.state.focus,
+      currentItems: this.state.currentItems,
+      currentStats: this.state.currentStats,
+      history: this.state.history
+    },
+    undefined);
+  }
+
+  removeItem = (index: number, e: React.MouseEvent) => {
+    e.preventDefault()
+
+    let newItems = clone(this.state.currentItems || [])
+    newItems.splice(index, 1)
+
+    this.state.currentItems = newItems
+    this.debugRerender()
+  }
+
+  addItem = (e: React.MouseEvent) => {
+    e.preventDefault()
+
+    let possibleItems = this.possibleItems(null)
+    if (possibleItems.length == 0) {
+      alert("There are no more possible items for you to add.")
+      return
+    }
+
+    let newItems = clone(this.state.currentItems || [])
+    newItems.push(possibleItems[0])
+    this.state.currentItems = newItems
+    this.debugRerender()
+  }
+
+  setItem = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+    let newItems = clone(this.state.currentItems || [])
+    newItems[index] = e.target.value
+
+    this.state.currentItems = newItems
+    this.debugRerender()
+  }
+
+  removeStat = (index: number, e: React.MouseEvent) => {
+    e.preventDefault()
+
+    let newStats = clone(this.state.currentStats || [])
+    newStats.splice(index, 1)
+
+    this.state.currentStats = newStats
+    this.debugRerender()
+  }
+
+  addStat = (e: React.MouseEvent) => {
+    e.preventDefault()
+
+    let possibleStats = this.possibleStats(null)
+    if (possibleStats.length == 0) {
+      alert("There are no more possible stats for you to add.")
+      return
+    }
+
+    let newStats = clone(this.state.currentStats || [])
+    newStats.push({ name: possibleStats[0], value: 0 })
+
+    this.state.currentStats = newStats
+    this.debugRerender()
+  }
+
+  setStatName = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+    let newStats = clone(this.state.currentStats || [])
+    newStats[index].name = e.target.value
+
+    this.state.currentStats = newStats
+    this.debugRerender()
+  }
+
+  incrementStat = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+    let newStats = clone(this.state.currentStats || [])
+    newStats[index].value++
+
+    this.state.currentStats = newStats
+    this.debugRerender()
+  }
+
+  decrementStat = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+    let newStats = clone(this.state.currentStats || [])
+    newStats[index].value--
+
+    this.state.currentStats = newStats
+    this.debugRerender()
+  }
+
+  possibleItems = (current: string | null) => {
+    let portMeta = this.props.portMeta
+    let toReturn: string[] = []
+
+    for (let key in portMeta) {
+      let changes = portMeta[key].itemChanges || []
+
+      changes.forEach(change => {
+        if (change.action === 'add' && toReturn.indexOf(change.name) === -1) {
+          toReturn.push(change.name)
+        }
+      })
+    }
+
+    return toReturn.filter(name => {
+      return name && (name === current || this.state.currentItems.indexOf(name) === -1)
+    })
+  }
+
+  possibleStats = (current: string | null) => {
+    let portMeta = this.props.portMeta
+    let toReturn: string[] = []
+
+    for (let key in portMeta) {
+      let changes = portMeta[key].statChanges || []
+
+      changes.forEach(change => {
+        if (toReturn.indexOf(change.name) === -1) {
+          toReturn.push(change.name)
+        }
+      })
+    }
+
+    let existing = (this.state.currentStats || []).map(stat => {
+      return stat.name
+    })
+
+    return toReturn.filter(name => {
+      return name && (name === current || existing.indexOf(name) === -1)
+    })
   }
 }
 

@@ -40,3 +40,181 @@
   top: 1rem;
   left: 1rem;
 }
+
+.debugger {
+  background: white;
+  border-top: 2px solid;
+  bottom: 0px;
+  display: flex;
+  height: 200px;
+  left: 0px;
+  margin-top: 30px;
+  position: fixed;
+  width: 100%;
+}
+
+.d-add-btn {
+  background: none;
+  background: var(--color-grey-button);
+  border-radius: 99999px;
+  border: 2px solid var(--color-grey-button);
+  height: 40px;
+  position: relative;
+  width: 40px;
+}
+
+.d-add-btn:hover {
+  background: var(--mkt-gold);
+  border-color: var(--mkt-gold);
+}
+
+.d-add-btn::before,
+.d-add-btn::after {
+  content: '';
+  display: block;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+}
+
+.d-add-btn::before {
+  height: 4px;
+  width: 14px;
+}
+
+.d-add-btn::after {
+  height: 14px;
+  width: 4px;
+}
+
+.d-footer {
+  display: flex;
+  justify-content: center;
+  padding: 20px 0;
+}
+
+.d-helper {
+  height: 200px;
+}
+
+.d-list input {
+  margin-right: 5px;
+}
+
+.d-list li {
+  display: flex;
+  align-items: center;
+  font-size: 16px;
+}
+
+.d-list p {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.d-remove-btn {
+  background: none;
+  background: red;
+  border-radius: 99999px;
+  border: 2px solid red;
+  flex-shrink: 0;
+  height: 20px;
+  margin-left: 5px;
+  padding: 0;
+  position: relative;
+  width: 20px;
+}
+
+.d-remove-btn::before {
+  background: white;
+  content: '';
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 10px;
+}
+
+.d-section {
+  text-align: center;
+  overflow: scroll;
+  width: 50%;
+}
+
+.d-section ul {
+  margin: auto;
+  width: max-content;
+}
+
+.d-stat-add-btn {
+  background: none;
+  background: var(--color-grey-button);
+  border-radius: 99999px;
+  border: 2px solid var(--color-grey-button);
+  flex-shrink: 0;
+  height: 16px;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 0;
+  position: relative;
+  width: 16px;
+}
+
+.d-stat-add-btn::before,
+.d-stat-add-btn::after {
+  background: white;
+  content: '';
+  display: block;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.d-stat-add-btn::before {
+  height: 2px;
+  width: 8px;
+}
+
+.d-stat-add-btn::after {
+  height: 8px;
+  width: 2px;
+}
+
+.d-stat-edit {
+  align-items: center;
+  border: 1px solid;
+  border-radius: 3px;
+  display: flex;
+  height: 20px;
+}
+
+.d-stat-subtract-btn {
+  background: none;
+  background: var(--color-grey-button);
+  border-radius: 99999px;
+  border: 2px solid var(--color-grey-button);
+  flex-shrink: 0;
+  height: 16px;
+  margin-left: 5px;
+  margin-right: 5px;
+  padding: 0;
+  position: relative;
+  width: 16px;
+}
+
+.d-stat-subtract-btn::before {
+  background: white;
+  content: '';
+  display: block;
+  height: 2px;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+}
