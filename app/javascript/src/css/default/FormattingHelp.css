@@ -1,0 +1,5 @@
+@import '../../variables.css';
+
+.formattingHelpLink {
+  color: var(--mkt-text);
+}

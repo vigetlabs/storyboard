@@ -66,6 +66,8 @@ class SceneEditor extends React.Component<SceneEditorProps> {
           defaultValue={text}
           placeholderText=""
           instructionalText=""
+          linkUrl="/formatting-help"
+          linkText="Formatting Help"
           onChange={this.onChangeContent}
         />
         <div className="SceneEditorField">
@@ -202,7 +204,9 @@ function SceneEditorTextAreaField({
   defaultValue,
   placeholderText,
   instructionalText,
-  onChange
+  onChange,
+  linkUrl,
+  linkText
 }: SceneEditorTextAreaFieldProps) {
   let inputRef: React.RefObject<HTMLTextAreaElement> = React.createRef()
 
@@ -217,6 +221,18 @@ function SceneEditorTextAreaField({
     }
   }, [inputRef.current])
 
+  const linkContent = () => {
+    if (linkUrl) {
+      return (
+        <div>
+          <a href={linkUrl} target="_blank" rel="noopener noreferrer">
+            {linkText}
+          </a>
+        </div>
+      )
+    }
+  }
+
   return (
     <div className="SceneEditorField">
       <label className="SceneEditorHeading" htmlFor={name}>
@@ -229,6 +245,7 @@ function SceneEditorTextAreaField({
         defaultValue={defaultValue}
       />
       <p>{instructionalText}</p>
+      {linkContent()}
     </div>
   )
 }
@@ -241,4 +258,6 @@ type SceneEditorTextAreaFieldProps = {
   placeholderText: string
   instructionalText: string
   onChange: (arg0: string) => void
+  linkUrl?: string
+  linkText?: string
 }

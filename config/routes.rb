@@ -12,6 +12,8 @@ Rails.application.routes.draw do
 
   root to: "adventures#index"
 
+  get "/formatting-help", to: "formatting_help#show"
+
   get "/terms", to: "terms#show"
 
   post "/api/:id", to: "api/adventures#update"

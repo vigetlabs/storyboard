@@ -14,6 +14,7 @@ interface TutorialPageContent {
   intro?: boolean
   image?: string
   url?: string
+  link?: string
 }
 
 const pages: TutorialPageContent[] = [
@@ -67,13 +68,14 @@ const pages: TutorialPageContent[] = [
     image: require('../images/tutorial/saving.gif')
   },
   {
-      title: '#7 - Advanced - Using Items',
+    title: '#7 - Advanced - Using Items',
     text: [
       'You can directly configure a choice to add or remove an item.',
       'This allows you to add conditional logic based on whether the item is available.'
     ],
     image: require('../images/tutorial/using_items.gif'),
-    url: 'https://storyboard.viget.com/items-example'
+    url: 'https://storyboard.viget.com/items-example',
+    link: 'Try our demo story!'
   },
   {
     title: '#8 - Advanced - Using Stats',
@@ -82,7 +84,8 @@ const pages: TutorialPageContent[] = [
       'For example, you are presented with two shields and only one of them will give you enough \'Defense\' to protect you.',
     ],
     image: require('../images/tutorial/using_stats.gif'),
-    url: 'https://storyboard.viget.com/stats-example'
+    url: 'https://storyboard.viget.com/stats-example',
+    link: 'Try our demo story!'
   },
   {
     title: '#9 - Advanced - Using Conditions',
@@ -93,11 +96,21 @@ const pages: TutorialPageContent[] = [
     image: require('../images/tutorial/using_conditions.gif')
   },
   {
-    title: '#10 - Time to Play!',
+    title: '#10 - Advanced - Using Formatting',
+    text: [
+      'Formatting allows you to customize the scene content depending on your items and stats.',
+      'When someone is playing the game created by the below example, we will show the player their \'Energy\' and \'Speed\' values and then will tell them that they have the \'Key\' if the \'Key\' is present.'
+    ],
+    image: require('../images/tutorial/basic_templating.png'),
+    url: '/formatting-help',
+    link: 'Get additional help.'
+  },
+  {
+    title: '#11 - Time to Play!',
     text: ['Press “Play” to read your story and get a shareable link.']
   },
   {
-    title: '#11 - Disclaimer',
+    title: '#12 - Disclaimer',
     text: [
       "This project was primarily built in a weekend, so you may encounter some quirks along the way. If something doesn't look right, saving your story and refreshing the page might do the trick. If saving isn't working, you can export your story as a last resort.",
       'And of course, feel free to drop us a note in our feedback form (available from the footer on the homepage).',
@@ -173,6 +186,10 @@ class TutorialPage extends React.Component<TPProps, TPState> {
     return this.currentPage().url
   }
 
+  private getLink() {
+    return this.currentPage().link
+  }
+
   private renderSkipLink() {
     return (
       <button onClick={this.props.onClose} className="SlantButton">
@@ -230,7 +247,7 @@ class TutorialPage extends React.Component<TPProps, TPState> {
     return(
       <div>
         <a href={this.getUrl()} target="_blank" rel="noopener noreferrer">
-          Try our demo story!
+          {this.getLink()}
         </a>
       </div>
     )
