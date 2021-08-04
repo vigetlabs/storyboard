@@ -1,0 +1,220 @@
+<div class="Container" style="padding-bottom: 40px">
+  <h2>Formatting Help</h2>
+  <p>
+    This help page is designed to enhance your ability to use the formatting functionality. The idea is to give you all the
+    tools you need to fully take advantage of this feature and make your scenes more customized to the player's current state
+    in regards to their items and stats. Subjects that will be covered are:
+  </p>
+  <ul>
+    <li><a class="formattingHelpLink" href="#display-stat">Displaying a Stat</a></li>
+    <li><a class="formattingHelpLink" href="#display-if-item">Displaying Text if Player has Item</a></li>
+    <li><a class="formattingHelpLink" href="#display-if-stat-condition">Displaying Text if Stat Meets Conditions</a></li>
+    <li><a class="formattingHelpLink" href="#advanced-conditionals">Displaying Text using Advanced Conditionals</a></li>
+    <ul>
+      <li><a class="formattingHelpLink" href="#advanced-conditionals-else">Else Statements</a></li>
+      <li><a class="formattingHelpLink" href="#advanced-conditionals-negating">Negating an If Statement</a></li>
+      <li><a class="formattingHelpLink" href="#advanced-conditionals-combining">Combining Conditionals</a></li>
+    </ul>
+    <li><a class="formattingHelpLink" href="#math-on-stats">Displaying Results of Math Functions on Stats</a></li>
+    <li><a class="formattingHelpLink" href="#additional-notes">Additional Notes</a></li>
+  </ul>
+
+  <h2 id="display-stat">Displaying a Stat</h2>
+  <p>
+    First, the most basic thing you can do with the formatting is to display the value of a stat. The way to
+    do this is to place the name of the stat inside of double brackets. So if your stat's name is 'Dollars',
+    then you would display the value by adding <code>{{ Dollars }}</code> to your scene content. See the below example:
+  </p>
+  <h4>Editor:</h4>
+  <%= image_tag "display_stat_editor_example.png", width: "100%" %>
+  <h4>Player:</h4>
+  <%= image_tag "display_stat_player_example.png", width: "100%" %>
+  <p>
+    As you can see in the example, where <code>{{ Dollars }}</code> was placed in the editor was replaced with
+    '50', the current value of the 'Dollars' stat, when viewing this scene while playing.
+  </p>
+
+  <h2 id="display-if-item">Displaying Text if Player has Item</h2>
+  <p>
+    Next, another useful feature of this scene content formatting is the ability to only show certain text
+    when the player has a certain item. This can be done by placing the text that you want to hide if the
+    player does not have the item between <code>{{#if Item }}</code> and <code>{{/if}}</code>, where 'Item'
+    represents the name of the item. See the below example:
+  </p>
+  <h4>Editor:</h4>
+  <%= image_tag "display_if_item_editor_example.png", width: "100%" %>
+  <h4>Player:</h4>
+  <%= image_tag "display_if_item_player_example.gif", width: "100%" %>
+  <p>
+    In the example, you can see the player clicking the 'Buy Popcorn' button, which allows them to acquire
+    the 'Popcorn' item. That, in turn, allows them to see the 'Hope the popcorn isn't too salty!!' text that
+    is in between <code>{{#if Popcorn }}</code> and <code>{{/if}}</code> in the editor. On the flip side, you
+    can see that when the player chooses to 'Go Straight to your Seat', they do not acquire the 'Popcorn' item
+    and therefore cannot see the additional message.
+  </p>
+  <p>
+    One additional note on this point is that you can put all of your if statement on the same line in order
+    to save space if you wish. It would look something like
+    <br/><code>{{#if Popcorn }}Hope your popcorn isn't too salty!!{{/if}}</code>
+  </p>
+
+  <h2 id="display-if-stat-condition">Displaying Text if Stat Meets Conditions</h2>
+  <p>
+    Another tool that could possibly be helpful to you is the ability to conditionally show text based on stat
+    values. We currently support five methods which you can do this:
+  </p>
+  <ol>
+    <li>Greater Than: <code>greater</code></li>
+    <li>Less Than: <code>less</code></li>
+    <li>Equal To: <code>equal</code></li>
+    <li>Greater Than or Equal To: <code>greater_or_equal</code></li>
+    <li>Less Than or Equal To: <code>less_or_equal</code></li>
+  </ol>
+  <p>
+    Each of these methods takes in two numbers and can be used in the if statement which was initially covered
+    in the previous section. It is written like
+    <br/><code>{{#if (greater Dollars 15)}}You have more than $15.{{/if}}</code><br/>
+    That will check if the value of your 'Dollars' stat is greater than 15 and if it is, will display the text.
+    In order to use another one of the methods, you could just replace the word <code>greater</code> with any
+    of the other methods listed above. Make sure to note that when you using these methods the first argument is
+    the item that you are checking to see if it is greater, less, etc. than the second item. See the below
+    example:
+  </p>
+  <h4>Editor:</h4>
+  <%= image_tag "display_if_stat_condition_editor_example.png", width: "100%" %>
+  <h4>Player:</h4>
+  <%= image_tag "display_if_stat_condition_player_example.gif", width: "100%" %>
+  <p>
+    For this example, we are only showing the 'You have enough money to go to the movies and buy popcorn!!'
+    message when the 'Dollars' stat is greater than or equal to 15. As you can see, when the player chooses
+    to 'Open Lemonade Stand', they then have $50 and can see the message accordingly, but if they choose to
+    'Be Lazy', then they have $0 and cannot see the message.
+  </p>
+  <p>
+    It is important to note that just like in the previous section, you can put the whole if statement all
+    on one line. For example,
+    <br/><code>{{#if (less Dollars 100)}}You do not have $100.{{/if}}</code><br/>
+    is perfectly valid.
+  </p>
+  <p>
+    One final note is that you can use these methods to compare two stats to one another as well. Let's say
+    you want to know if your player has equal amounts of their 'Speed' and 'Strength' stats. It would be
+    as simple as
+    <br/><code>{{#if (equal Speed Strength)}}You are just as fast as you are strong.{{/if}}</code>
+  </p>
+
+  <h2 id="advanced-conditionals">Displaying Text using Advanced Conditionals</h2>
+  <p>
+    We have three more ways that can take your scene content to the next level by enhancing the abilities
+    of the if statement that we have introduced in previous sections.
+  </p>
+  <h3 id="advanced-conditionals-else">Else Statements</h3>
+  <p>
+    The first advanced form of using the conditionally displayed text is the else statement. Basically, it
+    allows you to display alternate text if your initial condition is not met. To do this, you just need to
+    add <code>{{^}}</code> between your two initial if statement segments. So to put it all on line it would
+    look like
+    <br/><code>{{#if Popcorn }}You have popcorn!{{^}}You do not have popcorn.{{/if}}></code><br/>
+    It will display the text from before <code>{{^}}</code> if the initial if statement is true and it will
+    display the text from after <code>{{^}}</code> if that initial if statement is false. See the below example:
+  </p>
+  <h4>Editor:</h4>
+  <%= image_tag "advanced_conditionals_else_editor_example.png", width: "100%" %>
+  <h4>Player:</h4>
+  <%= image_tag "advanced_conditionals_else_player_example.gif", width: "100%" %>
+  <p>
+    As seen above, when the player successfully acquires the 'Popcorn' item, they see the text in the first
+    part of the if statement. But when they choose to not 'Buy Popcorn', they then see the text from after
+    the <code>{{^}}</code>, which would otherwise be known as the else statement.
+  </p>
+  <h3 id="advanced-conditionals-negating">Negating an If Statement</h3>
+  <p>
+    The next advanced way to use the conditionals is using the <code>not</code> method to negate your if
+    statement. This method takes in one true or false argument and then negates it by making true arguments
+    false and vice versa. You can use this to show text if your player does not have an item or to check if
+    your player's stat is not greater than a certain number. Of course, you could always just use the less
+    than or equal method, but where's the fun in that? Anyways, see the below example:
+  </p>
+  <h4>Editor:</h4>
+  <%= image_tag "advanced_conditionals_negating_editor_example.png", width: "100%" %>
+  <h4>Player:</h4>
+  <%= image_tag "advanced_conditionals_negating_player_example.gif", width: "100%" %>
+  <p>
+    In this example, you can see that we are only showing the user the text about how bad sprinkles are
+    if the player chose to not get the item 'Sprinkles'.
+  </p>
+  <h3 id="advanced-conditionals-combining">Combining Conditionals</h3>
+  <p>
+    The final advanced techique for using conditionals in your templating is by combining multiple conditionals
+    using on of our two methods of doing so:
+  </p>
+  <ol>
+    <li>Both Conditionals are True: <code>both</code></li>
+    <li>Either of the Conditionals are True: <code>either</code></li>
+  </ol>
+  <p>
+    The <code>both</code> method would be used when you want to check if two different things are true, like
+    when you need to see if a player has a certain item <b>AND</b> a certain stat is high enough. The <code>either</code>
+    method is for when you only need one of those things to be true. They can still both be true but to show
+    the text in the if statement, only one being true is required. For example, you want to show a message to
+    your players who you either have the 'Sword' item <b>OR</b> have 'Strength' above 50 to let them know that
+    they are currently well set up to win the fight at the end of their adventure. You can see another example
+    below:
+  </p>
+  <h4>Editor:</h4>
+  <%= image_tag "advanced_conditionals_combining_editor_example.png", width: "100%" %>
+  <h4>Player:</h4>
+  <%= image_tag "advanced_conditionals_combining_player_example.gif", width: "100%" %>
+  <p>
+    In this one, the player has more than the $10 either way as demonstrated by just displaying the amount
+    of the 'Dollars' stat on this screen, but you only see the text if the player also accepted the 'Coupon'
+    item because you needed both to be true to see the text.
+  </p>
+
+  <h2 id="math-on-stats">Displaying Results of Math Functions on Stats</h2>
+  <p>
+    The final thing I am going to teach you today is how to use math on your stats. We currently support
+    four math methods that you can use:
+  </p>
+  <ol>
+    <li>Addition: <code>add</code></li>
+    <li>Subtraction: <code>subtract</code></li>
+    <li>Multiplication: <code>multiply</code></li>
+    <li>Division: <code>divide</code></li>
+  </ol>
+  <p>
+    All of these methods take in two numbers and do exactly what their names imply. The <code>add</code>
+    method adds the two numbers and the rest also do what you expect. You should note with <code>subtract</code>
+    and <code>divide</code> that it is subtracting the second number from the first number or dividing the
+    first number by the second number. Just think how you would write those equations in elementary school.
+    That is how you can determine which number should be listed first or second. See the below example:
+  </p>
+  <h4>Editor:</h4>
+  <%= image_tag "math_on_stats_editor_example.png", width: "100%" %>
+  <h4>Player:</h4>
+  <%= image_tag "math_on_stats_player_example.png", width: "100%" %>
+  <p>
+    This example shows the values of your two stats 'Dollars' and 'Deliciousness' being 50 and 2 respectively.
+    Then, you can see the multiply method take those two stats and multiply them together to get 100. It
+    is really pretty simple when you think about it.
+  </p>
+
+  <h2 id="additional-notes">Additional Notes</h2>
+  <p>
+    In this last section, I just wanted to note that you can combine all of these methods fairly easily.
+    You just need to remember the format for how it works. You first put the name of the method (<code>greater</code>,
+    <code>both</code>, <code>subtract</code>, etc.). Then, you have a space followed by your first argument.
+    Then, there is another space followed by your second argument, unless you are using the <code>not</code>
+    method, which only has one argument. If you want to use another function as one of your arguments, just
+    make sure that you place that function call within parentheses. Also, take note that stats are all numbers
+    and items are all true or false booleans. The comparing methods take in two numbers and return a boolean.
+    The math methods take in two numbers and return a number. The <code>not</code> method takes in one
+    boolean and returns a boolean. Finally, the combining conditionals methods take in two booleans and return
+    a boolean, so while combining methods make sure you take all of that into account.
+  </p>
+  <p>
+    In order to try out the example story that was being created throughout this tutorial,
+    <a class="formattingHelpLink" href="/lemonade-stand" target="_blank" rel="noopener noreferrer">click here.</a>
+  </p>
+
+</div>

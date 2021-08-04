@@ -24,6 +24,7 @@ import { PlayerInvalid } from './PlayerInvalid'
 import { PlayerEnd, PlayerDeadEnd } from './PlayerEnd'
 import { clone } from '../clone'
 import { Parser } from 'expr-eval'
+import * as Handlebars from "handlebars"
 
 var CryptoJS = require('crypto-js')
 
@@ -569,44 +570,103 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return doc.body.textContent || ''
   }
 
-  private translate(text: string) {
-    const tags = text.match(/\{\{(.+?)\}\}/g)
-    if (tags) {
-      tags.forEach(tag => {
-        const tagName = tag.replace(/[\{\}]/g, '')
-        var cleanedTag = this.strip(tagName)
-
-        const operands = cleanedTag.split(/[+*/-]/g)
-        const statArray = operands.map(item => {
-          return this.findStat(item.trim())
-        })
-
-        var expressionVariables = {} as any
-        statArray.forEach(stat => {
-          if (stat) {
-            expressionVariables[stat.name] = stat.value
-          }
-        })
-        var evaluated
-
-        try {
-          evaluated = Parser.evaluate(
-            cleanedTag.replace(/\s/g, ''),
-            expressionVariables
-          )
-        } catch (err) {
-          var errors = [] as any
-          operands.forEach(item => {
-            if (this.findInvalidStat(item.trim())) {
-              errors += item
-            }
-          })
-          evaluated = 'Unidentified variable(s): ' + errors
-        }
-        text = text.replace(tag, evaluated.toString())
-      })
+  private translate(text: string): string {
+    this.prepareHandlebars()
+    var expressionVariables = {} as any
+    [text, expressionVariables] = this.prepareTextForTranslation(text)
+    try {
+      const template = Handlebars.compile(text)
+      text = template(expressionVariables)
+    } catch (error) {
+      alert("There was a problem translating your template.")
     }
+    text = this.repairTextAfterTranslation(text)
+    return text
+  }
 
+  private prepareHandlebars() {
+    Handlebars.registerHelper('add', (a: number, b: number) => {
+      return a + b
+    })
+    Handlebars.registerHelper('subtract', (a: number, b: number) => {
+      return a - b
+    })
+    Handlebars.registerHelper('multiply', (a: number, b: number) => {
+      return a * b
+    })
+    Handlebars.registerHelper('divide', (a: number, b: number) => {
+      return a / b
+    })
+    Handlebars.registerHelper('greater', (a: number, b: number) => {
+      return a > b
+    })
+    Handlebars.registerHelper('greater_or_equal', (a: number, b: number) => {
+      return a >= b
+    })
+    Handlebars.registerHelper('less', (a: number, b: number) => {
+      return a < b
+    })
+    Handlebars.registerHelper('less_or_equal', (a: number, b: number) => {
+      return a <= b
+    })
+    Handlebars.registerHelper('equal', (a: number, b: number) => {
+      return a == b
+    })
+    Handlebars.registerHelper('not', (a: boolean) => {
+      return !a
+    })
+    Handlebars.registerHelper('either', (a: boolean, b: boolean) => {
+      return a || b
+    })
+    Handlebars.registerHelper('both', (a: boolean, b: boolean) => {
+      return a && b
+    })
+  }
+
+  private prepareTextForTranslation(text: string) {
+    var expressionVariables = {} as any
+    this.allItems().forEach(item => {
+      if (item) {
+        var itemName = item.slice()
+        if (itemName.includes(' ')) {
+          itemName = itemName.split(' ').join('')
+          text = text.split(item).join(itemName)
+        }
+        expressionVariables[itemName] = this.state.currentItems.indexOf(item) !== -1
+      }
+    })
+    this.allStats().forEach(stat => {
+      if (stat) {
+        var statName = stat.name
+        if (statName.includes(' ')) {
+          statName = statName.split(' ').join('')
+          text = text.split(stat.name).join(statName)
+        }
+        expressionVariables[statName] = stat.value
+      }
+    })
+    return [text, expressionVariables]
+  }
+
+  private repairTextAfterTranslation(text: string) {
+    this.allStats().forEach(stat => {
+      if (stat) {
+        var statName = stat.name
+        if (statName.includes(' ')) {
+          statName = statName.split(' ').join('')
+          text = text.split(statName).join(stat.name)
+        }
+      }
+    })
+    this.allItems().forEach(item => {
+      if (item) {
+        var itemName = item
+        if (itemName.includes(' ')) {
+          itemName = itemName.split(' ').join('')
+          text = text.split(itemName).join(item)
+        }
+      }
+    })
     return text
   }
 
@@ -761,6 +821,47 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return toReturn.filter(name => {
       return name && (name === current || existing.indexOf(name) === -1)
     })
+  }
+
+  allItems = () => {
+    let portMeta = this.props.portMeta
+    let toReturn: string[] = []
+
+    for (let key in portMeta) {
+      let changes = portMeta[key].itemChanges || []
+
+      changes.forEach(change => {
+        if (change.action === 'add' && toReturn.indexOf(change.name) === -1) {
+          toReturn.push(change.name)
+        }
+      })
+    }
+
+    return toReturn
+  }
+
+  allStats = () => {
+    let portMeta = this.props.portMeta
+    let toReturn: { name: string, value: number }[] = []
+    let existing: string[] = []
+
+    let currentStats = {} as any
+    this.state.currentStats.forEach(stat => {
+      currentStats[stat.name] = stat.value
+    })
+
+    for (let key in portMeta) {
+      let changes = portMeta[key].statChanges || []
+
+      changes.forEach(change => {
+        if (existing.indexOf(change.name) === -1) {
+          existing.push(change.name)
+          toReturn.push({ name: change.name, value: currentStats[change.name] || 0 })
+        }
+      })
+    }
+
+    return toReturn
   }
 }
 

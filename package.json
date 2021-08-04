@@ -13,6 +13,7 @@
     "@types/react-dom": "^16.0.9",
     "crypto-js": "^4.0.0",
     "expr-eval": "^2.0.2",
+    "handlebars": "^4.7.7",
     "lodash": "^4.17.13",
     "node-sass": "^4.14.1",
     "prop-types": "^15.6.2",
