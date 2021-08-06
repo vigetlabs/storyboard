@@ -16,7 +16,7 @@ import Easing from '../utilities/Easing'
 
 import './Editor.css'
 import './FlowChart.css'
-import { StateConsumer, ApplicationState } from '../Store'
+import { StateConsumer, ApplicationState, MetaData, PortMeta } from '../Store'
 import { save } from '../persistance'
 import { clone } from '../clone'
 import * as _ from 'lodash'
@@ -39,13 +39,16 @@ interface EditorProps {
   updateState(state: Readonly<ApplicationState>): Readonly<ApplicationState>
 }
 
+interface CopiedData {
+  copiedNodes: DefaultNodeModel[]
+  copiedLinks: DefaultLinkModel[]
+  copiedMeta: MetaData
+  copiedPortMeta: PortMeta
+}
+
 class Editor extends React.Component<EditorProps, EditorState> {
   engine: DiagramEngine
   model: DiagramModel
-  copiedNodes: DefaultNodeModel[]
-  pastedNodes: DefaultNodeModel[]
-  copiedLinks: DefaultLinkModel[]
-  pastedLinks: DefaultLinkModel[]
   lastSavedState: ApplicationState
   past: ApplicationState[]
   future: ApplicationState[]
@@ -187,17 +190,12 @@ class Editor extends React.Component<EditorProps, EditorState> {
             {viewOnly ? null : this.renderAddScene()}
             {viewOnly ? null : this.renderSave()}
 
-            <button className="EditorButton" onClick={() => this.toFile()}>
-              Export
+            <button className="EditorButton" onClick={() => this.onCopy()}>
+              Copy
             </button>
 
-            <label className="EditorButton">
-              Import
-              <input
-                type="file"
-                onChange={event => this.loadFile(event.target.files)}
-                style={{ width: '100%' }}
-              />
+            <label className="EditorButton" onClick={() => this.onPaste()}>
+              Paste
             </label>
 
             <div className="EditorButton -zooms">
@@ -388,7 +386,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private addScene = () => {
-    let node = new DefaultNodeModel(defaultNodeName)
+    let node = new DefaultNodeModel(name)
 
     let workspace = document.getElementsByClassName('EditorWorkspace')[0]
     let clientWidth = workspace.clientWidth * 0.4
@@ -412,42 +410,6 @@ class Editor extends React.Component<EditorProps, EditorState> {
     node.selected = true
 
     this.repaint()
-  }
-
-  private toFile() {
-    let dataStr =
-      'data:text/json;charset=utf-8,' +
-      encodeURIComponent(JSON.stringify(this.serialize()))
-    let anchor = document.createElement('a')
-
-    anchor.setAttribute('href', dataStr)
-    anchor.setAttribute('download', this.props.state.slug + '.json')
-    anchor.style.position = 'absolute'
-
-    document.body.appendChild(anchor)
-    anchor.click()
-    anchor.remove()
-  }
-
-  private loadFile(files: FileList | null) {
-    if (files == null) return
-
-    let file = files[0]
-    let reader = new FileReader()
-
-    let scope = this
-    reader.onload = function() {
-      try {
-        scope.props.updateState({
-          ...JSON.parse(`${this.result}`),
-          slug: scope.props.state.slug
-        })
-      } catch (error) {
-        alert("Sorry, we couldn't parse your file :(")
-      }
-    }
-
-    reader.readAsText(file)
   }
 
   private saveStory = async (opts: { force: boolean }) => {
@@ -488,8 +450,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
   }
 
-  private getLinksThatShouldBeSelected = () => {
-    const { copiedNodes } = this
+  private getLinksThatShouldBeSelected = (copiedNodes: DefaultNodeModel[]) => {
     let linksToAdd: DefaultLinkModel[] = []
 
     copiedNodes.forEach(sourceNode => {
@@ -509,66 +470,120 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private onCopy = () => {
+    this.saveStory({ force: true })
+
     const { model } = this
 
     const selectedNodes = model
       .getSelectedItems()
       .filter(item => item instanceof DefaultNodeModel) as DefaultNodeModel[]
+
+    if (selectedNodes.length == 0) {
+      alert("You have not selected any scenes to copy.")
+      return
+    }
+
     const selectedLinks = this.model
       .getSelectedItems()
       .filter(item => item instanceof DefaultLinkModel) as DefaultLinkModel[]
-    this.copiedNodes = selectedNodes
-    this.copiedLinks = selectedLinks.concat(this.getLinksThatShouldBeSelected())
+    const copiedNodes: DefaultNodeModel[] = selectedNodes
+    const copiedLinks: DefaultLinkModel[] = selectedLinks.concat(this.getLinksThatShouldBeSelected(copiedNodes))
 
-    this.pastedNodes = []
-    this.pastedLinks = []
+    const copiedNodeIds: string[] = []
+    const copiedLinkIds: string[] = []
+
+    const copiedMeta: MetaData = {}
+    const copiedPortMeta: PortMeta = {}
+
+    const stateToCopy: ApplicationState = clone(this.serialize())
+
+    copiedNodes.forEach(node => {
+      copiedNodeIds.push(node.id)
+      copiedMeta[node.id] = stateToCopy.meta[node.id]
+      Object.keys(node.ports).forEach(key => {
+        const port = node.ports[key]
+        copiedPortMeta[port.id] = stateToCopy.portMeta[port.id]
+      })
+    })
+    copiedLinks.forEach(link => copiedLinkIds.push(link.id))
+
+    const copiedData: CopiedData = {
+      copiedNodes: stateToCopy.story.nodes.filter((node: DefaultNodeModel) => copiedNodeIds.includes(node.id)),
+      copiedLinks: stateToCopy.story.links.filter((link: DefaultLinkModel) => copiedLinkIds.includes(link.id)),
+      copiedMeta: copiedMeta,
+      copiedPortMeta: copiedPortMeta
+    }
+
+    navigator.clipboard.writeText(JSON.stringify(copiedData))
   }
 
   private onPaste = () => {
-    const { copiedNodes, model, pastedNodes, pastedLinks, copiedLinks } = this
+    const { model } = this
+    navigator.clipboard.readText().then(text => {
+      try {
+        const pasted = JSON.parse(text)
+        const copiedNodes: DefaultNodeModel[] = pasted.copiedNodes
+        const copiedLinks: DefaultLinkModel[] = pasted.copiedLinks
+        const copiedMeta: MetaData = pasted.copiedMeta
+        const copiedPortMeta: PortMeta = pasted.copiedPortMeta
+        const pastedNodes: DefaultNodeModel[] = []
+        const pastedLinks: DefaultLinkModel[] = []
 
-    model.clearSelection()
+        model.clearSelection()
 
-    copiedNodes.forEach(node => {
-      let copiedNode = this.createCopiedNode(
-        node,
-        node.x + offset,
-        node.y + offset
-      )
-      if (copiedNode) {
-        pastedNodes.push(copiedNode)
+        copiedNodes.forEach(node => {
+          let copiedNode = this.createCopiedNode(
+            node,
+            node.x + offset,
+            node.y + offset,
+            copiedMeta,
+            copiedPortMeta
+          )
+          if (copiedNode) {
+            pastedNodes.push(copiedNode)
+          }
+        })
+        copiedLinks.forEach(link => {
+          let copiedLink = this.createCopiedLink(link, copiedNodes, pastedNodes)
+          if (copiedLink) {
+            pastedLinks.push(copiedLink)
+          }
+        })
+        pastedNodes.forEach(node => model.addNode(node))
+        pastedLinks.forEach(link => model.addLink(link))
+
+        this.repaint()
+      } catch (e) {
+        alert("Sorry, we couldn't parse what you pasted.")
       }
     })
-    copiedLinks.forEach(link => {
-      let copiedLink = this.createCopiedLink(link)
-      if (copiedLink) {
-        pastedLinks.push(copiedLink)
-      }
-    })
-    pastedNodes.forEach(node => model.addNode(node))
-    pastedLinks.forEach(link => model.addLink(link))
-
-    this.repaint()
   }
 
-  private getRelatedPorts = (oldLink: DefaultLinkModel) => {
-    const { copiedNodes, pastedNodes } = this
-
+  private getRelatedPorts = (oldLink: DefaultLinkModel, copiedNodes: DefaultNodeModel[], pastedNodes: DefaultNodeModel[]) => {
     let ret: DefaultPortModel[] = []
     copiedNodes.forEach(node => {
       // Iterates over the nodes that were copied to clipboard and then over their ports, returning them for the pasted links to use
-      let copiedOutPorts = node.getOutPorts()
-      let copiedInPorts = node.getInPorts()
+      let copiedOutPorts: DefaultPortModel[] = []
+      let copiedInPorts: DefaultPortModel[] = []
+      const oldPorts = node.ports
+      Object.keys(oldPorts).forEach(key => {
+        const port = oldPorts[key]
+        if (port.in) {
+          copiedInPorts.push(port)
+        } else {
+          copiedOutPorts.push(port)
+        }
+      })
       let nodeIndex = copiedNodes.indexOf(node)
 
       copiedOutPorts.forEach(outPort => {
-        if (outPort === oldLink.getSourcePort()) {
+        if (outPort.id == "" + oldLink.sourcePort) {
           let portIndex = copiedOutPorts.indexOf(outPort)
           ret.push(pastedNodes[nodeIndex].getOutPorts()[portIndex])
         }
       })
       copiedInPorts.forEach(inPort => {
-        if (inPort === oldLink.getTargetPort()) {
+        if (inPort.id == "" + oldLink.targetPort) {
           let portIndex = copiedInPorts.indexOf(inPort)
           ret.push(pastedNodes[nodeIndex].getInPorts()[portIndex])
         }
@@ -578,9 +593,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
     return ret
   }
 
-  private createCopiedLink = (copiedLink: DefaultLinkModel) => {
+  private createCopiedLink = (copiedLink: DefaultLinkModel, copiedNodes: DefaultNodeModel[], pastedNodes: DefaultNodeModel[]) => {
     let pastedLink = new DefaultLinkModel()
-    let relatedPorts = this.getRelatedPorts(copiedLink)
+    let relatedPorts = this.getRelatedPorts(copiedLink, copiedNodes, pastedNodes)
     if (relatedPorts.length < 2) {
       // The user copied one or more danging links (i.e. links that don't have a source and target port)
       return
@@ -597,7 +612,7 @@ class Editor extends React.Component<EditorProps, EditorState> {
 
     pastedLink.getPoints().forEach(point => {
       // Ensures the link moves with nodes visually
-      let copiedPoint = copiedLink.getPoints()[
+      let copiedPoint = copiedLink.points[
         pastedLink.getPoints().indexOf(point)
       ]
       point.x = copiedPoint.x + offset
@@ -611,15 +626,27 @@ class Editor extends React.Component<EditorProps, EditorState> {
   private createCopiedNode = (
     nodeToCopy: DefaultNodeModel,
     targetX: Number,
-    targetY: Number
+    targetY: Number,
+    copiedMeta: MetaData,
+    copiedPortMeta: PortMeta
   ) => {
-    let node = _.cloneDeep(nodeToCopy)
+    const { state, updateState } = this.props
+    let node: DefaultNodeModel = new DefaultNodeModel(nodeToCopy.name)
 
     // Cleanup dangling references from the copied items
     node.clearListeners()
-    this.copyPorts(node)
+    this.copyPorts(node, nodeToCopy, copiedPortMeta)
     node.parent = new DiagramModel()
     node.id = node.parent.id
+
+    const newMeta = _.cloneDeep(copiedMeta[nodeToCopy.id])
+    updateState({
+      ...state,
+      meta: {
+        ...state.meta,
+        [node.id]: newMeta
+      }
+    })
 
     // Set attributes of this new scene
     node.setPosition(targetX, targetY)
@@ -630,18 +657,23 @@ class Editor extends React.Component<EditorProps, EditorState> {
     return node
   }
 
-  private copyPorts = (node: DefaultNodeModel) => {
-    let ports = node.getPorts()
+  private copyPorts = (node: DefaultNodeModel, nodeToCopy: DefaultNodeModel, copiedPortMeta: PortMeta) => {
+    let ports = nodeToCopy.ports
+    const { state, updateState } = this.props
 
     Object.keys(ports).forEach(function(key) {
       let oldPort = ports[key] as DefaultPortModel
       let newPort = new DefaultPortModel(
         oldPort.in,
-        oldPort.getName(),
+        oldPort.name,
         oldPort.label
       )
       node.removePort(oldPort)
       node.addPort(newPort)
+      const newPortMeta = copiedPortMeta[oldPort.id]
+      if (newPortMeta) {
+        updateState(_.set(state, `portMeta.${newPort.id}`, newPortMeta))
+      }
     })
   }
 

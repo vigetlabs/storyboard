@@ -106,13 +106,21 @@ const pages: TutorialPageContent[] = [
     link: 'Get additional help.'
   },
   {
-    title: '#11 - Time to Play!',
+    title: "#11 - Advanced - Copying and Pasting",
+    text: [
+      'If you want certain sections of your story to also be in another one of your stories, you can easily copy and paste that section of the story with either our \'Copy\' and \'Paste\' buttons or your typical keyboard shortcuts.',
+      'In order to select the section of your story to copy, you have several options. You can just click on a singular scene you want to copy, you can hold the Shift key and drag your mouse over the seciton you want to copy, or you can hold the Shift key while clicking the scenes you wish to copy.'
+    ],
+    image: require('../images/tutorial/copy-paste.gif')
+  },
+  {
+    title: '#12 - Time to Play!',
     text: ['Press “Play” to read your story and get a shareable link.']
   },
   {
-    title: '#12 - Disclaimer',
+    title: '#13 - Disclaimer',
     text: [
-      "This project was primarily built in a weekend, so you may encounter some quirks along the way. If something doesn't look right, saving your story and refreshing the page might do the trick. If saving isn't working, you can export your story as a last resort.",
+      "This project was primarily built in a weekend, so you may encounter some quirks along the way. If something doesn't look right, saving your story and refreshing the page might do the trick. If saving isn't working, you can try copying and pasting your story into a new story as a last resort.",
       'And of course, feel free to drop us a note in our feedback form (available from the footer on the homepage).',
       'Thanks for making it all the way through the tutorial, hope you make a fun story!'
     ],
