@@ -93,6 +93,12 @@
   width: 100%;
 }
 
+.EditorButton:hover,
+.EditorButton:active {
+  background: var(--mkt-gold);
+  color: white;
+}
+
 .EditorButton.-zooms {
   height: 27px;
   padding: 0;

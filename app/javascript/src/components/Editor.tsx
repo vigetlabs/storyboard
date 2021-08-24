@@ -31,6 +31,8 @@ interface EditorState {
   ready: boolean
   selected: string | null
   saving: boolean
+  copying: boolean
+  pasting: boolean
 }
 
 interface EditorProps {
@@ -59,7 +61,9 @@ class Editor extends React.Component<EditorProps, EditorState> {
     this.state = {
       ready: false,
       selected: null,
-      saving: false
+      saving: false,
+      copying: false,
+      pasting: false
     }
     this.engine = new DiagramEngine()
     this.engine.installDefaultFactories()
@@ -189,14 +193,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
           <menu className="EditorTools">
             {viewOnly ? null : this.renderAddScene()}
             {viewOnly ? null : this.renderSave()}
-
-            <button className="EditorButton" onClick={() => this.onCopy()}>
-              Copy
-            </button>
-
-            <label className="EditorButton" onClick={() => this.onPaste()}>
-              Paste
-            </label>
+            {this.renderCopy()}
+            {viewOnly ? null : this.renderPaste()}
 
             <div className="EditorButton -zooms">
               <button onClick={() => this.undo()}>
@@ -250,6 +248,32 @@ class Editor extends React.Component<EditorProps, EditorState> {
         }}
       >
         {this.state.saving ? 'Saving...' : 'Save'}
+      </button>
+    )
+  }
+
+  private renderCopy() {
+    return (
+      <button
+        className="EditorButton"
+        onClick={() => {
+          this.onCopy()
+        }}
+      >
+        {this.state.copying ? 'Copying...' : 'Copy'}
+      </button>
+    )
+  }
+
+  private renderPaste() {
+    return (
+      <button
+        className="EditorButton"
+        onClick={() => {
+          this.onPaste()
+        }}
+      >
+        {this.state.pasting ? 'Pasting...' : 'Paste'}
       </button>
     )
   }
@@ -470,6 +494,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private onCopy = () => {
+    const copyStart = Date.now()
+    this.setState({ copying: true })
     this.saveStory({ force: true })
 
     const { model } = this
@@ -515,9 +541,16 @@ class Editor extends React.Component<EditorProps, EditorState> {
     }
 
     navigator.clipboard.writeText(JSON.stringify(copiedData))
+
+    let timeLeft = 250 - Math.min(Date.now() - copyStart, 400)
+    setTimeout(() => {
+      this.setState({ copying: false })
+    }, timeLeft)
   }
 
   private onPaste = () => {
+    const pasteStart = Date.now()
+    this.setState({ pasting: true })
     const { model } = this
     navigator.clipboard.readText().then(text => {
       try {
@@ -556,6 +589,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
       } catch (e) {
         alert("Sorry, we couldn't parse what you pasted.")
       }
+      let timeLeft = 250 - Math.min(Date.now() - pasteStart, 400)
+      setTimeout(() => {
+        this.setState({ pasting: false })
+      }, timeLeft)
     })
   }
 
