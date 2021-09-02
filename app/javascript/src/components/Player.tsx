@@ -205,7 +205,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
             {this.renderChoices(node)}
           </div>
         </div>
-        {this.renderDebugger()}
+        {this.renderDebugSection()}
       </main>
     )
   }
@@ -224,114 +224,126 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     }
   }
 
-  private renderDebugger() {
-    if (this.props.debuggable) {
-      return this.debug ? (
-        <div>
-          <div className="d-helper"></div>
-          <div className="debugger">
-            <div className="d-section">
-              <h4><u>Current Items</u></h4>
-              <ul className="d-list">
-                {this.state.currentItems.map((item, i) => {
-                  return (
-                    <li key={item.concat(i.toString())}>
-                      <div>
-                        <label
-                          className="sr-only"
-                          htmlFor={`name-for-${item}`}
-                        >
-                          Item Name
-                        </label>
-                        <select
-                          id={`name-for-${item}`}
-                          value={item}
-                          onChange={this.setItem.bind(this, i)}
-                        >
-                          {this.possibleItems(item).map(
-                            (item, i) => (
-                              <option key={i} value={item}>
-                                {item}
-                              </option>
-                            )
-                          )}
-                        </select>
-                      </div>
-                      <DebuggerRemoveButton
-                        onClick={this.removeItem.bind(this, i)}
-                      />
-                    </li>
-                  )
-                })}
-              </ul>
-              <DebuggerFooter onClick={this.addItem.bind(this)} />
-            </div>
-            <div className="d-section">
-              <h4><u>Current Stats</u></h4>
-              <ul className="d-list">
-                {this.state.currentStats.map((stat, i) => {
-                  return (
-                    <li key={stat.name.concat(i.toString())}>
-                      <div>
-                        <label
-                          className="sr-only"
-                          htmlFor={`stat-name-${stat.name}`}
-                        >
-                          Stat Name
-                        </label>
-                        <select
-                          id={`stat-name-${stat.name}`}
-                          value={stat.name}
-                          onChange={this.setStatName.bind(this, i)}
-                        >
-                          {this.possibleStats(stat.name).map(
-                            (item, i) => (
-                              <option key={i} value={item}>
-                                {item}
-                              </option>
-                            )
-                          )}
-                        </select>
-                      </div>
-                      <div className="d-stat-edit">
-                        <div>
-                          <label
-                            className="sr-only"
-                            htmlFor={`stat-value-${stat.name}`}
-                          >
-                            Number Value (#)
-                          </label>
-                          <p>{stat.value}</p>
-                        </div>
-                        <DebuggerStatAddButton
-                          onClick={this.incrementStat.bind(this, i)}
-                        />
-                        <DebuggerStatSubtractButton
-                          onClick={this.decrementStat.bind(this, i)}
-                        />
-                      </div>
-                      <DebuggerRemoveButton
-                        onClick={this.removeStat.bind(this, i)}
-                      />
-                    </li>
-                  )
-                })}
-              </ul>
-              <DebuggerFooter onClick={this.addStat.bind(this)} />
-            </div>
-            <a className="SlantButton" id="close-debug-button" onClick={this.toggleDebugger.bind(this)} >
-              Close
-            </a>
-          </div>
-        </div>
-      ) : (
-        <a className="SlantButton" id="debug-button" onClick={this.toggleDebugger.bind(this)} >
-          Debug
-        </a>
-      )
+  private renderDebugSection() {
+    if (this.props.debuggable && this.hasItemsOrStats()) {
+      return this.debug ? this.renderDebugger() : this.renderDebugButton()
     } else {
       return null
     }
+  }
+
+  private hasItemsOrStats() {
+    return this.allItems().length || this.allStats().length
+  }
+
+  private renderDebugger() {
+    return (
+      <div>
+        <div className="d-helper"></div>
+        <div className="debugger">
+          <div className="d-section">
+            <h4><u>Current Items</u></h4>
+            <ul className="d-list">
+              {this.state.currentItems.map((item, i) => {
+                return (
+                  <li key={item.concat(i.toString())}>
+                    <div>
+                      <label
+                        className="sr-only"
+                        htmlFor={`name-for-${item}`}
+                      >
+                        Item Name
+                      </label>
+                      <select
+                        id={`name-for-${item}`}
+                        value={item}
+                        onChange={this.setItem.bind(this, i)}
+                      >
+                        {this.possibleItems(item).map(
+                          (item, i) => (
+                            <option key={i} value={item}>
+                              {item}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                    <DebuggerRemoveButton
+                      onClick={this.removeItem.bind(this, i)}
+                    />
+                  </li>
+                )
+              })}
+            </ul>
+            <DebuggerFooter onClick={this.addItem.bind(this)} />
+          </div>
+          <div className="d-section">
+            <h4><u>Current Stats</u></h4>
+            <ul className="d-list">
+              {this.state.currentStats.map((stat, i) => {
+                return (
+                  <li key={stat.name.concat(i.toString())}>
+                    <div>
+                      <label
+                        className="sr-only"
+                        htmlFor={`stat-name-${stat.name}`}
+                      >
+                        Stat Name
+                      </label>
+                      <select
+                        id={`stat-name-${stat.name}`}
+                        value={stat.name}
+                        onChange={this.setStatName.bind(this, i)}
+                      >
+                        {this.possibleStats(stat.name).map(
+                          (item, i) => (
+                            <option key={i} value={item}>
+                              {item}
+                            </option>
+                          )
+                        )}
+                      </select>
+                    </div>
+                    <div className="d-stat-edit">
+                      <div>
+                        <label
+                          className="sr-only"
+                          htmlFor={`stat-value-${stat.name}`}
+                        >
+                          Number Value (#)
+                        </label>
+                        <p>{stat.value}</p>
+                      </div>
+                      <DebuggerStatAddButton
+                        onClick={this.incrementStat.bind(this, i)}
+                      />
+                      <DebuggerStatSubtractButton
+                        onClick={this.decrementStat.bind(this, i)}
+                      />
+                    </div>
+                    <DebuggerRemoveButton
+                      onClick={this.removeStat.bind(this, i)}
+                    />
+                  </li>
+                )
+              })}
+            </ul>
+            <DebuggerFooter onClick={this.addStat.bind(this)} />
+          </div>
+          <a className="SlantButton" id="close-debug-button" onClick={this.toggleDebugger.bind(this)} >
+            Close
+          </a>
+        </div>
+      </div>
+    )
+  }
+
+  private renderDebugButton() {
+    return (
+      <a className="SlantButton" id="debug-button" onClick={this.toggleDebugger.bind(this)} >
+        Debug
+      </a>
+    )
   }
 
   private toggleDebugger() {
