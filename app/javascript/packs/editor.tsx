@@ -32,6 +32,7 @@ declare global {
     viewOnly: boolean
     isOffline: boolean
     backButton: boolean
+    debuggable: boolean
     story: {
       story: any
       meta: MetaData

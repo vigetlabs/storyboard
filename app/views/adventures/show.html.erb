@@ -8,7 +8,7 @@
   <% end %>
 </div>
 
-<div class="Player" id="player" data-debug="<%= params[:debug] %>"></div>
+<div class="Player" id="player"></div>
 
 <script>
   var SEED = {
@@ -18,5 +18,10 @@
     backButton: <%= @adventure.back_button %>,
     theme: "<%== escape_javascript @adventure.theme.capitalize %>",
     isOffline: false,
+    <% if @adventure.editable_by?(current_user) %>
+      debuggable: true
+    <% else %>
+      debuggable: false
+    <% end %>
   }
 </script>

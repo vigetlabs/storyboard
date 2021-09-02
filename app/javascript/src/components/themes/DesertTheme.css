@@ -6,7 +6,41 @@
   background: #55708c;
   color: white;
   text-shadow: 0 1px 1px rgba(0, 0, 0, 0.68);
-  border: 40px solid white;
+}
+
+html:before,
+html:after,
+body:before,
+body:after {
+  content: "";
+  position: fixed;
+  background: white;
+}
+
+html:before,
+html:after {
+  height: 40px;
+  width: 100%;
+}
+
+body:before,
+body:after {
+  height: 100%;
+  width: 40px;
+}
+
+html:after {
+  bottom: 0;
+}
+
+body:after {
+  right: 0;
+}
+
+.DesertTheme .debugger {
+  background: #55708c;
+  border: 40px white solid;
+  height: 280px;
 }
 
 .DesertTheme .PlayerIntro {
@@ -102,4 +136,10 @@
   font-size: 14px;
   line-height: 24px;
   margin-bottom: 68px;
+}
+
+.DesertTheme #back-button,
+.DesertTheme #debug-button,
+.DesertTheme .debugger {
+  z-index: 5000;
 }

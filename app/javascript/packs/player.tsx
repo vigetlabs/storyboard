@@ -28,7 +28,7 @@ async function render() {
         theme={SEED.theme}
         isOffline={SEED.isOffline}
         backButton={SEED.backButton}
-        debug={player!.dataset.debug == 'true'}
+        debuggable={SEED.debuggable}
       />,
       player
     )
