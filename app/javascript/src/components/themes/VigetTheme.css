@@ -8,6 +8,11 @@
   color: white;
 }
 
+.VigetTheme .debugger {
+  background: #054f67 url('../../images/viget-logo.svg') calc(100% - 24px)
+    calc(100% - 24px) no-repeat;
+}
+
 .VigetTheme .PlayerIntro {
   background: url('../../images/viget-theme-intro-background.svg') top right
     no-repeat / auto 100%;

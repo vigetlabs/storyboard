@@ -218,3 +218,15 @@
   transform: translate(-50%, -50%);
   width: 8px;
 }
+
+#debug-button {
+  align-self: flex-end;
+  bottom: 1rem;
+  right: 1rem;
+}
+
+#close-debug-button {
+  height: 27px;
+  top: 1rem;
+  right: 1rem;
+}

@@ -18,7 +18,16 @@
 
 .SpaceTheme {
   background: linear-gradient(#0c0c28, #000001), #000001;
+  background-repeat: no-repeat;
   color: white;
+}
+
+.SpaceTheme body {
+  background: linear-gradient(#0c0c28, #000001), #000001;
+}
+
+.SpaceTheme .debugger {
+  background: linear-gradient(#0c0c28, #000001), #000001;
 }
 
 .SpaceTheme .PlayerIntro {
@@ -32,7 +41,6 @@
   align-items: flex-start;
   display: flex;
   flex-direction: column;
-  height: 100%;
   justify-content: center;
   padding: 24px 128px;
 }
