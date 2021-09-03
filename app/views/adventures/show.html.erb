@@ -17,6 +17,7 @@
     theme: "<%== escape_javascript @adventure.theme.capitalize %>",
     isOffline: false,
     debuggable: <%= !!@adventure.editable_by?(current_user) %>,
+    characterCard: <%= @adventure.character_card %>,
     showSource: <%= @adventure.show_source? %>
   }
 </script>

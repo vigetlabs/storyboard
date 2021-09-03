@@ -29,6 +29,7 @@ async function render() {
         isOffline={SEED.isOffline}
         backButton={SEED.backButton}
         debuggable={SEED.debuggable}
+        characterCard={SEED.characterCard}
         showSource={SEED.showSource}
       />,
       player

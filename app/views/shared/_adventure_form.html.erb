@@ -80,6 +80,16 @@
     </div>
   </div>
 
+  <div class="Field -checkbox">
+    <%= f.check_box :character_card %>
+    <%= f.label :character_card, "Add Character Card?" %>
+    <div class="hint">
+      <em>
+        If checked, the user will be able to view a character card with their items and stats.
+      </em>
+    </div>
+  </div>
+
   <div class="Field">
     <button class="SlantButton"> <%= is_update ? "Update" : "Create" %> Story</button>
   </div>
