@@ -181,7 +181,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       )
     }
 
-    const imageContent = () => {
+    const renderImage = () => {
       if (meta.image) {
         return <img src={meta.image} alt='' width='400' />
       } else {
@@ -191,12 +191,12 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
     return (
       <main className="PlayerScene">
-        {this.goBackButton()}
+        {this.renderBackButton()}
         <div className="PlayerForeground">
           <h1 className="PlayerSceneTitle">{node.name}</h1>
 
           <div className="PlayerSceneContent">
-            {imageContent()}
+            {renderImage()}
             <div
               className="PlayerSceneBody"
               dangerouslySetInnerHTML={{ __html: translatedText }}
@@ -334,8 +334,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   private toggleDebugger() {
     this.setState({
       debug: !this.state.debug
-    },
-    undefined);
+    });
   }
 
   private renderChoices(node: DefaultNodeModel) {
@@ -361,7 +360,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     )
   }
 
-  private goBackButton() {
+  private renderBackButton() {
     return this.props.backButton ? (
       <a className="SlantButton" id="back-button" onClick={this.revertToPreviousState.bind(this)} >
         Back
@@ -705,22 +704,15 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return nodes[Math.floor(Math.random() * nodes.length)]
   }
 
-  private debugRerender() {
-    this.setState({
-      currentItems: this.state.currentItems,
-      currentStats: this.state.currentStats
-    },
-    undefined);
-  }
-
   removeItem = (index: number, e: React.MouseEvent) => {
     e.preventDefault()
 
     let newItems = clone(this.state.currentItems || [])
     newItems.splice(index, 1)
 
-    this.state.currentItems = newItems
-    this.debugRerender()
+    this.setState({
+      currentItems: newItems
+    })
   }
 
   addItem = (e: React.MouseEvent) => {
@@ -734,16 +726,19 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
     let newItems = clone(this.state.currentItems || [])
     newItems.push(possibleItems[0])
-    this.state.currentItems = newItems
-    this.debugRerender()
+
+    this.setState({
+      currentItems: newItems
+    })
   }
 
   setItem = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
     let newItems = clone(this.state.currentItems || [])
     newItems[index] = e.target.value
 
-    this.state.currentItems = newItems
-    this.debugRerender()
+    this.setState({
+      currentItems: newItems
+    })
   }
 
   removeStat = (index: number, e: React.MouseEvent) => {
@@ -752,8 +747,9 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     let newStats = clone(this.state.currentStats || [])
     newStats.splice(index, 1)
 
-    this.state.currentStats = newStats
-    this.debugRerender()
+    this.setState({
+      currentStats: newStats
+    })
   }
 
   addStat = (e: React.MouseEvent) => {
@@ -768,32 +764,36 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     let newStats = clone(this.state.currentStats || [])
     newStats.push({ name: possibleStats[0], value: 0 })
 
-    this.state.currentStats = newStats
-    this.debugRerender()
+    this.setState({
+      currentStats: newStats
+    })
   }
 
   setStatName = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
     let newStats = clone(this.state.currentStats || [])
     newStats[index].name = e.target.value
 
-    this.state.currentStats = newStats
-    this.debugRerender()
+    this.setState({
+      currentStats: newStats
+    })
   }
 
   incrementStat = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
     let newStats = clone(this.state.currentStats || [])
     newStats[index].value++
 
-    this.state.currentStats = newStats
-    this.debugRerender()
+    this.setState({
+      currentStats: newStats
+    })
   }
 
   decrementStat = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
     let newStats = clone(this.state.currentStats || [])
     newStats[index].value--
 
-    this.state.currentStats = newStats
-    this.debugRerender()
+    this.setState({
+      currentStats: newStats
+    })
   }
 
   possibleItems = (current: string | null) => {

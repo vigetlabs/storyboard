@@ -10,7 +10,7 @@ interface Props {
 }
 
 export const PlayerEnd: React.SFC<Props> = ({ title, body, image, onReplay, onGoBack, showSource }) => {
-  const imageContent = () => {
+  const renderImage = () => {
     if (image) {
       return <img src={image} alt='' width='400' />
     } else {
@@ -18,7 +18,7 @@ export const PlayerEnd: React.SFC<Props> = ({ title, body, image, onReplay, onGo
     }
   }
 
-  const sourceButton = () => {
+  const renderSourceButton = () => {
     return showSource ? (
       <a className="SlantButton" id="source-button" href={window.location.href + "/source"} >
         Source
@@ -31,11 +31,11 @@ export const PlayerEnd: React.SFC<Props> = ({ title, body, image, onReplay, onGo
       <a className="SlantButton" id="back-button" onClick={(onGoBack)}>
         Back
       </a>
-      {sourceButton()}
+      {renderSourceButton()}
       <div className="PlayerForeground">
         <h1 className="PlayerEndTitle">{title}</h1>
         <div className="PlayerEndContent">
-          {imageContent()}
+          {renderImage()}
           <div
             className="PlayerEndBody"
             dangerouslySetInnerHTML={{ __html: body }}
