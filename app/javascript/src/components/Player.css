@@ -41,6 +41,12 @@
   left: 1rem;
 }
 
+#source-button {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
 .debugger {
   background: white;
   border-top: 2px solid;
@@ -223,6 +229,7 @@
   align-self: flex-end;
   bottom: 1rem;
   right: 1rem;
+  top: 1rem;
 }
 
 #close-debug-button {

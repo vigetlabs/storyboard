@@ -38,6 +38,7 @@ interface PlayerProps {
   isOffline: boolean
   backButton: boolean
   debuggable: boolean
+  showSource: boolean
 }
 
 interface Stat {
@@ -57,6 +58,7 @@ interface PlayerState {
   currentItems: string[]
   currentStats: Stat[]
   history: StateSnapshot[]
+  debug: boolean
 }
 
 const DebuggerRemoveButton: FC<{ onClick: () => void }> = props => (
@@ -88,7 +90,6 @@ const DebuggerStatSubtractButton: FC<{ onClick: () => void }> = props => (
 class Player extends React.Component<PlayerProps, PlayerState> {
   engine: DiagramEngine
   model: DiagramModel
-  debug: boolean
 
   private passphrase = 'labrats'
 
@@ -96,7 +97,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     started: false,
     currentItems: [],
     currentStats: [],
-    history: []
+    history: [],
+    debug: false
   }
 
   constructor(props: PlayerProps) {
@@ -104,7 +106,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
     this.engine = new DiagramEngine()
     this.model = new DiagramModel()
-    this.debug = false
 
     this.engine.installDefaultFactories()
     this.model.deSerializeDiagram(this.props.story, this.engine)
@@ -132,8 +133,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   render() {
-    this.hideSourceButton()
-
     let { focus, started } = this.state
     let { title, description } = this.props
 
@@ -155,6 +154,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       return <PlayerDeadEnd
         onReplay={this.restart}
         onGoBack={this.revertToPreviousState.bind(this)}
+        showSource={this.props.showSource}
       />
     }
 
@@ -169,8 +169,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     let choices = this.ports(node)
 
     if (choices.length <= 0) {
-      this.showSourceButton()
-
       return (
         <PlayerEnd
           title={node.name}
@@ -178,6 +176,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           image={meta.image}
           onReplay={this.restart}
           onGoBack={this.revertToPreviousState.bind(this)}
+          showSource={this.props.showSource}
         />
       )
     }
@@ -210,23 +209,9 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     )
   }
 
-  private hideSourceButton() {
-    let a: any = document.getElementsByClassName('-source-link')[0]
-    if (a) {
-      a.style.display = 'none'
-    }
-  }
-
-  private showSourceButton() {
-    let a: any = document.getElementsByClassName('-source-link')[0]
-    if (a) {
-      a.style.display = 'inherit'
-    }
-  }
-
   private renderDebugSection() {
     if (this.props.debuggable && this.hasItemsOrStats()) {
-      return this.debug ? this.renderDebugger() : this.renderDebugButton()
+      return this.state.debug ? this.renderDebugger() : this.renderDebugButton()
     } else {
       return null
     }
@@ -347,8 +332,10 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   private toggleDebugger() {
-    this.debug = !this.debug
-    this.debugRerender()
+    this.setState({
+      debug: !this.state.debug
+    },
+    undefined);
   }
 
   private renderChoices(node: DefaultNodeModel) {
@@ -720,10 +707,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
   private debugRerender() {
     this.setState({
-      focus: this.state.focus,
       currentItems: this.state.currentItems,
-      currentStats: this.state.currentStats,
-      history: this.state.history
+      currentStats: this.state.currentStats
     },
     undefined);
   }

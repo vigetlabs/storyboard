@@ -3,8 +3,6 @@
 <div class="PlayerActions">
   <% if @adventure.editable_by?(current_user) %>
     <%= link_to 'Edit', [:edit, @adventure], class: "SlantButton" %>
-  <% elsif @adventure.show_source? %>
-    <%= link_to 'Source', [:source, @adventure], class: "SlantButton -source-link" %>
   <% end %>
 </div>
 
@@ -18,6 +16,7 @@
     backButton: <%= @adventure.back_button %>,
     theme: "<%== escape_javascript @adventure.theme.capitalize %>",
     isOffline: false,
-    debuggable: <%= !!@adventure.editable_by?(current_user) %>
+    debuggable: <%= !!@adventure.editable_by?(current_user) %>,
+    showSource: <%= @adventure.show_source? %>
   }
 </script>
