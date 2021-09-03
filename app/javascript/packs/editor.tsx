@@ -33,6 +33,7 @@ declare global {
     isOffline: boolean
     backButton: boolean
     debuggable: boolean
+    characterCard: boolean
     showSource: boolean
     story: {
       story: any

@@ -38,6 +38,7 @@ interface PlayerProps {
   isOffline: boolean
   backButton: boolean
   debuggable: boolean
+  characterCard: boolean
   showSource: boolean
 }
 
@@ -58,7 +59,7 @@ interface PlayerState {
   currentItems: string[]
   currentStats: Stat[]
   history: StateSnapshot[]
-  debug: boolean
+  showItemsStats: boolean
 }
 
 const DebuggerRemoveButton: FC<{ onClick: () => void }> = props => (
@@ -98,7 +99,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     currentItems: [],
     currentStats: [],
     history: [],
-    debug: false
+    showItemsStats: false
   }
 
   constructor(props: PlayerProps) {
@@ -204,17 +205,20 @@ class Player extends React.Component<PlayerProps, PlayerState> {
             {this.renderChoices(node)}
           </div>
         </div>
-        {this.renderDebugSection()}
+        {this.renderItemsStatsSection()}
       </main>
     )
   }
 
-  private renderDebugSection() {
-    if (this.props.debuggable && this.hasItemsOrStats()) {
-      return this.state.debug ? this.renderDebugger() : this.renderDebugButton()
-    } else {
-      return null
+  private renderItemsStatsSection() {
+    if (this.hasItemsOrStats()) {
+      if (this.props.debuggable) {
+        return this.state.showItemsStats ? this.renderDebugger() : this.renderItemsStatsButton("Debug")
+      } else if (this.props.characterCard) {
+        return this.state.showItemsStats ? this.renderCharacterCard() : this.renderItemsStatsButton("View Character Card")
+      }
     }
+    return null
   }
 
   private hasItemsOrStats() {
@@ -315,7 +319,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
             </ul>
             <DebuggerFooter onClick={this.addStat.bind(this)} />
           </div>
-          <a className="SlantButton" id="close-debug-button" onClick={this.toggleDebugger.bind(this)} >
+          <a className="SlantButton" id="close-debug-button" onClick={this.toggleItemsStatsSection.bind(this)} >
             Close
           </a>
         </div>
@@ -323,17 +327,54 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     )
   }
 
-  private renderDebugButton() {
+  private renderItemsStatsButton(title: string) {
     return (
-      <a className="SlantButton" id="debug-button" onClick={this.toggleDebugger.bind(this)} >
-        Debug
+      <a className="SlantButton" id="debug-button" onClick={this.toggleItemsStatsSection.bind(this)} >
+        {title}
       </a>
     )
   }
 
-  private toggleDebugger() {
+  private renderCharacterCard() {
+    return (
+      <div>
+        <div className="d-helper"></div>
+        <div className="debugger">
+          <div className="d-section">
+            <h4><u>Current Items</u></h4>
+            <ul className="d-list">
+              {this.state.currentItems.map((item, i) => {
+                return (
+                  <li key={item.concat(i.toString())}>
+                    {item}
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+          <div className="d-section">
+            <h4><u>Current Stats</u></h4>
+            <ul className="d-list">
+              {this.state.currentStats.map((stat, i) => {
+                return (
+                  <li key={stat.name.concat(i.toString())}>
+                    {stat.name}: {stat.value}
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+          <a className="SlantButton" id="close-debug-button" onClick={this.toggleItemsStatsSection.bind(this)} >
+            Close
+          </a>
+        </div>
+      </div>
+    )
+  }
+
+  private toggleItemsStatsSection() {
     this.setState({
-      debug: !this.state.debug
+      showItemsStats: !this.state.showItemsStats
     });
   }
 
