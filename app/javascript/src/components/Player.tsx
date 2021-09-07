@@ -319,9 +319,9 @@ class Player extends React.Component<PlayerProps, PlayerState> {
             </ul>
             <DebuggerFooter onClick={this.addStat.bind(this)} />
           </div>
-          <a className="SlantButton" id="close-debug-button" onClick={this.toggleItemsStatsSection.bind(this)} >
+          <button className="SlantButton" id="close-debug-button" onClick={this.toggleItemsStatsSection.bind(this)} >
             Close
-          </a>
+          </button>
         </div>
       </div>
     )
@@ -329,9 +329,9 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
   private renderItemsStatsButton(title: string) {
     return (
-      <a className="SlantButton" id="debug-button" onClick={this.toggleItemsStatsSection.bind(this)} >
+      <button className="SlantButton" id="debug-button" onClick={this.toggleItemsStatsSection.bind(this)} >
         {title}
-      </a>
+      </button>
     )
   }
 
@@ -364,9 +364,9 @@ class Player extends React.Component<PlayerProps, PlayerState> {
               })}
             </ul>
           </div>
-          <a className="SlantButton" id="close-debug-button" onClick={this.toggleItemsStatsSection.bind(this)} >
+          <button className="SlantButton" id="close-debug-button" onClick={this.toggleItemsStatsSection.bind(this)} >
             Close
-          </a>
+          </button>
         </div>
       </div>
     )
@@ -403,9 +403,9 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
   private renderBackButton() {
     return this.props.backButton ? (
-      <a className="SlantButton" id="back-button" onClick={this.revertToPreviousState.bind(this)} >
+      <button className="SlantButton" id="back-button" onClick={this.revertToPreviousState.bind(this)} >
         Back
-      </a>
+      </button>
     ) : null
   }
 
