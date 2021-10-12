@@ -1,18 +1,45 @@
 import * as React from 'react'
 
+import ReactAudioPlayer from 'react-audio-player'
+import { isMobile } from "react-device-detect";
+
 interface Props {
   title: string
   body: string
   image: string
+  audio: string
   onReplay: () => void
   onGoBack: () => void
   showSource: boolean
 }
 
-export const PlayerEnd: React.SFC<Props> = ({ title, body, image, onReplay, onGoBack, showSource }) => {
+export const PlayerEnd: React.SFC<Props> = ({ title, body, image, audio, onReplay, onGoBack, showSource }) => {
   const renderImage = () => {
     if (image) {
       return <img src={image} alt='' width='400' />
+    } else {
+      return
+    }
+  }
+
+  const renderAudioSection = () => {
+    if (audio) {
+      if (isMobile) {
+        return (
+          <ReactAudioPlayer
+            src={audio}
+            controls
+          />
+        )
+      } else {
+        return (
+          <ReactAudioPlayer
+            src={audio}
+            autoPlay
+            controls
+          />
+        )
+      }
     } else {
       return
     }
@@ -36,6 +63,7 @@ export const PlayerEnd: React.SFC<Props> = ({ title, body, image, onReplay, onGo
         <h1 className="PlayerEndTitle">{title}</h1>
         <div className="PlayerEndContent">
           {renderImage()}
+          {renderAudioSection()}
           <div
             className="PlayerEndBody"
             dangerouslySetInnerHTML={{ __html: body }}
@@ -61,6 +89,7 @@ export const PlayerDeadEnd: React.SFC<DeadEndProps> = ({ onReplay, onGoBack, sho
       title="Dead End"
       body="That choice wasn't tied to a new scene. You should fix that. Try replaying the story."
       image=''
+      audio=''
       onReplay={onReplay}
       onGoBack={onGoBack}
       showSource={showSource}

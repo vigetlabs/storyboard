@@ -41,8 +41,9 @@ export async function load(slug: String) {
   return content
 }
 
-export async function savePhoto(metaId: String, image: String, state: ApplicationState, updateState: (state: Readonly<ApplicationState>) => Readonly<ApplicationState>) {
-  let request = await fetch(`/api/photos/${metaId}`, {
+export async function savePhoto(metaId: String, image: String, state: ApplicationState,
+  updateState: (state: Readonly<ApplicationState>) => Readonly<ApplicationState>) {
+  const request = await fetch(`/api/photos/${metaId}`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -60,11 +61,49 @@ export async function savePhoto(metaId: String, image: String, state: Applicatio
   const data = await request.json()
   updateState(set(state, `meta.${metaId}.image`, data.url))
 
-  return request.json()
+  return data
 }
 
 export async function removePhoto(metaId: String) {
-  let request = await fetch(`/api/photos/${metaId}`, {
+  const request = await fetch(`/api/photos/${metaId}`, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  })
+
+  if (request.ok === false) {
+    throw request
+  }
+
+  return request.json()
+}
+
+export async function saveAudio(metaId: String, audio: String, state: ApplicationState,
+  updateState: (state: Readonly<ApplicationState>) => Readonly<ApplicationState>) {
+  const request = await fetch(`/api/audio-tracks/${metaId}`, {
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      audio_track_url: audio
+    })
+  })
+
+  if (request.ok === false) {
+    throw request
+  }
+
+  const data = await request.json()
+  updateState(set(state, `meta.${metaId}.audio`, data.url))
+
+  return data
+}
+
+export async function removeAudio(metaId: String) {
+  const request = await fetch(`/api/audio-tracks/${metaId}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json'

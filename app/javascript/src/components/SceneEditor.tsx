@@ -2,18 +2,39 @@ import * as React from 'react'
 
 import 'redactor/redactor.css'
 import 'redactor/redactor'
+
+import './ReactVoiceRecorder.css'
 import './SceneEditor.css'
 
 import { get, set } from 'lodash'
 import { DefaultNodeModel } from 'storm-react-diagrams'
+import ReactAudioPlayer from 'react-audio-player'
 import { StateConsumer, ApplicationState } from '../Store'
 import ChoiceEditor from './ChoiceEditor'
 import SettingsEditor from './SettingsEditor'
-import { savePhoto, removePhoto } from '../persistance'
-
+import { savePhoto, removePhoto, saveAudio, removeAudio } from '../persistance'
 
 declare function $R(el: HTMLElement, options: any): void
 declare function $R(el: HTMLElement, fun: string, arg: string): void
+
+const ReactVoiceRecorder = require('react-voice-recorder')
+
+interface Duration {
+  h: number
+  m: number
+  s: number
+}
+
+interface AudioDetails {
+  url: any
+  blob: any
+  chunks: any
+  duration: Duration
+}
+
+interface SceneEditorState {
+  audioDetails: AudioDetails
+}
 
 interface SceneEditorProps {
   state: ApplicationState
@@ -24,7 +45,28 @@ interface SceneEditorProps {
   onClear: () => void
 }
 
-class SceneEditor extends React.Component<SceneEditorProps> {
+interface AudioData {
+  url: string
+}
+
+class SceneEditor extends React.Component<SceneEditorProps, SceneEditorState> {
+  constructor(props: SceneEditorProps) {
+    super(props)
+
+    this.state = {
+    audioDetails: {
+        url: null,
+        blob: null,
+        chunks: null,
+        duration: {
+          h: 0,
+          m: 0,
+          s: 0
+        }
+      }
+    }
+  }
+
   render() {
     const { state, focus, requestPaint, updateDiagram } = this.props
 
@@ -33,8 +75,9 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     const notes = get(state, `meta.${focus.id}.notes`)
     const isFinal = get(state, `meta.${focus.id}.isFinal`)
     const image = get(state, `meta.${focus.id}.image`)
+    const audio = get(state, `meta.${focus.id}.audio`)
 
-    const imagesContent = () => {
+    const renderImageSection = () => {
       if (image) {
         return (
           <div>
@@ -43,7 +86,37 @@ class SceneEditor extends React.Component<SceneEditorProps> {
           </div>
         )
       } else {
-        return <input type="file" accept="image/*" onChange={this.onFileChange} />
+        return <input type="file" accept="image/*" onChange={this.onImageChange} />
+      }
+    }
+
+    const renderAudioSection = () => {
+      if (audio) {
+        return (
+          <div>
+            <ReactAudioPlayer
+              src={audio}
+              controls
+            />
+            <button onClick={this.removeAudio}>Remove Audio</button>
+          </div>
+        )
+      } else {
+        return (
+          <div>
+            <input type="file" accept="audio/*" onChange={this.onAudioChange} />
+            <h3 className="recorderHeader">Record your own audio!</h3>
+            <ReactVoiceRecorder.Recorder
+              record={true}
+              hideHeader
+              showUIAudio
+              audioURL={this.state.audioDetails.url}
+              handleAudioStop={(data: AudioDetails) => this.handleAudioStop(data)}
+              handleAudioUpload={(data: any) => this.handleAudioUpload(data)}
+              handleReset={() => this.handleReset()}
+            />
+          </div>
+        )
       }
     }
 
@@ -77,7 +150,12 @@ class SceneEditor extends React.Component<SceneEditorProps> {
 
         <div className="SceneEditorField">
           <h3 className="SceneEditorHeading">Image</h3>
-          {imagesContent()}
+          {renderImageSection()}
+        </div>
+
+        <div className="SceneEditorField">
+          <h3 className="SceneEditorHeading">Audio</h3>
+          {renderAudioSection()}
         </div>
 
         <SceneEditorTextAreaField
@@ -99,6 +177,38 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     )
   }
 
+  handleAudioStop(data: AudioDetails) {
+    this.setState({ audioDetails: data });
+  }
+
+  handleAudioUpload(file: any) {
+    const { focus, state, updateState } = this.props
+
+    if (this.state.audioDetails.url) {
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          saveAudio(focus.id, reader.result, state, updateState)
+        }
+      }
+    }
+  }
+
+  handleReset() {
+    const reset = {
+      url: null,
+      blob: null,
+      chunks: null,
+      duration: {
+        h: 0,
+        m: 0,
+        s: 0
+      }
+    };
+    this.setState({ audioDetails: reset });
+  }
+
   onChangeContent = (html: string) => {
     const { focus, state, updateState } = this.props
 
@@ -111,18 +221,17 @@ class SceneEditor extends React.Component<SceneEditorProps> {
     updateState(set(state, `meta.${focus.id}.notes`, html))
   }
 
-  onFileChange = (event: React.FormEvent<HTMLInputElement>) => {
+  onImageChange = (event: React.FormEvent<HTMLInputElement>) => {
     const { focus, state, updateState } = this.props
 
     if (event && event.currentTarget && event.currentTarget.files
       && event.currentTarget.files.length > 0) {
-      let file = event.currentTarget.files[0]
-      let reader = new FileReader()
+      const file = event.currentTarget.files[0]
+      const reader = new FileReader()
       reader.readAsDataURL(file)
       reader.onload = () => {
         if (typeof reader.result === "string") {
           savePhoto(focus.id, reader.result, state, updateState)
-          this.render()
         }
       }
     }
@@ -133,7 +242,30 @@ class SceneEditor extends React.Component<SceneEditorProps> {
 
     removePhoto(focus.id)
     updateState(set(state, `meta.${focus.id}.image`, undefined))
-    this.render()
+  }
+
+  onAudioChange = (event: React.FormEvent<HTMLInputElement>) => {
+    const { focus, state, updateState } = this.props
+
+    if (event && event.currentTarget && event.currentTarget.files
+      && event.currentTarget.files.length > 0) {
+      const file = event.currentTarget.files[0]
+      const reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = () => {
+        if (typeof reader.result === "string") {
+          saveAudio(focus.id, reader.result, state, updateState)
+        }
+      }
+    }
+  };
+
+  removeAudio = () => {
+    const { focus, state, updateState } = this.props
+
+    this.handleReset()
+    removeAudio(focus.id)
+    updateState(set(state, `meta.${focus.id}.audio`, undefined))
   }
 
   private onNameChange = (event: React.FormEvent<HTMLInputElement>) => {
