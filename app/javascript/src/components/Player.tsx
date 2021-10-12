@@ -8,6 +8,8 @@ import {
   DefaultNodeModel,
   DefaultPortModel
 } from 'storm-react-diagrams'
+import ReactAudioPlayer from 'react-audio-player'
+import { isMobile } from "react-device-detect";
 
 import './Player.css'
 
@@ -175,6 +177,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           title={node.name}
           body={translatedText}
           image={meta.image}
+          audio={meta.audio}
           onReplay={this.restart}
           onGoBack={this.revertToPreviousState.bind(this)}
           showSource={this.props.showSource}
@@ -190,6 +193,29 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       }
     }
 
+    const renderAudioSection = () => {
+      if (meta.audio) {
+        if (isMobile) {
+          return (
+            <ReactAudioPlayer
+              src={meta.audio}
+              controls
+            />
+          )
+        } else {
+          return (
+            <ReactAudioPlayer
+              src={meta.audio}
+              autoPlay
+              controls
+            />
+          )
+        }
+      } else {
+        return
+      }
+    }
+
     return (
       <main className="PlayerScene">
         {this.renderBackButton()}
@@ -198,6 +224,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
           <div className="PlayerSceneContent">
             {renderImage()}
+            {renderAudioSection()}
             <div
               className="PlayerSceneBody"
               dangerouslySetInnerHTML={{ __html: translatedText }}
@@ -319,9 +346,9 @@ class Player extends React.Component<PlayerProps, PlayerState> {
             </ul>
             <DebuggerFooter onClick={this.addStat.bind(this)} />
           </div>
-          <button className="SlantButton" id="close-debug-button" onClick={this.toggleItemsStatsSection.bind(this)} >
+          <a className="SlantButton" id="close-debug-button" onClick={this.toggleItemsStatsSection.bind(this)} >
             Close
-          </button>
+          </a>
         </div>
       </div>
     )
@@ -329,9 +356,9 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
   private renderItemsStatsButton(title: string) {
     return (
-      <button className="SlantButton" id="debug-button" onClick={this.toggleItemsStatsSection.bind(this)} >
+      <a className="SlantButton" id="debug-button" onClick={this.toggleItemsStatsSection.bind(this)} >
         {title}
-      </button>
+      </a>
     )
   }
 
@@ -364,9 +391,9 @@ class Player extends React.Component<PlayerProps, PlayerState> {
               })}
             </ul>
           </div>
-          <button className="SlantButton" id="close-debug-button" onClick={this.toggleItemsStatsSection.bind(this)} >
+          <a className="SlantButton" id="close-debug-button" onClick={this.toggleItemsStatsSection.bind(this)} >
             Close
-          </button>
+          </a>
         </div>
       </div>
     )
@@ -403,9 +430,9 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
   private renderBackButton() {
     return this.props.backButton ? (
-      <button className="SlantButton" id="back-button" onClick={this.revertToPreviousState.bind(this)} >
+      <a className="SlantButton" id="back-button" onClick={this.revertToPreviousState.bind(this)} >
         Back
-      </button>
+      </a>
     ) : null
   }
 

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_09_02_200754) do
+ActiveRecord::Schema.define(version: 2021_09_08_134936) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,12 @@ ActiveRecord::Schema.define(version: 2021_09_02_200754) do
     t.boolean "back_button", default: false, null: false
     t.boolean "character_card", default: true, null: false
     t.index ["user_id"], name: "index_adventures_on_user_id"
+  end
+
+  create_table "audio_tracks", force: :cascade do |t|
+    t.string "meta_id"
+    t.string "audio_track_uid"
+    t.index ["meta_id"], name: "index_audio_tracks_on_meta_id", unique: true
   end
 
   create_table "photos", force: :cascade do |t|

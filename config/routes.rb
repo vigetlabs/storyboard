@@ -22,6 +22,9 @@ Rails.application.routes.draw do
   post "/api/photos/:meta_id", to: "api/photos#update"
   delete "/api/photos/:meta_id", to: "api/photos#remove"
 
+  post "/api/audio-tracks/:meta_id", to: "api/audio_tracks#update"
+  delete "/api/audio-tracks/:meta_id", to: "api/audio_tracks#remove"
+
   get "unsubscribe", to: "unsubscribes#new", as: :new_unsubscribe
   resources :unsubscribes, only: [:create]
 

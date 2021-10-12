@@ -1,0 +1,237 @@
+/* add css module styles here (optional) */
+
+@import url("https://fonts.googleapis.com/css?family=Lato:400,700&display=swap");
+._1ceqH,
+._1ceqH * {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: "Lato", sans-serif
+}
+
+._1ceqH ._2fG9h {
+    width: 100%;
+    margin: 5px 0 auto auto;
+}
+
+._1ceqH ._dt3-T {
+    min-height: 300px;
+    border: 1px solid rgba(0, 0, 0, 0.23);
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+._1ceqH ._1dpop {
+    width: 60px;
+    display: flex;
+    height: 60px;
+    position: fixed;
+    justify-content: center;
+    align-items: center;
+    transition: .5s ease all;
+    background: rgb(245, 0, 87);
+    border-radius: 50%;
+    bottom: 65px;
+    right: 20%;
+    color: #fff;
+    font-size: 25px;
+}
+
+._1ceqH ._3neb0 {
+    width: 25px;
+    height: 25px;
+    display: flex;
+}
+
+._1ceqH ._1dpop:hover {
+    background-color: #fff;
+}
+
+._1ceqH ._3wi1g {
+    fill: #fff;
+    width: 100%;
+    height: 100%;
+}
+
+._1ceqH ._1dpop:hover ._3wi1g {
+    fill: rgb(245, 0, 87);
+}
+
+._1ceqH ._1lB9c {
+    display: flex;
+    justify-content: space-between;
+    background: #bd9f61;
+    align-items: center;
+    padding: 20px 20px;
+    color: #fff;
+    border-radius: 3px 3px 0 0;
+}
+
+._1ceqH ._1lB9c ._2N9dq {
+    font-weight: 400;
+}
+
+._1ceqH ._1lB9c ._3-aC9 {
+    font-size: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    cursor: pointer;
+    transition: 0.5s ease all;
+}
+
+._1ceqH ._1lB9c ._3-aC9:hover {
+    background: rgba(123, 118, 106, 0.21);
+}
+
+._1ceqH ._3bC73 {
+    position: relative;
+    flex: 1;
+}
+
+._1ceqH ._3bC73 ._1dpop {
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 10px;
+}
+
+._1ceqH ._1Yplu ._1Pz2d {
+    border: 0;
+    outline: 0;
+    padding: 10px 20px;
+    border-radius: 3px;
+    background: #555461;
+    color: #fff;
+    cursor: pointer;
+    transition: .3s ease all;
+}
+
+._1ceqH ._1Yplu ._1Pz2d:hover {
+    background: #d7a10c;
+}
+
+._1ceqH ._1Yplu ._2gd2_ {
+    margin-left: 15px;
+}
+
+._1ceqH ._f2DT8 {
+    text-align: center;
+}
+
+._1ceqH ._17RTH {
+    min-height: calc(100vh - 128px);
+    background: #fff;
+}
+
+._1ceqH ._f2DT8 * {
+    color: #000;
+    font-size: 60px;
+}
+
+._1ceqH ._1YOWG ._eV_dK {
+    bottom: 8px;
+    color: #000;
+    position: relative;
+    text-align: center;
+}
+
+._1ceqH ._qxztz {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    top: 125px;
+    padding: 20px 0;
+    display: flex;
+}
+
+._1ceqH ._qxztz ._2uz65 {
+    width: 50px;
+    display: flex;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 20px;
+}
+
+._1ceqH ._qxztz ._1bSom {
+    background: #940505;
+    position: relative;
+    margin-right: 15px;
+}
+
+._1ceqH ._qxztz ._3nQu5 {
+    background: #9c6702;
+    position: relative;
+}
+
+._1ceqH ._3O0Io {
+    width: 20px;
+    height: 20px;
+    border-style: solid;
+    border-width: 10px 0px 10px 17px;
+    border-color: transparent transparent transparent #fff;
+    box-sizing: border-box;
+    position: absolute;
+    left: 56%;
+    transform: translate(-50%, -50%);
+    top: 50%;
+}
+
+._1ceqH ._2ACrw {
+    width: 17px;
+    height: 17px;
+    border-style: double;
+    border-width: 0px 0px 0px 15px;
+    border-color: #fff;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+._1ceqH ._oEOY- {
+    width: 17px;
+    height: 17px;
+    border: 1.5px solid #fff;
+    border-radius: 2px;
+}
+
+._1ceqH ._3neb0 {
+    width: 30px;
+    height: 30px;
+    display: flex;
+}
+
+._1ceqH ._3bC73 ._1Yplu {
+    left: 50%;
+    position: relative;
+    top: 240px;
+    transform: translate(-50%);
+    width: 173px;
+}
+
+._1ceqH ._3bC73 ._1YOWG {
+    position: relative;
+}
+
+._1ceqH ._1YOWG audio {
+    left: 50%;
+    position: absolute;
+    top: -32px;
+    transform: translate(-50%);
+}
+
+.recorderHeader {
+  font-family: "Lato", sans-serif;
+  font-weight: normal;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%)
+}
