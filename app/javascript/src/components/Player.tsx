@@ -195,22 +195,13 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
     const renderAudioSection = () => {
       if (meta.audio) {
-        if (isMobile) {
-          return (
-            <ReactAudioPlayer
-              src={meta.audio}
-              controls
-            />
-          )
-        } else {
-          return (
-            <ReactAudioPlayer
-              src={meta.audio}
-              autoPlay
-              controls
-            />
-          )
-        }
+        return (
+          <ReactAudioPlayer
+            src={meta.audio}
+            autoPlay={!isMobile}
+            controls
+          />
+        )
       } else {
         return
       }

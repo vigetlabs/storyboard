@@ -54,7 +54,7 @@ class SceneEditor extends React.Component<SceneEditorProps, SceneEditorState> {
     super(props)
 
     this.state = {
-    audioDetails: {
+      audioDetails: {
         url: null,
         blob: null,
         chunks: null,
