@@ -34,6 +34,7 @@ interface AudioDetails {
 
 interface SceneEditorState {
   audioDetails: AudioDetails
+  audioOpen: boolean
 }
 
 interface SceneEditorProps {
@@ -53,6 +54,9 @@ class SceneEditor extends React.Component<SceneEditorProps, SceneEditorState> {
   constructor(props: SceneEditorProps) {
     super(props)
 
+    const { state, focus } = props
+    const audio = get(state, `meta.${focus.id}.audio`)
+
     this.state = {
       audioDetails: {
         url: null,
@@ -63,12 +67,14 @@ class SceneEditor extends React.Component<SceneEditorProps, SceneEditorState> {
           m: 0,
           s: 0
         }
-      }
+      },
+      audioOpen: !!audio
     }
   }
 
   render() {
     const { state, focus, requestPaint, updateDiagram } = this.props
+    const { audioOpen } = this.state
 
     // TODO: replace this. It doesn't matter much here but this breaks typechecking as get always returns `any`
     const text = get(state, `meta.${focus.id}.text`)
@@ -103,7 +109,7 @@ class SceneEditor extends React.Component<SceneEditorProps, SceneEditorState> {
         )
       } else {
         return (
-          <div>
+          <div className="recorderSection">
             <input type="file" accept="audio/*" onChange={this.onAudioChange} />
             <h3 className="recorderHeader">Record your own audio!</h3>
             <ReactVoiceRecorder.Recorder
@@ -154,8 +160,20 @@ class SceneEditor extends React.Component<SceneEditorProps, SceneEditorState> {
         </div>
 
         <div className="SceneEditorField">
-          <h3 className="SceneEditorHeading">Audio</h3>
-          {renderAudioSection()}
+          <label className="SceneEditorHeading">
+            Audio
+
+            <button className="audioButton" onClick={this.audioButtonClick}>
+              {audioOpen ? 'v' : '>'}
+            </button>
+          </label>
+          <section>
+            {audioOpen && (
+              <>
+                {renderAudioSection()}
+              </>
+            )}
+          </section>
         </div>
 
         <SceneEditorTextAreaField
@@ -175,6 +193,10 @@ class SceneEditor extends React.Component<SceneEditorProps, SceneEditorState> {
         <br/><br/>
       </aside>
     )
+  }
+
+  audioButtonClick = () => {
+    this.setState(prevState => ({ audioOpen: !prevState.audioOpen }))
   }
 
   handleAudioStop(data: AudioDetails) {

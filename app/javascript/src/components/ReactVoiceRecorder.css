@@ -235,3 +235,7 @@
   position: absolute;
   transform: translate(-50%)
 }
+
+.recorderSection {
+  width: 100%;
+}
