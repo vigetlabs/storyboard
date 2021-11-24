@@ -41,8 +41,8 @@ class Adventure < ApplicationRecord
   end
 
   def editable_by?(current_user)
-    public               ||
-    !user                ||
+    (!archived && public) ||
+    (!archived && !user)  ||
     user == current_user ||
     current_user.try(:is_admin?)
   end

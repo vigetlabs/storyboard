@@ -1,13 +1,9 @@
 <div class="Container">
-  <h1 class="PageBanner">My Stories</h1>
+  <h1 class="PageBanner">My Archived Stories</h1>
 
   <% if @adventures.size <= 0 %>
-    <p>You have no stories. Live a little!</p>
+    <p>You have no archived stories.</p>
   <% end %>
-
-  <p>
-    <%= link_to "Create a Story", new_adventure_path, class: "SlantButton" %>
-  </p>
 
   <div class="AdventureList">
     <% @adventures.each do |adventure| %>
@@ -34,8 +30,4 @@
        </div>
     <% end %>
   </div>
-
-  <p>
-    <%= link_to "My Archived Stories", my_archived_adventures_path, class: "SlantButton" %>
-  </p>
 </div>

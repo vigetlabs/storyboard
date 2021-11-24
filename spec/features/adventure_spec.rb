@@ -83,6 +83,7 @@ describe "Adventures" do
     end
     context "when logged in and accessing stories" do
       let!(:adventure)          { create(:adventure, user: user) }
+      let!(:archived_adventure) { create(:adventure, user: user, archived: true, slug: "archived-adventure", description: "Archived Story", title: "Archived Story")}
 
       before do
         login_as(user, :scope => :user)
@@ -105,6 +106,14 @@ describe "Adventures" do
         visit my_adventures_path
 
         expect(page).to have_content(adventure.description)
+        expect(page).to_not have_content(archived_adventure.description)
+      end
+
+      it "lets you view your archived stories" do
+        visit my_archived_adventures_path
+
+        expect(page).to_not have_content(adventure.description)
+        expect(page).to have_content(archived_adventure.description)
       end
 
       it "lets you create a story", js:true do
@@ -171,6 +180,7 @@ describe "Adventures" do
 
   context "when not logged in" do
     let!(:adventure)          { create(:adventure, user: user) }
+    let!(:archived_adventure) { create(:adventure, user: user, archived: true, slug: "archived-adventure", description: "Archived Story", title: "Archived Story")}
 
     context "when dealing with password-protected stories" do
       let!(:adventure_password) { create(:adventure, user: user, slug: "test-story-password", has_password: true, password: "password") }
@@ -241,6 +251,13 @@ describe "Adventures" do
       expect(page).to have_current_path("/")
     end
 
+    it "does not let you view /archived" do
+      visit my_archived_adventures_path
+
+      expect(page).to have_content("You must be logged in to view your archived Adventures")
+      expect(page).to have_current_path("/")
+    end
+
     it "does not let you edit a user's story" do
       visit edit_adventure_path(adventure)
 
@@ -254,6 +271,20 @@ describe "Adventures" do
       expect(page).to have_current_path(adventure_path(adventure))
       expect(page).to have_content("Test Story")
       expect(page).to have_content("begin")
+    end
+
+    it "does not let you access an archived story" do
+      visit adventure_path(archived_adventure)
+
+      expect(page).to have_current_path("/")
+      expect(page).to have_content("You can't view that Adventure")
+    end
+
+    it "does not let you access the source of an archived story" do
+      visit source_adventure_path(archived_adventure)
+
+      expect(page).to have_current_path("/")
+      expect(page).to have_content("You can't view the source of that Adventure")
     end
   end
 end
