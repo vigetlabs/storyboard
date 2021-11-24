@@ -36,6 +36,7 @@ Rails.application.routes.draw do
     get "offline", on: :member
     post "authenticate", on: :member
     get "mine", on: :collection, as: :my
+    get "archived", on: :collection, as: :my_archived
     get "csv", on: :collection
   end
 end

@@ -11,10 +11,24 @@ class AdventuresController < ApplicationController
       return redirect_to root_url
     end
 
-    @adventures = current_user.adventures
+    @adventures = current_user.adventures.where(archived: false)
+  end
+
+  def archived
+    if !current_user
+      flash[:alert] = "You must be logged in to view your archived Adventures"
+      return redirect_to root_url
+    end
+
+    @adventures = current_user.adventures.where(archived: true)
   end
 
   def show
+    if @adventure.archived && @adventure.user != current_user
+      flash[:alert] = "You can't view that Adventure"
+      return redirect_to root_url
+    end
+
     render layout: 'player'
   end
 
@@ -45,6 +59,11 @@ class AdventuresController < ApplicationController
   end
 
   def source
+    if @adventure.archived && @adventure.user != current_user
+      flash[:alert] = "You can't view the source of that Adventure"
+      return redirect_to root_url
+    end
+
     render 'edit',
       layout: 'editor',
       locals: { view_only: true }
@@ -126,7 +145,8 @@ class AdventuresController < ApplicationController
       :has_age_limit,
       :back_button,
       :show_source,
-      :character_card
+      :character_card,
+      :archived
     )
   end
 

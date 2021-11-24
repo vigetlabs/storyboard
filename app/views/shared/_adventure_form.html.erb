@@ -90,6 +90,16 @@
     </div>
   </div>
 
+  <div class="Field -checkbox">
+    <%= f.check_box :archived %>
+    <%= f.label :archived, "Archived?" %>
+    <div class="hint">
+      <em>
+        If checked, the story will not be visible to the public, but can still be edited or viewed by yourself.
+      </em>
+    </div>
+  </div>
+
   <div class="Field">
     <button class="SlantButton"> <%= is_update ? "Update" : "Create" %> Story</button>
   </div>
