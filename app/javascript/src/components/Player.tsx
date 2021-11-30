@@ -646,16 +646,18 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   private translate(text: string): string {
-    this.prepareHandlebars()
-    var expressionVariables = {} as any
-    [text, expressionVariables] = this.prepareTextForTranslation(text)
-    try {
-      const template = Handlebars.compile(text)
-      text = template(expressionVariables)
-    } catch (error) {
-      alert("There was a problem translating your template.")
+    if (text) {
+      this.prepareHandlebars()
+      var expressionVariables = {} as any
+      [text, expressionVariables] = this.prepareTextForTranslation(text)
+      try {
+        const template = Handlebars.compile(text)
+        text = template(expressionVariables)
+      } catch (error) {
+        alert("There was a problem translating your template.")
+      }
+      text = this.repairTextAfterTranslation(text)
     }
-    text = this.repairTextAfterTranslation(text)
     return text
   }
 
