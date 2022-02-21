@@ -73,7 +73,7 @@ class PortEditor extends React.Component<
     const {
       selectedTab,
       optionsOpen,
-      thisPortMeta: { showIfItems, showIfStats, itemChanges, statChanges }
+      thisPortMeta: { showIfItems, showIfStats, itemChanges, statChanges, isTimer, timeoutSeconds }
     } = this.state
 
     return (
@@ -122,6 +122,16 @@ class PortEditor extends React.Component<
                   onClick={() => this.setSelectedTab('showif')}
                 >
                   Show If
+                </button>
+                <button
+                  className={
+                    selectedTab === 'timer'
+                      ? 'pe-active-tab'
+                      : 'pe-inactive-tab'
+                  }
+                  onClick={() => this.setSelectedTab('timer')}
+                >
+                  Timer
                 </button>
               </div>
 
@@ -395,6 +405,43 @@ class PortEditor extends React.Component<
                   <PortEditorFooter onClick={this.addShowIfStat.bind(this)} />
                 </div>
               )}
+
+              {selectedTab === 'timer' && (
+                <div className="flexDiv">
+                  <PortEditorHeader>Set Up Timer</PortEditorHeader>
+
+                  <ul className="pe-list">
+                    <li>
+                      <div>
+                        <input
+                          id="is-timer"
+                          type="checkbox"
+                          checked={isTimer}
+                          onChange={this.toggleTimer.bind(this)}
+                        />
+                        <label htmlFor="is-timer">
+                          <span className="sr-only">Is Timer?</span>
+                        </label>
+                      </div>
+                      <div>
+                        <label
+                          className="sr-only"
+                          htmlFor="timeout-seconds"
+                        >
+                          Timout Seconds
+                        </label>
+                        <input
+                          id="timeout-seconds"
+                          onBlur={this.setTimeoutSeconds.bind(this)}
+                          defaultValue={
+                            timeoutSeconds ? timeoutSeconds.toString() : ''
+                          }
+                        />
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </>
           )}
         </section>
@@ -410,6 +457,19 @@ class PortEditor extends React.Component<
 
   optionsButtonClick = () => {
     this.setState(prevState => ({ optionsOpen: !prevState.optionsOpen }))
+  }
+
+  /**
+   * Timer
+   */
+  toggleTimer = (e: React.MouseEvent) => {
+    this.state.thisPortMeta.isTimer = !this.state.thisPortMeta.isTimer
+    this.savePortMeta()
+  }
+
+  setTimeoutSeconds = (e: React.FocusEvent<HTMLInputElement>) => {
+    this.state.thisPortMeta.timeoutSeconds = parseInt(e.target.value, 0)
+    this.savePortMeta()
   }
 
   /**

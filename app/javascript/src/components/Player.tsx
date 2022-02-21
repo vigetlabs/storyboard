@@ -104,6 +104,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     showItemsStats: false
   }
 
+  timeout: number = 0
+
   constructor(props: PlayerProps) {
     super(props)
 
@@ -402,7 +404,11 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         {this.ports(node).map(port => {
           let showItem = this.showIfItem(port)
           let showStat = this.showIfStat(port)
-          return showItem && showStat ? (
+          let isTimer = this.isTimer(port)
+          if (isTimer && this.timeout == 0) {
+            this.timeout = this.startTimer(port)
+          }
+          return !isTimer && showItem && showStat ? (
             <div key={port.getID()}>
               <a
                 className="PlayerChoice"
@@ -428,6 +434,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   private revertToPreviousState() {
+    this.stopTimer()
+
     let newHistory = clone(this.state.history)
 
     // remove last element from history array and assign it to lastHistory
@@ -440,6 +448,17 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       },
       this.resetScroll
     )
+  }
+
+  private isTimer(port: DefaultPortModel): boolean {
+    const isTimer: boolean = get(this.props.portMeta as any, `${port.id}.isTimer`)
+    return isTimer
+  }
+
+  private startTimer(port: DefaultPortModel): number {
+    const timeoutSeconds: number = get(this.props.portMeta as any, `${port.id}.timeoutSeconds`)
+    const that = this
+    return setTimeout(function() {that.updateScene(port)}, timeoutSeconds * 1000)
   }
 
   private showIfItem(port: DefaultPortModel): boolean {
@@ -561,6 +580,19 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
   private makeChoice(port: DefaultPortModel, event: Event) {
     event.preventDefault()
+
+    this.updateScene(port)
+  }
+
+  private stopTimer() {
+    if (this.timeout) {
+      clearTimeout(this.timeout)
+      this.timeout = 0
+    }
+  }
+
+  private updateScene(port: DefaultPortModel) {
+    this.stopTimer()
 
     const itemChanges: ItemChange[] =
       get(this.props.portMeta as any, `${port.id}.itemChanges`) || []
