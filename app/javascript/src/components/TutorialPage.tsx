@@ -96,7 +96,16 @@ const pages: TutorialPageContent[] = [
     image: require('../images/tutorial/using_conditions.gif')
   },
   {
-    title: '#10 - Advanced - Using Formatting',
+    title: '#10 - Advanced - Using Timers',
+    text: [
+      "Using timers allows you to automatically send players to the next scene if they do not choose an option within a certain amount of time.",
+      "You just need to check the box and set how many seconds pass before moving on under the Timers tab in choice options.",
+      "Please note that choices that are timers will not be seen by the player and only the first timer in the choice list will actually be used."
+    ],
+    image: require('../images/tutorial/timers.gif')
+  },
+  {
+    title: '#11 - Advanced - Using Formatting',
     text: [
       'Formatting allows you to customize the scene content depending on your items and stats.',
       'When someone is playing the game created by the below example, we will show the player their \'Energy\' and \'Speed\' values and then will tell them that they have the \'Key\' if the \'Key\' is present.'
@@ -106,7 +115,7 @@ const pages: TutorialPageContent[] = [
     link: 'Get additional help.'
   },
   {
-    title: "#11 - Advanced - Copying and Pasting",
+    title: "#12 - Advanced - Copying and Pasting",
     text: [
       'If you want certain sections of your story to also be in another one of your stories, you can easily copy and paste that section of the story with either our \'Copy\' and \'Paste\' buttons or your typical keyboard shortcuts.',
       'In order to select the section of your story to copy, you have several options. You can just click on a singular scene you want to copy, you can hold the Shift key and drag your mouse over the seciton you want to copy, or you can hold the Shift key while clicking the scenes you wish to copy.'
@@ -114,11 +123,11 @@ const pages: TutorialPageContent[] = [
     image: require('../images/tutorial/copy-paste.gif')
   },
   {
-    title: '#12 - Time to Play!',
+    title: '#13 - Time to Play!',
     text: ['Press “Play” to read your story and get a shareable link.']
   },
   {
-    title: '#13 - Disclaimer',
+    title: '#14 - Disclaimer',
     text: [
       "This project was primarily built in a weekend, so you may encounter some quirks along the way. If something doesn't look right, saving your story and refreshing the page might do the trick. If saving isn't working, you can try copying and pasting your story into a new story as a last resort.",
       'And of course, feel free to drop us a note in our feedback form (available from the footer on the homepage).',

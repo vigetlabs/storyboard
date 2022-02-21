@@ -30,6 +30,8 @@ export interface PortMetaContent {
   showIfStats?: ShowIfStat[]
   itemChanges?: ItemChange[]
   statChanges?: StatChange[]
+  isTimer: boolean
+  timeoutSeconds: number
 }
 
 export interface ShowIfItem {
