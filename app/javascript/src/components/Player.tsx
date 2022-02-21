@@ -104,7 +104,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     showItemsStats: false
   }
 
-  timeout: number = 0
+  timeout: any = null
 
   constructor(props: PlayerProps) {
     super(props)
@@ -405,7 +405,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           let showItem = this.showIfItem(port)
           let showStat = this.showIfStat(port)
           let isTimer = this.isTimer(port)
-          if (isTimer && this.timeout == 0) {
+          if (isTimer && this.timeout == null) {
             this.timeout = this.startTimer(port)
           }
           return !isTimer && showItem && showStat ? (
@@ -455,7 +455,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     return isTimer
   }
 
-  private startTimer(port: DefaultPortModel): number {
+  private startTimer(port: DefaultPortModel): ReturnType<typeof setTimeout> {
     const timeoutSeconds: number = get(this.props.portMeta as any, `${port.id}.timeoutSeconds`)
     const that = this
     return setTimeout(function() {that.updateScene(port)}, timeoutSeconds * 1000)
@@ -587,7 +587,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   private stopTimer() {
     if (this.timeout) {
       clearTimeout(this.timeout)
-      this.timeout = 0
+      this.timeout = null
     }
   }
 
