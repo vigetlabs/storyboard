@@ -10,6 +10,7 @@ import {
 } from 'storm-react-diagrams'
 import ReactAudioPlayer from 'react-audio-player'
 import { isMobile } from "react-device-detect";
+import Countdown from 'react-countdown'
 
 import './Player.css'
 
@@ -103,8 +104,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     history: [],
     showItemsStats: false
   }
-
-  timeout: any = null
 
   constructor(props: PlayerProps) {
     super(props)
@@ -404,11 +403,9 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         {this.ports(node).map(port => {
           let showItem = this.showIfItem(port)
           let showStat = this.showIfStat(port)
-          let isTimer = this.isTimer(port)
-          if (isTimer && this.timeout == null) {
-            this.timeout = this.startTimer(port)
-          }
-          return !isTimer && showItem && showStat ? (
+          let hideChoice = this.hideChoice(port)
+
+          return !hideChoice && showItem && showStat ? (
             <div key={port.getID()}>
               <a
                 className="PlayerChoice"
@@ -416,13 +413,47 @@ class Player extends React.Component<PlayerProps, PlayerState> {
                 onClick={this.makeChoice.bind(this, port)}
                 href="#"
               >
-                {port.label}
+                {port.label} {this.renderCountdown(port)}
               </a>
             </div>
           ) : null
         })}
       </menu>
     )
+  }
+
+  private renderCountdown(port: DefaultPortModel) {
+    const isTimer = this.isTimer(port)
+    const timeoutSeconds = this.timeoutSeconds(port)
+
+    const that = this
+
+    return isTimer && timeoutSeconds > 0 ? (
+      <Countdown
+        date={Date.now() + (timeoutSeconds * 1000)}
+        onComplete={function() {that.updateScene(port)}}
+        renderer={props => that.timeFromSeconds(Math.floor(props.total / 1000))}
+      />
+    ) : null
+  }
+
+  private timeFromSeconds(seconds: number): string {
+    let rv = ""
+
+    const minutes = Math.floor(seconds / 60)
+    const remainder = seconds % 60
+
+    if (minutes < 10) {
+      rv = rv.concat("0")
+    }
+    rv = rv.concat(minutes.toString())
+    rv = rv.concat(":")
+    if (remainder < 10) {
+      rv = rv.concat("0")
+    }
+    rv = rv.concat(remainder.toString())
+
+    return rv
   }
 
   private renderBackButton() {
@@ -434,8 +465,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   }
 
   private revertToPreviousState() {
-    this.stopTimer()
-
     let newHistory = clone(this.state.history)
 
     // remove last element from history array and assign it to lastHistory
@@ -453,6 +482,16 @@ class Player extends React.Component<PlayerProps, PlayerState> {
   private isTimer(port: DefaultPortModel): boolean {
     const isTimer: boolean = get(this.props.portMeta as any, `${port.id}.isTimer`)
     return isTimer
+  }
+
+  private hideChoice(port: DefaultPortModel): boolean {
+    const hideChoice: boolean = get(this.props.portMeta as any, `${port.id}.hideChoice`)
+    return hideChoice
+  }
+
+  private timeoutSeconds(port: DefaultPortModel): number {
+    const timeoutSeconds: number = get(this.props.portMeta as any, `${port.id}.timeoutSeconds`)
+    return timeoutSeconds
   }
 
   private startTimer(port: DefaultPortModel): ReturnType<typeof setTimeout> {
@@ -584,16 +623,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
     this.updateScene(port)
   }
 
-  private stopTimer() {
-    if (this.timeout) {
-      clearTimeout(this.timeout)
-      this.timeout = null
-    }
-  }
-
   private updateScene(port: DefaultPortModel) {
-    this.stopTimer()
-
     const itemChanges: ItemChange[] =
       get(this.props.portMeta as any, `${port.id}.itemChanges`) || []
     const statChanges: StatChange[] =

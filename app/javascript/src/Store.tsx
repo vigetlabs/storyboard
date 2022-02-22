@@ -31,6 +31,7 @@ export interface PortMetaContent {
   itemChanges?: ItemChange[]
   statChanges?: StatChange[]
   isTimer: boolean
+  hideChoice: boolean
   timeoutSeconds: number
 }
 

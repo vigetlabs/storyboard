@@ -19,6 +19,7 @@
     "prop-types": "^15.6.2",
     "react": "16.14",
     "react-audio-player": "^0.17.0",
+    "react-countdown": "^2.3.2",
     "react-device-detect": "^1.17.0",
     "react-dnd": "^13.1.1",
     "react-dnd-html5-backend": "^12.1.1",

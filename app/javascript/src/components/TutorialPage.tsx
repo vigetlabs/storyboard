@@ -98,9 +98,7 @@ const pages: TutorialPageContent[] = [
   {
     title: '#10 - Advanced - Using Timers',
     text: [
-      "Using timers allows you to automatically send players to the next scene if they do not choose an option within a certain amount of time.",
-      "You just need to check the box and set how many seconds pass before moving on under the Timers tab in choice options.",
-      "Please note that choices that are timers will not be seen by the player and only the first timer in the choice list will actually be used."
+      "Using timers allows you to automatically send players to the next scene if they do not choose an option within a certain amount of time."
     ],
     image: require('../images/tutorial/timers.gif')
   },
