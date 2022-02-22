@@ -73,7 +73,7 @@ class PortEditor extends React.Component<
     const {
       selectedTab,
       optionsOpen,
-      thisPortMeta: { showIfItems, showIfStats, itemChanges, statChanges, isTimer, timeoutSeconds }
+      thisPortMeta: { showIfItems, showIfStats, itemChanges, statChanges, isTimer, hideChoice, timeoutSeconds }
     } = this.state
 
     return (
@@ -414,21 +414,33 @@ class PortEditor extends React.Component<
                     <li>
                       <div>
                         <input
-                          id="is-timer"
+                          id={`is-timer-${port.id}`}
                           type="checkbox"
                           checked={isTimer}
                           onChange={this.toggleTimer.bind(this)}
                         />
-                        <label htmlFor="is-timer">
-                          <span className="sr-only">Is Timer?</span>
+                        <label htmlFor={`is-timer-${port.id}`} className="checkbox-label">
+                          Is Timer?
                         </label>
                       </div>
+                    </li>
+                    <li>
                       <div>
-                        <label
-                          className="sr-only"
-                          htmlFor="timeout-seconds"
-                        >
-                          Timout Seconds
+                        <input
+                          id={`hide-choice-${port.id}`}
+                          type="checkbox"
+                          checked={hideChoice}
+                          onChange={this.toggleHideChoice.bind(this)}
+                        />
+                        <label htmlFor={`hide-choice-${port.id}`} className="checkbox-label">
+                          Hide Choice?
+                        </label>
+                      </div>
+                    </li>
+                    <li>
+                      <div className="labeled-select">
+                        <label htmlFor="timeout-seconds">
+                          Seconds
                         </label>
                         <input
                           id="timeout-seconds"
@@ -464,6 +476,11 @@ class PortEditor extends React.Component<
    */
   toggleTimer = (e: React.MouseEvent) => {
     this.state.thisPortMeta.isTimer = !this.state.thisPortMeta.isTimer
+    this.savePortMeta()
+  }
+
+  toggleHideChoice = (e: React.MouseEvent) => {
+    this.state.thisPortMeta.hideChoice = !this.state.thisPortMeta.hideChoice
     this.savePortMeta()
   }
 
