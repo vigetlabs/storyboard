@@ -192,7 +192,7 @@ class PortEditor extends React.Component<
 
               {selectedTab === 'stats' && (
                 <div className="flexDiv">
-                  <PortEditorHeader>Increase/Decrease Stats</PortEditorHeader>
+                  <PortEditorHeader>Increase/Decrease/Reset Stats</PortEditorHeader>
 
                   <ul className="pe-list">
                     {statChanges && statChanges.length > 0 ? (
@@ -216,7 +216,7 @@ class PortEditor extends React.Component<
                               className="sr-only"
                               htmlFor={`stat-decrease-increase-${statChange.name}`}
                             >
-                              Increase/Decrease
+                              Increase/Decrease/Reset
                             </label>
                             <select
                               id={`stat-decrease-increase-${statChange.name}`}
@@ -228,6 +228,9 @@ class PortEditor extends React.Component<
                               </option>
                               <option key="-" value="-">
                                 ➖
+                              </option>
+                              <option key="=" value="=">
+                                =
                               </option>
                             </select>
                           </div>
@@ -678,7 +681,7 @@ class PortEditor extends React.Component<
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     e.preventDefault()
-    if (e.target.value !== '+' && e.target.value !== '-') return
+    if (e.target.value !== '+' && e.target.value !== '-' && e.target.value !== '=') return
 
     let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
     newStatChanges[index].action = e.target.value

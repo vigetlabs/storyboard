@@ -656,7 +656,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       if (indexOfStat === -1) {
         let curStat: Stat = {
           name: change.name,
-          value: change.action === '+' ? change.value : change.value * -1
+          value: change.action === '-' ? change.value * -1 : change.value
         }
         newStats.push(curStat)
       } else {
@@ -664,10 +664,13 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           // Add it to the total if it already exists
           newStats[indexOfStat].value =
             Number(newStats[indexOfStat].value) + Number(change.value)
-        } else {
+        } else if (change.action === '-') {
           // Subtract it from the total
           newStats[indexOfStat].value =
             Number(newStats[indexOfStat].value) - Number(change.value)
+        } else if (change.action === '=') {
+          // Subtract it from the total
+          newStats[indexOfStat].value = Number(change.value)
         }
       }
     })

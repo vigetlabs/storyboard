@@ -54,7 +54,7 @@ export interface ItemChange {
 export interface StatChange {
   name: string
   value: number
-  action: '+' | '-'
+  action: '+' | '-' | '='
 }
 
 const applicationState: ApplicationState = {
