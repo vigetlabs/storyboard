@@ -192,7 +192,7 @@ class PortEditor extends React.Component<
 
               {selectedTab === 'stats' && (
                 <div className="flexDiv">
-                  <PortEditorHeader>Increase/Decrease/Reset Stats</PortEditorHeader>
+                  <PortEditorHeader>Modify Stats</PortEditorHeader>
 
                   <ul className="pe-list">
                     {statChanges && statChanges.length > 0 ? (
