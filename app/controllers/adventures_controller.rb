@@ -46,6 +46,11 @@ class AdventuresController < ApplicationController
   end
 
   def new
+    if !current_user
+      flash[:alert] = "You must be logged in to create a story."
+      return redirect_to new_user_session_path
+    end
+
     @adventure = Adventure.new
   end
 
