@@ -238,10 +238,11 @@ describe "Adventures" do
       end
     end
 
-    it "lets you create a story" do
+    it "redirects you to the log in page if you attempt to create a story" do
       visit "/"
       click_on "Create a Story"
-      expect(page).to have_content("What's your title?")
+      expect(page).to have_content("You must be logged in to create a story.")
+      expect(page.current_path).to eq('/users/sign_in')
     end
 
     it "does not let you view /mine" do
