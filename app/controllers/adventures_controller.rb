@@ -112,6 +112,7 @@ class AdventuresController < ApplicationController
   end
 
   def destroy
+    Rails.logger.info @adventure.content
     @adventure.destroy
     if current_user
       redirect_to my_adventures_url, notice: 'Adventure was successfully destroyed.'
