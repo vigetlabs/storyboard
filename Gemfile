@@ -13,7 +13,7 @@ gem 'rails', '~> 5.2.1'
 gem 'uglifier'
 gem 'webpacker', '~> 4.0.7'
 gem 'sentry-raven'
-gem 'pointless_feedback', '~> 4.0.6'
+gem 'pointless_feedback', '~> 4.1.4'
 gem 'stat_board', '~> 1.1.0'
 gem 'administrate', '~> 0.13.0'
 gem "dragonfly"

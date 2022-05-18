@@ -15,4 +15,8 @@ PointlessFeedback.setup do |config|
   ]
   config.google_captcha_site_key   = "6Lcx6pQUAAAAANoXFts8_nsPSoNikCW6p80aCIL_"
   config.google_captcha_secret_key = "6Lcx6pQUAAAAALoO68Z-f5vxBehQZLkxZkQvwkGw"
+
+  # Configure the words that will prevent an email from being sent if they are
+  # contained in the description
+  config.invalid_words = ['nymphomania']
 end
