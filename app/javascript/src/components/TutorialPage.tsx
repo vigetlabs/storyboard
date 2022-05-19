@@ -88,7 +88,15 @@ const pages: TutorialPageContent[] = [
     link: 'Try our demo story!'
   },
   {
-    title: '#9 - Advanced - Using Conditions',
+    title: '#9 - Advanced - Using Random Stats',
+    text: [
+      'Random stats can make for different experiences each time you play.',
+      'For example, the first time you play, you might be assigned enough \'Speed\' to run away from the monster, but the second time it catches and eats you.',
+    ],
+    image: require('../images/tutorial/using_random_stats.gif')
+  },
+  {
+    title: '#10 - Advanced - Using Conditions',
     text: [
       'Using conditions allows you to show a choice only if the conditions are met.',
       'Conditions can be used interchangeably with items and stats.',
@@ -96,14 +104,14 @@ const pages: TutorialPageContent[] = [
     image: require('../images/tutorial/using_conditions.gif')
   },
   {
-    title: '#10 - Advanced - Using Timers',
+    title: '#11 - Advanced - Using Timers',
     text: [
       "Using timers allows you to automatically send players to the next scene if they do not choose an option within a certain amount of time."
     ],
     image: require('../images/tutorial/timers.gif')
   },
   {
-    title: '#11 - Advanced - Using Formatting',
+    title: '#12 - Advanced - Using Formatting',
     text: [
       'Formatting allows you to customize the scene content depending on your items and stats.',
       'When someone is playing the game created by the below example, we will show the player their \'Energy\' and \'Speed\' values and then will tell them that they have the \'Key\' if the \'Key\' is present.'
@@ -113,7 +121,7 @@ const pages: TutorialPageContent[] = [
     link: 'Get additional help.'
   },
   {
-    title: "#12 - Advanced - Copying and Pasting",
+    title: "#13 - Advanced - Copying and Pasting",
     text: [
       'If you want certain sections of your story to also be in another one of your stories, you can easily copy and paste that section of the story with either our \'Copy\' and \'Paste\' buttons or your typical keyboard shortcuts.',
       'In order to select the section of your story to copy, you have several options. You can just click on a singular scene you want to copy, you can hold the Shift key and drag your mouse over the seciton you want to copy, or you can hold the Shift key while clicking the scenes you wish to copy.'
@@ -121,11 +129,11 @@ const pages: TutorialPageContent[] = [
     image: require('../images/tutorial/copy-paste.gif')
   },
   {
-    title: '#13 - Time to Play!',
+    title: '#14 - Time to Play!',
     text: ['Press “Play” to read your story and get a shareable link.']
   },
   {
-    title: '#14 - Disclaimer',
+    title: '#15 - Disclaimer',
     text: [
       "This project was primarily built in a weekend, so you may encounter some quirks along the way. If something doesn't look right, saving your story and refreshing the page might do the trick. If saving isn't working, you can try copying and pasting your story into a new story as a last resort.",
       'And of course, feel free to drop us a note in our feedback form (available from the footer on the homepage).',

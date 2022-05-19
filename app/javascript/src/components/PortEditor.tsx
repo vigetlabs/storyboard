@@ -232,25 +232,69 @@ class PortEditor extends React.Component<
                               <option key="=" value="=">
                                 =
                               </option>
+                              <option key="?" value="?">
+                                ?
+                              </option>
                             </select>
                           </div>
-                          <div>
-                            <label
-                              className="sr-only"
-                              htmlFor={`stat-value-${statChange.name}`}
-                            >
-                              Number Value (#)
-                            </label>
-                            <input
-                              id={`stat-value-${statChange.name}`}
-                              onBlur={this.setStatValue.bind(this, i)}
-                              defaultValue={
-                                statChange.value
-                                  ? statChange.value.toString()
-                                  : ''
-                              }
-                            />
-                          </div>
+                          {statChange.action !== '?' ? (
+                            <div>
+                              <label
+                                className="sr-only"
+                                htmlFor={`stat-value-${statChange.name}`}
+                              >
+                                Number Value (#)
+                              </label>
+                              <input
+                                id={`stat-value-${statChange.name}`}
+                                onBlur={this.setStatValue.bind(this, i)}
+                                defaultValue={
+                                  statChange.value
+                                    ? statChange.value.toString()
+                                    : ''
+                                }
+                              />
+                            </div>
+                          ) : (
+                            <div>
+                              <div>
+                                <label
+                                  className="sr-only"
+                                  htmlFor={`stat-min-${statChange.name}`}
+                                >
+                                  Random Number Min (#)
+                                </label>
+                                <input
+                                  id={`stat-min-${statChange.name}`}
+                                  onBlur={this.setStatMin.bind(this, i)}
+                                  placeholder="Min"
+                                  defaultValue={
+                                    statChange.min
+                                      ? statChange.min.toString()
+                                      : ''
+                                  }
+                                />
+                              </div>
+                              <div>
+                                <label
+                                  className="sr-only"
+                                  htmlFor={`stat-max-${statChange.name}`}
+                                >
+                                  Random Number Max (#)
+                                </label>
+                                <input
+                                  id={`stat-max-${statChange.name}`}
+                                  onBlur={this.setStatMax.bind(this, i)}
+                                  placeholder="Max"
+                                  defaultValue={
+                                    statChange.max
+                                      ? statChange.max.toString()
+                                      : ''
+                                  }
+                                />
+                              </div>
+                            </div>
+                          )}
                           <PortEditorRemoveButton
                             onClick={this.removeStatChanges.bind(this, i)}
                           />
@@ -646,7 +690,7 @@ class PortEditor extends React.Component<
     e.preventDefault()
 
     let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
-    newStatChanges.push({ name: '', value: 0, action: '+' })
+    newStatChanges.push({ name: '', value: 0, action: '+', min: 0, max: 0 })
 
     this.state.thisPortMeta.statChanges = newStatChanges
     this.savePortMeta()
@@ -675,13 +719,27 @@ class PortEditor extends React.Component<
     this.state.thisPortMeta.statChanges = newStatChanges
     this.savePortMeta()
   }
+  setStatMin = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+    let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
+    newStatChanges[index].min = parseInt(e.target.value, 0)
+
+    this.state.thisPortMeta.statChanges = newStatChanges
+    this.savePortMeta()
+  }
+  setStatMax = (index: number, e: React.FocusEvent<HTMLInputElement>) => {
+    let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
+    newStatChanges[index].max = parseInt(e.target.value, 0)
+
+    this.state.thisPortMeta.statChanges = newStatChanges
+    this.savePortMeta()
+  }
 
   toggleStatChanges = (
     index: number,
     e: React.ChangeEvent<HTMLSelectElement>
   ) => {
     e.preventDefault()
-    if (e.target.value !== '+' && e.target.value !== '-' && e.target.value !== '=') return
+    if (e.target.value !== '+' && e.target.value !== '-' && e.target.value !== '=' && e.target.value !== '?') return
 
     let newStatChanges = clone(this.state.thisPortMeta.statChanges || [])
     newStatChanges[index].action = e.target.value

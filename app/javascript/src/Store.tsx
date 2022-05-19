@@ -54,7 +54,9 @@ export interface ItemChange {
 export interface StatChange {
   name: string
   value: number
-  action: '+' | '-' | '='
+  action: '+' | '-' | '=' | '?'
+  min?: number
+  max?: number
 }
 
 const applicationState: ApplicationState = {
