@@ -654,9 +654,20 @@ class Player extends React.Component<PlayerProps, PlayerState> {
 
       // Need to add it to the list of stats
       if (indexOfStat === -1) {
+        let startValue: number
+        if (change.action === '-') {
+          startValue = change.value * -1
+        } else if (change.action === '?') {
+          const min = change.min ? change.min : 1
+          const max = change.max ? change.max : 10
+
+          startValue = Math.floor(Math.random() * (max - min + 1) + min);
+        } else {
+          startValue = change.value
+        }
         let curStat: Stat = {
           name: change.name,
-          value: change.action === '-' ? change.value * -1 : change.value
+          value: startValue,
         }
         newStats.push(curStat)
       } else {
@@ -671,6 +682,11 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         } else if (change.action === '=') {
           // Subtract it from the total
           newStats[indexOfStat].value = Number(change.value)
+        } else if (change.action === '?') {
+          const min = change.min ? Number(change.min) : 1
+          const max = change.max ? Number(change.max) : 10
+
+          newStats[indexOfStat].value = Math.floor(Math.random() * (max - min + 1) + min);
         }
       }
     })
