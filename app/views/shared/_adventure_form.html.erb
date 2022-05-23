@@ -1,3 +1,5 @@
+<%= javascript_pack_tag "adventure-form", async: true, defer: true %>
+
 <%= form_for @adventure do |f| %>
   <div class="Field">
     <%= f.label :title, "What's your title?" %>
@@ -18,7 +20,20 @@
 
   <div class="Field">
     <%= f.label :Theme %>
-    <%= f.select :theme, options_for_select(Adventure::THEMES) %>
+    <% if @adventure.theme %>
+      <%= f.select :theme, options_for_select(Adventure::THEMES, @adventure.theme) %>
+    <% else %>
+      <%= f.select :theme, options_for_select(Adventure::THEMES) %>
+    <% end %>
+  </div>
+
+  <div id="custom_theme_section" class="Field no-display">
+    <%= f.label :custom_theme_id, "Custom Theme" %>
+    <% if @adventure.custom_theme %>
+      <%= f.select :custom_theme_id, options_for_select(CustomTheme.where(user_id: current_user.id).map { |ct| [ct.title, ct.id] }, @adventure.custom_theme_id)%>
+    <% else %>
+      <%= f.select :custom_theme_id, options_for_select(CustomTheme.where(user_id: current_user.id).map { |ct| [ct.title, ct.id] }) %>
+    <% end %>
   </div>
 
   <% if correct_user %>

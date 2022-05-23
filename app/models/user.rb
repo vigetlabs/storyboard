@@ -3,6 +3,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :adventures, dependent: :destroy
+  has_many :custom_themes, dependent: :destroy
 
   def is_admin?
     email.in? [

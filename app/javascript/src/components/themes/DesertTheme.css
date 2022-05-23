@@ -44,24 +44,36 @@ body:after {
 }
 
 .DesertTheme .PlayerIntro {
-  background: url('../../images/desert-theme-intro-background.jpg') 0 0 no-repeat /
-    cover;
+  background-image: url('../../images/desert-theme-intro-background.jpg');
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .DesertTheme .PlayerScene {
-  background: url('../../images/desert-theme-scene-background.jpg') 0 0 no-repeat /
-    cover;
+  background-image: url('../../images/desert-theme-scene-background.jpg');
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: 0;
+  margin-bottom: 30px;
 }
 
 .DesertTheme .PlayerEnd {
-  background: url('../../images/desert-theme-end-background.jpg') 50% 50% no-repeat /
-    cover;
+  background-image: url('../../images/desert-theme-end-background.jpg');
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin-top: 0;
+  margin-bottom: 0;
   text-align: center;
 }
 
 .DesertTheme .PlayerForeground {
   max-width: 1184px;
-  margin: 0 auto;
+  margin: auto auto;
   padding: 24px 36px;
   width: 100%;
 }

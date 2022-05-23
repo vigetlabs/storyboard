@@ -69,3 +69,7 @@
   display: block;
   color: white;
 }
+
+.no-display {
+  display: none;
+}

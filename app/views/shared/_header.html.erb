@@ -16,6 +16,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <div class="AdventureHeaderMenu">
       <% if current_user.present? %>
         <%= link_to "My Stories", my_adventures_path %>
+        <%= link_to "My Themes", custom_themes_path %>
         <%= link_to "Account", edit_user_registration_path %>
         <%= link_to "Log Out", destroy_user_session_path %>
       <% else %>

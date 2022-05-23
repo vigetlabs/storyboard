@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_05_19_134603) do
+ActiveRecord::Schema.define(version: 2022_07_01_182837) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,8 @@ ActiveRecord::Schema.define(version: 2022_05_19_134603) do
     t.boolean "back_button", default: false, null: false
     t.boolean "character_card", default: true, null: false
     t.boolean "archived", default: false, null: false
+    t.integer "custom_theme_id"
+    t.index ["custom_theme_id"], name: "index_adventures_on_custom_theme_id"
     t.index ["user_id"], name: "index_adventures_on_user_id"
   end
 
@@ -41,6 +43,32 @@ ActiveRecord::Schema.define(version: 2022_05_19_134603) do
     t.string "meta_id"
     t.string "audio_track_uid"
     t.index ["meta_id"], name: "index_audio_tracks_on_meta_id", unique: true
+  end
+
+  create_table "custom_themes", force: :cascade do |t|
+    t.string "title", null: false
+    t.string "background_color"
+    t.string "border_color"
+    t.string "intro_image_uid"
+    t.string "intro_image_name"
+    t.string "scene_image_uid"
+    t.string "scene_image_name"
+    t.string "end_image_name"
+    t.string "end_image_uid"
+    t.string "header_font_family"
+    t.string "header_font_color"
+    t.string "body_font_family"
+    t.string "body_font_color"
+    t.string "choice_font_family"
+    t.string "choice_font_color"
+    t.string "button_color"
+    t.string "button_font_family"
+    t.string "button_font_color"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "slug", null: false
+    t.index ["user_id"], name: "index_custom_themes_on_user_id"
   end
 
   create_table "photos", force: :cascade do |t|
@@ -87,5 +115,7 @@ ActiveRecord::Schema.define(version: 2022_05_19_134603) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "adventures", "custom_themes", on_delete: :cascade
   add_foreign_key "adventures", "users", on_delete: :cascade
+  add_foreign_key "custom_themes", "users", on_delete: :cascade
 end

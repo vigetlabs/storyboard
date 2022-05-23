@@ -21,3 +21,7 @@
     showSource: <%= @adventure.show_source? %>
   }
 </script>
+
+<% if @adventure.theme === 'custom' %>
+  <%= render "shared/custom_styles" %>
+<% end %>

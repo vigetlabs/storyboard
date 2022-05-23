@@ -138,6 +138,11 @@ class AdventuresController < ApplicationController
     @adventure = Adventure.find_by_slug!(params[:id])
   end
 
+  def custom_theme
+    @adventure.custom_theme
+  end
+  helper_method :custom_theme
+
   def adventure_params
     params.require(:adventure).permit(
       :title,
@@ -152,7 +157,8 @@ class AdventuresController < ApplicationController
       :back_button,
       :show_source,
       :character_card,
-      :archived
+      :archived,
+      :custom_theme_id
     )
   end
 

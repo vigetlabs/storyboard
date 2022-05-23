@@ -1,0 +1,107 @@
+<%= javascript_pack_tag "custom-theme-form", async: true, defer: true %>
+
+<%= form_for custom_theme, html: { class: "CustomThemeForm" } do |f| %>
+  <div class="Field">
+    <%= f.label :title, "Title" %>
+    <%= f.text_field :title %>
+  </div>
+
+  <div class="Field">
+    <%= f.label :background_color, "Background Color" %>
+    <%= f.color_field :background_color %>
+  </div>
+
+  <div class="Field">
+    <%= f.label :border_color, "Border Color" %>
+    <%= f.color_field :border_color %>
+  </div>
+
+  <div class="Field">
+    <%= f.label :intro_image, "Intro Photo Background" %>
+    <% if custom_theme.intro_image %>
+      <%= image_tag custom_theme.intro_image.thumb('400x200#').url %><br/>
+    <% end %>
+    <%= f.file_field :intro_image, accept: "image/gif,image/jpeg,image/png" %>
+  </div>
+
+  <div class="Field">
+    <%= f.label :scene_image, "Scene Photo Background" %>
+    <% if custom_theme.scene_image %>
+      <%= image_tag custom_theme.scene_image.thumb('400x200#').url %><br/>
+    <% end %>
+    <%= f.file_field :scene_image, accept: "image/gif,image/jpeg,image/png" %>
+  </div>
+
+  <div class="Field">
+    <%= f.label :end_image, "Ending Photo Background" %>
+    <% if custom_theme.end_image %>
+      <%= image_tag custom_theme.end_image.thumb('400x200#').url %><br/>
+    <% end %>
+    <%= f.file_field :end_image, accept: "image/gif,image/jpeg,image/png" %>
+  </div>
+
+  <div class="Field">
+    <%= f.label :header_font_family, "Header Font" %>
+    <% if custom_theme.header_font_family %>
+      <%= f.select :header_font_family, options_for_select(CustomTheme::FONTS, custom_theme.header_font_family), { include_blank: true }, { style: "font-family:#{custom_theme.header_font_family}" } %>
+    <% else %>
+      <%= f.select :header_font_family, options_for_select(CustomTheme::FONTS), include_blank: true %>
+    <% end %>
+  </div>
+
+  <div class="Field">
+    <%= f.label :header_font_color, "Header Text Color" %>
+    <%= f.color_field :header_font_color %>
+  </div>
+
+  <div class="Field">
+    <%= f.label :body_font_family, "Body Font" %>
+    <% if custom_theme.header_font_family %>
+      <%= f.select :body_font_family, options_for_select(CustomTheme::FONTS, custom_theme.body_font_family), { include_blank: true }, { style: "font-family:#{custom_theme.body_font_family}" } %>
+    <% else %>
+      <%= f.select :body_font_family, options_for_select(CustomTheme::FONTS), include_blank: true %>
+    <% end %>
+  </div>
+
+  <div class="Field">
+    <%= f.label :body_font_color, "Body Text Color" %>
+    <%= f.color_field :body_font_color %>
+  </div>
+
+  <div class="Field">
+    <%= f.label :choice_font_family, "Choice Font" %>
+    <% if custom_theme.choice_font_family %>
+      <%= f.select :choice_font_family, options_for_select(CustomTheme::FONTS, custom_theme.choice_font_family), { include_blank: true }, { style: "font-family:#{custom_theme.choice_font_family}" } %>
+    <% else %>
+      <%= f.select :choice_font_family, options_for_select(CustomTheme::FONTS), include_blank: true %>
+    <% end %>
+  </div>
+
+  <div class="Field">
+    <%= f.label :choice_font_color, "Choice Text Color" %>
+    <%= f.color_field :choice_font_color %>
+  </div>
+
+  <div class="Field">
+    <%= f.label :button_color, "Button Color" %>
+    <%= f.color_field :button_color %>
+  </div>
+
+  <div class="Field">
+    <%= f.label :button_font_family, "Button Font" %>
+    <% if custom_theme.button_font_family %>
+      <%= f.select :button_font_family, options_for_select(CustomTheme::FONTS, custom_theme.button_font_family), { include_blank: true }, { style: "font-family:#{custom_theme.button_font_family}" } %>
+    <% else %>
+      <%= f.select :button_font_family, options_for_select(CustomTheme::FONTS), include_blank: true %>
+    <% end %>
+  </div>
+
+  <div class="Field">
+    <%= f.label :button_font_color, "Button Text Color" %>
+    <%= f.color_field :button_font_color %>
+  </div>
+
+  <div class="Field">
+    <button class="SlantButton"><%= is_update ? "Update" : "Create" %> Custom Theme</button>
+  </div>
+<% end %>
