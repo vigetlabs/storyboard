@@ -1,0 +1,16 @@
+<% content_for :theme, "CustomTheme" %>
+
+<div class="PlayerActions">
+  <%= link_to 'Edit', [:edit, custom_theme], class: "SlantButton" %>
+</div>
+
+<div class="Player" id="custom-theme-preview"></div>
+
+<script>
+  var SEED = {
+    slug: "<%= @adventure.to_param %>",
+    title: "<%== escape_javascript custom_theme.title %>",
+  }
+</script>
+
+<%= render "shared/custom_styles", custom_theme: custom_theme %>

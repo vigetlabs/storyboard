@@ -28,6 +28,8 @@ Rails.application.routes.draw do
   get "unsubscribe", to: "unsubscribes#new", as: :new_unsubscribe
   resources :unsubscribes, only: [:create]
 
+  resources :custom_themes, path: "/custom_themes"
+
   # Keep this block at the bottom so the "/:id adventures#show"
   # doesn't catch other routes
   resources :adventures, path: "/" do

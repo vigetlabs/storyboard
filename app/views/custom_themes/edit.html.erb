@@ -1,0 +1,9 @@
+<div class="AccountForm Container">
+  <h1 class="PageBanner"><%= custom_theme %></h1>
+
+  <%= render "form", custom_theme: custom_theme, is_update: true %>
+
+  <footer class="AccountFormFooter">
+    <%= link_to 'Back', custom_theme_path(custom_theme) %>
+  </footer>
+</div>

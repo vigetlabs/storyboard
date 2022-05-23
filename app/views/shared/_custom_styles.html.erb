@@ -1,0 +1,171 @@
+<style>
+  .CustomTheme {
+    background: <%= custom_theme.background_color ? custom_theme.background_color : "#55708c" %>;
+    color: white;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.68);
+  }
+
+  html:before,
+  html:after,
+  body:before,
+  body:after {
+    content: "";
+    position: fixed;
+    background: <%= custom_theme.border_color ? custom_theme.border_color : "#000000" %>;
+  }
+
+  html:before,
+  html:after {
+    height: 40px;
+    width: 100%;
+  }
+
+  body:before,
+  body:after {
+    height: 100%;
+    width: 40px;
+  }
+
+  html:after {
+    bottom: 0;
+  }
+
+  body:after {
+    right: 0;
+  }
+
+  .CustomTheme .debugger {
+    background: <%= custom_theme.background_color ? custom_theme.background_color : "#55708c" %>;
+    border: 40px <%= custom_theme.border_color ? custom_theme.border_color : "#000000" %> solid;
+    height: 280px;
+  }
+
+  .CustomTheme .PlayerIntro {
+    <% if custom_theme.intro_image %>
+      background-image: url(<%= custom_theme.intro_image.url %>);
+    <% end %>
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .CustomTheme .PlayerScene {
+    <% if custom_theme.scene_image %>
+      background-image: url(<%= custom_theme.scene_image.url %>);
+    <% end %>
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: 0;
+    margin-bottom: 30px;
+  }
+
+  .CustomTheme .PlayerEnd {
+    <% if custom_theme.end_image %>
+      background-image: url(<%= custom_theme.end_image.url %>);
+    <% end %>
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+  .CustomTheme .PlayerForeground {
+    max-width: 1184px;
+    margin: auto auto;
+    padding: 24px 36px;
+    width: 100%;
+  }
+
+  .CustomTheme .PlayerIntroTitle {
+    font-family: <%= custom_theme.header_font_family ? custom_theme.header_font_family : "Georgia, serif" %>;
+    font-size: 72px;
+    max-width: 600px;
+    color: <%= custom_theme.header_font_color ? custom_theme.header_font_color : "#000000" %>;
+  }
+
+  .CustomTheme .PlayerIntroBody {
+    font-family: <%= custom_theme.body_font_family ? custom_theme.body_font_family : "" %>;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 64px;
+    color: <%= custom_theme.body_font_color ? custom_theme.body_font_color : "#000000" %>;
+  }
+
+  .CustomTheme .PlayerIntroContent {
+    margin: 0 auto 0 0;
+    max-width: 600px;
+  }
+
+  .CustomTheme .PlayerIntroStart,
+  .CustomTheme .PlayerEndReplay {
+    background: <%= custom_theme.button_color ? custom_theme.button_color : "#000000" %>;
+    border-radius: 24px;
+    border: 0;
+    color: <%= custom_theme.button_font_color ? custom_theme.button_font_color : "#ffffff" %>;
+    font-family: <%= custom_theme.button_font_family ? custom_theme.button_font_family : "" %>;
+    font-size: 18px;
+    font-weight: bold;
+    height: 40px;
+    min-width: 150px;
+    text-transform: lowercase;
+    text-shadow: none;
+  }
+
+  .CustomTheme .PlayerSceneBody {
+    margin: 0 auto 0 0;
+    max-width: 600px;
+    color: <%= custom_theme.body_font_color ? custom_theme.body_font_color : "#000000" %>;
+    font-family: <%= custom_theme.body_font_family ? custom_theme.body_font_family : "" %>;
+  }
+
+  .CustomTheme .PlayerSceneTitle {
+    font-family: <%= custom_theme.header_font_family ? custom_theme.header_font_family : "Georgia, serif" %>;
+    font-size: 48px;
+    line-height: normal;
+    max-width: 600px;
+    color: <%= custom_theme.header_font_color ? custom_theme.header_font_color : "#000000" %>;
+  }
+
+  .CustomTheme .PlayerChoices {
+    max-width: 600px;
+    margin: 36px auto 0 0;
+  }
+
+  .CustomTheme .PlayerChoice {
+    color: <%= custom_theme.choice_font_color ? custom_theme.choice_font_color : "#000000" %>;
+    font-family: <%= custom_theme.choice_font_family ? custom_theme.choice_font_family : "" %>;
+    display: inline-block;
+    font-size: 18px;
+    font-weight: bold;
+    min-height: 48px;
+    padding: 0.5em 0;
+    text-decoration: none;
+  }
+
+  .CustomTheme .PlayerEndTitle {
+    font-family: <%= custom_theme.header_font_family ? custom_theme.header_font_family : "Georgia, serif" %>;
+    font-size: 48px;
+    line-height: normal;
+    margin-bottom: 68px;
+    color: <%= custom_theme.header_font_color ? custom_theme.header_font_color : "#000000" %>;
+  }
+
+  .CustomTheme .PlayerEndBody {
+    font-size: 14px;
+    line-height: 24px;
+    margin-bottom: 68px;
+    color: <%= custom_theme.body_font_color ? custom_theme.body_font_color : "#000000" %>;
+    font-family: <%= custom_theme.body_font_family ? custom_theme.body_font_family : "" %>;
+  }
+
+  .CustomTheme #back-button,
+  .CustomTheme #debug-button,
+  .CustomTheme .debugger {
+    z-index: 5000;
+  }
+</style>

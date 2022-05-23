@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= render "shared/head_tags" %>
+  </head>
+  <body class="<%= content_for :theme %>">
+    <%= yield %>
+
+    <%= stylesheet_pack_tag "player" %>
+    <%= javascript_pack_tag "custom-theme-preview", async: true, defer: true %>
+  </body>
+</html>

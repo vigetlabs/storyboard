@@ -5,7 +5,8 @@ class Adventure < ApplicationRecord
     "Light"  => "light",
     "Viget"  => "viget",
     "Space"  => "space",
-    "Desert" => "desert"
+    "Desert" => "desert",
+    "Custom" => "custom",
   }
 
   FEATURE_GROUPS = [
@@ -17,12 +18,15 @@ class Adventure < ApplicationRecord
   slug_from :slug_source
 
   belongs_to :user, optional: true
+  belongs_to :custom_theme, optional: true
 
   validates :title, :theme, presence: true
 
   validates :password, length: (3..32), presence: true, if: :has_password
 
   validates :age_limit, numericality: { only_integer: true }, presence: true, if: :has_age_limit
+
+  validate :custom_theme_set
 
   def to_s
     title
@@ -51,5 +55,11 @@ class Adventure < ApplicationRecord
 
   def slug_source
     title
+  end
+
+  def custom_theme_set
+    if theme == 'custom' && custom_theme.nil?
+      errors.add(:custom_theme, "required when theme is set to 'Custom'")
+    end
   end
 end
