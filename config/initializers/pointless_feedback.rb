@@ -9,9 +9,7 @@ PointlessFeedback.setup do |config|
   config.email_feedback            = true
   config.from_email                = 'feedback@pointlesscorp.com'
   config.to_emails                 = [
-    'eli.fatsi@viget.com',
-    'noah.over@viget.com',
-    'danny.brown@viget.com'
+    'noah.over@viget.com'
   ]
   config.google_captcha_site_key   = "6Lcx6pQUAAAAANoXFts8_nsPSoNikCW6p80aCIL_"
   config.google_captcha_secret_key = "6Lcx6pQUAAAAALoO68Z-f5vxBehQZLkxZkQvwkGw"

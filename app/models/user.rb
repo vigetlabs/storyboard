@@ -6,8 +6,7 @@ class User < ApplicationRecord
 
   def is_admin?
     email.in? [
-      "eli.fatsi@viget.com",
-      "joe.jackson@viget.com",
+      "noah.over@viget.com",
       "kelly.kenny@viget.com"
     ]
   end
