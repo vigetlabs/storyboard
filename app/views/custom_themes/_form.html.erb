@@ -19,7 +19,7 @@
   <div class="Field">
     <%= f.label :intro_image, "Intro Photo Background" %>
     <% if custom_theme.intro_image %>
-      <%= image_tag custom_theme.intro_image.thumb('400x200#').url %><br/>
+      <%= image_tag custom_theme.intro_image.url, width: 400 %><br/>
     <% end %>
     <%= f.file_field :intro_image, accept: "image/gif,image/jpeg,image/png" %>
   </div>
@@ -27,7 +27,7 @@
   <div class="Field">
     <%= f.label :scene_image, "Scene Photo Background" %>
     <% if custom_theme.scene_image %>
-      <%= image_tag custom_theme.scene_image.thumb('400x200#').url %><br/>
+      <%= image_tag custom_theme.scene_image.url, width: 400 %><br/>
     <% end %>
     <%= f.file_field :scene_image, accept: "image/gif,image/jpeg,image/png" %>
   </div>
@@ -35,7 +35,7 @@
   <div class="Field">
     <%= f.label :end_image, "Ending Photo Background" %>
     <% if custom_theme.end_image %>
-      <%= image_tag custom_theme.end_image.thumb('400x200#').url %><br/>
+      <%= image_tag custom_theme.end_image.url, width: 400 %><br/>
     <% end %>
     <%= f.file_field :end_image, accept: "image/gif,image/jpeg,image/png" %>
   </div>
