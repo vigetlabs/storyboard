@@ -16,7 +16,7 @@ PointlessFeedback.setup do |config|
 
   # Configure the words that will prevent an email from being sent if they are
   # contained in the description
-  config.invalid_words = ['nymphomania']
+  config.invalid_words = ['nymphomania', 'bisexual']
 
   # ==> URL Field
   # Configure URL field in form and email
