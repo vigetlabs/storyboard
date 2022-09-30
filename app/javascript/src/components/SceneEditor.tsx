@@ -80,8 +80,12 @@ class SceneEditor extends React.Component<SceneEditorProps, SceneEditorState> {
     const text = get(state, `meta.${focus.id}.text`)
     const notes = get(state, `meta.${focus.id}.notes`)
     const isFinal = get(state, `meta.${focus.id}.isFinal`)
+    // const showTitle = get(state, `meta.${focus.id}.showTitle`)
+    const hideTitle = get(state, `meta.${focus.id}.hideTitle`)
     const image = get(state, `meta.${focus.id}.image`)
     const audio = get(state, `meta.${focus.id}.audio`)
+
+    console.log(hideTitle)
 
     const renderImageSection = () => {
       if (image) {
@@ -138,6 +142,34 @@ class SceneEditor extends React.Component<SceneEditorProps, SceneEditorState> {
             onChange={this.onNameChange}
           />
         </div>
+        {
+          /*
+          <div className="SceneEditorField">
+            <label className="SceneEditorHeading" htmlFor="showTitle">
+              Show Scene Title
+            </label>
+            <input
+              name="showTitle"
+              defaultChecked={showTitle}
+              onChange={this.onChangeShowTitle}
+              type="checkbox"
+            />
+          </div>
+          */
+        }
+
+        <div className="SceneEditorField">
+          <label className="SceneEditorHeading" htmlFor="hideTitle">
+            Hide Scene Title
+          </label>
+          <input 
+            name="hideTitle"
+            defaultChecked={hideTitle}
+            onChange={this.onChangeHideTitle}
+            type="checkbox"
+          />
+        </div>
+        
 
         <SceneEditorTextAreaField
           name="content"
@@ -241,6 +273,20 @@ class SceneEditor extends React.Component<SceneEditorProps, SceneEditorState> {
     const { focus, state, updateState } = this.props
 
     updateState(set(state, `meta.${focus.id}.notes`, html))
+  }
+
+  /*
+  onChangeShowTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { focus, state, updateState } = this.props
+
+    updateState(set(state, `meta.${focus.id}.showTitle`, event.target.checked))
+  }
+  */
+
+  onChangeHideTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { focus, state, updateState } = this.props
+
+    updateState(set(state, `meta.${focus.id}.hideTitle`, event.target.checked))
   }
 
   onImageChange = (event: React.FormEvent<HTMLInputElement>) => {
