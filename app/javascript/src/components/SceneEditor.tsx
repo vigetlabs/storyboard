@@ -143,13 +143,14 @@ class SceneEditor extends React.Component<SceneEditorProps, SceneEditorState> {
         <div className="SceneEditorField">
           <label className="SceneEditorHeading" htmlFor="hideTitle">
             Hide Scene Title
+            <input
+              className="checkbox"
+              name="hideTitle"
+              defaultChecked={hideTitle}
+              onChange={this.onChangeHideTitle}
+              type="checkbox"
+            />
           </label>
-          <input 
-            name="hideTitle"
-            defaultChecked={hideTitle}
-            onChange={this.onChangeHideTitle}
-            type="checkbox"
-          />
         </div>
 
         <SceneEditorTextAreaField
