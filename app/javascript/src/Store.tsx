@@ -17,7 +17,6 @@ export interface MetaData {
     notes: string
     isFinal: boolean
     hideTitle: boolean
-    // showTitle: boolean
     image: string
     audio: string
   }

@@ -8,12 +8,13 @@ interface Props {
   body: string
   image: string
   audio: string
+  hideTitle: boolean
   onReplay: () => void
   onGoBack: () => void
   showSource: boolean
 }
 
-export const PlayerEnd: React.SFC<Props> = ({ title, body, image, audio, onReplay, onGoBack, showSource }) => {
+export const PlayerEnd: React.SFC<Props> = ({ title, body, image, audio, hideTitle, onReplay, onGoBack, showSource }) => {
   const renderImage = () => {
     if (image) {
       return <img src={image} alt='' width='400' />
@@ -60,7 +61,7 @@ export const PlayerEnd: React.SFC<Props> = ({ title, body, image, audio, onRepla
       </a>
       {renderSourceButton()}
       <div className="PlayerForeground">
-        <h1 className="PlayerEndTitle">{title}</h1>
+        <h1 className="PlayerEndTitle">{!hideTitle && title}</h1>
         <div className="PlayerEndContent">
           {renderImage()}
           {renderAudioSection()}
@@ -90,6 +91,7 @@ export const PlayerDeadEnd: React.SFC<DeadEndProps> = ({ onReplay, onGoBack, sho
       body="That choice wasn't tied to a new scene. You should fix that. Try replaying the story."
       image=''
       audio=''
+      hideTitle
       onReplay={onReplay}
       onGoBack={onGoBack}
       showSource={showSource}
