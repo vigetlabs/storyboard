@@ -16,6 +16,7 @@ rake db:create db:migrate db:seed
 
 
 # Docker
+
 ```
 docker-compose build
 docker-compose up
@@ -23,3 +24,5 @@ docker-compose up
 docker-compose exec app rake db:migrate
 docker-compose exec app rake db:seed
 ```
+
+**Note**: If you're building these images on Apple Silicon (M1/M2 Mac), you can use the environment variable `DOCKER_DEFAULT_PLATFORM=linux/amd64` to avoid platform-related build issues when running `docker-compose build`.

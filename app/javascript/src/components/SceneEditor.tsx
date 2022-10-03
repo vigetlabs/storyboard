@@ -80,6 +80,7 @@ class SceneEditor extends React.Component<SceneEditorProps, SceneEditorState> {
     const text = get(state, `meta.${focus.id}.text`)
     const notes = get(state, `meta.${focus.id}.notes`)
     const isFinal = get(state, `meta.${focus.id}.isFinal`)
+    const hideTitle = get(state, `meta.${focus.id}.hideTitle`)
     const image = get(state, `meta.${focus.id}.image`)
     const audio = get(state, `meta.${focus.id}.audio`)
 
@@ -137,6 +138,19 @@ class SceneEditor extends React.Component<SceneEditorProps, SceneEditorState> {
             defaultValue={focus.name}
             onChange={this.onNameChange}
           />
+        </div>
+
+        <div className="SceneEditorField">
+          <label className="SceneEditorHeading" htmlFor="hideTitle">
+            Hide Scene Title
+            <input
+              className="checkbox"
+              name="hideTitle"
+              defaultChecked={hideTitle}
+              onChange={this.onChangeHideTitle}
+              type="checkbox"
+            />
+          </label>
         </div>
 
         <SceneEditorTextAreaField
@@ -241,6 +255,12 @@ class SceneEditor extends React.Component<SceneEditorProps, SceneEditorState> {
     const { focus, state, updateState } = this.props
 
     updateState(set(state, `meta.${focus.id}.notes`, html))
+  }
+
+  onChangeHideTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { focus, state, updateState } = this.props
+
+    updateState(set(state, `meta.${focus.id}.hideTitle`, event.target.checked))
   }
 
   onImageChange = (event: React.FormEvent<HTMLInputElement>) => {

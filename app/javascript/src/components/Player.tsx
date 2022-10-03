@@ -168,7 +168,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       return <PlayerInvalid />
     }
 
-    let meta = this.props.meta[focus] || { text: '', image: '' }
+    let meta = this.props.meta[focus] || { text: '', image: '', hideTitle: false }
     let translatedText = this.translate(meta.text)
     let choices = this.ports(node)
 
@@ -176,6 +176,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       return (
         <PlayerEnd
           title={node.name}
+          hideTitle={meta.hideTitle}
           body={translatedText}
           image={meta.image}
           audio={meta.audio}
@@ -212,7 +213,7 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       <main className="PlayerScene">
         {this.renderBackButton()}
         <div className="PlayerForeground">
-          <h1 className="PlayerSceneTitle">{node.name}</h1>
+          {!meta.hideTitle && <h1 className="PlayerSceneTitle">{node.name}</h1>}
 
           <div className="PlayerSceneContent">
             {renderImage()}
