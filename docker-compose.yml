@@ -1,20 +1,14 @@
 version: "3.2"
 
-volumes:
-  db-data:
-  yarn:
-  gems:
-  log:
-  tmp:
-
 services:
   db:
-    environment:
-      POSTGRES_USER: root
-      POSTGRES_DB: adventure-time_development
-    image: postgres:9.3-alpine
+    image: postgres:13.3-alpine
     volumes:
       - db-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: adventure-time_development
 
   app:
     image: storyboard_app
@@ -22,17 +16,52 @@ services:
       context: .
       dockerfile: ./.docker-config/Dockerfile
     entrypoint: ./.docker-config/entrypoint.sh
-    command: ./bin/rails server -p 3000 -b '0.0.0.0'
+    command: rails server -p 3000 -b '0.0.0.0'
     ports:
       - 3000:3000
-    tty: true
-    stdin_open: true
+    environment:
+      WEBPACKER_DEV_SERVER_HOST: webpack
+    depends_on:
+      - db
     volumes:
-      - .:/usr/src/app:delegated
-      - yarn:/usr/src/app/node_modules
+      - .:/usr/src/app
       - gems:/usr/local/bundle
+      - yarn:/usr/src/app/node_modules
+      - packs:/usr/src/public/packs
       - log:/usr/src/app/log
       - tmp:/usr/src/app/tmp
       - type: bind
         source: /run/host-services/ssh-auth.sock
         target: /run/host-services/ssh-auth.sock
+    tty: true
+    stdin_open: true
+
+  webpack:
+    image: storyboard_app
+    command: [
+      "./.docker-config/wait-for-it.sh",
+      "app:3000",
+      "--timeout=0",
+      "--",
+      "yarn",
+      "start"
+    ]
+    ports:
+      - 3035:3035
+    volumes:
+      - .:/usr/src/app
+      - gems:/usr/local/bundle
+      - yarn:/usr/src/app/node_modules
+      - packs:/usr/src/public/packs
+    environment:
+      NODE_ENV: development
+      RAILS_ENV: development
+      WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
+
+volumes:
+  db-data:
+  gems:
+  yarn:
+  packs:
+  log:
+  tmp:
