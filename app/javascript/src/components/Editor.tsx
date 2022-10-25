@@ -20,6 +20,7 @@ import { StateConsumer, ApplicationState, MetaData, PortMeta } from '../Store'
 import { save } from '../persistance'
 import { clone } from '../clone'
 import * as _ from 'lodash'
+import { store } from "../syncstore";
 
 import { defaultNodeName } from '../constants'
 
@@ -458,7 +459,13 @@ class Editor extends React.Component<EditorProps, EditorState> {
       } else {
         // Clone newState so changes to the sub objects won't tarnish lastSavedState
         this.lastSavedState = clone(newState)
-        await save(this.props.state.slug, newState)
+        store.state.slug = newState.slug
+        store.state.story = newState.story
+        store.state.meta = newState.meta
+        store.state.portMeta = newState.portMeta
+        store.state.modifiers = newState.modifiers
+        store.state.currentFocusedScene = newState.currentFocusedScene
+        // await save(this.props.state.slug, newState)
       }
     } catch (error) {
       alert(

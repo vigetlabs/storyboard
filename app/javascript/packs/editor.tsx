@@ -11,6 +11,9 @@ import Editor from '../src/components/Editor'
 import { ApplicationComponent, MetaData, PortMeta } from '../src/Store'
 import { load } from '../src/persistance'
 import defaultStory from '../src/seed'
+import { useSyncedStore } from "@syncedstore/react";
+import { store } from "../src/syncstore";
+import SyncedStore from "../src/SyncedStore";
 
 // Similar to the note in application.tsx old data was loaded so it would show
 // a version of the story but you can't update it. This reloads the page
@@ -47,25 +50,27 @@ const slug = SEED.slug
 const viewOnly = SEED.viewOnly
 
 async function render() {
-  const content = await load(slug)
+  // const content = await load(slug)
 
-  if (content) {
+  // if (content) {
     ReactDOM.render(
-      <ApplicationComponent {...content} slug={slug}>
-        <Editor viewOnly={viewOnly} />
-        <Tutorial />
-      </ApplicationComponent>,
+      <SyncedStore>
+        <ApplicationComponent slug={slug}>
+          <Editor viewOnly={viewOnly} />
+          <Tutorial />
+        </ApplicationComponent>
+      </SyncedStore>,
       document.getElementById('editor')
     )
-  } else {
-    ReactDOM.render(
-      <ApplicationComponent story={defaultStory} slug={slug}>
-        <Editor viewOnly={viewOnly} />
-        <Tutorial />
-      </ApplicationComponent>,
-      document.getElementById('editor')
-    )
-  }
+  // } else {
+  //   ReactDOM.render(
+  //     <ApplicationComponent story={defaultStory} slug={slug}>
+  //       <Editor viewOnly={viewOnly} />
+  //       <Tutorial />
+  //     </ApplicationComponent>,
+  //     document.getElementById('editor')
+  //   )
+  // }
 }
 
 render()
