@@ -33,6 +33,7 @@ interface EditorState {
   saving: boolean
   copying: boolean
   pasting: boolean
+  needsPastingForm: boolean
 }
 
 interface EditorProps {
@@ -63,7 +64,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
       selected: null,
       saving: false,
       copying: false,
-      pasting: false
+      pasting: false,
+      needsPastingForm: false
     }
     this.engine = new DiagramEngine()
     this.engine.installDefaultFactories()
@@ -223,6 +225,8 @@ class Editor extends React.Component<EditorProps, EditorState> {
           requestPaint={this.eventuallyForceUpdate}
           onClear={this.clearSelection}
         />
+
+        {this.renderPastingForm()}
       </>
     )
   }
@@ -300,6 +304,51 @@ class Editor extends React.Component<EditorProps, EditorState> {
         this.forceUpdate()
       }
     }
+  }
+
+  private renderPastingForm() {
+    if (this.state.needsPastingForm) {
+      return (
+        <div className="PastingFormBackdrop">
+          <div className="PastingForm">
+            <div>
+              <button className="delete" onClick={this.handleClosePastingForm}>
+                X
+              </button>
+            </div>
+
+            <div className="PastingFormHeader">
+              <h2>Pasting Problem</h2>
+            </div>
+
+            <div className="PastingFormContent">
+              Unfortunately, your browser does not support the technology required
+              for our pasting. Instead, you can paste the copied story elements into
+              the text box below to have them added to your story.
+            </div>
+
+            <div className="PastingFormField">
+              <textarea
+                name="paste"
+                onChange={this.handlePastingFormChange}
+              />
+            </div>
+          </div>
+        </div>
+      )
+    } else {
+      return null
+    }
+  }
+
+  handleClosePastingForm = () => {
+    this.setState({ needsPastingForm: false })
+  }
+
+  handlePastingFormChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    this.setState({ needsPastingForm: false })
+
+    this.paste(event.target.value)
   }
 
   private setZoom = (direction: number) => {
@@ -549,51 +598,60 @@ class Editor extends React.Component<EditorProps, EditorState> {
   }
 
   private onPaste = () => {
+    try {
+      navigator.clipboard.readText().then(text => {
+        this.paste(text)
+      })
+    } catch(e) {
+      this.setState({ needsPastingForm: true })
+    }
+  }
+
+  private paste = (text: string) => {
     const pasteStart = Date.now()
     this.setState({ pasting: true })
     const { model } = this
-    navigator.clipboard.readText().then(text => {
-      try {
-        const pasted = JSON.parse(text)
-        const copiedNodes: DefaultNodeModel[] = pasted.copiedNodes
-        const copiedLinks: DefaultLinkModel[] = pasted.copiedLinks
-        const copiedMeta: MetaData = pasted.copiedMeta
-        const copiedPortMeta: PortMeta = pasted.copiedPortMeta
-        const pastedNodes: DefaultNodeModel[] = []
-        const pastedLinks: DefaultLinkModel[] = []
 
-        model.clearSelection()
+    try {
+      const pasted = JSON.parse(text)
+      const copiedNodes: DefaultNodeModel[] = pasted.copiedNodes
+      const copiedLinks: DefaultLinkModel[] = pasted.copiedLinks
+      const copiedMeta: MetaData = pasted.copiedMeta
+      const copiedPortMeta: PortMeta = pasted.copiedPortMeta
+      const pastedNodes: DefaultNodeModel[] = []
+      const pastedLinks: DefaultLinkModel[] = []
 
-        copiedNodes.forEach(node => {
-          let copiedNode = this.createCopiedNode(
-            node,
-            node.x + offset,
-            node.y + offset,
-            copiedMeta,
-            copiedPortMeta
-          )
-          if (copiedNode) {
-            pastedNodes.push(copiedNode)
-          }
-        })
-        copiedLinks.forEach(link => {
-          let copiedLink = this.createCopiedLink(link, copiedNodes, pastedNodes)
-          if (copiedLink) {
-            pastedLinks.push(copiedLink)
-          }
-        })
-        pastedNodes.forEach(node => model.addNode(node))
-        pastedLinks.forEach(link => model.addLink(link))
+      model.clearSelection()
 
-        this.repaint()
-      } catch (e) {
-        alert("Sorry, we couldn't parse what you pasted.")
-      }
-      let timeLeft = 250 - Math.min(Date.now() - pasteStart, 400)
-      setTimeout(() => {
-        this.setState({ pasting: false })
-      }, timeLeft)
-    })
+      copiedNodes.forEach(node => {
+        let copiedNode = this.createCopiedNode(
+          node,
+          node.x + offset,
+          node.y + offset,
+          copiedMeta,
+          copiedPortMeta
+        )
+        if (copiedNode) {
+          pastedNodes.push(copiedNode)
+        }
+      })
+      copiedLinks.forEach(link => {
+        let copiedLink = this.createCopiedLink(link, copiedNodes, pastedNodes)
+        if (copiedLink) {
+          pastedLinks.push(copiedLink)
+        }
+      })
+      pastedNodes.forEach(node => model.addNode(node))
+      pastedLinks.forEach(link => model.addLink(link))
+
+      this.repaint()
+    } catch (e) {
+      alert("Sorry, we couldn't parse what you pasted.")
+    }
+    let timeLeft = 250 - Math.min(Date.now() - pasteStart, 400)
+    setTimeout(() => {
+      this.setState({ pasting: false })
+    }, timeLeft)
   }
 
   private getRelatedPorts = (oldLink: DefaultLinkModel, copiedNodes: DefaultNodeModel[], pastedNodes: DefaultNodeModel[]) => {
