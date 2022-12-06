@@ -1,0 +1,89 @@
+name: Test
+on: [push]
+
+jobs:
+  rspec:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:11
+        ports: ['5432:5432']
+        env:
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    # - name: Set Timezone
+    #   uses: szenius/set-timezone@v1.0
+    #   with:
+    #     timezoneLinux: America/Denver
+
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up ruby 2.5.1
+      uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: 2.5.1
+
+    - name: Cache ruby gems
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ubuntu-20-04-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ubuntu-20-04-gems-
+
+    - name: Cache node modules
+      uses: actions/cache@v2
+      with:
+        path: node_modules
+        key: ubuntu-20-04-modules-${{ hashFiles('**/yarn.lock') }}
+        restore-keys: |
+          ubuntu-20-04-modules-
+
+    - name: Install ruby dependencies
+      run: |
+        bundle config path vendor/bundle
+        bundle install --jobs 4 --retry 3
+
+    - name: Install js dependencies
+      run: |
+        yarn install --pure-lockfile
+
+    - name: Install postgres dependency
+      run: |
+        sudo apt-get -yqq install libpq-dev
+
+    - name: Set up the database
+      env:
+        PGHOST: 127.0.0.1
+        PGUSER: postgres
+        PGPASSWORD: postgres
+        RAILS_ENV: test
+        RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+      run: |
+        cp config/database.yml{.example,}
+        bundle exec rails db:create
+        bundle exec rails db:migrate
+
+    - name: Run specs
+      env:
+        PGHOST: 127.0.0.1
+        PGUSER: postgres
+        PGPASSWORD: postgres
+        RAILS_ENV: test
+        RAILS_MASTER_KEY: ${{ secrets.RAILS_MASTER_KEY }}
+        COVERAGE: '1'
+      run: bundle exec rspec
+
+    - name: Upload coverage results
+      uses: actions/upload-artifact@v2
+      with:
+        name: coverage-report
+        path: coverage
