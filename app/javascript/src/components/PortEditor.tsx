@@ -249,7 +249,7 @@ class PortEditor extends React.Component<
                                 id={`stat-value-${statChange.name}`}
                                 onBlur={this.setStatValue.bind(this, i)}
                                 defaultValue={
-                                  statChange.value
+                                  statChange.value != undefined
                                     ? statChange.value.toString()
                                     : ''
                                 }
@@ -269,7 +269,7 @@ class PortEditor extends React.Component<
                                   onBlur={this.setStatMin.bind(this, i)}
                                   placeholder="Min"
                                   defaultValue={
-                                    statChange.min
+                                    statChange.min != undefined
                                       ? statChange.min.toString()
                                       : ''
                                   }
@@ -287,7 +287,7 @@ class PortEditor extends React.Component<
                                   onBlur={this.setStatMax.bind(this, i)}
                                   placeholder="Max"
                                   defaultValue={
-                                    statChange.max
+                                    statChange.max != undefined
                                       ? statChange.max.toString()
                                       : ''
                                   }
@@ -434,7 +434,7 @@ class PortEditor extends React.Component<
                               id={`show-if-stat-value-${deSpace(showIf.name)}`}
                               onBlur={this.setShowIfStatValue.bind(this, i)}
                               defaultValue={
-                                showIf.value ? showIf.value.toString() : ''
+                                showIf.value != undefined ? showIf.value.toString() : ''
                               }
                             />
                           </div>
@@ -493,7 +493,7 @@ class PortEditor extends React.Component<
                           id="timeout-seconds"
                           onBlur={this.setTimeoutSeconds.bind(this)}
                           defaultValue={
-                            timeoutSeconds ? timeoutSeconds.toString() : ''
+                            timeoutSeconds != undefined ? timeoutSeconds.toString() : ''
                           }
                         />
                       </div>
