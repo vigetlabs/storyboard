@@ -73,7 +73,7 @@ class PortEditor extends React.Component<
     const {
       selectedTab,
       optionsOpen,
-      thisPortMeta: { showIfItems, showIfStats, itemChanges, statChanges, isTimer, hideChoice, timeoutSeconds }
+      thisPortMeta: { showIfItems, showIfStats, itemChanges, statChanges, isTimer, hideChoice, timeoutSeconds, isLoop }
     } = this.state
 
     return (
@@ -132,6 +132,16 @@ class PortEditor extends React.Component<
                   onClick={() => this.setSelectedTab('timer')}
                 >
                   Timer
+                </button>
+                <button
+                  className={
+                    selectedTab === 'loop'
+                      ? 'pe-active-tab'
+                      : 'pe-inactive-tab'
+                  }
+                  onClick={() => this.setSelectedTab('loop')}
+                >
+                    Loop
                 </button>
               </div>
 
@@ -501,6 +511,28 @@ class PortEditor extends React.Component<
                   </ul>
                 </div>
               )}
+
+              {selectedTab === 'loop' && (
+                <div className="flexDiv">
+                  <PortEditorHeader>Set Up Loop</PortEditorHeader>
+
+                  <ul className="pe-list">
+                    <li>
+                      <div>
+                        <input
+                          id={`is-loop-${port.id}`}
+                          type="checkbox"
+                          checked={isLoop}
+                          onChange={this.toggleLoop.bind(this)}
+                        />
+                        <label htmlFor={`is-loop-${port.id}`} className="checkbox-label">
+                          Loop Back to Same Scene?
+                        </label>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </>
           )}
         </section>
@@ -533,6 +565,14 @@ class PortEditor extends React.Component<
 
   setTimeoutSeconds = (e: React.FocusEvent<HTMLInputElement>) => {
     this.state.thisPortMeta.timeoutSeconds = parseInt(e.target.value, 0)
+    this.savePortMeta()
+  }
+
+  /**
+   * Loop
+   */
+  toggleLoop = (e: React.MouseEvent) => {
+    this.state.thisPortMeta.isLoop = !this.state.thisPortMeta.isLoop
     this.savePortMeta()
   }
 

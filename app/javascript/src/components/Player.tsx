@@ -629,6 +629,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       get(this.props.portMeta as any, `${port.id}.itemChanges`) || []
     const statChanges: StatChange[] =
       get(this.props.portMeta as any, `${port.id}.statChanges`) || []
+    const isLoop: boolean =
+      get(this.props.portMeta as any, `${port.id}.isLoop`) || false
 
     let newItems = clone(this.state.currentItems)
     let newStats = clone(this.state.currentStats)
@@ -702,6 +704,13 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         targetNodes.push(link.targetPort.parent.id)
       }
     }
+
+    // If port is set to be a loop port, add the current node
+    // to the potential targets
+    if (isLoop && this.state.focus) {
+      targetNodes.push(this.state.focus)
+    }
+
     let nextNode = this.getRandom(targetNodes) || 'empty'
 
     let newHistory = clone(this.state.history)
@@ -720,11 +729,6 @@ class Player extends React.Component<PlayerProps, PlayerState> {
       },
       this.resetScroll
     )
-  }
-
-  private strip(html: string) {
-    var doc = new DOMParser().parseFromString(html, 'text/html')
-    return doc.body.textContent || ''
   }
 
   private translate(text: string): string {

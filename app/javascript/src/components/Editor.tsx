@@ -830,7 +830,10 @@ class Editor extends React.Component<EditorProps, EditorState> {
         let sourcePort = link.sourcePort as DefaultPortModel
         let targetPort = link.targetPort as DefaultPortModel
 
-        if (sourcePort.in && !targetPort.in) {
+        if (sourcePort.getNode().getID() == targetPort.getNode().getID()) {
+          // port loops back to same node, prefer users use the loop functionality
+          this.model.links[key].remove()
+        } else if (sourcePort.in && !targetPort.in) {
           // link was dragged from target to source, switch the ports
           this.model.links[key].remove()
 
