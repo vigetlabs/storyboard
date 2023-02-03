@@ -659,8 +659,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
         if (change.action === '-') {
           startValue = change.value * -1
         } else if (change.action === '?') {
-          const min = change.min ? change.min : 1
-          const max = change.max ? change.max : 10
+          const min = change.min != undefined ? change.min : 1
+          const max = change.max != undefined ? change.max : 10
 
           startValue = Math.floor(Math.random() * (max - min + 1) + min);
         } else {
@@ -684,8 +684,8 @@ class Player extends React.Component<PlayerProps, PlayerState> {
           // Subtract it from the total
           newStats[indexOfStat].value = Number(change.value)
         } else if (change.action === '?') {
-          const min = change.min ? Number(change.min) : 1
-          const max = change.max ? Number(change.max) : 10
+          const min = change.min != undefined ? Number(change.min) : 1
+          const max = change.max != undefined ? Number(change.max) : 10
 
           newStats[indexOfStat].value = Math.floor(Math.random() * (max - min + 1) + min);
         }
