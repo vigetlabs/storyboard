@@ -34,6 +34,7 @@ export interface PortMetaContent {
   isTimer: boolean
   hideChoice: boolean
   timeoutSeconds: number
+  isLoop: boolean
 }
 
 export interface ShowIfItem {
