@@ -1,5 +1,5 @@
 class AdventuresController < ApplicationController
-  before_action :set_adventure, only: [:show, :edit, :update, :destroy, :details, :source, :offline, :authenticate]
+  before_action :set_adventure, only: [:show, :edit, :update, :destroy, :details, :source, :offline, :authenticate, :duplicate]
   before_action :check_authentication, only: [:show]
 
   def index
@@ -130,6 +130,19 @@ class AdventuresController < ApplicationController
     if current_user.try(:is_admin?)
       send_data(AdventureExport.export, filename: "storyboard_adventures_#{Date.current.strftime("%x").gsub("/", "-")}.csv")
     end
+  end
+
+  def duplicate
+    if !@adventure.editable_by?(current_user)
+      flash[:alert] = "You can't modify that Adventure"
+      return redirect_to root_url
+    end
+
+    duplicated_adventure = @adventure.dup
+    duplicated_adventure.title = "Copy of #{@adventure.title}"
+    duplicated_adventure.save
+
+    redirect_to [:edit, duplicated_adventure], notice: "Adventure was successfully copied."
   end
 
   private
