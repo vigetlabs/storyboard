@@ -3,6 +3,8 @@
 
   <%= render "shared/adventure_form", is_update: true, correct_user: @adventure.user && @adventure.user == current_user %>
 
+  <%= link_to "Duplicate Story", duplicate_adventure_path(@adventure), method: :post, class: "SlantButton" %>
+
   <footer class="AccountFormFooter">
     <%= link_to 'Back to Edit', [:edit, @adventure] %>
     <br>
