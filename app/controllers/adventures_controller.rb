@@ -142,7 +142,7 @@ class AdventuresController < ApplicationController
     duplicated_adventure.title = "Copy of #{@adventure.title}"
     duplicated_adventure.save
 
-    redirect_to [:edit, duplicated_adventure], notice: "Adventure was successfully copied."
+    redirect_to [:edit, duplicated_adventure]
   end
 
   private
