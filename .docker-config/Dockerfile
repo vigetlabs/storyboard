@@ -1,4 +1,4 @@
-FROM ruby:2.5.1
+FROM ruby:3.2.1
 
 RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - && \
@@ -9,8 +9,8 @@ RUN curl -sL https://deb.nodesource.com/setup_14.x | bash - && \
     wget xvfb unzip && \
     rm -rf /var/lib/apt/lists/*
 
-ENV BUNDLER_VERSION='1.17.3'
-RUN gem install bundler:1.17.3
+ENV BUNDLER_VERSION='2.4.6'
+RUN gem install bundler:2.4.6
 
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | \
     apt-key add - && \

@@ -68,7 +68,7 @@ An app for creating Choose Your Own Adventure stories
   ### Application Dependencies
   If you don't have Bundler installed for Ruby:
   ```bash
-  gem install bundler -v 1.17.3
+  gem install bundler -v 2.4.6
   ```
 
   Install dependencies:
