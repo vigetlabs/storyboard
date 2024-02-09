@@ -231,7 +231,8 @@ GEM
     pry-rails (0.3.7)
       pry (>= 0.10.4)
     public_suffix (3.0.3)
-    puma (3.12.2)
+    puma (4.3.12)
+      nio4r (~> 2.0)
     rack (2.1.2)
     rack-proxy (0.6.5)
       rack
@@ -374,7 +375,7 @@ DEPENDENCIES
   pg (>= 0.18, < 2.0)
   pointless_feedback (~> 4.1.5)
   pry-rails
-  puma (~> 3.12)
+  puma (~> 4.3)
   rails (~> 5.2.1)
   rspec-rails (~> 4.0.0)
   selenium-webdriver
