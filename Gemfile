@@ -43,6 +43,7 @@ group :test do
   gem 'capybara', '>= 2.15'
   gem 'database_cleaner',   '~> 0.9.1'
   gem "factory_bot_rails"
+  gem 'factory_bot', '6.4.4'
   gem 'selenium-webdriver'
   gem 'simplecov', require: false
   gem 'webdrivers', '< 4.1'
