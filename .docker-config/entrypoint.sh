@@ -6,7 +6,7 @@ set -e
 rm -rf /usr/src/app/tmp/pids
 
 # Verify node_modules are up to date
-# yarn install --silent
+yarn install --silent
 
 # Verify gems are up to date
 if ! bundle check > /dev/null; then

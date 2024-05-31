@@ -135,7 +135,7 @@ GEM
       ffi (>= 1.15.0)
     excon (0.110.0)
     execjs (2.9.1)
-    factory_bot (6.4.5)
+    factory_bot (6.4.4)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.4.3)
       factory_bot (~> 6.4)
@@ -392,6 +392,7 @@ DEPENDENCIES
   devise
   dragonfly
   dragonfly-s3_data_store
+  factory_bot (= 6.4.4)
   factory_bot_rails
   listen (>= 3.0.5, < 3.2)
   mimemagic!
@@ -417,4 +418,4 @@ RUBY VERSION
    ruby 2.7.2p137
 
 BUNDLED WITH
-   2.1.4
+   2.4.13
