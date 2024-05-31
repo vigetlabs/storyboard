@@ -7,7 +7,7 @@ jobs:
 
     env:
         RAILS_ENV: test
-        DATABASE_URL: "postgresql://root@localhost/adventure-time_test?pool=5"
+        DATABASE_URL: "postgresql://root:password@localhost/adventure-time_test?pool=5"
         TZ: "/usr/share/zoneinfo/America/New_York"
         COV: '1'
         BUNDLER_PATH: vendor/bundle
@@ -20,7 +20,7 @@ jobs:
         env:
           POSTGRES_USER: root
           POSTGRES_DB: adventure-time_test
-          POSTGRES_PASSWORD: ""
+          POSTGRES_PASSWORD: password
         ports:
           - 5432:5432
         # Add a health check
