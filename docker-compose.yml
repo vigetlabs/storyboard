@@ -2,7 +2,7 @@ version: "3.2"
 
 services:
   db:
-    image: postgres:10.6-alpine
+    image: postgres:14.12-alpine
     volumes:
       - db-data:/var/lib/postgresql/data
     environment:
@@ -20,7 +20,8 @@ services:
     ports:
       - 3000:3000
     environment:
-      WEBPACKER_DEV_SERVER_HOST: webpack
+      - WEBPACKER_DEV_SERVER_HOST=webpack
+      - SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
     depends_on:
       - db
     volumes:

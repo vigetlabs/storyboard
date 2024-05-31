@@ -4,7 +4,7 @@ require 'viget/deployment/rails'
 require 'capistrano-db-tasks'
 
 set :application, 'storyboard'
-set :repository,  'git@github.com:vigetlabs/adventure-time.git'
+set :repository,  'git@github.com:vigetlabs/storyboard.git'
 set :branch,      'main'
 
 before 'deploy:assets:precompile', 'deploy:assets:node_modules'
