@@ -15,7 +15,7 @@
     "expr-eval": "^2.0.2",
     "handlebars": "^4.7.7",
     "lodash": "^4.17.13",
-    "node-sass": "^4.14.1",
+    "node-sass": "^7.0.0",
     "prop-types": "^15.6.2",
     "react": "16.14",
     "react-audio-player": "^0.17.0",
