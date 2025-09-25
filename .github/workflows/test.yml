@@ -42,7 +42,6 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '14.17.0'
-          cache: 'yarn'
 
       - run: node --version
       - run: yarn --version
