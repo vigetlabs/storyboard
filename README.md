@@ -111,5 +111,10 @@ To deploy:
 bundle exec cap production deploy
 ```
 
+#### Captcha information
+The captcha is configured at https://www.google.com/recaptcha/admin under the account `apps@viget.com`.
+
+Account details for that shared app account are available [in 1Password](https://start.1password.com/open/i?a=AMZ7SJK7R5ELTBZKA4GUYTUUDM&v=maxyfxamkf65q6flnyqzyixhgi&i=4yowbbfk7hool3oh4a6ur3w7iu&h=viget.1password.com).
+
 ## Contributing
 - We're using a "rebase and merge" workflow for a linear commit history.

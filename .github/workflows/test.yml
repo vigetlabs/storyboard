@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up ruby 2.7.2
         uses: ruby/setup-ruby@v1
@@ -39,10 +39,9 @@ jobs:
           bundle install
 
       - name: Setup Node
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '14.17.0'
-          cache: 'yarn'
 
       - run: node --version
       - run: yarn --version

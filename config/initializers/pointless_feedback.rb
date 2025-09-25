@@ -11,8 +11,8 @@ PointlessFeedback.setup do |config|
   config.to_emails                 = [
     'noah.over@viget.com'
   ]
-  config.google_captcha_site_key   = "6Lcx6pQUAAAAANoXFts8_nsPSoNikCW6p80aCIL_"
-  config.google_captcha_secret_key = "6Lcx6pQUAAAAALoO68Z-f5vxBehQZLkxZkQvwkGw"
+  config.google_captcha_site_key   = "6LdKEdUrAAAAAKr1rPKsJAfWeFr8ouo3BLRCoyrR"
+  config.google_captcha_secret_key = "6LdKEdUrAAAAAPW0xa8av_T3D_NsHbeTqp2VH1ff"
 
   # Configure the words that will prevent an email from being sent if they are
   # contained in the description
