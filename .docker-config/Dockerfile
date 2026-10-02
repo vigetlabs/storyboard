@@ -1,36 +1,40 @@
-FROM ruby:2.7.2
+FROM ruby:2.7.8
 
-RUN wget https://dl.yarnpkg.com/debian/pubkey.gpg 
-RUN curl https://deb.nodesource.com/setup_14.x | bash
-RUN cat pubkey.gpg | apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-RUN apt-get update && \
-    apt-get install -qq -y build-essential libpq-dev \
-    postgresql-client nodejs yarn \
-    wget xvfb unzip && \
-    rm -rf /var/lib/apt/lists/*
+ENV NODE_VERSION=14.17.0
+ENV YARN_VERSION=1.22.19
+ENV BUNDLER_VERSION=2.4.13
+# Selenium 4.9's manager asks for Chrome 114. Latest Chrome needs a newer glibc
+# than Debian 11, so pin a matching pair for js: true specs in this image.
+ENV CHROME_VERSION=114.0.5735.90
+ENV CHROMEDRIVER_VERSION=114.0.5735.90
+ENV CHROME_BIN=/usr/bin/google-chrome
 
-# remove pubkey 
-RUN rm pubkey.gpg
+# ruby:2.7.8 is Debian 11. Regular mirrors dropped bullseye after LTS ended
+# in August 2026. Use the archive and skip the retired security suite.
+RUN printf 'deb http://archive.debian.org/debian bullseye main\n' > /etc/apt/sources.list \
+    && rm -f /etc/apt/sources.list.d/* \
+    && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until \
+    && apt-get update \
+    && apt-get install -qq -y --no-install-recommends \
+       build-essential libpq-dev postgresql-client xz-utils ca-certificates unzip \
+       fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libatspi2.0-0 \
+       libcups2 libdbus-1-3 libdrm2 libgbm1 libgtk-3-0 libnspr4 libnss3 \
+       libxcomposite1 libxdamage1 libxfixes3 libxkbcommon0 libxrandr2 xdg-utils \
+    && curl -fsSL -o /tmp/chrome.deb \
+       "https://mirror.cs.uchicago.edu/google-chrome/pool/main/g/google-chrome-stable/google-chrome-stable_${CHROME_VERSION}-1_amd64.deb" \
+    && apt-get install -qq -y --no-install-recommends /tmp/chrome.deb \
+    && curl -fsSL -o /tmp/chromedriver.zip \
+       "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip" \
+    && unzip -q /tmp/chromedriver.zip -d /usr/local/bin \
+    && chmod +x /usr/local/bin/chromedriver \
+    && rm -f /tmp/chrome.deb /tmp/chromedriver.zip \
+    && rm -rf /var/lib/apt/lists/*
 
-ENV BUNDLER_VERSION='2.4.13'
-RUN gem install bundler:2.4.13
+# NodeSource's setup_14.x script is retired. Pin the same Node/Yarn as .tool-versions.
+RUN curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" \
+    | tar -xJ -C /usr/local --strip-components=1 \
+    && npm install -g "yarn@${YARN_VERSION}"
 
-# RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | \
-#     apt-key add - && \
-#     echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> \
-#     /etc/apt/sources.list.d/google.list && \
-#     apt-get update -y && \
-#     apt-get install -y google-chrome-stable && \
-#     rm -rf /var/lib/apt/lists/*
-
-# ENV CHROMEDRIVER_VERSION 2.19
-# ENV CHROMEDRIVER_DIR /chromedriver
-
-# RUN mkdir $CHROMEDRIVER_DIR && \
-#   wget -q --continue -P $CHROMEDRIVER_DIR "http://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip" && \
-#   unzip $CHROMEDRIVER_DIR/chromedriver* -d $CHROMEDRIVER_DIR
-
-# ENV PATH $CHROMEDRIVER_DIR:$PATH
+RUN gem install bundler:${BUNDLER_VERSION}
 
 WORKDIR /usr/src/app

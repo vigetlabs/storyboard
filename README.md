@@ -41,7 +41,7 @@ An app for creating Choose Your Own Adventure stories
   docker compose run --rm -e RAILS_ENV=test app rake db:create db:migrate
 
   # Run specs
-  docker-compose run --rm app rspec
+  docker compose run --rm app rspec
   ```
 </details>
 
@@ -51,7 +51,7 @@ An app for creating Choose Your Own Adventure stories
   ### Tooling and Dependencies
   - If you have `asdf` installed, `.tool-versions` is set up for Ruby, Node, and Yarn versions.
   - PostgreSQL
-    - version 11.x
+    - version 14.x (Docker Compose uses `postgres:14.12-alpine`)
     - can be installed with homebrew
 
 
@@ -68,7 +68,7 @@ An app for creating Choose Your Own Adventure stories
   ### Application Dependencies
   If you don't have Bundler installed for Ruby:
   ```bash
-  gem install bundler -v 1.17.3
+  gem install bundler -v 2.4.13
   ```
 
   Install dependencies:
