@@ -25,7 +25,12 @@ import { defaultNodeName } from '../constants'
 
 let offset = 100
 
-import { Undo, Redo } from '@material-ui/icons'
+import UndoModule from '@material-ui/icons/esm/Undo'
+import RedoModule from '@material-ui/icons/esm/Redo'
+import muiIcon from '../muiIcon'
+
+const Undo = muiIcon(UndoModule)
+const Redo = muiIcon(RedoModule)
 
 interface EditorState {
   ready: boolean

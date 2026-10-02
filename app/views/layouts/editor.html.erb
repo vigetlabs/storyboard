@@ -8,8 +8,8 @@
       <%= render "shared/header" %>
       <%= yield %>
 
-      <%= stylesheet_pack_tag "editor" %>
-      <%= javascript_pack_tag "editor", async: true, defer: true %>
+      <%= vite_client_tag %>
+      <%= vite_javascript_tag "editor.tsx" %>
     </div>
   </body>
 </html>

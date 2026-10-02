@@ -90,9 +90,9 @@ An app for creating Choose Your Own Adventure stories
   ./bin/rails s
   ```
 
-  If you're updating CSS or JS, start webpacker to enable hot reloading:
+  If you're updating CSS or JS, start Vite to enable hot reloading:
   ```bash
-  ./bin/webpack-dev-server
+  ./bin/vite dev
   ```
 
   Then open [http://localhost:3000](http://localhost:3000) with your favorite internet browser.

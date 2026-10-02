@@ -21,7 +21,7 @@ services:
     ports:
       - 3000:3000
     environment:
-      - WEBPACKER_DEV_SERVER_HOST=webpack
+      - VITE_RUBY_HOST=vite
       - SSH_AUTH_SOCK=/run/host-services/ssh-auth.sock
     depends_on:
       - db
@@ -29,7 +29,7 @@ services:
       - .:/usr/src/app
       - gems:/usr/local/bundle
       - yarn:/usr/src/app/node_modules
-      - packs:/usr/src/public/packs
+      - vite:/usr/src/app/public/vite-dev
       - log:/usr/src/app/log
       - tmp:/usr/src/app/tmp
       - type: bind
@@ -38,7 +38,7 @@ services:
     tty: true
     stdin_open: true
 
-  webpack:
+  vite:
     platform: linux/x86_64
     image: storyboard_app
     command: [
@@ -46,25 +46,25 @@ services:
       "app:3000",
       "--timeout=0",
       "--",
-      "yarn",
-      "start"
+      "bin/vite",
+      "dev"
     ]
     ports:
-      - 3035:3035
+      - 3036:3036
     volumes:
       - .:/usr/src/app
       - gems:/usr/local/bundle
       - yarn:/usr/src/app/node_modules
-      - packs:/usr/src/public/packs
+      - vite:/usr/src/app/public/vite-dev
     environment:
       NODE_ENV: development
       RAILS_ENV: development
-      WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
+      VITE_RUBY_HOST: 0.0.0.0
 
 volumes:
   db-data:
   gems:
   yarn:
-  packs:
+  vite:
   log:
   tmp:

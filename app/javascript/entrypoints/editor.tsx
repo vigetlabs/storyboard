@@ -8,7 +8,7 @@ import * as ReactDOM from 'react-dom'
 
 import Tutorial from '../src/components/Tutorial'
 import Editor from '../src/components/Editor'
-import { ApplicationComponent, MetaData, PortMeta } from '../src/Store'
+import { ApplicationComponent } from '../src/Store'
 import { load } from '../src/persistance'
 import defaultStory from '../src/seed'
 
@@ -20,28 +20,8 @@ window.addEventListener('pageshow', e => {
     e.persisted ||
     (window.performance && window.performance.navigation.type === 2)
   )
-    location.reload(true)
+    location.reload()
 })
-
-declare global {
-  const SEED: {
-    slug: string
-    title: string
-    description: string
-    theme: string
-    viewOnly: boolean
-    isOffline: boolean
-    backButton: boolean
-    debuggable: boolean
-    characterCard: boolean
-    showSource: boolean
-    story: {
-      story: any
-      meta: MetaData
-      portMeta: PortMeta
-    }
-  }
-}
 
 const slug = SEED.slug
 const viewOnly = SEED.viewOnly

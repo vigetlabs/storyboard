@@ -6,7 +6,7 @@
   <body class="<%= content_for :theme %>">
     <%= yield %>
 
-    <%= stylesheet_pack_tag "player" %>
-    <%= javascript_pack_tag "player", async: true, defer: true %>
+    <%= vite_client_tag %>
+    <%= vite_javascript_tag "player.tsx" %>
   </body>
 </html>

@@ -1,6 +1,6 @@
 FROM ruby:2.7.8
 
-ENV NODE_VERSION=14.17.0
+ENV NODE_VERSION=20.20.2
 ENV YARN_VERSION=1.22.19
 ENV BUNDLER_VERSION=2.4.13
 # Selenium 4.9's manager asks for Chrome 114. Latest Chrome needs a newer glibc

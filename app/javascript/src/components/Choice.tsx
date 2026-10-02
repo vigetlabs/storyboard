@@ -3,10 +3,16 @@ import { FC, useRef } from 'react'
 import { DropTargetMonitor, useDrag, useDrop } from 'react-dnd'
 import { XYCoord } from 'dnd-core'
 import { DefaultPortModel } from 'storm-react-diagrams';
-import UnfoldMoreIcon from '@material-ui/icons/UnfoldMore';
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
-import MenuOpenIcon from '@material-ui/icons/MenuOpen';
-import MenuIcon from '@material-ui/icons/Menu';
+import UnfoldMoreIconModule from '@material-ui/icons/esm/UnfoldMore'
+import DeleteOutlineIconModule from '@material-ui/icons/esm/DeleteOutline'
+import MenuOpenIconModule from '@material-ui/icons/esm/MenuOpen'
+import MenuIconModule from '@material-ui/icons/esm/Menu'
+import muiIcon from '../muiIcon'
+
+const UnfoldMoreIcon = muiIcon(UnfoldMoreIconModule)
+const DeleteOutlineIcon = muiIcon(DeleteOutlineIconModule)
+const MenuOpenIcon = muiIcon(MenuOpenIconModule)
+const MenuIcon = muiIcon(MenuIconModule)
 
 interface ChoiceProps {
   id: any
