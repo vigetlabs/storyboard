@@ -12,18 +12,13 @@ gem 'puma', '~> 4.3'
 gem 'rails', '~> 6.1.7'
 gem 'uglifier'
 gem 'webpacker', '~> 4.0.7'
-gem 'sentry-raven'
+gem 'sentry-ruby'
+gem 'sentry-rails'
 gem 'pointless_feedback', '~> 4.1.5'
 gem 'stat_board', '~> 1.1.0'
 gem 'administrate', '~> 0.13.0'
 gem "dragonfly"
 gem "dragonfly-s3_data_store"
-
-gem 'capistrano-db-tasks', {
-  :github  => 'efatsi/capistrano-db-tasks',
-  :require => false,
-  :branch  => '0.2.1'
-}
 
 group :development, :test do
   gem 'pry-rails'
@@ -34,8 +29,17 @@ group :development do
   gem 'listen', '>= 3.0.5'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'viget-deployment', '2.0.0', github: 'vigetlabs/viget-deployment', require: false
   gem 'web-console', '>= 3.3.0'
+
+  # Capistrano 2 via viget-deployment. Isolated from runtime/test so it
+  # cannot break boot. Replace before the Ruby 3 upgrade (keyword-arg
+  # breakage); `bundle exec cap production deploy` still works on 2.7.
+  gem 'viget-deployment', '2.0.0', github: 'vigetlabs/viget-deployment', require: false
+  gem 'capistrano-db-tasks', {
+    github: 'efatsi/capistrano-db-tasks',
+    require: false,
+    branch: '0.2.1'
+  }
 end
 
 group :test do

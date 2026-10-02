@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+# Capistrano 2 / viget-deployment. Isolated in the development Gemfile group.
+# Replace before Ruby 3 (Cap 2 keyword-arg breakage).
 
 require 'viget/deployment/rails'
 require 'capistrano-db-tasks'
