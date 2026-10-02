@@ -9,7 +9,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'devise'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 4.3'
-gem 'rails', '~> 6.0.6'
+gem 'rails', '~> 6.1.7'
 gem 'uglifier'
 gem 'webpacker', '~> 4.0.7'
 gem 'sentry-raven'

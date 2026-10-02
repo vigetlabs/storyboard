@@ -19,7 +19,7 @@ Bundler.require(*Rails.groups)
 module AdventureTime
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.0
+    config.load_defaults 6.1
 
     config.action_mailer.preview_path = "#{Rails.root}/lib/mailer_previews"
 
