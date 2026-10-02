@@ -9,7 +9,8 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'devise'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 4.3'
-gem 'rails', '~> 6.1.7'
+gem 'rails', '~> 7.0.8'
+gem 'sprockets-rails'
 gem 'uglifier'
 gem 'vite_rails'
 gem 'sentry-ruby'
@@ -22,14 +23,12 @@ gem "dragonfly-s3_data_store"
 
 group :development, :test do
   gem 'pry-rails'
-  gem 'rspec-rails', '~> 4.0.0'
+  gem 'rspec-rails', '~> 6.1'
 end
 
 group :development do
   gem 'listen', '>= 3.0.5'
-  gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
-  gem 'web-console', '>= 3.3.0'
+  gem 'web-console', '>= 4.2.0'
 
   # Capistrano 2 via viget-deployment. Isolated from runtime/test so it
   # cannot break boot. Replace before the Ruby 3 upgrade (keyword-arg
