@@ -105,7 +105,8 @@ An app for creating Choose Your Own Adventure stories
 
 ## Deployment
 
-To deploy:
+Deploy still uses Capistrano 2 via `viget-deployment` (development-only gems).
+Replace that stack before the Ruby 3 upgrade; it will not install on Ruby 3.
 
 ```sh
 bundle exec cap production deploy
