@@ -153,7 +153,7 @@ describe "Adventures" do
       end
 
       it "does not allow you to update a story with a blank title" do
-        adventure.update_attributes(title: nil)
+        adventure.update(title: nil)
 
         expect(adventure.save).to eq(false)
       end

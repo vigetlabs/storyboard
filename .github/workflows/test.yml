@@ -30,13 +30,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up ruby 2.7.2
+      - name: Set up Ruby
         uses: ruby/setup-ruby@v1
+        with:
+          bundler: '2.4.13'
 
       - name: Set up Ruby dependencies
-        run: |
-          gem update bundler
-          bundle install
+        run: bundle install
 
       - name: Setup Node
         uses: actions/setup-node@v4
