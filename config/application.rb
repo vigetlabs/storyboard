@@ -19,9 +19,9 @@ Bundler.require(*Rails.groups)
 module AdventureTime
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.0
+    config.load_defaults 7.1
 
-    config.action_mailer.preview_path = "#{Rails.root}/lib/mailer_previews"
+    config.action_mailer.preview_paths << "#{Rails.root}/lib/mailer_previews"
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
