@@ -140,6 +140,7 @@ GEM
     dragonfly-s3_data_store (1.3.0)
       dragonfly (~> 1.0)
       fog-aws
+    dry-cli (1.2.0)
     erubi (1.12.0)
     ethon (0.16.0)
       ffi (>= 1.15.0)
@@ -223,6 +224,7 @@ GEM
       railties (>= 3.1)
     msgpack (1.7.2)
     multi_json (1.15.0)
+    mutex_m (0.3.0)
     net-http-persistent (4.0.2)
       connection_pool (~> 2.2)
     net-imap (0.4.25)
@@ -262,7 +264,7 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.0)
     rack (2.2.9)
-    rack-proxy (0.7.7)
+    rack-proxy (0.8.3)
       rack
     rack-test (2.1.0)
       rack (>= 1.3)
@@ -372,6 +374,15 @@ GEM
       concurrent-ruby (~> 1.0)
     uglifier (4.2.0)
       execjs (>= 0.3.0, < 3)
+    vite_rails (3.11.1)
+      railties (>= 5.1, < 9)
+      vite_ruby (~> 3.0, >= 3.2.2)
+    vite_ruby (3.11.1)
+      dry-cli (>= 0.7, < 2)
+      logger (~> 1.6)
+      mutex_m
+      rack-proxy (>= 0.6.1)
+      zeitwerk (~> 2.2)
     warden (1.2.9)
       rack (>= 2.0.9)
     web-console (3.7.0)
@@ -379,10 +390,6 @@ GEM
       activemodel (>= 5.0)
       bindex (>= 0.4.0)
       railties (>= 5.0)
-    webpacker (4.0.7)
-      activesupport (>= 4.2)
-      rack-proxy (>= 0.6.1)
-      railties (>= 4.2)
     websocket (1.2.10)
     websocket-driver (0.8.2)
       base64
@@ -426,8 +433,8 @@ DEPENDENCIES
   stat_board (~> 1.1.0)
   uglifier
   viget-deployment (= 2.0.0)!
+  vite_rails
   web-console (>= 3.3.0)
-  webpacker (~> 4.0.7)
 
 RUBY VERSION
    ruby 2.7.8p225

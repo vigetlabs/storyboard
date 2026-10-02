@@ -17,7 +17,11 @@ import { savePhoto, removePhoto, saveAudio, removeAudio } from '../persistance'
 declare function $R(el: HTMLElement, options: any): void
 declare function $R(el: HTMLElement, fun: string, arg: string): void
 
-const ReactVoiceRecorder = require('react-voice-recorder')
+const VoiceRecorderModule = require('react-voice-recorder')
+const VoiceRecorder =
+  VoiceRecorderModule.Recorder ||
+  VoiceRecorderModule.default?.Recorder ||
+  VoiceRecorderModule
 
 interface Duration {
   h: number
@@ -113,7 +117,7 @@ class SceneEditor extends React.Component<SceneEditorProps, SceneEditorState> {
           <div className="recorderSection">
             <input type="file" accept="audio/*" onChange={this.onAudioChange} />
             <h3 className="recorderHeader">Record your own audio!</h3>
-            <ReactVoiceRecorder.Recorder
+            <VoiceRecorder
               record={true}
               hideHeader
               showUIAudio

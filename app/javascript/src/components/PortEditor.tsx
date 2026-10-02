@@ -7,7 +7,6 @@ import { clone } from '../clone'
 import { Choice } from './Choice'
 
 import './PortEditor.css'
-import { link } from 'fs'
 
 interface PortEditorProps {
   port: DefaultPortModel
