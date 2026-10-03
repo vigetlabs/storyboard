@@ -55,3 +55,15 @@ jobs:
 
       - name: Run specs
         run: bundle exec rspec
+
+      - name: Require 100% line coverage
+        run: |
+          ruby -e '
+            require "json"
+            path = "coverage/.last_run.json"
+            abort "SimpleCov did not write #{path}" unless File.exist?(path)
+            result = JSON.parse(File.read(path)).fetch("result")
+            percent = result["line"] || result["covered_percent"]
+            puts "Line coverage: #{percent}%"
+            abort "Expected 100% line coverage, got #{percent}%" unless percent.to_f >= 100
+          '

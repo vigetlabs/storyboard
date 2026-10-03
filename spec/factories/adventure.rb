@@ -3,7 +3,7 @@ FactoryBot.define do
     association :user, :factory => :user
     description { "Test Story" }
     title { "Test Story" }
-    slug { "test-story"}
+    sequence(:slug) { |n| "test-story-#{n}" }
     has_password { false }
     password { "" }
     theme { "light" }
