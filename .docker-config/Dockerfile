@@ -1,6 +1,6 @@
 FROM ruby:3.4.11-bookworm
 
-ENV NODE_VERSION=20.20.2
+ENV NODE_VERSION=26.10.0
 ENV YARN_VERSION=1.22.19
 ENV BUNDLER_VERSION=2.4.13
 # Selenium 4.9's manager asks for Chrome 114. Pin a matching pair for
