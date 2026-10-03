@@ -11,7 +11,7 @@ gem 'devise', '~> 4.9'
 gem 'json', '~> 2.13'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 6.6'
-gem 'rails', '~> 7.2.0'
+gem 'rails', '~> 8.0.0'
 gem 'sprockets-rails'
 gem 'uglifier'
 gem 'vite_rails'
@@ -19,13 +19,13 @@ gem 'sentry-ruby'
 gem 'sentry-rails'
 gem 'pointless_feedback', '~> 4.1.5'
 gem 'stat_board', '~> 1.1.0'
-gem 'administrate', '~> 0.13.0'
+gem 'administrate', '~> 1.0.0'
 gem "dragonfly"
 gem "dragonfly-s3_data_store"
 
 group :development, :test do
   gem 'pry-rails'
-  gem 'rspec-rails', '~> 6.1'
+  gem 'rspec-rails', '~> 7.1'
 end
 
 group :development do
