@@ -1,15 +1,16 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '2.7.8'
+ruby '3.4.11'
 
 gem 'awesome_print'
 gem 'bcrypt'
+gem 'csv'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'devise', '~> 4.9'
+gem 'json', '~> 2.13'
 gem 'pg', '>= 0.18', '< 2.0'
-gem 'puma', '~> 4.3'
-gem 'rack', '~> 2.2'
+gem 'puma', '~> 6.6'
 gem 'rails', '~> 7.1.0'
 gem 'sprockets-rails'
 gem 'uglifier'
@@ -32,8 +33,8 @@ group :development do
   gem 'web-console', '>= 4.2.0'
 
   # Capistrano 2 via viget-deployment. Isolated from runtime/test so it
-  # cannot break boot. Replace before the Ruby 3 upgrade (keyword-arg
-  # breakage); `bundle exec cap production deploy` still works on 2.7.
+  # cannot break boot. Keyword-arg breakage on Ruby 3; replace before
+  # using `cap production deploy` from this Ruby.
   gem 'viget-deployment', '2.0.0', github: 'vigetlabs/viget-deployment', require: false
   gem 'capistrano-db-tasks', {
     github: 'efatsi/capistrano-db-tasks',

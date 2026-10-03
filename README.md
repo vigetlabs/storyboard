@@ -23,10 +23,10 @@ An app for creating Choose Your Own Adventure stories
 
   Once the containers have been built, starting the app is just:
   ```bash
-  docker compose up
+  docker compose up --remove-orphans
 
   # And a shortcut for rebuilding containers while spinning them up at the same time:
-  docker compose up --build
+  docker compose up --build --remove-orphans
   ```
 
   ### Seeding the database
@@ -38,10 +38,10 @@ An app for creating Choose Your Own Adventure stories
   ### Running tests
   ```bash
   # Set up the test database
-  docker compose run --rm -e RAILS_ENV=test app rake db:create db:migrate
+  docker compose run --rm -e RAILS_ENV=test app bundle exec rake db:create db:migrate
 
   # Run specs
-  docker compose run --rm app rspec
+  docker compose run --rm app bundle exec rspec
   ```
 </details>
 
@@ -99,14 +99,15 @@ An app for creating Choose Your Own Adventure stories
 
   ### Run the test suite
   ```bash
-  rspec
+  bundle exec rspec
   ```
 </details>
 
 ## Deployment
 
 Deploy still uses Capistrano 2 via `viget-deployment` (development-only gems).
-Replace that stack before the Ruby 3 upgrade; it will not install on Ruby 3.
+Cap 2 has keyword-arg breakage on Ruby 3; replace that stack before deploying
+from this Ruby. `bundle exec cap production deploy` is not expected to work here.
 
 ```sh
 bundle exec cap production deploy
