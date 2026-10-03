@@ -8,7 +8,7 @@ gem 'bcrypt'
 gem 'cgi'
 gem 'csv'
 gem 'bootsnap', '>= 1.1.0', require: false
-gem 'devise', '~> 4.9'
+gem 'devise', '~> 5.0'
 gem 'json', '~> 2.13'
 gem 'pg', '>= 0.18', '< 2.0'
 gem 'puma', '~> 6.6'
