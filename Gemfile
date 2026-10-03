@@ -1,10 +1,11 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-ruby '3.4.11'
+ruby '4.0.7'
 
 gem 'awesome_print'
 gem 'bcrypt'
+gem 'cgi'
 gem 'csv'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'devise', '~> 4.9'
