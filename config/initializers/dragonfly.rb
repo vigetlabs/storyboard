@@ -28,7 +28,7 @@ Dragonfly.app.configure do
       app.server.url_for(job)
     end
 
-    URI::Parser.new.escape(url)
+    URI::RFC2396_PARSER.escape(url)
   end
 
   before_serve do |job, env|

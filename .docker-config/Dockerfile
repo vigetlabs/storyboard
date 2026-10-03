@@ -1,20 +1,15 @@
-FROM ruby:2.7.8
+FROM ruby:3.4.11-bookworm
 
 ENV NODE_VERSION=20.20.2
 ENV YARN_VERSION=1.22.19
 ENV BUNDLER_VERSION=2.4.13
-# Selenium 4.9's manager asks for Chrome 114. Latest Chrome needs a newer glibc
-# than Debian 11, so pin a matching pair for js: true specs in this image.
+# Selenium 4.9's manager asks for Chrome 114. Pin a matching pair for
+# js: true specs in this image.
 ENV CHROME_VERSION=114.0.5735.90
 ENV CHROMEDRIVER_VERSION=114.0.5735.90
 ENV CHROME_BIN=/usr/bin/google-chrome
 
-# ruby:2.7.8 is Debian 11. Regular mirrors dropped bullseye after LTS ended
-# in August 2026. Use the archive and skip the retired security suite.
-RUN printf 'deb http://archive.debian.org/debian bullseye main\n' > /etc/apt/sources.list \
-    && rm -f /etc/apt/sources.list.d/* \
-    && echo 'Acquire::Check-Valid-Until "false";' > /etc/apt/apt.conf.d/99no-check-valid-until \
-    && apt-get update \
+RUN apt-get update \
     && apt-get install -qq -y --no-install-recommends \
        build-essential libpq-dev postgresql-client xz-utils ca-certificates unzip \
        fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libatspi2.0-0 \
@@ -30,7 +25,7 @@ RUN printf 'deb http://archive.debian.org/debian bullseye main\n' > /etc/apt/sou
     && rm -f /tmp/chrome.deb /tmp/chromedriver.zip \
     && rm -rf /var/lib/apt/lists/*
 
-# NodeSource's setup_14.x script is retired. Pin the same Node/Yarn as .tool-versions.
+# Pin the same Node/Yarn as .tool-versions.
 RUN curl -fsSL "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz" \
     | tar -xJ -C /usr/local --strip-components=1 \
     && npm install -g "yarn@${YARN_VERSION}"
