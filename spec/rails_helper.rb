@@ -1,6 +1,14 @@
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'simplecov'
-SimpleCov.start
+SimpleCov.start 'rails' do
+  enable_coverage :line
+  skip '/spec/'
+  skip '/config/'
+  skip '/vendor/'
+  skip '/db/'
+  cover '{app/**/*.rb}'
+  minimum_coverage line: 100
+end
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../config/environment', __dir__)
@@ -52,6 +60,8 @@ rescue ActiveRecord::PendingMigrationError => e
   exit 1
 end
 RSpec.configure do |config|
+  config.include Devise::Test::IntegrationHelpers, type: :request
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = ["#{::Rails.root}/spec/fixtures"]
 
