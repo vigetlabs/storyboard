@@ -12,7 +12,7 @@ describe "Adventures" do
         fill_in "Password", with: "not password"
         click_on "Log in"
 
-        expect(page).to have_content("Invalid Email or password.")
+        expect(page).to have_content("Invalid email or password.")
       end
 
       it "allows you to log in with the correct credentials" do
