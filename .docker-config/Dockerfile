@@ -1,8 +1,8 @@
-FROM ruby:3.4.11-bookworm
+FROM ruby:4.0.7-bookworm
 
 ENV NODE_VERSION=26.10.0
 ENV YARN_VERSION=1.22.19
-ENV BUNDLER_VERSION=2.4.13
+ENV BUNDLER_VERSION=4.0.22
 # Selenium 4.9's manager asks for Chrome 114. Pin a matching pair for
 # js: true specs in this image.
 ENV CHROME_VERSION=114.0.5735.90
@@ -11,7 +11,7 @@ ENV CHROME_BIN=/usr/bin/google-chrome
 
 RUN apt-get update \
     && apt-get install -qq -y --no-install-recommends \
-       build-essential libpq-dev postgresql-client xz-utils ca-certificates unzip \
+       build-essential libpq-dev libyaml-dev postgresql-client xz-utils ca-certificates unzip \
        fonts-liberation libasound2 libatk-bridge2.0-0 libatk1.0-0 libatspi2.0-0 \
        libcups2 libdbus-1-3 libdrm2 libgbm1 libgtk-3-0 libnspr4 libnss3 \
        libxcomposite1 libxdamage1 libxfixes3 libxkbcommon0 libxrandr2 xdg-utils \
