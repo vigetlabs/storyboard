@@ -29,8 +29,20 @@
     "vite": "^8.0.0",
     "vite-plugin-ruby": "^5.2.5"
   },
+  "devDependencies": {
+    "@testing-library/dom": "^8.20.1",
+    "@testing-library/jest-dom": "6.6.3",
+    "@testing-library/react": "^12.1.5",
+    "@testing-library/user-event": "^13.5.0",
+    "@vitest/coverage-v8": "^3.2.4",
+    "jsdom": "^26.1.0",
+    "vitest": "^3.2.4"
+  },
   "scripts": {
     "start": "bin/vite dev",
-    "build": "bin/vite build"
+    "build": "bin/vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   }
 }

@@ -37,3 +37,4 @@ yarn-debug.log*
 .yarn-integrity
 .vscode/
 coverage
+coverage-js

@@ -67,3 +67,22 @@ jobs:
             puts "Line coverage: #{percent}%"
             abort "Expected 100% line coverage, got #{percent}%" unless percent.to_f >= 100
           '
+
+  js:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '26.10.0'
+          cache: yarn
+
+      - name: Install js dependencies
+        run: yarn install --pure-lockfile
+
+      - name: Run frontend tests
+        run: yarn test:coverage
