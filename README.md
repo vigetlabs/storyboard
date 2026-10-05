@@ -40,8 +40,14 @@ An app for creating Choose Your Own Adventure stories
   # Set up the test database
   docker compose run --rm -e RAILS_ENV=test app bundle exec rake db:create db:migrate
 
-  # Run specs
+  # Run Ruby specs
   docker compose run --rm app bundle exec rspec
+
+  # Run JS/frontend tests (Vitest)
+  docker compose run --rm app yarn test
+
+  # JS tests with coverage (writes coverage-js/)
+  docker compose run --rm app yarn test:coverage
   ```
 </details>
 
@@ -99,7 +105,17 @@ An app for creating Choose Your Own Adventure stories
 
   ### Run the test suite
   ```bash
+  # Ruby
   bundle exec rspec
+
+  # JS/frontend (Vitest)
+  yarn test
+
+  # Watch mode
+  yarn test:watch
+
+  # JS tests with coverage (writes coverage-js/)
+  yarn test:coverage
   ```
 </details>
 

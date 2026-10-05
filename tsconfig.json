@@ -13,11 +13,10 @@
     "sourceMap": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "types": ["vite/client"]
+    "types": ["vite/client", "vitest/globals"]
   },
   "include": ["app/javascript"],
   "exclude": [
-    "**/*.spec.ts",
     "node_modules",
     "vendor",
     "public"
