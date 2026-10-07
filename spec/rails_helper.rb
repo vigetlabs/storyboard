@@ -16,24 +16,26 @@ require File.expand_path('../config/environment', __dir__)
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require 'rspec/rails'
 require 'capybara/rspec'
+require 'capybara/cuprite'
 require 'support/factory_bot.rb'
 
 include Warden::Test::Helpers
 
-Capybara.register_driver :chrome_headless do |app|
-  options = ::Selenium::WebDriver::Chrome::Options.new
-  options.binary = ENV['CHROME_BIN'] if ENV['CHROME_BIN']
+Capybara.register_driver :cuprite do |app|
+  options = {
+    window_size: [1400, 1400],
+    headless: true,
+    timeout: 15,
+    process_timeout: 20
+  }
+  options[:browser_path] = ENV['CHROME_BIN'] if ENV['CHROME_BIN'].present?
+  # Chromium cannot use its sandbox as root inside Docker.
+  options[:dockerize] = true if File.exist?('/.dockerenv')
 
-  options.add_argument('--headless')
-  options.add_argument('--no-sandbox')
-  options.add_argument('--disable-dev-shm-usage')
-  options.add_argument('--disable-gpu')
-  options.add_argument('--window-size=1400,1400')
-
-  Capybara::Selenium::Driver.new(app, browser: :chrome, options: options)
+  Capybara::Cuprite::Driver.new(app, **options)
 end
 
-Capybara.javascript_driver = :chrome_headless
+Capybara.javascript_driver = :cuprite
 
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
