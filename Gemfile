@@ -41,8 +41,8 @@ end
 
 group :test do
   gem 'capybara', '>= 2.15'
+  gem 'cuprite'
   gem "factory_bot_rails"
   gem 'factory_bot', '6.4.4'
-  gem 'selenium-webdriver'
   gem 'simplecov', require: false
 end

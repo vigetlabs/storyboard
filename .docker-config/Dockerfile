@@ -8,7 +8,7 @@ ENV CHROME_BIN=/usr/bin/chromium
 RUN apt-get update \
     && apt-get install -qq -y --no-install-recommends \
        build-essential libpq-dev libyaml-dev postgresql-client xz-utils ca-certificates \
-       chromium chromium-driver \
+       chromium \
     && rm -rf /var/lib/apt/lists/*
 
 # Pin the same Node/Yarn as .tool-versions.
