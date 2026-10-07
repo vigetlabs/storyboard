@@ -33,15 +33,10 @@ group :development do
   gem 'listen', '>= 3.0.5'
   gem 'web-console', '>= 4.2.0'
 
-  # Capistrano 2 via viget-deployment. Isolated from runtime/test so it
-  # cannot break boot. Keyword-arg breakage on Ruby 3; replace before
-  # using `cap production deploy` from this Ruby.
-  gem 'viget-deployment', '2.0.0', github: 'vigetlabs/viget-deployment', require: false
-  gem 'capistrano-db-tasks', {
-    github: 'efatsi/capistrano-db-tasks',
-    require: false,
-    branch: '0.2.1'
-  }
+  gem 'capistrano', '~> 3.20', require: false
+  gem 'capistrano-bundler', require: false
+  gem 'capistrano-rails', require: false
+  gem 'capistrano-rbenv', require: false
 end
 
 group :test do

@@ -1,1 +1,1 @@
-server '206.81.7.34', :web, :app, :db, primary: true
+server "206.81.7.34", user: "deploy", roles: %w[app web db]
