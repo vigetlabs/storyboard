@@ -9,7 +9,6 @@ services:
       POSTGRES_DB: adventure-time_development
 
   app:
-    platform: linux/x86_64
     image: storyboard_app
     build:
       context: .
@@ -37,7 +36,6 @@ services:
     stdin_open: true
 
   vite:
-    platform: linux/x86_64
     image: storyboard_app
     command: [
       "./.docker-config/wait-for-it.sh",
