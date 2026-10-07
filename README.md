@@ -121,9 +121,7 @@ An app for creating Choose Your Own Adventure stories
 
 ## Deployment
 
-Deploy still uses Capistrano 2 via `viget-deployment` (development-only gems).
-Cap 2 has keyword-arg breakage on Ruby 3; replace that stack before deploying
-from this Ruby. `bundle exec cap production deploy` is not expected to work here.
+Capistrano 3.20 (Ruby 4 compatible). From this machine:
 
 ```sh
 bundle exec cap production deploy
